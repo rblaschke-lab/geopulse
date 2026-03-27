@@ -434,7 +434,7 @@ document.addEventListener("DOMContentLoaded", () => {
             lon: (Math.random() * 360) - 180,
             lat: (Math.random() * 140) - 70, // Avoid freezing poles
             hdg: Math.random() * 360,
-            spd: 0.00003 + (Math.random() * 0.00002), // CORRECT SPEED (not 70,000 km/h)
+            spd: 0.00008 + (Math.random() * 0.00004), // Realistic velocity curve on macro scale
             alt: Math.floor(30000 + Math.random() * 10000)
         });
     }
@@ -454,7 +454,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .setPopup(new maplibregl.Popup({ offset: 15 }).setHTML(`
                     <h3><i class="fa-solid fa-plane"></i> FLIGHT: ${f.callsign}</h3>
                     <p>ALT: ${f.alt} FT</p>
-                    <p>SPD: ${(f.spd * 8000000).toFixed(0)} KM/H</p>
+                    <p>SPD: ${(f.spd * 9000000).toFixed(0)} KM/H</p>
                 `));
             f.marker = marker;
             marker.addTo(map);
@@ -542,9 +542,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // ----------------------------------------------------
     const webcamData = [
         // Global Highlight Cams
-        { name: 'Jackson Hole, WY', img: 'https://images.unsplash.com/photo-1618083811566-f40c749b5ae7?w=800&q=90', lat: 43.4799, lon: -110.7624 },
+        { name: 'Jackson Hole, WY', img: 'https://images.unsplash.com/photo-1542640244-7e672d6cb466?w=800&q=90', lat: 43.4799, lon: -110.7624 },
         { name: 'NASA ISS Live Feed', img: 'https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?w=800&q=90', lat: 28.3922, lon: -80.6077 },
-        { name: 'Abbey Road, London', img: 'https://images.unsplash.com/photo-1513635269975-59693e2d8ce2?w=800&q=90', lat: 51.5321, lon: -0.1773 },
+        { name: 'Abbey Road, London', img: 'https://images.unsplash.com/photo-1520939817895-060bdaf4ede3?w=800&q=90', lat: 51.5321, lon: -0.1773 },
         { name: 'Venice Grand Canal', img: 'https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=800&q=90', lat: 45.4383, lon: 12.3364 },
         
         // --- DEEP DIVE DEMO CLUSTER: NEW YORK CITY ---
