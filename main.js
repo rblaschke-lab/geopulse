@@ -63,19 +63,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     map.on('load', () => {
         // --- MOBILE MENU BEHAVIOR ---
+        let menuToggleLock = false;
         const sidebar = document.getElementById('sidebar');
         const mobileBtn = document.getElementById('mobile-menu-btn');
         
         if (mobileBtn && sidebar) {
             mobileBtn.addEventListener('click', (e) => {
+                e.preventDefault();
                 e.stopPropagation(); // prevent map from catching the initial click
+                
+                menuToggleLock = true;
                 sidebar.classList.toggle('open');
+                
+                // Keep the lock active for 300ms to swallow any double taps or ghost MapLibre canvas events!
+                setTimeout(() => { menuToggleLock = false; }, 300);
             });
         }
 
-        map.on('click', (e) => {
+        map.on('click', () => {
             // Prevent MapLibre from capturing the exact same touch down event and instantly closing it
-            if (e.originalEvent && e.originalEvent.target.closest('#mobile-menu-btn')) return;
+            if (menuToggleLock) return;
             
             if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains('open')) {
                 sidebar.classList.remove('open');
