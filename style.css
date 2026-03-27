@@ -1,0 +1,211 @@
+:root {
+    --amber: #ffb000;
+    --amber-dim: rgba(255, 176, 0, 0.4);
+    --bg-dark: #0a0a09;
+    --panel-bg: rgba(10, 10, 9, 0.85); /* Slightly darker for contrast against earth */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #000; /* Outer space background */
+    color: var(--amber);
+}
+
+/* Map sizing and positioning */
+#map {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 1;
+}
+
+/* Hide map attribution */
+.maplibregl-ctrl-bottom-right { display: none; }
+
+/* Let globe bleed to edges nicely */
+.maplibregl-canvas { filter: none; }
+
+/* Sidebar Terminal Panel */
+#sidebar {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 320px;
+    z-index: 10;
+    background: var(--panel-bg);
+    border: 1px solid var(--amber);
+    box-shadow: 0 0 15px var(--amber-dim);
+    padding: 20px;
+    backdrop-filter: blur(10px);
+}
+
+header {
+    border-bottom: 1px solid var(--amber);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 5px var(--amber);
+}
+
+.version {
+    font-size: 0.9rem;
+    vertical-align: top;
+    opacity: 0.8;
+}
+
+.sub-header {
+    font-size: 0.8rem;
+    margin-top: 5px;
+    opacity: 0.7;
+}
+
+.blinking-cursor { animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.menu-group { margin-bottom: 15px; }
+
+.category-title {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px dashed var(--amber-dim);
+    padding-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.control-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    padding-left: 10px;
+}
+
+/* Custom Checkbox (Retro Style) */
+.toggle-switch {
+    position: relative;
+    width: 36px;
+    height: 18px;
+    border: 1px solid var(--amber);
+    background: transparent;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    transition: .3s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 1px;
+    bottom: 1px;
+    background-color: var(--amber);
+    transition: .3s;
+}
+
+input:checked + .slider { background: var(--amber-dim); }
+input:checked + .slider:before {
+    transform: translateX(18px);
+    box-shadow: 0 0 5px var(--amber);
+}
+
+/* Status Panel */
+.status-panel {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid var(--amber);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+}
+
+.pulse-ring {
+    width: 8px;
+    height: 8px;
+    background: var(--amber);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--amber);
+    animation: pulse-amber 2s infinite;
+}
+
+@keyframes pulse-amber {
+    0% { box-shadow: 0 0 0 0 rgba(255, 176, 0, 0.7); }
+    70% { box-shadow: 0 0 0 6px rgba(255, 176, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 176, 0, 0); }
+}
+
+/* Map Popups (MapLibre specific) */
+.maplibregl-popup-content {
+    background: var(--panel-bg);
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    border-radius: 0;
+    font-family: 'Share Tech Mono', monospace;
+    box-shadow: 0 0 10px var(--amber-dim);
+    padding: 10px;
+}
+
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip { border-top-color: var(--amber); }
+.maplibregl-popup-anchor-top .maplibregl-popup-tip { border-bottom-color: var(--amber); }
+.maplibregl-popup-anchor-left .maplibregl-popup-tip { border-right-color: var(--amber); }
+.maplibregl-popup-anchor-right .maplibregl-popup-tip { border-left-color: var(--amber); }
+
+.maplibregl-popup-content h3 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--amber);
+    padding-bottom: 2px;
+}
+.maplibregl-popup-content p {
+    margin: 3px 0;
+    font-size: 0.8rem;
+}
+.maplibregl-popup-content iframe {
+    margin-top: 5px;
+    border: 1px solid var(--amber-dim);
+}
+
+/* Marker Overrides */
+.marker-flight svg, .marker-iss svg { filter: drop-shadow(0 0 3px currentColor); }
+.marker-ship svg { filter: drop-shadow(0 0 3px currentColor); }
+.ship-cargo svg { fill: #00f2fe; color: #00f2fe; }
+.ship-naval svg { fill: #ff4444; color: #ff4444; filter: drop-shadow(0 0 5px #ff4444); }
+
+/* Webcams */
+.marker-webcam {
+    color: #00ff00;
+    font-size: 20px;
+    cursor: pointer;
+    text-shadow: 0 0 5px #00ff00;
+}

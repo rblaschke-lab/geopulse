@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worldview V3 | Satellite Globe</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <!-- MapLibre GL CSS & JS (Upgraded to v4 for Globe Projection) -->
+    <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body class="theme-clean">
+    <div id="map"></div>
+    
+    <div id="sidebar" class="terminal-panel">
+        <header>
+            <h1>WORLDVIEW <span class="version">V3.0</span></h1>
+            <div class="sub-header">
+                <span class="blinking-cursor">_</span> SATELLITE UPLINK ACTIVE
+            </div>
+        </header>
+
+        <section class="menu-group">
+            <h2 class="category-title"><i class="fa-solid fa-satellite"></i> ORBITAL</h2>
+            <div class="control-item">
+                <span>ISS Telemetry</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-iss" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </section>
+
+        <section class="menu-group">
+            <h2 class="category-title"><i class="fa-solid fa-waveform-lines"></i> SEISMIC</h2>
+            <div class="control-item">
+                <span>Global Activity (24H)</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-earthquakes" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </section>
+
+        <section class="menu-group">
+            <h2 class="category-title"><i class="fa-solid fa-plane-radar"></i> AVIATION</h2>
+            <div class="control-item">
+                <span>EU Airspace Traffic</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-flights" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </section>
+
+        <section class="menu-group">
+            <h2 class="category-title"><i class="fa-solid fa-ship"></i> SURVEILLANCE</h2>
+            <div class="control-item">
+                <span>Military & Cargo AIS</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-ships" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </section>
+
+        <section class="menu-group">
+            <h2 class="category-title"><i class="fa-solid fa-cloud-bolt"></i> WEATHER</h2>
+            <div class="control-item">
+                <span>Multi-Spectrum Radar</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-weather" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </section>
+
+        <section class="menu-group">
+            <h2 class="category-title"><i class="fa-solid fa-camera-web"></i> WEBCAMS</h2>
+            <div class="control-item">
+                <span>Global Live Streams</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-webcams" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </section>
+
+        <footer class="status-panel">
+            <div class="pulse-ring"></div>
+            <div id="status-text">SYSTEM ONLINE...</div>
+        </footer>
+    </div>
+
+    <script src="./main.js"></script>
+</body>
+</html>
