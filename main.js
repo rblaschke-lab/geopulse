@@ -73,7 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        map.on('click', () => {
+        map.on('click', (e) => {
+            // Prevent MapLibre from capturing the exact same touch down event and instantly closing it
+            if (e.originalEvent && e.originalEvent.target.closest('#mobile-menu-btn')) return;
+            
             if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains('open')) {
                 sidebar.classList.remove('open');
             }
