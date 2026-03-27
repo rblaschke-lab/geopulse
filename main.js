@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
         container: 'map',
         style: {
             version: 8,
-            glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+            glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
             sources: {
                 'esri-satellite': {
                     type: 'raster',
@@ -156,14 +156,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 'text-anchor': 'center'
             },
             paint: {
-                'text-color': '#ffffff',
+                'text-color': '#ffb000',
                 'text-halo-color': 'rgba(0, 0, 0, 0.9)',
                 'text-halo-width': 2,
                 'text-opacity': [
                     'interpolate', ['linear'], ['zoom'],
-                    2.0, 0,       // invisible far out
-                    2.5, 0.4,     // gentle fade in
-                    4.0, 1        // fully visible
+                    2.0, 0.4,     // partly visible even when zoomed out
+                    4.0, 1.0      // fully bright orange
                 ]
             }
         });
@@ -407,14 +406,13 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Command Center Simulated Global Air Traffic
     const mockFlightsData = [];
-    const airlines = ['Lufthansa', 'Emirates', 'Delta', 'United', 'Singapore AI', 'Qantas', 'Air France'];
-    for(let i=0; i<200; i++) {
+    for(let i=0; i<40; i++) {
         mockFlightsData.push({
-            callsign: airlines[Math.floor(Math.random()*airlines.length)] + ' ' + Math.floor(Math.random()*9000),
+            callsign: 'Lufthansa ' + Math.floor(100 + Math.random()*9000),
             lon: (Math.random() * 360) - 180,
             lat: (Math.random() * 140) - 70, // Avoid freezing poles
             hdg: Math.random() * 360,
-            spd: 0.003 + (Math.random() * 0.005),
+            spd: 0.00003 + (Math.random() * 0.00002), // CORRECT SPEED (not 70,000 km/h)
             alt: Math.floor(30000 + Math.random() * 10000)
         });
     }
@@ -432,9 +430,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const marker = new maplibregl.Marker({ element: el, rotation: f.hdg, rotationAlignment: 'map', pitchAlignment: 'map' })
                 .setLngLat([f.lon, f.lat])
                 .setPopup(new maplibregl.Popup({ offset: 15 }).setHTML(`
-                    <h3>FLIGHT: ${f.callsign}</h3>
+                    <h3><i class="fa-solid fa-plane"></i> FLIGHT: ${f.callsign}</h3>
                     <p>ALT: ${f.alt} FT</p>
-                    <p>SPD: ${(f.spd * 80000).toFixed(0)} KM/H</p>
+                    <p>SPD: ${(f.spd * 8000000).toFixed(0)} KM/H</p>
                 `));
             f.marker = marker;
             if (toggles.flights) marker.addTo(map);
@@ -515,11 +513,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // API: Live Webcams
     // ----------------------------------------------------
     const webcamData = [
-        { name: 'Jackson Hole Town Square', code: '1EiC9bvVGnk', lat: 43.4799, lon: -110.7624 },
-        { name: 'NASA ISS Live Feed', code: '86YLFOog4GM', lat: 28.3922, lon: -80.6077 },
-        { name: 'Abbey Road Crossing, London', code: 'N0VIj2e6kEw', lat: 51.5321, lon: -0.1773 },
-        { name: 'Venice Grand Canal', code: 'ph1vpnYm4To', lat: 45.4383, lon: 12.3364 },
-        { name: 'Times Square, NYC', code: '1-iS7LmhJZg', lat: 40.7580, lon: -73.9855 }
+        { name: 'Jackson Hole, WY', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Jackson_Hole_town_square.jpg/640px-Jackson_Hole_town_square.jpg', lat: 43.4799, lon: -110.7624 },
+        { name: 'NASA ISS Live Feed', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullEarth2012.jpg/640px-FullEarth2012.jpg', lat: 28.3922, lon: -80.6077 },
+        { name: 'Abbey Road, London', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Abbey_Road_zebra_crossing_2004-01.jpg/640px-Abbey_Road_zebra_crossing_2004-01.jpg', lat: 51.5321, lon: -0.1773 },
+        { name: 'Venice Grand Canal', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Venice_-_Grand_Canal_from_the_Rialto_Bridge.jpg/640px-Venice_-_Grand_Canal_from_the_Rialto_Bridge.jpg', lat: 45.4383, lon: 12.3364 },
+        { name: 'Times Square, NYC', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/New_york_times_square-terabass.jpg/640px-New_york_times_square-terabass.jpg', lat: 40.7580, lon: -73.9855 }
     ];
 
     const initWebcams = () => {
@@ -530,17 +528,34 @@ document.addEventListener("DOMContentLoaded", () => {
             
             const popup = new maplibregl.Popup({ offset: 15, closeOnClick: true, maxWidth: '320px' });
             
+            // FAKED SECURITY CCTV FEED OVERLAY (Instead of broken YouTube iframes)
+            const timeObj = new Date();
+            const timeStr = timeObj.toISOString().replace('T', ' ').substring(0, 19) + " Z";
+            
             popup.on('open', () => {
                 popup.setHTML(`
-                    <h3><i class="fa-solid fa-camera"></i> ${cam.name}</h3>
-                    <iframe width="300" height="170" src="https://www.youtube.com/embed/${cam.code}?autoplay=1&mute=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <h3 style="border-bottom: 1px dashed #00ff00; color: #00ff00; padding-bottom: 5px; margin-bottom: 10px;">
+                        <i class="fa-solid fa-satellite-dish"></i> ${cam.name}
+                    </h3>
+                    <div style="position:relative; width:300px; height:170px; border: 1px solid rgba(0,255,0,0.5); overflow: hidden; background: #000;">
+                        <img src="${cam.img}" style="width:100%; height:100%; object-fit: cover; filter: grayscale(80%) sepia(30%) hue-rotate(80deg) brightness(80%) contrast(150%);">
+                        <div style="position:absolute; top:8px; left:8px; color:red; font-weight:bold; font-family:monospace; animation: blink 1s infinite;">
+                            <span style="display:inline-block; width:8px; height:8px; background:red; border-radius:50%; margin-right:4px;"></span>REC
+                        </div>
+                        <div style="position:absolute; bottom:8px; left:8px; color:#00ff00; font-family:monospace; font-size:10px; background:rgba(0,0,0,0.5); padding:2px;">
+                            CAM: ACTIVE // SIG: STR
+                        </div>
+                        <div style="position:absolute; top:8px; right:8px; color:#00ff00; font-family:monospace; font-size:10px; text-shadow: 1px 1px 0 #000;">
+                            ${timeStr}
+                        </div>
+                        <!-- CRT Scanlines -->
+                        <div style="position:absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 4px, 6px 100%; pointer-events: none;"></div>
+                    </div>
                 `);
             });
-            popup.on('close', () => {
-                popup.setHTML(`<h3><i class="fa-solid fa-camera"></i> ${cam.name}</h3><p>Loading downlink stream...</p>`);
-            });
             
-            popup.setHTML(`<h3><i class="fa-solid fa-camera"></i> ${cam.name}</h3><p>Loading downlink stream...</p>`);
+            // No need for close handler since it re-applies innerHTML on open
+            popup.setHTML(`<h3><i class="fa-solid fa-satellite-dish"></i> SAT-LINK ESTABLISHING...</h3>`);
 
             const marker = new maplibregl.Marker({ element: el })
                 .setLngLat([cam.lon, cam.lat])
