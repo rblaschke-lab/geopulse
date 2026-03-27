@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
         container: 'map',
         style: {
             version: 8,
+            glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
             sources: {
                 'esri-satellite': {
                     type: 'raster',
@@ -80,6 +81,90 @@ document.addEventListener("DOMContentLoaded", () => {
             paint: {
                 'fill-color': '#000000',
                 'fill-opacity': 0.65
+            }
+        });
+
+        // Setup Cities Layer (Appears on zoom)
+        const cities = [
+            {name: "Tokyo", lat: 35.6762, lon: 139.6503},
+            {name: "Delhi", lat: 28.7041, lon: 77.1025},
+            {name: "Shanghai", lat: 31.2304, lon: 121.4737},
+            {name: "São Paulo", lat: -23.5505, lon: -46.6333},
+            {name: "Mexico City", lat: 19.4326, lon: -99.1332},
+            {name: "Cairo", lat: 30.0444, lon: 31.2357},
+            {name: "Mumbai", lat: 19.0760, lon: 72.8777},
+            {name: "Beijing", lat: 39.9042, lon: 116.4074},
+            {name: "Dhaka", lat: 23.8103, lon: 90.4125},
+            {name: "Osaka", lat: 34.6937, lon: 135.5023},
+            {name: "New York", lat: 40.7128, lon: -74.0060},
+            {name: "Karachi", lat: 24.8607, lon: 67.0011},
+            {name: "Buenos Aires", lat: -34.6037, lon: -58.3816},
+            {name: "Chongqing", lat: 29.5332, lon: 106.5029},
+            {name: "Istanbul", lat: 41.0082, lon: 28.9784},
+            {name: "Kolkata", lat: 22.5726, lon: 88.3639},
+            {name: "Manila", lat: 14.5995, lon: 120.9842},
+            {name: "Lagos", lat: 6.5244, lon: 3.3792},
+            {name: "Rio", lat: -22.9068, lon: -43.1729},
+            {name: "Kinshasa", lat: -4.4419, lon: 15.2663},
+            {name: "Los Angeles", lat: 34.0522, lon: -118.2437},
+            {name: "Moscow", lat: 55.7558, lon: 37.6173},
+            {name: "Paris", lat: 48.8566, lon: 2.3522},
+            {name: "Bogotá", lat: 4.7110, lon: -74.0721},
+            {name: "Jakarta", lat: -6.2088, lon: 106.8456},
+            {name: "Lima", lat: -12.0464, lon: -77.0428},
+            {name: "Bangkok", lat: 13.7563, lon: 100.5018},
+            {name: "Seoul", lat: 37.5665, lon: 126.9780},
+            {name: "London", lat: 51.5074, lon: -0.1278},
+            {name: "Tehran", lat: 35.6892, lon: 51.3890},
+            {name: "Chicago", lat: 41.8781, lon: -87.6298},
+            {name: "Hong Kong", lat: 22.3193, lon: 114.1694},
+            {name: "Berlin", lat: 52.5200, lon: 13.4050},
+            {name: "Madrid", lat: 40.4168, lon: -3.7038},
+            {name: "Rome", lat: 41.9028, lon: 12.4964},
+            {name: "Sydney", lat: -33.8688, lon: 151.2093},
+            {name: "Toronto", lat: 43.6510, lon: -79.3470},
+            {name: "Johannesburg", lat: -26.2041, lon: 28.0473},
+            {name: "Dubai", lat: 25.2048, lon: 55.2708},
+            {name: "Singapore", lat: 1.3521, lon: 103.8198}
+        ];
+        
+        map.addSource('cities', {
+            type: 'geojson',
+            data: {
+                type: 'FeatureCollection',
+                features: cities.map(c => ({
+                    type: 'Feature',
+                    properties: { name: c.name.toUpperCase() },
+                    geometry: { type: 'Point', coordinates: [c.lon, c.lat] }
+                }))
+            }
+        });
+
+        map.addLayer({
+            id: 'cities-label',
+            type: 'symbol',
+            source: 'cities',
+            layout: {
+                'text-field': ['get', 'name'],
+                'text-font': ['Open Sans Bold'],
+                'text-size': [
+                    'interpolate', ['linear'], ['zoom'],
+                    2.0, 8,
+                    6.0, 14,
+                    10.0, 20
+                ],
+                'text-anchor': 'center'
+            },
+            paint: {
+                'text-color': '#ffffff',
+                'text-halo-color': 'rgba(0, 0, 0, 0.9)',
+                'text-halo-width': 2,
+                'text-opacity': [
+                    'interpolate', ['linear'], ['zoom'],
+                    2.0, 0,       // invisible far out
+                    2.5, 0.4,     // gentle fade in
+                    4.0, 1        // fully visible
+                ]
             }
         });
 
