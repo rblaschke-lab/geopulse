@@ -204,7 +204,28 @@ input:checked + .slider:before {
 .marker-ship svg { filter: drop-shadow(0 0 3px currentColor); }
 .ship-cargo svg { fill: #00f2fe; color: #00f2fe; }
 .ship-naval svg { fill: #ff4444; color: #ff4444; filter: drop-shadow(0 0 5px #ff4444); }
-.marker-webcam { color: #00ff00; font-size: 20px; cursor: pointer; text-shadow: 0 0 5px #00ff00; }
+
+/* V4.1 Webcams - Fully redesigned for Global Sat-View Contrast */
+.marker-webcam { 
+    color: #000; /* Dark icon */
+    font-size: 15px; 
+    cursor: pointer; 
+    background: #00ff00; /* Bright Green Circle */
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 10px #00ff00;
+    animation: pulse-webcam 2s infinite;
+}
+
+@keyframes pulse-webcam {
+    0% { transform: scale(1); box-shadow: 0 0 10px #00ff00; }
+    50% { transform: scale(1.1); box-shadow: 0 0 20px #00ff00, 0 0 10px #00ff00 inset; }
+    100% { transform: scale(1); box-shadow: 0 0 10px #00ff00; }
+}
 
 /* Media Queries for Mobile Responsiveness */
 @media (max-width: 768px) {

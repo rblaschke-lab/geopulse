@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     map.on('load', () => {
-        setStatus("SATELLITE DOWNLINK ESTABLISHED. INITIALIZING MODEL V4.");
+        setStatus("SATELLITE DOWNLINK ESTABLISHED. INITIALIZING MODEL V4.1.");
 
         // Draw Solar Terminator Night Shadow Before Weather/Other Data
         map.addSource('terminator', {
@@ -83,19 +83,56 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Setup Earthquake geojson source & layers
+        // Setup Earthquake geojson source
         map.addSource('earthquakes', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+        
+        // V4.1: Data-Driven Styling for Earthquakes (Size & Color by Magnitude)
         map.addLayer({
             id: 'earthquakes-core',
             type: 'circle',
             source: 'earthquakes',
-            paint: { 'circle-radius': ['*', ['get', 'mag'], 2.5], 'circle-color': '#ffb000', 'circle-opacity': 0.8 }
+            paint: { 
+                'circle-radius': [
+                    'interpolate', ['linear'], ['get', 'mag'],
+                    1.0, 2,  
+                    6.0, 6,  
+                    8.0, 12  
+                ],
+                'circle-color': [
+                    'step', ['get', 'mag'],
+                    'rgba(255, 176, 0, 0.4)',  // < 4.0: Subtle Amber
+                    4.0, '#ffb000',            // >= 4.0: Solid Amber
+                    6.0, '#ff3300'             // >= 6.0: Neon Orange / Danger Red
+                ],
+                'circle-opacity': 0.85 
+            }
         });
         map.addLayer({
             id: 'earthquakes-halo',
             type: 'circle',
             source: 'earthquakes',
-            paint: { 'circle-radius': ['*', ['get', 'mag'], 6], 'circle-color': 'transparent', 'circle-stroke-width': 1.5, 'circle-stroke-color': '#ffb000', 'circle-stroke-opacity': 0.6 }
+            paint: { 
+                'circle-radius': [
+                    'interpolate', ['linear'], ['get', 'mag'],
+                    1.0, 6,
+                    6.0, 16,
+                    8.0, 24
+                ],
+                'circle-color': 'transparent', 
+                'circle-stroke-width': [
+                    'step', ['get', 'mag'],
+                    1.0, 1,    // < 4.0
+                    4.0, 1.5,
+                    6.0, 3     // >= 6.0: Bold stroke
+                ], 
+                'circle-stroke-color': [
+                    'step', ['get', 'mag'],
+                    'rgba(255, 176, 0, 0.3)',  // < 4.0: Subtle
+                    4.0, '#ffb000',
+                    6.0, '#ff3300'             // >= 6.0: Neon Orange
+                ],
+                'circle-stroke-opacity': 0.85 
+            }
         });
 
         // Initialize Feeds
@@ -129,23 +166,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const l = q + 1.915 * Math.sin(g * Math.PI / 180) + 0.020 * Math.sin(2 * g * Math.PI / 180);
         const e = 23.439 - 0.00000036 * d;
         
-        // Calculate the solar declination
         const declination = Math.asin(Math.sin(e * Math.PI / 180) * Math.sin(l * Math.PI / 180)) * 180 / Math.PI;
-        
-        // GMT calculation for longitude translation (Greenwich Sidereal Time)
         const gmst = (18.697374558 + 24.06570982441908 * d) % 24;
         const subsolarLon = (-(gmst * 15)) % 360; 
     
         let coords = [];
-        // Trace terminator exactly 90 degrees out from subsolar spot
         for (let lon = -180; lon <= 180; lon += 1) {
             const dLon = (lon - subsolarLon) * Math.PI / 180;
-            // Arc tangent provides the latitude boundary
             let lat = Math.atan(-Math.cos(dLon) / Math.tan(declination * Math.PI / 180)) * 180 / Math.PI;
             coords.push([lon, lat]);
         }
     
-        // Complete the giant shadow polygon over the hemisphere wrapped in night
         const poleLat = declination > 0 ? -90 : 90;
         coords.push([180, poleLat], [-180, poleLat], [coords[0][0], coords[0][1]]);
     
@@ -163,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ----------------------------------------------------
     const fetchNASA_Fires = () => {
         try {
-            const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+            const today = new Date().toISOString().split('T')[0];
             
             map.addLayer({
                 id: 'nasa-fires',
@@ -171,7 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 source: {
                     type: 'raster',
                     tiles: [
-                        // Public GIBS Endpoint serving Thermal Anomalies / Active Fires 
                         `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_Thermal_Anomalies_375m_All/default/${today}/GoogleMapsCompatible_Level8/{z}/{y}/{x}.png`
                     ],
                     tileSize: 256
@@ -179,13 +209,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 paint: {
                     'raster-opacity': 0.8
                 }
-            }, 'earthquakes-core'); // Render below earthquakes
+            }, 'terminator-layer');
             
             if(!toggles.fires) map.setLayoutProperty('nasa-fires', 'visibility', 'none');
             setStatus("NASA ACTIVE FIRES SYNCHRONIZED.");
-        } catch(err) {
-            console.warn("NASA Data Error:", err);
-        }
+        } catch(err) {}
     };
 
     // ----------------------------------------------------
@@ -294,16 +322,19 @@ document.addEventListener("DOMContentLoaded", () => {
     </svg>`;
 
     const fetchFlights = async () => {
-        setStatus("SCANNING AIRSPACE...");
+        setStatus("SCANNING GLOBAL AIRSPACE...");
         try {
-            // Using a European window to ensure reliable data volume without overloading browser
-            const response = await fetch('https://opensky-network.org/api/states/all?lamin=35.0&lomin=-15.0&lamax=65.0&lomax=35.0');
+            // V4.1: Removed Europe bounds. Now fetching GLOBAL states/all
+            const response = await fetch('https://opensky-network.org/api/states/all');
             if(!response.ok) throw new Error("API Limit");
             const data = await response.json();
             flightMarkers.forEach(m => m.remove());
             flightMarkers = [];
             if (!data.states) return;
-            const planes = data.states.slice(0, 150);
+            
+            // Limit to 350 globally distributed planes to protect smartphone rendering performance
+            const planes = data.states.slice(0, 350);
+            
             planes.forEach(plane => {
                 const [_, callsign, __, ___, ____, lon, lat, _____, ______, velocity, true_track, _______, ________, altitude] = plane;
                 if (lat && lon) {
@@ -321,7 +352,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (toggles.flights) marker.addTo(map);
                 }
             });
-            setStatus("AIRSPACE DATA LOADED.");
+            setStatus("GLOBAL AIRSPACE DATA LOADED.");
         } catch (error) { setStatus("FLIGHT DATA LIMITED/ERROR."); }
     };
 
@@ -391,7 +422,8 @@ document.addEventListener("DOMContentLoaded", () => {
         webcamData.forEach(cam => {
             const el = document.createElement('div');
             el.className = 'marker-webcam';
-            el.innerHTML = '<i class="fa-solid fa-camera-security"></i>';
+            // V4.1: Repaired FontAwesome generic video icon to ensure 100% load
+            el.innerHTML = '<i class="fa-solid fa-video"></i>';
             
             const popup = new maplibregl.Popup({ offset: 15, closeOnClick: true, maxWidth: '320px' });
             
@@ -420,7 +452,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // UI Toggles
     // ----------------------------------------------------
     
-    // NEW / V4: Environment Layer event listeners
     document.getElementById('toggle-terminator').addEventListener('change', (e) => {
         toggles.terminator = e.target.checked;
         if (map.getLayer('terminator-layer')) {
@@ -435,7 +466,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Original Toggles
     document.getElementById('toggle-iss').addEventListener('change', (e) => {
         toggles.iss = e.target.checked;
         if (issMarker) toggles.iss ? issMarker.addTo(map) : issMarker.remove();
