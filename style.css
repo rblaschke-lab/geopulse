@@ -2,256 +2,301 @@
     --amber: #ffb000;
     --amber-dim: rgba(255, 176, 0, 0.4);
     --bg-dark: #0a0a09;
-    --panel-bg: rgba(10, 10, 9, 0.65); /* More transparent so map is visible behind it */
+    --panel-bg: rgba(4, 6, 16, 0.88);
+    --neon-green: #00ff00;
+    --neon-blue: #00f2fe;
+    --neon-red: #ff3300;
+    --collapse-h: 38px; /* height of collapsed tab strip */
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Share Tech Mono', monospace;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Share Tech Mono', monospace; }
+body, html { width: 100%; height: 100%; overflow: hidden; background: #000; color: var(--amber); }
 
-body, html {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background-color: #000; /* Outer space background */
-    color: var(--amber);
-}
-
-/* Map sizing and positioning */
-#map {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 1;
-}
-
-/* Hide map attribution */
+#map { position: absolute; inset: 0; z-index: 1; }
 .maplibregl-ctrl-bottom-right { display: none; }
-
-/* Let globe bleed to edges nicely */
 .maplibregl-canvas { filter: none; }
 
-/* Mobile Menu Button */
+/* -------------------------------------------------------
+   MOBILE MENU BUTTON
+------------------------------------------------------- */
 #mobile-menu-btn {
     display: none;
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    z-index: 20;
-    background: rgba(10, 10, 9, 0.85);
-    border: 1px solid var(--amber);
-    color: var(--amber);
-    padding: 10px 15px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    border-radius: 4px;
+    position: absolute; top: 15px; right: 15px; z-index: 20;
+    background: rgba(10,10,9,.85); border: 1px solid var(--amber);
+    color: var(--amber); padding: 10px 15px; font-size: 1.5rem;
+    cursor: pointer; border-radius: 4px;
     box-shadow: 0 0 10px var(--amber-dim);
 }
-
 #mobile-menu-btn:hover { background: var(--amber-dim); }
 
-/* Sidebar Terminal Panel */
+/* -------------------------------------------------------
+   SIDEBAR — collapsible tab, TOP-RIGHT
+------------------------------------------------------- */
 #sidebar {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 320px;
-    z-index: 10;
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    width: 300px;
+    z-index: 100;
     background: var(--panel-bg);
-    border: 1px solid var(--amber);
-    box-shadow: 0 0 15px var(--amber-dim);
-    padding: 20px;
-    backdrop-filter: blur(8px);
-    transition: transform 0.3s ease-in-out;
+    border: 1px solid var(--amber-dim);
+    border-right: 3px solid var(--amber);
+    border-radius: 3px;
+    box-shadow: 0 4px 30px rgba(0,0,0,.6), 0 0 18px var(--amber-dim);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    /* Collapsed: only show the tab strip */
+    max-height: var(--collapse-h);
+    overflow: hidden;
+    transition: max-height 0.38s cubic-bezier(0.4,0,0.2,1);
+}
+#sidebar:hover { max-height: 92vh; overflow-y: auto; }
+
+/* Scanline CRT overlay */
+#sidebar::before {
+    content: " "; display: block; position: absolute;
+    inset: 0; pointer-events: none; z-index: 100;
+    background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.12) 50%),
+                linear-gradient(90deg, rgba(255,0,0,.03), rgba(0,255,0,.01), rgba(0,0,255,.03));
+    background-size: 100% 4px, 10px 100%;
+    opacity: .5;
 }
 
+/* Tab strip — always visible */
 header {
-    border-bottom: 1px dashed var(--amber);
-    padding-bottom: 10px;
-    margin-bottom: 15px;
+    height: var(--collapse-h);
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px dashed var(--amber-dim);
+    cursor: default;
+    flex-shrink: 0;
 }
-
 header h1 {
-    font-size: 1.6rem;
-    letter-spacing: 1px;
-    text-shadow: 0 0 5px var(--amber);
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 6px var(--amber);
+    white-space: nowrap;
 }
+.version { font-size: .75rem; vertical-align: top; opacity: .7; }
+.sub-header { display: none; } /* hidden in collapsed state */
 
-.version {
-    font-size: 0.9rem;
-    vertical-align: top;
-    opacity: 0.8;
-}
-
-.sub-header {
-    font-size: 0.75rem;
-    margin-top: 5px;
-    opacity: 0.7;
-}
-
+/* Show sub-header and byline only when expanded */
+#sidebar:hover .sub-header { display: block; font-size: .68rem; margin: 2px 0 10px; opacity: .6; padding: 0 14px; }
+#sidebar:hover header { border-bottom: 1px dashed var(--amber); height: auto; padding: 10px 14px 8px; flex-direction: column; align-items: flex-start; }
+#sidebar:hover header h1 { font-size: 1.25rem; }
+#sidebar:hover header .byline { display: block; }
+.byline { display: none; font-size: .65rem; opacity: .65; letter-spacing: 1px; margin-top: 2px; }
 .blinking-cursor { animation: blink 1s step-end infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 
+.sidebar-body { padding: 10px 14px 14px; }
+
+/* Tiny "expand" chevron hint in tab strip */
+.sidebar-expand-hint {
+    font-size: .6rem; opacity: .4; letter-spacing: 1px;
+    transition: opacity .2s;
+}
+#sidebar:hover .sidebar-expand-hint { opacity: 0; }
+
 .menu-group { margin-bottom: 12px; }
-
 .category-title {
-    font-size: 0.8rem;
-    margin-bottom: 6px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 1px dashed var(--amber-dim);
-    padding-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-size: .78rem; margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 1px;
+    border-bottom: 1px dashed var(--amber-dim); padding-bottom: 4px;
+    display: flex; align-items: center; gap: 8px;
 }
-
 .control-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.8rem;
-    padding-left: 10px;
+    display: flex; justify-content: space-between;
+    align-items: center; font-size: .78rem; padding-left: 10px;
 }
 
-/* Custom Checkbox (Retro Style) */
+/* Toggle switch */
 .toggle-switch {
-    position: relative;
-    width: 34px;
-    height: 16px;
-    border: 1px solid var(--amber);
-    background: transparent;
-    cursor: pointer;
-    display: inline-block;
+    position: relative; width: 34px; height: 16px;
+    border: 1px solid var(--amber); background: transparent;
+    cursor: pointer; display: inline-block;
 }
-
-.toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    position: absolute;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-    transition: .3s;
-}
-
+.toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+.slider { position: absolute; cursor: pointer; inset: 0; background: rgba(0,0,0,.5); transition: .3s; }
 .slider:before {
-    position: absolute;
-    content: "";
-    height: 12px;
-    width: 12px;
-    left: 1px;
-    bottom: 1px;
-    background-color: var(--amber);
-    transition: .3s;
+    position: absolute; content: "";
+    height: 12px; width: 12px; left: 1px; bottom: 1px;
+    background: var(--amber); transition: .3s;
 }
-
 input:checked + .slider { background: var(--amber-dim); }
-input:checked + .slider:before {
-    transform: translateX(18px);
-    box-shadow: 0 0 5px var(--amber);
-}
+input:checked + .slider:before { transform: translateX(18px); box-shadow: 0 0 5px var(--amber); }
 
-/* Status Panel */
+/* Status strip */
 .status-panel {
-    margin-top: 20px;
-    padding-top: 10px;
+    margin-top: 16px; padding-top: 10px;
     border-top: 1px solid var(--amber);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.75rem;
+    display: flex; align-items: center; gap: 10px; font-size: .72rem;
 }
-
 .pulse-ring {
-    width: 8px;
-    height: 8px;
-    background: var(--amber);
-    border-radius: 50%;
+    width: 8px; height: 8px;
+    background: var(--amber); border-radius: 50%;
     box-shadow: 0 0 10px var(--amber);
     animation: pulse-amber 2s infinite;
 }
-
 @keyframes pulse-amber {
-    0% { box-shadow: 0 0 0 0 rgba(255, 176, 0, 0.7); }
-    70% { box-shadow: 0 0 0 6px rgba(255, 176, 0, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 176, 0, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(255,176,0,.7); }
+    70% { box-shadow: 0 0 0 6px rgba(255,176,0,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,176,0,0); }
 }
 
-/* Map Popups (MapLibre specific) */
+/* -------------------------------------------------------
+   MAP POPUPS
+------------------------------------------------------- */
 .maplibregl-popup-content {
-    background: rgba(10, 10, 9, 0.9);
-    border: 1px solid var(--amber);
-    color: var(--amber);
-    border-radius: 4px;
+    background: rgba(4,6,16,.93); border: 1px solid var(--amber);
+    color: var(--amber); border-radius: 3px;
     font-family: 'Share Tech Mono', monospace;
-    box-shadow: 0 0 10px var(--amber-dim);
-    padding: 10px;
+    box-shadow: 0 0 12px var(--amber-dim); padding: 10px;
 }
 .maplibregl-popup-content h3 { border-bottom: 1px solid var(--amber); padding-bottom: 2px; }
-.maplibregl-popup-content p { font-size: 0.8rem; margin: 3px 0; }
+.maplibregl-popup-content p { font-size: .8rem; margin: 3px 0; }
 .maplibregl-popup-content iframe { border: 1px solid var(--amber-dim); margin-top: 5px; }
 
-/* Marker Colors */
+/* -------------------------------------------------------
+   MARKERS
+------------------------------------------------------- */
 .marker-flight svg, .marker-iss svg { filter: drop-shadow(0 0 3px currentColor); }
 .marker-ship svg { filter: drop-shadow(0 0 3px currentColor); }
 .ship-cargo svg { fill: #00f2fe; color: #00f2fe; }
 .ship-naval svg { fill: #ff4444; color: #ff4444; filter: drop-shadow(0 0 5px #ff4444); }
 
-/* V4.1 Webcams - Fully redesigned for Global Sat-View Contrast */
-.marker-webcam {
-    /* MapLibre wrapper */
-    width: 28px;
-    height: 28px;
-    cursor: pointer;
+.marker-webcam { width: 28px; height: 28px; cursor: pointer; }
+.marker-webcam-inner {
+    color: #000; font-size: 15px; background: #00ff00;
+    width: 100%; height: 100%; border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 0 10px #00ff00; animation: pulse-webcam 2s infinite;
 }
-.marker-webcam-inner { 
-    color: #000;
-    font-size: 15px; 
-    background: #00ff00; 
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 10px #00ff00;
-    animation: pulse-webcam 2s infinite;
-}
-
 @keyframes pulse-webcam {
-    0% { transform: scale(1); box-shadow: 0 0 10px #00ff00; }
-    50% { transform: scale(1.1); box-shadow: 0 0 20px #00ff00, 0 0 10px #00ff00 inset; }
-    100% { transform: scale(1); box-shadow: 0 0 10px #00ff00; }
+    0%   { transform: scale(1);   box-shadow: 0 0 10px #00ff00; }
+    50%  { transform: scale(1.1); box-shadow: 0 0 20px #00ff00, 0 0 10px #00ff00 inset; }
+    100% { transform: scale(1);   box-shadow: 0 0 10px #00ff00; }
 }
 
-/* Media Queries for Mobile Responsiveness */
+/* -------------------------------------------------------
+   INTELLIGENCE PANEL — collapsible tab, TOP-LEFT
+------------------------------------------------------- */
+#intelligence-panel {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    width: 340px;
+    z-index: 100;
+    background: var(--panel-bg);
+    border: 1px solid rgba(0,255,0,.25);
+    border-left: 3px solid var(--neon-green);
+    border-radius: 3px;
+    box-shadow: 0 4px 30px rgba(0,0,0,.6), 0 0 16px rgba(0,255,0,.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    /* Collapsed */
+    max-height: var(--collapse-h);
+    overflow: hidden;
+    color: var(--neon-green);
+    transition: max-height 0.38s cubic-bezier(0.4,0,0.2,1);
+}
+#intelligence-panel:hover { max-height: 85vh; }
+
+#intelligence-panel::before {
+    content: " "; display: block; position: absolute;
+    inset: 0; pointer-events: none; z-index: 100;
+    background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.12) 50%),
+                linear-gradient(90deg, rgba(255,0,0,.03), rgba(0,255,0,.01), rgba(0,0,255,.03));
+    background-size: 100% 4px, 10px 100%;
+    opacity: .5;
+}
+
+/* Tab strip inside intelligence panel */
+#intelligence-panel h2 {
+    height: var(--collapse-h);
+    padding: 0 14px;
+    font-size: .85rem;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px dashed rgba(0,255,0,.2);
+    flex-shrink: 0;
+    cursor: default;
+}
+#intelligence-panel:hover h2 {
+    height: auto;
+    padding: 10px 14px;
+    margin-bottom: 0;
+    border-bottom: 1px dashed rgba(0,255,0,.4);
+}
+
+#intelligence-panel h2 .pulse {
+    width: 8px; height: 8px;
+    background: var(--neon-green); border-radius: 50%;
+    box-shadow: 0 0 8px var(--neon-green);
+    animation: pulse-green 1.5s infinite;
+}
+@keyframes pulse-green {
+    0%   { box-shadow: 0 0 0 0 rgba(0,255,0,.7); }
+    70%  { box-shadow: 0 0 0 6px rgba(0,255,0,0); }
+    100% { box-shadow: 0 0 0 0 rgba(0,255,0,0); }
+}
+
+#alert-list {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 8px 14px 12px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--neon-green) transparent;
+}
+#alert-list::-webkit-scrollbar { width: 4px; }
+#alert-list::-webkit-scrollbar-thumb { background: rgba(0,255,0,.4); }
+
+.alert-item {
+    background: rgba(0,255,0,.03); border: 1px solid rgba(0,255,0,.18);
+    padding: 10px; margin-bottom: 8px;
+    cursor: pointer; transition: all .2s; position: relative; overflow: hidden;
+}
+.alert-item:hover { background: rgba(0,255,0,.1); border-color: var(--neon-green); transform: translateX(3px); }
+.alert-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--neon-green); }
+.alert-item h4 { font-size: .88rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.alert-item p { font-size: .73rem; opacity: .85; line-height: 1.3; }
+.alert-item .timestamp { display: block; margin-top: 5px; font-size: .62rem; opacity: .55; }
+
+/* Severity classes */
+.severity-high  { background: rgba(255,51,0,.05); border-color: rgba(255,51,0,.3); color: var(--neon-red); }
+.severity-high::before { background: var(--neon-red); }
+.severity-high h4 { color: var(--neon-red); }
+.severity-high:hover { background: rgba(255,51,0,.15); border-color: var(--neon-red); }
+
+.severity-medium { background: rgba(255,176,0,.05); border-color: rgba(255,176,0,.3); color: var(--amber); }
+.severity-medium::before { background: var(--amber); }
+.severity-medium h4 { color: var(--amber); }
+.severity-medium:hover { background: rgba(255,176,0,.15); border-color: var(--amber); }
+
+/* -------------------------------------------------------
+   PULSE RING (generic)
+------------------------------------------------------- */
+@keyframes pulse-ring {
+    0%   { opacity: 1; }
+    50%  { opacity: .3; }
+    100% { opacity: 1; }
+}
+
+/* -------------------------------------------------------
+   MOBILE
+------------------------------------------------------- */
 @media (max-width: 768px) {
-    #mobile-menu-btn {
-        display: block; /* Show hamburger */
-    }
-    
+    #mobile-menu-btn { display: block; }
     #sidebar {
-        width: 100%;
-        max-width: 300px;
-        top: 65px;
-        right: 15px;
-        transform: translateX(120%); /* Hide off-screen by default */
-        background: rgba(10, 10, 9, 0.85); /* Slightly darker when open to ensure text readability */
+        width: calc(100% - 28px);
+        top: 65px; right: 14px;
+        max-height: var(--collapse-h);
     }
-    
-    #sidebar.open {
-        transform: translateX(0); /* Slide in */
-    }
-    
-    .maplibregl-ctrl-top-left {
-        top: 65px; /* Ensure map controls aren't colliding with standard mobile top-bars */
-    }
+    #sidebar.open { max-height: 85vh; overflow-y: auto; }
+    #intelligence-panel { width: calc(100% - 28px); left: 14px; top: auto; bottom: 14px; }
+    .maplibregl-ctrl-top-left { top: 65px; }
 }

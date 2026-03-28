@@ -1,0 +1,16 @@
+# Node / npm
+node_modules/
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/settings.json
+*.suo
+*.user
+
+# Logs
+*.log

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Worldview V4.0 | Global Command</title>
+    <title>Worldview V6.0 | Global Command Center</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="./style.css?v=5.5">
+    <link rel="stylesheet" href="./style.css?v=6.0">
 </head>
 <body class="theme-clean">
     <div id="map"></div>
@@ -25,11 +25,12 @@
 
     <div id="sidebar" class="terminal-panel">
         <header>
-            <h1>WORLDVIEW <span class="version">V5.5</span></h1>
-            <div class="sub-header">
-                <span class="blinking-cursor">_</span> SATELLITE UPLINK ACTIVE
-            </div>
+            <h1>WORLDVIEW <span class="version">V6.0</span></h1>
+            <span class="sidebar-expand-hint">▼ EXPAND</span>
+            <span class="byline" style="color:var(--amber);">by RB_Design 2026</span>
+            <div class="sub-header"><span class="blinking-cursor">_</span> SATELLITE UPLINK ACTIVE</div>
         </header>
+        <div class="sidebar-body">
 
         <section class="menu-group" style="border-bottom: 1px dotted rgba(0, 255, 0, 0.3); padding-bottom: 15px; margin-bottom: 15px;">
             <div class="control-item">
@@ -61,6 +62,27 @@
                 <span>Global Seismic Activity</span>
                 <label class="toggle-switch">
                     <input type="checkbox" id="toggle-earthquakes">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="control-item" style="margin-top: 8px;">
+                <span>Night Light Pollution</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-nightlights">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="control-item" style="margin-top: 8px;">
+                <span>Population Density</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-population">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="control-item" style="margin-top: 8px;">
+                <span>Surface Temperature</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-temperature">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -108,6 +130,35 @@
                     <span class="slider"></span>
                 </label>
             </div>
+            <div class="control-item" style="margin-top: 8px;">
+                <span>Starlink Network</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-starlink">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="control-item" style="margin-top: 8px;">
+                <span>Satellite &amp; Debris</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-satellites">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="control-item" style="margin-top: 8px; cursor:pointer; border-top: 1px solid rgba(255,100,0,0.2); padding-top: 8px;" id="launch-tracker-trigger">
+                <span style="color:#ff8844;">&#128640; Launch Tracker</span>
+                <i class="fa-solid fa-chevron-right" style="color:#ff6600; font-size:.75rem;"></i>
+            </div>
+        </section>
+
+        <section class="menu-group">
+            <h2 class="category-title"><i class="fa-solid fa-crosshairs"></i> CONFLICTS</h2>
+            <div class="control-item">
+                <span>Active War Zones</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-conflicts">
+                    <span class="slider"></span>
+                </label>
+            </div>
         </section>
 
         <section class="menu-group">
@@ -121,12 +172,61 @@
             </div>
         </section>
 
+        <section class="menu-group">
+            <h2 class="category-title"><i class="fa-solid fa-triangle-exclamation"></i> HAZARDS</h2>
+            <div class="control-item">
+                <span>Active Volcanoes</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-volcanoes">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="control-item" style="margin-top: 8px;">
+                <span>Radiation Sites</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-radiation">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="control-item" style="margin-top: 8px;">
+                <span>Internet Outages</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-internet">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </section>
+
         <footer class="status-panel">
             <div class="pulse-ring"></div>
             <div id="status-text">SYSTEM ONLINE...</div>
         </footer>
+
+        </div><!-- /.sidebar-body -->
     </div>
 
-    <script src="./main.js?v=5.5"></script>
+    <div id="intelligence-panel">
+        <h2>INTELLIGENCE <span class="pulse"></span></h2>
+        <div id="alert-list">
+            <div class="alert-item" style="opacity: 0.5;">
+                <h4><i class="fa-solid fa-satellite-dish"></i> INITIALIZING AI CORE...</h4>
+                <p>Establishing spatial aggregation patterns.</p>
+                <span class="timestamp">AWAITING TELEMETRY</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="solar-hud" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:900;background:rgba(0,5,20,0.85);border:1px solid rgba(0,200,255,0.3);backdrop-filter:blur(12px);padding:8px 14px;border-radius:4px;font-family:'Share Tech Mono',monospace;color:#ccd;min-width:220px;font-size:.7rem;">
+        <div style="color:#0af;font-size:.6rem;letter-spacing:2px;">☀ SOLAR STORM INDEX</div>
+        <div style="opacity:.5;font-size:.65rem;margin-top:4px;">CONNECTING TO NOAA SWPC...</div>
+    </div>
+
+    <!-- Launch Tracker HUD: shown only on menu hover -->
+    <div id="launch-hud" style="position:fixed;bottom:80px;left:280px;z-index:900;background:rgba(0,5,20,0.92);border:1px solid rgba(255,100,0,0.4);backdrop-filter:blur(14px);padding:10px 14px;border-radius:4px;font-family:'Share Tech Mono',monospace;color:#ccd;min-width:240px;max-width:270px;font-size:.7rem;opacity:0;pointer-events:none;transition:opacity 0.25s ease, transform 0.25s ease;transform:translateX(-8px);">
+        <div style="color:#ff6600;font-size:.6rem;letter-spacing:2px;margin-bottom:6px;">&#128640; UPCOMING LAUNCHES</div>
+        <div id="launch-feed" style="opacity:.5;font-size:.65rem;">CONNECTING TO LAUNCH LIBRARY...</div>
+    </div>
+
+    <script src="./main.js?v=6.0"></script>
 </body>
 </html>
