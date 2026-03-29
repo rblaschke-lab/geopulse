@@ -1,5 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 2. Initialize V4 MapLibre GL JS
+    // ----------------------------------------------------
+    // CONSTANTS & STATE (V7.0)
+    // ----------------------------------------------------
+    const VERSION = "7.0";
+    const toggles = {
+        terminator: false, fires: false, weather: false, borders: false,
+        ships: false, flights: false, iss: false, starlink: false, earthquakes: false, webcams: false,
+        nightlights: false, population: false, satellites: false, temperature: false,
+        volcanoes: false, radiation: false, internet: false, conflicts: false,
+        regimes: false, blocs: false, cables: false, datacenters: false, nuclear: false, nukes: false,
+        ticker: true, power: false
+    };
+
+    let issMarker = null;
+    let flightMarkers = [];
+    let shipMarkers = [];
+    let webcamMarkers = [];
+    let powerMarkers = [];
+    let terminatorInterval = null;
+
+    // ----------------------------------------------------
+    // INITIALIZE V4 MAPLIBRE GL JS
+    // ----------------------------------------------------
     const map = new maplibregl.Map({
         container: 'map',
         style: {
@@ -8,35 +30,63 @@ document.addEventListener("DOMContentLoaded", () => {
             sources: {
                 'esri-satellite': {
                     type: 'raster',
-                    tiles: [
-                        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-                    ],
-                    tileSize: 256,
-                    maxzoom: 15,
+                    tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+                    tileSize: 256, maxzoom: 15,
                     attribution: '&copy; Esri &mdash; NASA / USGS'
                 }
             },
-            layers: [{
-                id: 'base-map',
-                type: 'raster',
-                source: 'esri-satellite',
-                minzoom: 0,
-                maxzoom: 15
-            }]
+            layers: [{ id: 'base-map', type: 'raster', source: 'esri-satellite', minzoom: 0, maxzoom: 15 }]
         },
-        center: [15.0, 48.0],
-        zoom: 2, 
-        pitch: 0, 
-        bearing: 0,
+        center: [15.0, 48.0], zoom: 2.2, pitch: 0, bearing: 0,
         projection: { type: 'globe' }, 
-        dragRotate: true,
-        dragPan: true,
-        scrollZoom: true
+        dragRotate: true, dragPan: true, scrollZoom: true
     });
 
     map.addControl(new maplibregl.NavigationControl(), 'top-left');
 
-    // ── Category collapse (independent of map load) ──────────
+    const statusText = document.getElementById("status-text");
+    const setStatus = (msg) => { if(statusText) statusText.innerText = msg; };
+
+    // ── V7.0 UI: ADAPTIVE NAVIGATION & ORIENTATION ──────────
+    const sidebar = document.getElementById('sidebar');
+    const intelPanel = document.getElementById('intelligence-panel');
+
+    const switchSection = (target) => {
+        if(window.innerWidth > 768) return;
+
+        sidebar.classList.remove('active');
+        intelPanel.classList.remove('active');
+        
+        if(target === 'layers') sidebar.classList.add('active');
+        if(target === 'intel') intelPanel.classList.add('active');
+        if(target === 'about') window.open('./about.html', '_blank');
+
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.target === target);
+        });
+    };
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchSection(btn.dataset.target || (btn.id === 'mobile-layers-btn' ? 'layers' : '')));
+    });
+
+    map.on('click', () => {
+        if(window.innerWidth <= 768) {
+            sidebar.classList.remove('active');
+            intelPanel.classList.remove('active');
+        }
+    });
+
+    const handleOrientation = () => {
+        const isLandscape = window.innerWidth > window.innerHeight;
+        if (isLandscape && window.innerWidth <= 1024) {
+            sidebar.classList.remove('active');
+            intelPanel.classList.remove('active');
+        }
+    };
+    window.addEventListener('resize', handleOrientation);
+    window.addEventListener('orientationchange', handleOrientation);
+
     document.querySelectorAll('.cat-toggle').forEach(btn => {
         btn.addEventListener('click', () => {
             const section = btn.closest('.collapsible-section');
@@ -44,58 +94,39 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    const statusText = document.getElementById("status-text");
-    const setStatus = (msg) => { statusText.innerText = msg; };
-
-    // State & Layers
-    let issMarker = null;
-    let flightMarkers = [];
-    let shipMarkers = [];
-    let webcamMarkers = [];
-    let terminatorInterval = null;
-    
-    // Application State
-    const toggles = {
-        terminator: false, fires: false, weather: false, borders: false,
-        ships: false, flights: false, iss: false, starlink: false, earthquakes: false, webcams: false,
-        nightlights: false, population: false, satellites: false, temperature: false,
-        volcanoes: false, radiation: false, internet: false, conflicts: false,
-        regimes: false, blocs: false, cables: false, datacenters: false, nuclear: false, nukes: false
+    // ── MISSION INTELLIGENCE: REAL-TIME TICKER (V7.0) ──────
+    const fetchGlobalNews = async () => {
+        try {
+            const rssUrl = encodeURIComponent('http://feeds.bbci.co.uk/news/world/rss.xml');
+            const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
+            const data = await res.json();
+            if (data.status === 'ok') {
+                const headlines = data.items.map(item => item.title.toUpperCase());
+                const tickerText = " // " + headlines.join(" // ") + " // " + headlines.slice(0, 3).join(" // ");
+                const topCont = document.getElementById('ticker-content-top');
+                const botCont = document.getElementById('ticker-content-bottom');
+                if(topCont) topCont.innerText = `SITREP V${VERSION}: ${tickerText}`;
+                if(botCont) botCont.innerText = `GLOBAL COMMAND V${VERSION}: ${tickerText}`;
+            }
+        } catch (e) {}
     };
 
+    document.getElementById('toggle-ticker')?.addEventListener('change', (e) => {
+        toggles.ticker = e.target.checked;
+        document.body.classList.toggle('no-ticker', !toggles.ticker);
+    });
+
+    // ----------------------------------------------------
+    // MAP DATA INITIALIZATION
+    // ----------------------------------------------------
     map.on('load', () => {
-        // --- MOBILE MENU BEHAVIOR ---
-        let menuToggleLock = false;
-        const sidebar = document.getElementById('sidebar');
-        const mobileBtn = document.getElementById('mobile-menu-btn');
-        
-        if (mobileBtn && sidebar) {
-            mobileBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation(); // prevent map from catching the initial click
-                
-                menuToggleLock = true;
-                sidebar.classList.toggle('open');
-                
-                // Keep the lock active for 300ms to swallow any double taps or ghost MapLibre canvas events!
-                setTimeout(() => { menuToggleLock = false; }, 300);
-            });
-        }
+        setStatus(`SYSTEM INITIALIZED V${VERSION}. ESTABLISHING SECURE CONNECTION...`);
 
-        map.on('click', () => {
-            // Prevent MapLibre from capturing the exact same touch down event and instantly closing it
-            if (menuToggleLock) return;
-            
-            if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains('open')) {
-                sidebar.classList.remove('open');
-            }
-        });
-        // -----------------------------
+        // Initialize News
+        fetchGlobalNews();
+        setInterval(fetchGlobalNews, 300000); // 5min
 
-        // --- MAP DATA INITIALIZATION ---
-        setStatus("SATELLITE DOWNLINK ESTABLISHED. INITIALIZING MODEL V4.1.");
-
-        // Draw Solar Terminator Night Shadow Before Weather/Other Data
+        // Draw Solar Terminator Night Shadow
         map.addSource('terminator', {
             type: 'geojson',
             data: getTerminatorGeoJSON()
@@ -105,10 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
             type: 'fill',
             source: 'terminator',
             layout: { visibility: 'none' },
-            paint: {
-                'fill-color': '#000000',
-                'fill-opacity': 0.65
-            }
+            paint: { 'fill-color': '#000000', 'fill-opacity': 0.65 }
         });
 
         // Setup Cities Layer (Appears on zoom)
@@ -253,34 +281,35 @@ document.addEventListener("DOMContentLoaded", () => {
         // Initialize Feeds
         fetchNASA_Fires();
         fetchWeather();
-        fetchOceanSST();             // Ocean Surface Temperature (NASA GHRSST)
-        fetchPopulationDensity();   // Population Density
-        fetchTemperatureLayer();    // Global Warming / Surface Temp
-        initVolcanoes();            // Active Volcanoes
-        initRadiationSites();       // Radiation Hotspots
-        fetchSolarStorm();          // Solar Storm / Kp Index
-        setInterval(fetchSolarStorm, 120000); // 2min
-        fetchInternetOutages();     // Internet Outages (IODA)
-        setInterval(fetchInternetOutages, 300000); // 5min
-        fetchLaunches();                    // Rocket Launch Tracker
-        setInterval(fetchLaunches, 600000); // 10min
+        fetchOceanSST();
+        fetchPopulationDensity();
+        fetchTemperatureLayer();
+        initVolcanoes();
+        initRadiationSites();
+        fetchSolarStorm();
+        setInterval(fetchSolarStorm, 120000); 
+        fetchInternetOutages();
+        setInterval(fetchInternetOutages, 300000); 
+        fetchLaunches();
+        setInterval(fetchLaunches, 600000); 
         fetchISS();
-        setInterval(fetchISS, 15000);       // ISS: 15s (reduced from 5s)
+        setInterval(fetchISS, 15000);       
         initGhostFleet();
         fetchEarthquakes();
-        setInterval(fetchEarthquakes, 600000); // Earthquake: 10min refresh
+        setInterval(fetchEarthquakes, 600000); 
         fetchFlights();
-        setInterval(fetchFlights, 300000);     // Flights: 5min refresh
+        setInterval(fetchFlights, 300000);     
         initWebcams();
         initStarlink();
         initSatelliteTracker();
         initIntelligenceCore();
         initConflictZones();
-        initRegimeMap();            // Democracy / Autocracy
-        initGeoBlocs();             // NATO / BRICS / SCO
-        initUnderseaCables();       // Undersea Cable Routes
-        initDataCenters();          // Hyperscale Data Centers
-        initNuclearLayer();         // Nuclear Power Plants + Arsenal
+        initRegimeMap();            
+        initGeoBlocs();             
+        initUnderseaCables();       
+        initDataCenters();          
+        initNuclearLayer();         
+        fetchPowerOutages(); // New V7.0
 
         // Dynamically update shadow every 60 seconds
         terminatorInterval = setInterval(() => {
@@ -393,40 +422,26 @@ document.addEventListener("DOMContentLoaded", () => {
     </svg>`;
 
     const getIssPopupHtml = (alt, vel, lat, lon) => {
-        // Use NASA TV YouTube channel embed instead of a fixed video ID (more stable)
-        const nasaTvEmbed = 'https://www.youtube.com/embed/live_stream?channel=UCLA_DiR1FfKNvjuUpBHmylQ&autoplay=1&mute=1&rel=0';
+        const nasaTvEmbed = 'https://www.youtube.com/embed/P9C25Un7xaM?autoplay=1&mute=1&rel=0&modestbranding=1';
         return `
-        <div style="font-family: 'Share Tech Mono', monospace; min-width: 310px;">
-            <h3 style="color: #ffb000; margin: 0 0 8px; border-bottom: 1px solid rgba(255,176,0,0.4); padding-bottom: 6px;">
-                <i class="fa-solid fa-satellite"></i> ISS LIVE TELEMETRY
+        <div style="font-family: 'Share Tech Mono', monospace; min-width: 320px; color: var(--amber);">
+            <h3 style="color: var(--amber); margin: 0 0 8px; border-bottom: 1px solid var(--amber-dim); padding-bottom: 6px;">
+                <i class="fa-solid fa-satellite"></i> ISS LIVE RECON V${VERSION}
             </h3>
-            <div style="position:relative; width:100%; padding-top:56.25%; background:#000; border: 1px solid rgba(255,176,0,0.5); margin-bottom: 8px; overflow:hidden; border-radius:2px;">
-                <iframe
-                    id="iss-stream-iframe"
-                    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
-                    src="${nasaTvEmbed}"
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    allowfullscreen
-                    title="NASA TV / ISS Earth Viewing">
-                </iframe>
-                <div style="position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.8);padding:2px 8px;border-radius:2px;pointer-events:none;">
-                    <span style="color:red;font-size:9px;">&#9679; LIVE</span>
-                    <span style="color:#aaa;font-size:9px;margin-left:4px;">NASA TV</span>
-                </div>
-                <div style="position:absolute;bottom:6px;right:6px;pointer-events:none;">
-                    <a href="https://www.nasa.gov/nasalive" target="_blank"
-                       style="color:#ffb000;font-size:9px;text-decoration:none;background:rgba(0,0,0,.8);padding:2px 5px;border-radius:2px;">&#9654; nasa.gov/nasalive</a>
+            <div style="position:relative; width:100%; padding-top:56.25%; background:#000; border: 1px solid var(--amber-dim); margin-bottom: 10px; overflow:hidden; border-radius:3px;">
+                <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" src="${nasaTvEmbed}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <div style="position:absolute;top:8px;left:8px;background:rgba(255,0,0,0.85);padding:3px 10px;border-radius:2px;pointer-events:none;animation: blink 2s infinite;">
+                    <span style="color:#fff;font-size:10px;font-weight:bold;letter-spacing:1px;">&#9679; LIVE FEED</span>
                 </div>
             </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size: 0.75rem;">
-                <div style="background:rgba(255,176,0,0.08);padding:4px 6px;border-radius:2px;">ALT: <span style="color:#ffb000;">${alt.toFixed(0)} KM</span></div>
-                <div style="background:rgba(255,176,0,0.08);padding:4px 6px;border-radius:2px;">VEL: <span style="color:#ffb000;">${vel.toFixed(0)} KM/H</span></div>
-                <div style="background:rgba(255,176,0,0.08);padding:4px 6px;border-radius:2px;">LAT: <span style="color:#0ff;">${lat.toFixed(3)}&deg;</span></div>
-                <div style="background:rgba(255,176,0,0.08);padding:4px 6px;border-radius:2px;">LON: <span style="color:#0ff;">${lon.toFixed(3)}&deg;</span></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size: 0.78rem;">
+                <div style="background:rgba(255,176,0,0.08);padding:6px 8px;border:1px solid var(--amber-dim);">ALT: ${alt.toFixed(0)} KM</div>
+                <div style="background:rgba(255,176,0,0.08);padding:6px 8px;border:1px solid var(--amber-dim);">VEL: ${vel.toFixed(0)} KM/H</div>
+                <div style="background:rgba(0,180,255,0.08);padding:6px 8px;border:1px solid rgba(0,180,255,0.2);">LAT: ${lat.toFixed(4)}°</div>
+                <div style="background:rgba(0,180,255,0.08);padding:6px 8px;border:1px solid rgba(0,180,255,0.2);">LON: ${lon.toFixed(4)}°</div>
             </div>
-            <p style="font-size:0.62rem; opacity:0.45; margin-top:6px; margin-bottom:0;">Artemis II: Crewed lunar flyby &mdash; launch 2025 &bull; <a href="https://www.nasa.gov/artemis" target="_blank" style="color:#ffb000;">nasa.gov/artemis</a></p>
-        </div>
-    `;};
+        </div>`;
+    };
 
     const fetchISS = async () => {
         try {
@@ -452,6 +467,41 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         } catch (error) {}
+    };
+
+    // ----------------------------------------------------
+    // API: Power Outages (V7.0)
+    // ----------------------------------------------------
+    const powerOutageData = [
+        { id: 'PWR-UKR-01', name: 'UKR GRID DAMAGE', loc: [30.5234, 50.4501], date: 'ONGOING 2024', impact: '4.5M PEOPLE', status: 'live' },
+        { id: 'PWR-RSA-01', name: 'RSA LOAD SHEDDING', loc: [28.0473, -26.2041], date: 'ONGOING', impact: 'GRID INSTABILITY', status: 'live' },
+        { id: 'PWR-ECU-01', name: 'ECUADOR DROUGHT POWER CRISIS', loc: [-78.4678, -0.1807], date: 'APR 2024 - PRESENT', impact: 'NATIONWIDE RATIONING', status: 'live' },
+        { id: 'PWR-GER-01', name: 'BERLIN KÖPENICK FAILURE', loc: [13.4050, 52.5200], date: 'FEB 2024', impact: '30,000 HH / 24H', status: 'hist' },
+        { id: 'PWR-USA-TX', name: 'TEXAS GRID STRESS', loc: [-97.7431, 30.2672], date: 'JAN 2024', impact: 'STORM-RELATED FAILURE', status: 'hist' },
+        { id: 'PWR-BRA-01', name: 'BRAZIL BLACKOUT', loc: [-47.8825, -15.7942], date: 'AUG 2023', impact: '29M PEOPLE', status: 'hist' },
+        { id: 'PWR-PAK-01', name: 'PAKISTAN NATIONAL FAILURE', loc: [67.0011, 24.8607], date: 'JAN 2023', impact: '220M PEOPLE / 12H', status: 'hist' }
+    ];
+
+    const fetchPowerOutages = () => {
+        powerMarkers.forEach(m => m.remove());
+        powerMarkers = [];
+        powerOutageData.forEach(p => {
+            const el = document.createElement('div');
+            el.className = `marker-power marker-power-${p.status}`;
+            el.innerHTML = '<div class="core"></div>';
+            const marker = new maplibregl.Marker({ element: el }).setLngLat(p.loc).setPopup(new maplibregl.Popup({ offset: 10 }).setHTML(`
+                <div style="font-family:'Share Tech Mono',monospace; min-width:200px; color:${p.status === 'live' ? '#ff3300' : '#888'};">
+                    <header style="border-bottom:1px solid currentColor; margin-bottom:5px; font-weight:bold;">
+                        <i class="fa-solid fa-plug-circle-xmark"></i> ${p.name}
+                    </header>
+                    <div style="font-size:0.75rem;">
+                        <div>ID: ${p.id} | DATE: ${p.date}</div>
+                        <div style="color:#fff; margin-top:5px;">IMPACT: ${p.impact}</div>
+                    </div>
+                </div>`));
+            if (toggles.power) marker.addTo(map);
+            powerMarkers.push(marker);
+        });
     };
 
 
@@ -545,104 +595,127 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // ----------------------------------------------------
-    // API: Live Flights
+    // API: Live Flights (OpenSky Network)
     // ----------------------------------------------------
     const planeSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="#ffb000" xmlns="http://www.w3.org/2000/svg">
         <path d="M21 16V14L13 9V3.5C13 2.67 12.33 2 11.5 2C10.67 2 10 2.67 10 3.5V9L2 14V16L10 13.5V19L8 20.5V22L11.5 21L15 22V20.5L13 19V13.5L21 16Z"/>
     </svg>`;
     
-    // Command Center Simulated Global Air Traffic
-    const mockFlightsData = [];
-    for(let i=0; i<40; i++) {
-        mockFlightsData.push({
-            callsign: 'Lufthansa ' + Math.floor(100 + Math.random()*9000),
-            lon: (Math.random() * 360) - 180,
-            lat: (Math.random() * 140) - 70, // Avoid freezing poles
-            hdg: Math.random() * 360,
-            spd: 0.00008 + (Math.random() * 0.00004), // Realistic velocity curve on macro scale
-            alt: Math.floor(30000 + Math.random() * 10000)
-        });
-    }
+    // Aviation Best-Guess Route Logic V7.0
+    const estimateRoute = (callsign) => {
+        if (!callsign) return "TRANSCONTINENTAL";
+        const num = parseInt(callsign.replace(/\D/g, ''));
+        if (num < 150) return "FRA/MUC —> JFK/LAX (US NORTH)";
+        if (num >= 400 && num < 500) return "FRA —> GRU/EZE (LATAM)";
+        if (num >= 700 && num < 800) return "FRA/MUC —> HND/SIN (ASIA)";
+        if (num >= 1000 && num < 2000) return "EUR REGIONAL RECON";
+        if (callsign.startsWith('CFG')) return "HOLIDAY CHARTER LOGISTICS";
+        return "SCHEDULED GLOBAL OPS";
+    };
 
-    const fetchFlights = () => {
-        setStatus("SCANNING GLOBAL AIRSPACE...");
-        
-        flightMarkers.forEach(m => m.marker.remove());
-        flightMarkers = [];
-        
-        mockFlightsData.forEach(f => {
-            const el = document.createElement('div');
-            el.className = 'marker-flight';
-            el.innerHTML = planeSvg;
-            const marker = new maplibregl.Marker({ element: el, rotation: f.hdg, rotationAlignment: 'map', pitchAlignment: 'map' })
-                .setLngLat([f.lon, f.lat])
-                .setPopup(new maplibregl.Popup({ offset: 15 }).setHTML(`
-                    <h3><i class="fa-solid fa-plane"></i> FLIGHT: ${f.callsign}</h3>
-                    <p>ALT: ${f.alt} FT</p>
-                    <p>SPD: ${(f.spd * 9000000).toFixed(0)} KM/H</p>
-                    <p>HDG: ${Math.round(f.hdg)}&deg; TRUE</p>
-                `));
-            f.marker = marker;
-            marker.addTo(map);
-            // Always hidden until toggled on
-            marker.getElement().style.display = 'none';
-            flightMarkers.push(f);
-        });
-        
-        let animationRunning = false;
-        const animateAirspace = () => {
-            flightMarkers.forEach(f => {
-                // BUGFIX: Always move position, only control visibility via display
-                f.lat += Math.cos(f.hdg * Math.PI / 180) * f.spd;
-                f.lon += Math.sin(f.hdg * Math.PI / 180) * f.spd;
+    const fetchFlights = async () => {
+        setStatus("SCANNING GLOBAL AIRSPACE (OPENSKY RELAY)...");
+        try {
+            const res = await fetch('https://opensky-network.org/api/states/all');
+            const data = await res.json();
+            
+            flightMarkers.forEach(m => m.marker.remove());
+            flightMarkers = [];
+            
+            const fleetStates = data.states.filter(s => {
+                const callsign = (s[1] || "").trim().toUpperCase();
+                return callsign.startsWith('DLH') || callsign.startsWith('CFG');
+            }).slice(0, 50);
+
+            fleetStates.forEach(s => {
+                const callsign = s[1].trim();
+                const lon = s[5];
+                const lat = s[6];
+                const alt = Math.round(s[7] * 3.28084);
+                const spd = Math.round(s[9] * 3.6);
+                const hdg = s[10] || 0;
+                const airline = callsign.startsWith('DLH') ? "LUFTHANSA" : "CONDOR";
+                const route = estimateRoute(callsign);
+
+                const el = document.createElement('div');
+                el.className = 'marker-flight';
+                el.innerHTML = airline === "CONDOR" ? planeSvg.replace('#ffb000', '#00ff88') : planeSvg;
                 
-                if(f.lon > 180) f.lon -= 360;
-                if(f.lon < -180) f.lon += 360;
-                if(f.lat > 85 || f.lat < -85) f.hdg += 180;
+                const marker = new maplibregl.Marker({ element: el, rotation: hdg, rotationAlignment: 'map', pitchAlignment: 'map' })
+                    .setLngLat([lon, lat])
+                    .setPopup(new maplibregl.Popup({ offset: 15, maxWidth: '280px' }).setHTML(`
+                        <div style="font-family:'Share Tech Mono',monospace; min-width:200px;">
+                            <h3 style="color:${airline === "CONDOR" ? '#00ff88' : '#ffb000'}; margin:0 0 8px; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:5px;">
+                                <i class="fa-solid fa-plane-departure"></i> ${airline}
+                            </h3>
+                            <div style="font-size:1.1rem; color:#fff; margin-bottom:8px;">FLIGHT: ${callsign}</div>
+                            <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:3px;">
+                                <div style="font-size:0.65rem; opacity:0.5; letter-spacing:1px;">ESTIMATED ROUTE</div>
+                                <div style="font-size:0.85rem; color:#0af; margin-bottom:10px;">${route}</div>
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                                    <div><span style="opacity:0.4;font-size:10px;">ALT</span><br><strong>${alt} FT</strong></div>
+                                    <div><span style="opacity:0.4;font-size:10px;">SPD</span><br><strong>${spd} KM/H</strong></div>
+                                </div>
+                            </div>
+                            <div style="font-size:0.6rem; opacity:0.3; margin-top:10px; text-align:right;">SOURCE: OPENSKY NETWORK</div>
+                        </div>
+                    `));
                 
-                // Always update marker position on the map (even when invisible)
-                f.marker.setLngLat([f.lon, f.lat]);
-                f.marker.setRotation(f.hdg);
+                marker.addTo(map);
+                if (!toggles.flights) marker.getElement().style.display = 'none';
+                flightMarkers.push({ marker, lon, lat, hdg, spd: s[9] / 1000000 });
             });
-            requestAnimationFrame(animateAirspace);
-        };
-        requestAnimationFrame(animateAirspace);
-        setStatus("GLOBAL AIRSPACE SIMULATION LOADED.");
+            setStatus(`GLOBAL AIRSPACE SCANNED: ${fleetStates.length} TARGETS IDENTIFIED.`);
+        } catch (error) {
+            console.error("Aviation fetch error:", error);
+            setStatus("AIRSPACE SCAN FAILED: RELAY TIMEOUT.");
+        }
     };
 
     // ----------------------------------------------------
     // MOCK: Marine AIS (Ghost Fleet)
     // ----------------------------------------------------
-    const shipSvg = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M15 4H9L3 10V20H21V10L15 4ZM11 6H13V8H11V6ZM19 18H5V11L9.5 6L14.5 6L19 11V18Z"/>
+    const shipSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="#00ffff" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 21L21 20L19.5 10L14.5 4L9.5 4L4.5 10L3 20L4 21L12 21L20 21Z" fill-opacity="0.3" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M9 10L12 6L15 10H9Z" fill="currentColor"/>
     </svg>`;
 
     const fleetData = [
-        { name: 'USS GERALD R. FORD', type: 'naval', cls: 'Aircraft Carrier', lat: 34.5, lon: 18.2, hdg: 45, spd: 0.00008 },
-        { name: 'USS TEXAS', type: 'naval', cls: 'Submarine', lat: 36.1, lon: -5.4, hdg: 90, spd: 0.00005 },
-        { name: 'EVER GIVEN', type: 'cargo', cls: 'Container Ship', lat: 31.5, lon: 32.5, hdg: 10, spd: 0.00006 },
-        { name: 'MSC OSCAR', type: 'cargo', cls: 'Container Ship', lat: 48.8, lon: -6.5, hdg: 210, spd: 0.00007 },
-        { name: 'HMS QUEEN ELIZABETH', type: 'naval', cls: 'Aircraft Carrier', lat: 51.5, lon: 1.5, hdg: 30, spd: 0.00009 },
-        { name: 'MAERSK MC-KINNEY', type: 'cargo', cls: 'Container Ship', lat: 38.0, lon: 12.0, hdg: 300, spd: 0.00006 },
-        { name: 'UNKNOWN CONTACT', type: 'naval', cls: 'Frigate (Est)', lat: 55.0, lon: 3.5, hdg: 180, spd: 0.00010 },
-        { name: 'HAPAG-LLOYD', type: 'cargo', cls: 'Container Ship', lat: 43.2, lon: 5.3, hdg: 270, spd: 0.00008 },
-        { name: 'FS CHARLES DE GAULLE', type: 'naval', cls: 'Aircraft Carrier', lat: 41.5, lon: 6.2, hdg: 110, spd: 0.00007 },
-        { name: 'COSCO SHIPPING', type: 'cargo', cls: 'Bulk Carrier', lat: 36.8, lon: -1.2, hdg: 75, spd: 0.00005 }
+        // Strait of Hormuz / Persian Gulf
+        { name: 'MT FRONT EMPIRE', type: 'tanker', cls: 'VLCC Oil Tanker', lat: 26.68, lon: 56.75, hdg: 120, spd: 0.00004 },
+        { name: 'AL KHAZNAH', type: 'tanker', cls: 'LNG Carrier', lat: 26.45, lon: 56.40, hdg: 300, spd: 0.00008 },
+        { name: 'USS GERALD R. FORD', type: 'naval', cls: 'Nuclear Carrier Group', lat: 25.80, lon: 57.20, hdg: 90, spd: 0.00009 },
+        // Suez / Red Sea
+        { name: 'MAERSK HALIFAX', type: 'cargo', cls: 'U-Large Container', lat: 27.54, lon: 34.25, hdg: 135, spd: 0.00006 },
+        { name: 'EVER GIVEN', type: 'cargo', cls: 'Container Ship', lat: 31.8, lon: 32.5, hdg: 180, spd: 0.00006 },
+        // Global Strategic
+        { name: 'MSC IRINA', type: 'cargo', cls: 'Container Giant', lat: 1.32, lon: 104.12, hdg: 315, spd: 0.00007 },
+        { name: 'HMS QUEEN ELIZABETH', type: 'naval', cls: 'Aircraft Carrier', lat: 48.5, lon: -5.5, hdg: 220, spd: 0.00008 },
+        { name: 'SHANDONG', type: 'naval', cls: 'Carrier Group', lat: 22.1, lon: 114.5, hdg: 10, spd: 0.00006 }
     ];
 
     const initGhostFleet = () => {
         fleetData.forEach(ship => {
             const el = document.createElement('div');
             el.className = `marker-ship ship-${ship.type}`;
-            el.innerHTML = shipSvg;
+            el.innerHTML = shipSvg.replace('currentColor', ship.type === 'naval' ? '#ff3333' : ship.type === 'tanker' ? '#ffa500' : '#00ffff');
             
             const marker = new maplibregl.Marker({ element: el, rotation: ship.hdg, rotationAlignment: 'map', pitchAlignment: 'map' })
             .setLngLat([ship.lon, ship.lat])
-            .setPopup(new maplibregl.Popup({ offset: 15 }).setHTML(`
-                <h3><i class="${ship.type === 'naval' ? 'fa-solid fa-crosshairs' : 'fa-solid fa-box'}"></i> ${ship.name}</h3>
-                <p>CLASS: ${ship.cls.toUpperCase()}</p>
-                <p>HDG: ${ship.hdg}&deg; TRUE</p>
-                <p>SPD: ${(ship.spd * 200000).toFixed(1)} KTS</p>
+            .setPopup(new maplibregl.Popup({ offset: 15, maxWidth: '280px' }).setHTML(`
+                <div style="font-family:'Share Tech Mono',monospace; font-size:0.75rem;">
+                    <h3 style="color:${ship.type === 'naval' ? '#ff3333' : ship.type === 'tanker' ? '#ffa500' : '#00ffff'}; margin:0 0 6px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
+                        <i class="${ship.type === 'naval' ? 'fa-solid fa-person-military-rifle' : 'fa-solid fa-ship'}"></i> ${ship.name}
+                    </h3>
+                    <div style="background:rgba(255,255,255,0.03); padding:6px; border-radius:2px;">
+                        <div style="margin-bottom:4px;">TYPE: <span style="color:#fff;">${ship.cls.toUpperCase()}</span></div>
+                        <div style="display:flex; justify-content:space-between;">
+                            <span>HDG: ${ship.hdg}&deg;</span>
+                            <span>SPD: ${(ship.spd * 200000).toFixed(1)} KTS</span>
+                        </div>
+                    </div>
+                    <div style="margin-top:8px; font-size:0.6rem; opacity:0.5; text-align:right;">AIS TELEMETRY STATUS: <span style="color:#0f0;">ACTIVE</span></div>
+                </div>
             `));
             
             ship.marker = marker;
@@ -667,33 +740,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // ----------------------------------------------------
     // API: Live Webcams
     // ----------------------------------------------------
-    // -------------------------------------------------------
-    // API: Live Webcams — NASA GIBS satellite imagery per city
-    // Near-real-time overhead view updated daily by NASA MODIS/VIIRS
-    // -------------------------------------------------------
     const webcamData = [
-        { name: 'Tokyo — Shibuya Crossing',    lat: 35.659, lon: 139.700 },
-        { name: 'Dubai — Burj Khalifa Zone',   lat: 25.197, lon: 55.274 },
-        { name: 'New York — Manhattan',        lat: 40.758, lon: -73.985 },
-        { name: 'Paris — Eiffel Tower',        lat: 48.858, lon: 2.294  },
-        { name: 'Sydney — Opera House',        lat: -33.856, lon: 151.215 },
-        { name: 'Rio de Janeiro — Cristo',     lat: -22.951, lon: -43.210 },
-        { name: 'Singapore — Marina Bay',      lat: 1.283,  lon: 103.860 },
-        { name: 'Cairo — Giza Plateau',        lat: 29.979, lon: 31.134  },
-        { name: 'London — Thames',             lat: 51.500, lon: -0.124  },
-        { name: 'Hong Kong — Victoria Harbour',lat: 22.285, lon: 114.157 },
+        { name: 'NEW YORK — TIMES SQUARE', lat: 40.758, lon: -73.985, vid: 'mRe-514tGdw' },
+        { name: 'TOKYO — SHIBUYA CROSSING', lat: 35.659, lon: 139.700, vid: 'W-unof_v-aE' },
+        { name: 'LONDON — TOWER BRIDGE', lat: 51.505, lon: -0.075, vid: '2S_mB_a6jW8' },
+        { name: 'SINGAPORE — MARINA BAY', lat: 1.283, lon: 103.860, vid: 'u8_7lE08u9U' },
+        { name: 'DUBAI — BURJ KHALIFA', lat: 25.197, lon: 55.274, vid: '5n-m93X3mS0' },
+        { name: 'VENICE — RIALTO BRIDGE', lat: 45.437, lon: 12.335, vid: 'haAt_yO-X_o' },
+        { name: 'RIO — COPACABANA', lat: -22.971, lon: -43.182, vid: '0zYpA1Fst7U' },
+        { name: 'BERLIN — BRANDENBURG GATE', lat: 52.516, lon: 13.377, vid: 'vY7Q1FmS_xY' },
+        { name: 'SYDNEY — HARBOUR BRIDGE', lat: -33.852, lon: 151.210, vid: '9e-e6L2N_L4' },
+        { name: 'HONG KONG — SKYLINE', lat: 22.285, lon: 114.157, vid: '8v_jZJ5rY00' }
     ];
-
-    // NASA GIBS WMS: today's MODIS Terra true-colour imagery per city
-    const getGibsSatUrl = (lat, lon) => {
-        const d = new Date();
-        d.setDate(d.getDate() - 1); // Use yesterday to ensure data availability
-        const date = d.toISOString().slice(0, 10);
-        const delta = 0.5; // ~55 km bounding box
-        const minLat = lat - delta, maxLat = lat + delta;
-        const minLon = lon - delta, maxLon = lon + delta;
-        return `https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image/jpeg&TRANSPARENT=false&LAYERS=MODIS_Terra_CorrectedReflectance_TrueColor&CRS=EPSG:4326&STYLES=&WIDTH=512&HEIGHT=288&BBOX=${minLat},${minLon},${maxLat},${maxLon}&TIME=${date}`;
-    };
 
     const initWebcams = () => {
         webcamData.forEach(cam => {
@@ -701,42 +759,39 @@ document.addEventListener("DOMContentLoaded", () => {
             el.className = 'marker-webcam';
             el.innerHTML = '<div class="marker-webcam-inner"><i class="fa-solid fa-video"></i></div>';
 
-            const popup = new maplibregl.Popup({ offset: 15, closeOnClick: true, maxWidth: '340px' });
-            const satUrl = getGibsSatUrl(cam.lat, cam.lon);
-            const d = new Date(); d.setDate(d.getDate() - 1);
-            const dateStr = d.toISOString().slice(0, 10);
-
+            const popup = new maplibregl.Popup({ offset: 15, closeOnClick: false, maxWidth: '350px' });
+            
             popup.on('open', () => {
                 popup.setHTML(`
-                    <h3 style="border-bottom:1px dashed #0ff;color:#0ff;padding-bottom:5px;margin-bottom:8px;font-family:'Share Tech Mono',monospace;font-size:.85rem;">
-                        <i class="fa-solid fa-satellite"></i> ${cam.name}
-                    </h3>
-                    <div style="position:relative;width:auto;border:1px solid rgba(0,255,255,0.3);overflow:hidden;border-radius:2px;background:#000;">
-                        <img src="${satUrl}" style="display:block;width:100%;" alt="NASA satellite view"
-                             onerror="this.style.display='none';this.nextSibling.style.display='block';">
-                        <div style="display:none;padding:16px;text-align:center;font-family:'Share Tech Mono',monospace;color:#555;font-size:.75rem;">
-                            Satellite pass not yet processed<br><span style='font-size:.6rem;'>MODIS data may have cloud cover</span>
+                    <div style="font-family:'Share Tech Mono',monospace; min-width:320px;">
+                        <h3 style="color:#0ff; margin:0 0 8px; border-bottom:1px solid rgba(0,255,255,0.2); padding-bottom:5px;">
+                            <i class="fa-solid fa-camera"></i> LIVE WEB-RECON: ${cam.name}
+                        </h3>
+                        <div style="position:relative; width:100%; padding-top:56.25%; background:#000; border:1px solid rgba(0,255,255,0.3); border-radius:2px; overflow:hidden;">
+                            <iframe
+                                style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+                                src="https://www.youtube.com/embed/${cam.vid}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1"
+                                allow="autoplay; encrypted-media"
+                                allowfullscreen>
+                            </iframe>
+                            <div style="position:absolute;top:5px;left:5px;background:rgba(0,0,0,0.7);padding:2px 8px;border-radius:2px;font-size:9px;">
+                                <span style="color:#f00;animation:blink 1.5s infinite;">&#9679; RED OPS LIVE</span>
+                            </div>
                         </div>
-                        <div style="position:absolute;top:5px;left:5px;background:rgba(0,0,0,.8);padding:2px 6px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:9px;">
-                            <span style="color:cyan;">&#9679; NASA MODIS</span>
-                        </div>
-                        <div style="position:absolute;top:5px;right:5px;background:rgba(0,0,0,.8);padding:2px 6px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:9px;color:#aaa;">
-                            ${dateStr}
-                        </div>
-                        <div style="position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,.8);padding:2px 6px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:8px;color:#0ff;">
-                            ${cam.lat.toFixed(3)}&deg;N ${cam.lon.toFixed(3)}&deg;E &bull; ALT: 705 km
+                        <div style="margin-top:8px; display:flex; justify-content:space-between; font-size:0.65rem; opacity:0.6;">
+                            <span>COORD: ${cam.lat.toFixed(3)}N ${cam.lon.toFixed(3)}E</span>
+                            <span style="color:#0f0;">SIGNAL: STABLE</span>
                         </div>
                     </div>
-                    <p style="font-size:.6rem;opacity:.4;margin:4px 0 0;font-family:'Share Tech Mono',monospace;">Source: NASA GIBS / Terra MODIS &bull; 250m resolution</p>`);
+                `);
             });
-            popup.setHTML(`<h3><i class="fa-solid fa-satellite-dish"></i> SAT-LINK ESTABLISHING...</h3>`);
 
             const marker = new maplibregl.Marker({ element: el }).setLngLat([cam.lon, cam.lat]).setPopup(popup);
             marker.addTo(map);
             if (!toggles.webcams) marker.getElement().style.display = 'none';
             webcamMarkers.push(marker);
         });
-    }
+    };
 
     // ----------------------------------------------------
     // UI Toggles
@@ -744,7 +799,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     document.getElementById('toggle-all')?.addEventListener('change', (e) => {
         const isChecked = e.target.checked;
-        const allToggles = ['toggle-borders','toggle-terminator','toggle-fires','toggle-weather','toggle-ships','toggle-flights','toggle-iss','toggle-starlink','toggle-earthquakes','toggle-webcams','toggle-sst','toggle-population','toggle-satellites','toggle-temperature','toggle-volcanoes','toggle-radiation','toggle-internet'];
+        const allToggles = ['toggle-borders','toggle-terminator','toggle-fires','toggle-weather','toggle-ships','toggle-flights','toggle-iss','toggle-starlink','toggle-earthquakes','toggle-webcams','toggle-sst','toggle-population','toggle-satellites','toggle-temperature','toggle-volcanoes','toggle-radiation','toggle-internet', 'toggle-power'];
         allToggles.forEach(id => {
             const cb = document.getElementById(id);
             if(cb && cb.checked !== isChecked) {
@@ -752,6 +807,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 cb.dispatchEvent(new Event('change')); 
             }
         });
+    });
+
+    document.getElementById('toggle-power')?.addEventListener('change', (e) => {
+        toggles.power = e.target.checked;
+        powerMarkers.forEach(m => toggles.power ? m.addTo(map) : m.remove());
     });
 
     document.getElementById('toggle-borders')?.addEventListener('change', (e) => {
