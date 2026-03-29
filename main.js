@@ -838,9 +838,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('toggle-population')?.addEventListener('change', (e) => {
         toggles.population = e.target.checked;
-        if (map.getLayer('population-density')) {
-            map.setLayoutProperty('population-density', 'visibility', toggles.population ? 'visible' : 'none');
-        }
+        const vis = toggles.population ? 'visible' : 'none';
+        if (map.getLayer('population-density')) map.setLayoutProperty('population-density', 'visibility', vis);
+        if (map.getLayer('population-cities')) map.setLayoutProperty('population-cities', 'visibility', vis);
     });
 
     document.getElementById('toggle-satellites')?.addEventListener('change', (e) => {
@@ -1007,65 +1007,125 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // ----------------------------------------------------
-    // NASA Black Marble — Night Light Pollution
-    // GIBS verified layer: VIIRS_SNPP_DayNightBand_ENCC (Level 8, PNG)
+    // NASA Black Marble 2016 — high-quality nighttime city lights
+    // VIIRS_Black_Marble_2016 is far more vivid than ENCC
+    // Shows cities, ship tracks, gas flares, fishing fleets
     // ----------------------------------------------------
     const fetchNightLights = () => {
         try {
             map.addSource('night-lights-src', {
                 type: 'raster',
                 tiles: [
-                    'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_DayNightBand_ENCC/default/2023-01-15/GoogleMapsCompatible_Level8/{z}/{y}/{x}.png'
+                    'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_Black_Marble_2016_bg_1Band/default/2016-01-01/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpg'
                 ],
                 tileSize: 256,
                 maxzoom: 8,
-                attribution: 'NASA VIIRS/GIBS'
+                attribution: 'NASA Black Marble 2016 / GIBS'
             });
             map.addLayer({
                 id: 'night-lights',
                 type: 'raster',
                 source: 'night-lights-src',
                 layout: { visibility: 'none' },
-                paint: { 'raster-opacity': 0.9 }
+                paint: {
+                    'raster-opacity': 1.0,
+                    'raster-brightness-min': 0.0,
+                    'raster-contrast': 0.15,
+                    'raster-saturation': 0.4
+                }
             }, 'terminator-layer');
         } catch(e) { console.warn('Night lights layer error:', e.message); }
     };
 
     // ----------------------------------------------------
-    // World Population Density -- Built-in Heatmap (CORS-free)
-    // Top-100 cities with real population weights as a
-    // native MapLibre heatmap layer. Zero external dependency.
+    // World Population Density — Heatmap + Clickable City Labels
     // ----------------------------------------------------
     const fetchPopulationDensity = () => {
+        // [lon, lat, population_millions, city_name, country]
         const cities = [
-            // [lon, lat, population_millions]
-            [139.69,35.69,37.4],[121.47,31.23,27.8],[116.39,39.91,21.5],[88.37,22.57,20.1],
-            [72.88,19.08,20.7],[-99.13,19.43,21.7],[-46.63,-23.55,22.4],[106.85,-6.21,34.5],
-            [28.95,41.01,15.3],[77.21,28.66,32.9],[126.98,37.57,9.7],[100.52,13.75,17.6],
-            [103.82,1.35,5.9],[31.24,30.06,21.3],[3.39,6.45,15.3],[37.97,-1.29,5.6],
-            [101.69,3.16,8.2],[120.98,14.59,14.4],[114.11,22.55,7.4],[36.81,3.24,5.5],
-            [-80.13,25.78,6.2],[-73.94,40.67,18.8],[-87.63,41.88,9.6],[-118.24,34.05,18.7],
-            [-122.33,37.78,7.7],[-79.38,43.65,6.8],[-43.18,-22.91,13.5],[-58.4,-34.6,15.3],
-            [-77.04,38.89,6.4],[-66.86,10.49,6.7],[2.35,48.85,12.2],[13.38,52.52,6.0],
-            [-0.13,51.51,9.4],[4.34,50.85,2.1],[23.72,37.98,3.8],[12.48,41.89,4.3],
-            [2.17,41.39,5.3],[28.05,53.9,2.0],[37.61,55.75,12.5],[44.37,33.34,7.2],
-            [51.43,35.69,16.0],[57.5,23.6,1.7],[67.09,24.86,16.1],[69.28,41.3,2.6],
-            [72.99,40.37,3.8],[80.28,13.09,10.5],[85.32,27.72,1.5],[87.63,43.79,4.0],
-            [88.37,22.57,14.8],[90.41,23.81,21.0],[104.06,30.65,16.0],[106.55,29.56,32.2],
-            [106.71,10.77,9.0],[108.94,34.27,13.0],[112.97,28.19,8.6],[113.26,23.13,13.5],
-            [114.31,30.52,11.2],[121.5,25.05,7.4],[123.45,41.8,8.1],[125.35,43.88,4.4],
-            [144.96,-37.81,5.0],[151.21,-33.87,5.3],[172.63,-43.53,0.4],
-            [-70.67,-33.45,7.1],[-75.51,-8.12,1.1],[-76.94,11.0,2.3],[-79.88,-2.17,2.7],
-            [-77.03,-12.04,10.9],[-57.68,-25.28,4.0],[-63.18,-17.78,2.3],[-65.46,-24.79,0.7],
-            [-47.93,-15.78,4.6],[-43.18,-22.91,13.5],[-48.55,-27.61,1.1]
+            [139.69,35.69,37.4,'Tokyo','Japan'],
+            [121.47,31.23,27.8,'Shanghai','China'],
+            [116.39,39.91,21.5,'Beijing','China'],
+            [88.37,22.57,20.1,'Kolkata','India'],
+            [72.88,19.08,20.7,'Mumbai','India'],
+            [-99.13,19.43,21.7,'Mexico City','Mexico'],
+            [-46.63,-23.55,22.4,'São Paulo','Brazil'],
+            [106.85,-6.21,34.5,'Jakarta','Indonesia'],
+            [28.95,41.01,15.3,'Istanbul','Turkey'],
+            [77.21,28.66,32.9,'Delhi','India'],
+            [126.98,37.57,9.7,'Seoul','South Korea'],
+            [100.52,13.75,17.6,'Bangkok','Thailand'],
+            [103.82,1.35,5.9,'Singapore','Singapore'],
+            [31.24,30.06,21.3,'Cairo','Egypt'],
+            [3.39,6.45,15.3,'Lagos','Nigeria'],
+            [37.97,-1.29,5.6,'Nairobi','Kenya'],
+            [101.69,3.16,8.2,'Kuala Lumpur','Malaysia'],
+            [120.98,14.59,14.4,'Manila','Philippines'],
+            [114.11,22.55,7.4,'Hong Kong','China SAR'],
+            [36.81,3.24,5.5,'Addis Ababa','Ethiopia'],
+            [-80.13,25.78,6.2,'Miami','USA'],
+            [-73.94,40.67,18.8,'New York','USA'],
+            [-87.63,41.88,9.6,'Chicago','USA'],
+            [-118.24,34.05,18.7,'Los Angeles','USA'],
+            [-122.33,37.78,7.7,'San Francisco','USA'],
+            [-79.38,43.65,6.8,'Toronto','Canada'],
+            [-43.18,-22.91,13.5,'Rio de Janeiro','Brazil'],
+            [-58.4,-34.6,15.3,'Buenos Aires','Argentina'],
+            [-77.04,38.89,6.4,'Washington D.C.','USA'],
+            [-66.86,10.49,6.7,'Caracas','Venezuela'],
+            [2.35,48.85,12.2,'Paris','France'],
+            [13.38,52.52,6.0,'Berlin','Germany'],
+            [-0.13,51.51,9.4,'London','United Kingdom'],
+            [4.34,50.85,2.1,'Brussels','Belgium'],
+            [23.72,37.98,3.8,'Athens','Greece'],
+            [12.48,41.89,4.3,'Rome','Italy'],
+            [2.17,41.39,5.3,'Barcelona','Spain'],
+            [28.05,53.9,2.0,'Minsk','Belarus'],
+            [37.61,55.75,12.5,'Moscow','Russia'],
+            [44.37,33.34,7.2,'Baghdad','Iraq'],
+            [51.43,35.69,16.0,'Tehran','Iran'],
+            [57.5,23.6,1.7,'Muscat','Oman'],
+            [67.09,24.86,16.1,'Karachi','Pakistan'],
+            [69.28,41.3,2.6,'Tashkent','Uzbekistan'],
+            [72.99,40.37,3.8,'Urumqi','China'],
+            [80.28,13.09,10.5,'Chennai','India'],
+            [85.32,27.72,1.5,'Kathmandu','Nepal'],
+            [87.63,43.79,4.0,'Ürümqi (W)','China'],
+            [90.41,23.81,21.0,'Dhaka','Bangladesh'],
+            [104.06,30.65,16.0,'Chengdu','China'],
+            [106.55,29.56,32.2,'Chongqing','China'],
+            [106.71,10.77,9.0,'Ho Chi Minh City','Vietnam'],
+            [108.94,34.27,13.0,'Xi\'an','China'],
+            [112.97,28.19,8.6,'Changsha','China'],
+            [113.26,23.13,13.5,'Guangzhou','China'],
+            [114.31,30.52,11.2,'Wuhan','China'],
+            [121.5,25.05,7.4,'Taipei','Taiwan'],
+            [123.45,41.8,8.1,'Shenyang','China'],
+            [125.35,43.88,4.4,'Changchun','China'],
+            [144.96,-37.81,5.0,'Melbourne','Australia'],
+            [151.21,-33.87,5.3,'Sydney','Australia'],
+            [172.63,-43.53,0.4,'Christchurch','New Zealand'],
+            [-70.67,-33.45,7.1,'Santiago','Chile'],
+            [-75.51,-8.12,1.1,'Lima','Peru'],
+            [-76.94,11.0,2.3,'Barranquilla','Colombia'],
+            [-79.88,-2.17,2.7,'Guayaquil','Ecuador'],
+            [-77.03,-12.04,10.9,'Lima Metro','Peru'],
+            [-57.68,-25.28,4.0,'Asunción','Paraguay'],
+            [-63.18,-17.78,2.3,'Santa Cruz','Bolivia'],
+            [-65.46,-24.79,0.7,'Salta','Argentina'],
+            [-47.93,-15.78,4.6,'Brasília','Brazil'],
+            [-43.18,-22.91,13.5,'Rio de Janeiro','Brazil'],
+            [-48.55,-27.61,1.1,'Florianópolis','Brazil']
         ];
+
+        // Heatmap layer
         map.addSource('population-heatmap', {
             type: 'geojson',
             data: {
                 type: 'FeatureCollection',
                 features: cities.map(c => ({
                     type: 'Feature',
-                    properties: { weight: c[2] },
+                    properties: { weight: c[2], name: c[3], country: c[4], pop: c[2] },
                     geometry: { type: 'Point', coordinates: [c[0], c[1]] }
                 }))
             }
@@ -1091,6 +1151,57 @@ document.addEventListener("DOMContentLoaded", () => {
                 'heatmap-opacity': 0.85
             }
         }, 'terminator-layer');
+
+        // Clickable circle layer on top — visible when zoomed in
+        map.addLayer({
+            id: 'population-cities',
+            type: 'circle',
+            source: 'population-heatmap',
+            layout: { visibility: 'none' },
+            minzoom: 2,
+            paint: {
+                'circle-radius': ['interpolate', ['linear'], ['zoom'],
+                    2, ['interpolate', ['linear'], ['get', 'pop'], 1, 3, 40, 9],
+                    6, ['interpolate', ['linear'], ['get', 'pop'], 1, 8, 40, 24]
+                ],
+                'circle-color': 'rgba(255,200,0,0)',
+                'circle-stroke-color': ['interpolate', ['linear'], ['get', 'pop'], 1, '#ffb00055', 40, '#ff4400cc'],
+                'circle-stroke-width': 1.5,
+                'circle-opacity': 0
+            }
+        });
+
+        // City popup on click
+        map.on('click', 'population-cities', (e) => {
+            const f = e.features[0];
+            const { name, country, pop } = f.properties;
+            const coords = f.geometry.coordinates.slice();
+            const popM = parseFloat(pop);
+            const tier = popM > 20 ? '🔴 MEGACITY' : popM > 10 ? '🟠 MAJOR METRO' : popM > 5 ? '🟡 MAJOR CITY' : '🟢 CITY';
+            new maplibregl.Popup({ maxWidth: '260px', closeButton: true })
+                .setLngLat(coords)
+                .setHTML(`
+                    <div style="font-family:'Share Tech Mono',monospace;">
+                    <h3 style="color:#ffb000;margin:0 0 6px;border-bottom:1px solid rgba(255,176,0,0.4);padding-bottom:4px;">
+                        &#127960; ${name}
+                    </h3>
+                    <div style="font-size:.72rem;margin-bottom:5px;opacity:.7;">${country}</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:.75rem;">
+                        <div style="background:rgba(255,176,0,.08);padding:5px 8px;">
+                            <div style="opacity:.5;font-size:.6rem;">POPULATION</div>
+                            <div style="color:#ffb000;font-size:1.1rem;font-weight:bold;">${popM.toFixed(1)}M</div>
+                        </div>
+                        <div style="background:rgba(255,176,0,.08);padding:5px 8px;">
+                            <div style="opacity:.5;font-size:.6rem;">CLASS</div>
+                            <div style="font-size:.7rem;margin-top:2px;">${tier}</div>
+                        </div>
+                    </div>
+                    <div style="font-size:.6rem;opacity:.35;margin-top:6px;">Source: UN World Urbanization Prospects 2023</div>
+                    </div>`)
+                .addTo(map);
+        });
+        map.on('mouseenter', 'population-cities', () => { map.getCanvas().style.cursor = 'pointer'; });
+        map.on('mouseleave', 'population-cities', () => { map.getCanvas().style.cursor = ''; });
     };
 
 
@@ -1728,6 +1839,26 @@ document.addEventListener("DOMContentLoaded", () => {
             displaced: '>200,000 Libyans displaced; major migrant transit country',
             status: 'FROZEN CONFLICT — Ceasefire Oct 2020; sporadic clashes; oil disputes',
             note: 'Split since Gaddafi fall 2011. Two rival govts. Occasional fighting despite 2020 ceasefire.'
+        },
+        {
+            name: 'Iran — Israel Shadow War', lat: 32.5, lon: 43.5, severity: 'CRITICAL',
+            type: 'Regional Proxy / Direct Military Clash', since: 2019,
+            parties: [['🇮🇱 Israel (IDF/Mossad)', 'Strikes, assassinations, sabotage'], ['🇮🇷 Iran (IRGC)', 'Proxies + direct strikes']],
+            support: 'Israel: US backing, F-35s, Iron Dome. Iran: Hezbollah, Hamas, Houthis, PMF Iraq.',
+            casualties: 'Hundreds killed in strikes/assassinations; April 2024: first direct Iran-Israel exchange',
+            displaced: 'N/A — shadow war, no mass displacement',
+            status: 'ACTIVE — Ongoing covert war; direct missile/drone exchanges Apr+Oct 2024',
+            note: 'Iran fired 300+ drones/missiles at Israel Apr 13-14, 2024. Israel retaliated Oct 26, 2024. Proxy network: Hezbollah, Hamas, Houthis, Iraqi PMF.'
+        },
+        {
+            name: 'Iran — USA Tensions', lat: 26.0, lon: 56.0, severity: 'HIGH',
+            type: 'Geopolitical / Military Confrontation', since: 2019,
+            parties: [['🇺🇸 USA (CENTCOM)', 'Carrier groups, airbases, sanctions'], ['🇮🇷 Iran (IRGC)', 'Proxy attacks, nuclear program, tanker seizures']],
+            support: 'USA: Israel, Gulf states (KSA, UAE, Bahrain). Iran: Russia, China (limited).',
+            casualties: 'Jan 2024: Jordan base attack killed 3 US soldiers. 160+ US strikes on Iran proxies in Iraq/Syria.',
+            displaced: 'N/A',
+            status: 'HIGH TENSION — Naval confrontations, proxy strikes, nuclear standoff',
+            note: 'Maximum pressure campaign (Trump 2018/2025). IRGC-backed PMF targeting US forces 160+ times since Oct 2023. Strait of Hormuz flashpoint: 20% of global oil.'
         },
     ];
     const CONFLICT_COLORS = { CRITICAL: '#ff0000', HIGH: '#ff6600', MODERATE: '#ffb000' };
