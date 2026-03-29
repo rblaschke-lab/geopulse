@@ -854,13 +854,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // API: INTELLIGENCE CORE (V5.5)
     // ----------------------------------------------------
     const initIntelligenceCore = () => {
-        // Setup Map Layers for translucent GeoJSON cluster rings
+        // Setup Map Layers — hidden by default, visible on hover/pin
         map.addSource('intel-clusters', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
         
         map.addLayer({
             id: 'intel-clusters-halo',
             type: 'circle',
             source: 'intel-clusters',
+            layout: { visibility: 'none' }, // hidden until intel panel hovered/pinned
             paint: {
                 'circle-radius': ['get', 'radius'],
                 'circle-color': ['get', 'color'],
@@ -872,12 +873,42 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         const alertList = document.getElementById('alert-list');
-        const activeAlerts = new Set(); // Prevent spamming exact same alert
+        const intelPanel = document.getElementById('intelligence-panel');
+        const MAX_ALERTS = 3; // rolling window
+        const activeAlerts = new Set();
+        let intelPinned = false; // true = circles locked visible by user click
+
+        // --- Intel circles visibility ---
+        const showIntelCircles = () => {
+            if (map.getLayer('intel-clusters-halo'))
+                map.setLayoutProperty('intel-clusters-halo', 'visibility', 'visible');
+        };
+        const hideIntelCircles = () => {
+            if (!intelPinned && map.getLayer('intel-clusters-halo'))
+                map.setLayoutProperty('intel-clusters-halo', 'visibility', 'none');
+        };
+
+        // Hover: show/hide circles with the panel
+        intelPanel?.addEventListener('mouseenter', showIntelCircles);
+        intelPanel?.addEventListener('mouseleave', hideIntelCircles);
+
+        // Click on panel header = toggle pin
+        intelPanel?.querySelector('h2')?.addEventListener('click', () => {
+            intelPinned = !intelPinned;
+            const h2 = intelPanel.querySelector('h2');
+            if (intelPinned) {
+                showIntelCircles();
+                if (h2) h2.style.borderBottom = '1px dashed rgba(0,255,0,.7)';
+            } else {
+                hideIntelCircles();
+                if (h2) h2.style.borderBottom = '';
+            }
+        });
 
         const logAlert = (id, type, severity, msg, lat, lon) => {
             if(activeAlerts.has(id)) return;
             activeAlerts.add(id);
-            setTimeout(() => activeAlerts.delete(id), 60000); // clear after 1 minute
+            setTimeout(() => activeAlerts.delete(id), 300000); // clear after 5 min
             
             const timeStr = new Date().toLocaleTimeString();
             const el = document.createElement('div');
@@ -890,120 +921,72 @@ document.addEventListener("DOMContentLoaded", () => {
             el.onclick = () => map.flyTo({ center: [lon, lat], zoom: 5, essential: true });
             
             alertList.prepend(el);
-            if(alertList.children.length > 50) alertList.lastChild.remove();
+            // Rolling window: keep only MAX_ALERTS newest
+            while (alertList.children.length > MAX_ALERTS) alertList.lastChild.remove();
         };
 
         const scanPatterns = () => {
             setStatus("AI CORE SCANNING FOR ANOMALIES...");
             let features = [];
             
-            // Collect all entities
             const entities = [];
             flightMarkers.forEach(f => entities.push({type: 'Flight', lon: f.lon, lat: f.lat, ref: f.callsign}));
             shipMarkers.forEach(s => entities.push({type: 'Marine', lon: s.lon, lat: s.lat, ref: s.name}));
-            
-            // Loop through our safe array instead of querying map internal properties
             globalEarthquakesArray.forEach(f => {
                 const coords = f.geometry.coordinates;
-                if(f.properties.mag >= 4.0) { // Only track significant earthquakes
+                if(f.properties.mag >= 4.0)
                     entities.push({type: 'Seismic', lon: coords[0], lat: coords[1], ref: f.properties.place, mag: f.properties.mag});
-                }
             });
 
-            // Simple clustering: group entities within 8 degrees of each other
             const clusters = [];
             const visited = new Set();
-            
             entities.forEach((e, i) => {
                 if(visited.has(i)) return;
                 const cluster = [e];
                 visited.add(i);
-                
                 entities.forEach((e2, j) => {
                     if(i === j || visited.has(j)) return;
-                    const dLon = e.lon - e2.lon;
-                    const dLat = e.lat - e2.lat;
-                    const dist = Math.sqrt(dLon*dLon + dLat*dLat);
-                    if(dist < 8) { // ~800km bounding radius
-                        cluster.push(e2);
-                        visited.add(j);
-                    }
+                    const dLon = e.lon - e2.lon, dLat = e.lat - e2.lat;
+                    if(Math.sqrt(dLon*dLon + dLat*dLat) < 8) { cluster.push(e2); visited.add(j); }
                 });
-                if(cluster.length > 1) {
-                    clusters.push(cluster);
-                }
+                if(cluster.length > 1) clusters.push(cluster);
             });
 
-            // Analyze clusters for anomalies
             clusters.forEach(c => {
-                // Calculate cluster centroid
                 let sumLon = 0, sumLat = 0;
                 let types = new Set();
                 let hasHighSeismic = false;
-                
                 c.forEach(ent => {
-                    sumLon += ent.lon;
-                    sumLat += ent.lat;
+                    sumLon += ent.lon; sumLat += ent.lat;
                     types.add(ent.type);
                     if(ent.type === 'Seismic' && ent.mag >= 6.0) hasHighSeismic = true;
                 });
-                
-                const cLon = sumLon / c.length;
-                const cLat = sumLat / c.length;
-                let severity = 'low';
-                let color = '#00ff00';
-                let radius = 20;
-                
+                const cLon = sumLon / c.length, cLat = sumLat / c.length;
+                let severity = 'low', color = '#00ff00', radius = 20;
                 const isCrossDomain = types.has('Seismic') && (types.has('Flight') || types.has('Marine'));
-                
                 if(c.length >= 5 || hasHighSeismic) severity = 'high';
                 else if(c.length >= 3 || isCrossDomain) severity = 'medium';
-                
                 if(severity === 'high') { color = '#ff3300'; radius = 50; }
                 else if(severity === 'medium') { color = '#ffb000'; radius = 35; }
-                
                 if(severity !== 'low') {
-                    // Generate Narrative
                     let msg = `High density of entities detected (${c.length} objects).`;
                     let typeLabel = "DENSITY";
-                    
-                    if(isCrossDomain) {
-                        msg = `Cross-domain correlation detected: Seismic event overlapping with ${types.has('Flight') ? 'Aviation' : 'Marine'} traffic.`;
-                        typeLabel = "MULTI-DOMAIN";
-                    }
-                    if(hasHighSeismic) {
-                        msg = `Major Seismic Event correlation zone identified. Immediate surveillance requested.`;
-                        typeLabel = "CRITICAL SEISMIC";
-                    }
-                    
-                    const clusterId = `C-${cLat.toFixed(1)}-${cLon.toFixed(1)}-${typeLabel}`;
-                    logAlert(clusterId, typeLabel, severity, msg, cLat, cLon);
-                    
-                    features.push({
-                        type: 'Feature',
-                        properties: { color, radius },
-                        geometry: { type: 'Point', coordinates: [cLon, cLat] }
-                    });
+                    if(isCrossDomain) { msg = `Cross-domain correlation: Seismic overlapping ${types.has('Flight') ? 'Aviation' : 'Marine'} traffic.`; typeLabel = "MULTI-DOMAIN"; }
+                    if(hasHighSeismic) { msg = `Major Seismic Event correlation zone. Immediate surveillance requested.`; typeLabel = "CRITICAL SEISMIC"; }
+                    logAlert(`C-${cLat.toFixed(1)}-${cLon.toFixed(1)}-${typeLabel}`, typeLabel, severity, msg, cLat, cLon);
+                    features.push({ type: 'Feature', properties: { color, radius }, geometry: { type: 'Point', coordinates: [cLon, cLat] } });
                 }
             });
 
-            // Update Map Visuals
-            map.getSource('intel-clusters').setData({
-                type: 'FeatureCollection',
-                features: features
-            });
-            
-            // Clear initial loading alert if needed
+            map.getSource('intel-clusters').setData({ type: 'FeatureCollection', features });
+
             const intro = alertList.querySelector('.alert-item i.fa-satellite-dish');
-            if(intro && intro.parentElement.parentElement) {
-                intro.parentElement.parentElement.remove();
-            }
+            if(intro && intro.parentElement.parentElement) intro.parentElement.parentElement.remove();
         };
 
-        // Run scanner every 10 seconds
-        setInterval(scanPatterns, 10000);
-        // Initial scan after entities load
-        setTimeout(scanPatterns, 2000);
+        // Scan every 5 minutes; initial scan after 3 seconds
+        setInterval(scanPatterns, 300000);
+        setTimeout(scanPatterns, 3000);
     };
 
     // ----------------------------------------------------
