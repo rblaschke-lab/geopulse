@@ -36,6 +36,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     map.addControl(new maplibregl.NavigationControl(), 'top-left');
 
+    // ── Category collapse (independent of map load) ──────────
+    document.querySelectorAll('.cat-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const section = btn.closest('.collapsible-section');
+            if (section) section.classList.toggle('open');
+        });
+    });
+
     const statusText = document.getElementById("status-text");
     const setStatus = (msg) => { statusText.innerText = msg; };
 
@@ -274,14 +282,6 @@ document.addEventListener("DOMContentLoaded", () => {
         initDataCenters();          // Hyperscale Data Centers
         initNuclearLayer();         // Nuclear Power Plants + Arsenal
 
-        // Category collapse logic
-        document.querySelectorAll('.cat-toggle').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const section = btn.closest('.collapsible-section');
-                if (section) section.classList.toggle('open');
-            });
-        });
-        
         // Dynamically update shadow every 60 seconds
         terminatorInterval = setInterval(() => {
             if(map.getSource('terminator')) {
