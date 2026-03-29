@@ -1709,7 +1709,7 @@ document.addEventListener("DOMContentLoaded", () => {
             [13.51,2.12,'Niger','A',9,'Military junta 2023.'],
             [-7.99,12.36,'Guinea','A',6,'Military junta 2021.'],
             [15.5,32.5,'Sudan','A',5,'SAF/RSF military conflict state.'],
-            [20.0,96.5,'Myanmar','A',5,'Military junta 2021.'],
+            [96.0,17.0,'Myanmar','A',5,'Military junta 2021.'],
             [48.5,37.5,'Kazakhstan','A',24,'Authoritarian, post-Nazarbayev.'],
             [69.28,41.3,'Uzbekistan','A',17,'Authoritarian.'],
             [37.88,-6.17,'Kenya','H',57,'Republic.'],
@@ -2428,33 +2428,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('toggle-regimes')?.addEventListener('change', (e) => {
         toggles.regimes = e.target.checked;
+        console.log('[REGIME] toggled', toggles.regimes, '| markers:', regimeMarkers.length);
         regimeMarkers.forEach(m => toggles.regimes ? m.addTo(map) : m.remove());
     });
 
     document.getElementById('toggle-blocs')?.addEventListener('change', (e) => {
         toggles.blocs = e.target.checked;
+        console.log('[BLOCS] toggled', toggles.blocs, '| markers:', blocMarkers.length);
         blocMarkers.forEach(m => toggles.blocs ? m.addTo(map) : m.remove());
     });
 
     document.getElementById('toggle-cables')?.addEventListener('change', (e) => {
         toggles.cables = e.target.checked;
+        console.log('[CABLES] toggled', toggles.cables, '| layer:', map.getLayer('cables-layer'));
         if (map.getLayer('cables-layer'))
             map.setLayoutProperty('cables-layer', 'visibility', toggles.cables ? 'visible' : 'none');
     });
 
     document.getElementById('toggle-datacenters')?.addEventListener('change', (e) => {
         toggles.datacenters = e.target.checked;
+        console.log('[DATACENTERS] toggled', toggles.datacenters, '| markers:', dcMarkers.length);
         dcMarkers.forEach(m => toggles.datacenters ? m.addTo(map) : m.remove());
     });
 
     document.getElementById('toggle-nuclear')?.addEventListener('change', (e) => {
         toggles.nuclear = e.target.checked;
+        console.log('[NUCLEAR] toggled', toggles.nuclear, '| markers:', nuclearMarkers.length);
         nuclearMarkers.forEach(m => toggles.nuclear ? m.addTo(map) : m.remove());
     });
 
     document.getElementById('toggle-nukes')?.addEventListener('change', (e) => {
         toggles.nukes = e.target.checked;
+        console.log('[NUKES] toggled', toggles.nukes, '| markers:', nukeArsenalMarkers.length);
         nukeArsenalMarkers.forEach(m => toggles.nukes ? m.addTo(map) : m.remove());
     });
+
+    // Expose debug info on window for console inspection
+    window.__wv = { regimeMarkers, blocMarkers, dcMarkers, nuclearMarkers, nukeArsenalMarkers, toggles, map };
 
 });
