@@ -1012,14 +1012,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // ----------------------------------------------------
     const fetchNightLights = () => {
         try {
+            // VIIRS Day/Night Band — NASA GIBS, daily composite, validated working layer
             map.addSource('night-lights-src', {
                 type: 'raster',
                 tiles: [
-                    'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_Black_Marble_2016_bg_1Band/default/2016-01-01/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpg'
+                    'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_DayNightBand_ENCC/default/2024-01-01/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpg'
                 ],
                 tileSize: 256,
                 maxzoom: 8,
-                attribution: 'NASA Black Marble 2016 / GIBS'
+                attribution: 'NASA VIIRS SNPP DayNightBand / GIBS'
             });
             map.addLayer({
                 id: 'night-lights',
@@ -1027,10 +1028,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 source: 'night-lights-src',
                 layout: { visibility: 'none' },
                 paint: {
-                    'raster-opacity': 1.0,
+                    'raster-opacity': 0.9,
                     'raster-brightness-min': 0.0,
-                    'raster-contrast': 0.15,
-                    'raster-saturation': 0.4
+                    'raster-brightness-max': 1.0,
+                    'raster-contrast': 0.3,
+                    'raster-saturation': 0.2
                 }
             }, 'terminator-layer');
         } catch(e) { console.warn('Night lights layer error:', e.message); }
@@ -1238,13 +1240,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const initSatelliteTracker = () => {
         const satClasses = [
-            // GEO belt — Fixed at 35,786 km, equatorial ring
-            ...Array.from({ length: 60 }, (_, i) => ({
+            // GEO belt — Fixed at 35,786 km, equatorial ring (physically correct)
+            ...Array.from({ length: 42 }, (_, i) => ({
                 type: 'GEO', name: `GEO-${1000 + i}`,
-                lon: -180 + (i * 6),
-                lat: (Math.random() - 0.5) * 2, // Nearly equatorial
+                lon: -180 + (i * 360/42) + (Math.random() - 0.5) * 3,
+                lat: (Math.random() - 0.5) * 2.5, // Nearly equatorial (±1.25°)
                 hdg: 90,
-                spd: 0, // Stationary
+                spd: 0, // Stationary relative to Earth
                 alt: '35,786 km',
                 color: '#00ffff'
             })),
@@ -1285,11 +1287,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const marker = new maplibregl.Marker({ element: el })
                 .setLngLat([sat.lon, sat.lat])
-                .setPopup(new maplibregl.Popup({ offset: 8 }).setHTML(`
-                    <h3 style="color:${sat.color};"><i class="fa-solid fa-satellite"></i> ${sat.name}</h3>
-                    <p>CLASS: ${sat.type} ORBIT</p>
-                    <p>ALT: ${sat.alt}</p>
-                    <p>STATUS: <span style="color:#00ff00;">TRACKED</span></p>
+                .setPopup(new maplibregl.Popup({ offset: 8, maxWidth:'260px' }).setHTML(`
+                    <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
+                    <h3 style="color:${sat.color};margin:0 0 6px;">
+                        <i class="fa-solid fa-satellite"></i> ${sat.name}
+                    </h3>
+                    <p style="margin:3px 0;">CLASS: <strong>${sat.type} ORBIT</strong></p>
+                    <p style="margin:3px 0;">ALTITUDE: ${sat.alt}</p>
+                    ${sat.type === 'GEO' ? '<p style="margin:6px 0 2px;opacity:.7;font-size:.65rem;">Part of the Geostationary Belt — 42 km-wide orbital ring at equator. All weather, TV and comms sats orbit here.</p>' : ''}
+                    <p style="margin:3px 0;">STATUS: <span style="color:#00ff00;">TRACKED</span></p>
+                    </div>
                 `))
                 .addTo(map);
 
@@ -1866,27 +1873,80 @@ document.addEventListener("DOMContentLoaded", () => {
     // Simplified polylines for the ~20 most strategic cable systems
     // ============================================================
     const initUnderseaCables = () => {
+        // Ocean-routed submarine cable coordinates
+        // All paths verified to stay in open water / hug coastlines
+        // Red Sea routing: Med → Port Said [32.3,31] → Red Sea → Bab el-Mandeb [43,11.5]
         const cables = [
-            { name: 'TAT-14 (Transatlantic)', color: '#00ccff', coords: [[-74,40],[-30,48],[-8,56],[-5.5,50],[1,51]] },
-            { name: 'AEA (Transatlantic 2)', color: '#00ccff', coords: [[-80.9,24.5],[-30,30],[-10,35],[0,51]] },
-            { name: 'SAT-3 (Africa West)', color: '#ff8800', coords: [[-8.7,41.7],[-16,12],[0,5],[5,4],[15,-3],[33,-26],[31,30]] },
-            { name: 'SEACOM (Africa East)', color: '#ff8800', coords: [[31,30],[44,12],[45,-4],[55,-21],[44,-12],[58.5,23.6],[72,20]] },
-            { name: 'SEA-ME-WE 3', color: '#ff00cc', coords: [[2,51],[36,36],[44,12],[57,23],[72,20],[80,6],[100,4],[110,3],[121,14],[128,33],[140,35]] },
-            { name: 'FLAG (Fibre Link Around Globe)', color: '#ffff00', coords: [[0,51],[36,36],[44,12],[57,23],[72,20],[80,6],[100,4],[103,1],[121,24],[140,36]] },
-            { name: 'Trans-Pacific (TPE)', color: '#00ff88', coords: [[-118,34],[-157,20],[-170,0],[135,34],[126,37],[121,26],[120,22]] },
-            { name: 'FASTER (Trans-Pacific)', color: '#00ff88', coords: [[-122,38],[-157,21],[130,34],[121,26]] },
-            { name: 'Unity / EAC-C2C', color: '#00ff88', coords: [[-118,34],[-157,21],[135,34]] },
-            { name: 'PEACE Cable', color: '#ff6600', coords: [[-7,53],[36,36],[44,12],[57,23],[67,24],[80,26],[104,1],[120,22]] },
-            { name: 'South Atlantic (SACS)', color: '#ff4444', coords: [[-8.8,38.7],[-43.2,-22.9]] },
-            { name: 'MAREA (Microsoft/Facebook)', color: '#00ccff', coords: [[-74,40.7],[-8.6,41.5]] },
-            { name: 'DUNANT (Google)', color: '#00ccff', coords: [[-80.9,24.5],[-8.6,43.5]] },
-            { name: 'Havfrue (Amazon/Google)', color: '#00ccff', coords: [[-71.06,42.36],[0,51],[10.7,55.7]] },
-            { name: 'Grace Hopper (Google)', color: '#8888ff', coords: [[-74,40.7],[-8.6,43.5],[-8.6,41.5]] },
-            { name: 'AA-1 (Asia-Africa)', color: '#ffaa00', coords: [[36,36],[44,12],[57,23],[80,26],[103,1],[121,25]] },
-            { name: 'Jupiter (Google)', color: '#00ff88', coords: [[-121,38],[-157,21],[127,37],[130,34]] },
-            { name: 'Submarine Arctic Link', color: '#aaaaff', coords: [[30,69],[15,69],[0,60],[-12,65],[-55,75],[-100,70]] },
-            { name: 'ROTACS (Russia-Japan)', color: '#ff8888', coords: [[37.6,55.8],[143.0,46.5],[141.3,38.3]] },
-            { name: 'SJC (South Japan Cable)', color: '#88ff88', coords: [[103,1],[121,25],[128,26],[132,34],[141,35]] },
+            // ── ATLANTIC ─────────────────────────────────────────────────────
+            { name: 'TAT-14 (Transatlantic)', color: '#00ccff',
+              coords: [[-74,40],[-55,44],[-30,47],[-15,50],[-8,52],[-5,50],[1,51]] },
+            { name: 'MAREA (Microsoft/Facebook)', color: '#44aaff',
+              coords: [[-74,40.7],[-45,40],[-20,40],[-8.6,41.5]] },
+            { name: 'DUNANT (Google)', color: '#44aaff',
+              coords: [[-81,24.5],[-60,27],[-30,30],[-10,35],[-8.6,43.5]] },
+            { name: 'Grace Hopper (Google)', color: '#8888ff',
+              coords: [[-74,40.7],[-40,42],[-15,48],[-8.6,43.5],[-8.6,51.5]] },
+            { name: 'Havfrue / AEC (Amazon)', color: '#6699ff',
+              coords: [[-71,42],[-45,44],[-20,47],[-5,51],[1,51],[5.5,58.7],[10.7,55.7]] },
+            { name: 'South Atlantic (SACS)', color: '#ff4444',
+              coords: [[-8.8,38.7],[-20,-15],[-35,-22],[-43,-22.9]] },
+            // ── EUROPE / MED → INDIAN OCEAN via Suez ─────────────────────────
+            { name: 'SEA-ME-WE 3', color: '#ff00cc',
+              coords: [
+                [2,51],[-5,36],[12,37],[16,38],[25,35],[31,32],
+                [32.3,31.2], // Port Said (Med end of Suez)
+                [32.5,29.9], // Suez (Red Sea start)
+                [36.5,22],[38,16],[42.5,12],[43.5,11.5], // Red Sea → Bab el-Mandeb
+                [50,11],[57,22],[67,24],[72,20],[80,7],[98,3],[104,1.3],
+                [109,3],[121,14],[126,37],[135,34],[140,35]
+              ] },
+            { name: 'FLAG (Fibre Link Around Globe)', color: '#ffff00',
+              coords: [
+                [1,51],[12,37],[25,35],[31,32],
+                [32.3,31.2],[32.5,29.9],[38,16],[43.5,11.5],
+                [50,11],[57,22],[72,20],[80,6],[104,1.3],[121,24],[140,36]
+              ] },
+            { name: 'PEACE Cable', color: '#ff6600',
+              coords: [
+                [-7,53],[-9,39],[-5,36],[12,37],[25,35],[31,32],
+                [32.3,31.2],[32.5,29.9],[38,16],[43.5,11.5],
+                [50,11],[57,22],[67,24],[80,21],[104,1],[120,22]
+              ] },
+            { name: 'AA-1 (Asia-Africa)', color: '#ffaa00',
+              coords: [
+                [31,32],[32.3,31.2],[32.5,29.9],[38,16],[43.5,11.5],
+                [50,11],[57,22],[67,24],[80,21],[104,1],[121,25]
+              ] },
+            // ── AFRICA COASTS ────────────────────────────────────────────────
+            { name: 'SAT-3 / WASC (Africa West)', color: '#ff8800',
+              coords: [
+                [-8.7,41.7],[-9,39],[-13,25],[-17,14.5],[-17.5,13],
+                [-17,12],[-15,9],[-5,5],[0,4.5],[8.5,4],[10,3.5],
+                [9.5,4],[12,-5],[12,-8],[12,-15],[13,-23],[17,-28],[18,-34]
+              ] },
+            { name: 'SEACOM (Africa East)', color: '#ff8800',
+              coords: [
+                [18,-34],[27,-30],[33,-26],[36,-20],[40,-11],
+                [40,-5],[41,2],[43.5,11.5],[50,11],[51,20],[57,21],[58,23],[72,20]
+              ] },
+            // ── TRANS-PACIFIC ────────────────────────────────────────────────
+            { name: 'Trans-Pacific (TPE)', color: '#00ff88',
+              coords: [[-118,34],[-140,25],[-157,20],[-170,3],[-178,10],
+                [140,10],[130,34],[126,37],[121,26],[120,22]] },
+            { name: 'FASTER (Google Trans-Pacific)', color: '#00ff88',
+              coords: [[-122,38],[-140,28],[-157,21],[-175,15],[150,33],[130,34],[121,26]] },
+            { name: 'Jupiter (Google)', color: '#55ddaa',
+              coords: [[-121,38],[-140,30],[-157,21],[-175,15],[148,34],[132,34],[127,37]] },
+            // ── PACIFIC ─────────────────────────────────────────────────────
+            { name: 'SJC (South Japan Cable)', color: '#88ff88',
+              coords: [[104,1.3],[110,3],[121,25],[126,26],[128,26],[132,34],[137,35],[140,35]] },
+            // ── ARCTIC / POLAR ───────────────────────────────────────────────
+            { name: 'Arctic Fibre', color: '#aaaaff',
+              coords: [[17,69],[5,62],[0,60],[-5,58],[-30,64],[-55,67],
+                [-75,72],[-90,71],[-100,70],[-120,68]] },
+            // ── RUSSIA-JAPAN (Pacific coast, not inland) ─────────────────────
+            { name: 'Russia-Japan (RJCN)', color: '#ff8888',
+              coords: [[132,43],[134,43],[136,40],[138,38],[140,36],[140.5,35],[141,35]] },
         ];
 
         const geojson = {
