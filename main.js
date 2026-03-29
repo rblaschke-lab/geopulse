@@ -253,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Initialize Feeds
         fetchNASA_Fires();
         fetchWeather();
-        fetchNightLights();         // Night Light Pollution
+        fetchOceanSST();             // Ocean Surface Temperature (NASA GHRSST)
         fetchPopulationDensity();   // Population Density
         fetchTemperatureLayer();    // Global Warming / Surface Temp
         initVolcanoes();            // Active Volcanoes
@@ -744,7 +744,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     document.getElementById('toggle-all')?.addEventListener('change', (e) => {
         const isChecked = e.target.checked;
-        const allToggles = ['toggle-borders','toggle-terminator','toggle-fires','toggle-weather','toggle-ships','toggle-flights','toggle-iss','toggle-starlink','toggle-earthquakes','toggle-webcams','toggle-nightlights','toggle-population','toggle-satellites','toggle-temperature','toggle-volcanoes','toggle-radiation','toggle-internet'];
+        const allToggles = ['toggle-borders','toggle-terminator','toggle-fires','toggle-weather','toggle-ships','toggle-flights','toggle-iss','toggle-starlink','toggle-earthquakes','toggle-webcams','toggle-sst','toggle-population','toggle-satellites','toggle-temperature','toggle-volcanoes','toggle-radiation','toggle-internet'];
         allToggles.forEach(id => {
             const cb = document.getElementById(id);
             if(cb && cb.checked !== isChecked) {
@@ -845,10 +845,10 @@ document.addEventListener("DOMContentLoaded", () => {
         internetMarkers.forEach(m => toggles.internet ? m.addTo(map) : m.remove());
     });
 
-    document.getElementById('toggle-nightlights')?.addEventListener('change', (e) => {
-        toggles.nightlights = e.target.checked;
-        if (map.getLayer('night-lights')) {
-            map.setLayoutProperty('night-lights', 'visibility', toggles.nightlights ? 'visible' : 'none');
+    document.getElementById('toggle-sst')?.addEventListener('change', (e) => {
+        toggles.sst = e.target.checked;
+        if (map.getLayer('ocean-sst')) {
+            map.setLayoutProperty('ocean-sst', 'visibility', toggles.sst ? 'visible' : 'none');
         }
     });
 
@@ -1010,32 +1010,34 @@ document.addEventListener("DOMContentLoaded", () => {
     // VIIRS_Black_Marble_2016 is far more vivid than ENCC
     // Shows cities, ship tracks, gas flares, fishing fleets
     // ----------------------------------------------------
-    const fetchNightLights = () => {
+    // ----------------------------------------------------
+    // NASA GHRSST MUR — Ocean Surface Temperature (daily, 1 km)
+    // Replaces Night Lights; shows SST with spectral color scale
+    // Blue = cold (<0°C), green = moderate, red = warm (>30°C)
+    // ----------------------------------------------------
+    const fetchOceanSST = () => {
         try {
-            // VIIRS Day/Night Band — NASA GIBS, daily composite, validated working layer
-            map.addSource('night-lights-src', {
+            map.addSource('ocean-sst-src', {
                 type: 'raster',
                 tiles: [
-                    'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_DayNightBand_ENCC/default/2024-01-01/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpg'
+                    'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/GHRSST_L4_MUR_Sea_Surface_Temperature/default/2024-08-15/GoogleMapsCompatible_Level7/{z}/{y}/{x}.png'
                 ],
                 tileSize: 256,
-                maxzoom: 8,
-                attribution: 'NASA VIIRS SNPP DayNightBand / GIBS'
+                maxzoom: 7,
+                attribution: 'NASA JPL MUR SST / GIBS — Aug 2024'
             });
             map.addLayer({
-                id: 'night-lights',
+                id: 'ocean-sst',
                 type: 'raster',
-                source: 'night-lights-src',
+                source: 'ocean-sst-src',
                 layout: { visibility: 'none' },
                 paint: {
-                    'raster-opacity': 0.9,
-                    'raster-brightness-min': 0.0,
-                    'raster-brightness-max': 1.0,
-                    'raster-contrast': 0.3,
-                    'raster-saturation': 0.2
+                    'raster-opacity': 0.85,
+                    'raster-saturation': 0.4,
+                    'raster-contrast': 0.2
                 }
             }, 'terminator-layer');
-        } catch(e) { console.warn('Night lights layer error:', e.message); }
+        } catch(e) { console.warn('Ocean SST layer error:', e.message); }
     };
 
     // ----------------------------------------------------
@@ -1888,73 +1890,90 @@ document.addEventListener("DOMContentLoaded", () => {
         const cables = [
             // ── ATLANTIC ─────────────────────────────────────────────────────
             { name: 'TAT-14 (Transatlantic)', color: '#00ccff',
+              capacity: '3.2 Tbps', year: 2001, length: '15,428 km', owner: 'KPN / Sprint / Deutsche Telekom',
               coords: [[-74,40],[-55,44],[-30,47],[-15,50],[-8,52],[-5,50],[1,51]] },
             { name: 'MAREA (Microsoft/Facebook)', color: '#44aaff',
+              capacity: '160 Tbps', year: 2017, length: '6,600 km', owner: 'Microsoft / Meta',
               coords: [[-74,40.7],[-45,40],[-20,40],[-8.6,41.5]] },
             { name: 'DUNANT (Google)', color: '#44aaff',
+              capacity: '250 Tbps', year: 2021, length: '6,600 km', owner: 'Google LLC',
               coords: [[-81,24.5],[-60,27],[-30,30],[-10,35],[-8.6,43.5]] },
             { name: 'Grace Hopper (Google)', color: '#8888ff',
+              capacity: '340 Tbps', year: 2022, length: '5,950 km', owner: 'Google LLC',
               coords: [[-74,40.7],[-40,42],[-15,48],[-8.6,43.5],[-8.6,51.5]] },
             { name: 'Havfrue / AEC (Amazon)', color: '#6699ff',
+              capacity: '345 Tbps', year: 2020, length: '8,742 km', owner: 'Amazon / Google / Meta',
               coords: [[-71,42],[-45,44],[-20,47],[-5,51],[1,51],[5.5,58.7],[10.7,55.7]] },
             { name: 'South Atlantic (SACS)', color: '#ff4444',
+              capacity: '40 Gbps', year: 2000, length: '7,250 km', owner: 'Angola Portugal consortium',
               coords: [[-8.8,38.7],[-20,-15],[-35,-22],[-43,-22.9]] },
             // ── EUROPE / MED → INDIAN OCEAN via Suez ─────────────────────────
             { name: 'SEA-ME-WE 3', color: '#ff00cc',
+              capacity: '960 Gbps', year: 1999, length: '39,000 km', owner: '92-nation consortium',
               coords: [
                 [2,51],[-5,36],[12,37],[16,38],[25,35],[31,32],
-                [32.3,31.2], // Port Said (Med end of Suez)
-                [32.5,29.9], // Suez (Red Sea start)
-                [36.5,22],[38,16],[42.5,12],[43.5,11.5], // Red Sea → Bab el-Mandeb
+                [32.3,31.2],[32.5,29.9],
+                [36.5,22],[38,16],[42.5,12],[43.5,11.5],
                 [50,11],[57,22],[67,24],[72,20],[80,7],[98,3],[104,1.3],
                 [109,3],[121,14],[126,37],[135,34],[140,35]
               ] },
             { name: 'FLAG (Fibre Link Around Globe)', color: '#ffff00',
+              capacity: '10 Gbps', year: 1997, length: '27,300 km', owner: 'FLAG Telecom',
               coords: [
                 [1,51],[12,37],[25,35],[31,32],
                 [32.3,31.2],[32.5,29.9],[38,16],[43.5,11.5],
                 [50,11],[57,22],[72,20],[80,6],[104,1.3],[121,24],[140,36]
               ] },
             { name: 'PEACE Cable', color: '#ff6600',
+              capacity: '60 Tbps', year: 2022, length: '15,000 km', owner: 'PEACE Cable International',
               coords: [
                 [-7,53],[-9,39],[-5,36],[12,37],[25,35],[31,32],
                 [32.3,31.2],[32.5,29.9],[38,16],[43.5,11.5],
                 [50,11],[57,22],[67,24],[80,21],[104,1],[120,22]
               ] },
             { name: 'AA-1 (Asia-Africa)', color: '#ffaa00',
+              capacity: '100 Tbps', year: 2020, length: '25,000 km', owner: 'Alcatel / consortium',
               coords: [
                 [31,32],[32.3,31.2],[32.5,29.9],[38,16],[43.5,11.5],
                 [50,11],[57,22],[67,24],[80,21],[104,1],[121,25]
               ] },
             // ── AFRICA COASTS ────────────────────────────────────────────────
             { name: 'SAT-3 / WASC (Africa West)', color: '#ff8800',
+              capacity: '120 Gbps', year: 2002, length: '14,350 km', owner: 'West African consortium',
               coords: [
                 [-8.7,41.7],[-9,39],[-13,25],[-17,14.5],[-17.5,13],
                 [-17,12],[-15,9],[-5,5],[0,4.5],[8.5,4],[10,3.5],
                 [9.5,4],[12,-5],[12,-8],[12,-15],[13,-23],[17,-28],[18,-34]
               ] },
             { name: 'SEACOM (Africa East)', color: '#ff8800',
+              capacity: '1.28 Tbps', year: 2009, length: '17,000 km', owner: 'Seacom Ltd',
               coords: [
                 [18,-34],[27,-30],[33,-26],[36,-20],[40,-11],
                 [40,-5],[41,2],[43.5,11.5],[50,11],[51,20],[57,21],[58,23],[72,20]
               ] },
-            // ── TRANS-PACIFIC ─── extended lon: 140°E=-220, 130°E=-230, 126°E=-234, 121°E=-239
+            // ── TRANS-PACIFIC ─── extended lon: 140°E=-220, 130°E=-230, 121°E=-239
             { name: 'Trans-Pacific (TPE)', color: '#00ff88',
+              capacity: '17.7 Tbps', year: 2016, length: '17,700 km', owner: 'Asia-Pacific Telecom consortium',
               coords: [[-118,34],[-130,30],[-145,23],[-157,20],[-170,8],[-178,5],
                        [-200,8],[-216,13],[-220,34],[-230,35],[-234,37],[-239,26],[-240,22]] },
             { name: 'FASTER (Google Trans-Pacific)', color: '#00ff88',
+              capacity: '60 Tbps', year: 2016, length: '9,000 km', owner: 'Google / SoftBank / China Mobile',
               coords: [[-122,38],[-140,29],[-157,21],[-175,15],[-200,18],[-215,33],[-220,36],[-240,27]] },
             { name: 'Jupiter (Google)', color: '#55ddaa',
+              capacity: '60 Tbps', year: 2020, length: '14,557 km', owner: 'Google / PLDT / SoftBank',
               coords: [[-121,38],[-140,30],[-157,21],[-175,15],[-200,14],[-215,32],[-220,34],[-228,37]] },
             // ── PACIFIC ─────────────────────────────────────────────────────
             { name: 'SJC (South Japan Cable)', color: '#88ff88',
+              capacity: '2.56 Tbps', year: 2009, length: '8,900 km', owner: 'SJC consortium',
               coords: [[104,1.3],[110,3],[121,25],[126,26],[128,26],[132,34],[137,35],[140,35]] },
             // ── ARCTIC / POLAR ───────────────────────────────────────────────
             { name: 'Arctic Fibre', color: '#aaaaff',
+              capacity: '160 Tbps (planned)', year: 2025, length: '15,600 km', owner: 'Far North Digital',
               coords: [[17,69],[5,62],[0,60],[-5,58],[-30,64],[-55,67],
                 [-75,72],[-90,71],[-100,70],[-120,68]] },
-            // ── RUSSIA-JAPAN (Pacific coast, not inland) ─────────────────────
+            // ── RUSSIA-JAPAN ─────────────────────────────────────────────────
             { name: 'Russia-Japan (RJCN)', color: '#ff8888',
+              capacity: '640 Gbps', year: 2013, length: '1,520 km', owner: 'KDDI / RTComm.RU',
               coords: [[132,43],[134,43],[136,40],[138,38],[140,36],[140.5,35],[141,35]] },
         ];
 
@@ -1962,7 +1981,7 @@ document.addEventListener("DOMContentLoaded", () => {
             type: 'FeatureCollection',
             features: cables.map(c => ({
                 type: 'Feature',
-                properties: { name: c.name, color: c.color },
+                properties: { name: c.name, color: c.color, capacity: c.capacity, year: c.year, length: c.length, owner: c.owner },
                 geometry: { type: 'LineString', coordinates: c.coords }
             }))
         };
@@ -1980,15 +1999,20 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Popup on cable click
+        // Popup on cable click — shows capacity, owner, year, length
         map.on('click', 'cables-layer', (e) => {
-            const { name, color } = e.features[0].properties;
-            new maplibregl.Popup({ maxWidth: '220px' })
+            const { name, color, capacity, year, length, owner } = e.features[0].properties;
+            new maplibregl.Popup({ maxWidth: '270px' })
                 .setLngLat(e.lngLat)
-                .setHTML(`<div style="font-family:'Share Tech Mono',monospace;">
-                    <h3 style="color:${color};margin:0 0 5px;">🔌 ${name}</h3>
-                    <div style="font-size:.68rem;opacity:.7;">Submarine fiber optic cable system</div>
-                    <div style="font-size:.6rem;opacity:.4;margin-top:5px;">Source: TeleGeography 2024</div>
+                .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
+                    <h3 style="color:${color};margin:0 0 8px;border-bottom:1px solid ${color}44;padding-bottom:5px;">🔌 ${name}</h3>
+                    <table style="width:100%;border-collapse:collapse;">
+                        <tr><td style="opacity:.5;padding:2px 0;">CAPACITY</td><td style="color:${color};font-weight:bold;text-align:right;">${capacity || 'N/A'}</td></tr>
+                        <tr><td style="opacity:.5;padding:2px 0;">LENGTH</td><td style="color:#ccc;text-align:right;">${length || 'N/A'}</td></tr>
+                        <tr><td style="opacity:.5;padding:2px 0;">ACTIVE SINCE</td><td style="color:#ccc;text-align:right;">${year || 'N/A'}</td></tr>
+                        <tr><td style="opacity:.5;padding:2px 0;">OWNER</td><td style="color:#aaa;text-align:right;font-size:.65rem;">${owner || 'Consortium'}</td></tr>
+                    </table>
+                    <div style="font-size:.57rem;opacity:.35;margin-top:6px;">Source: TeleGeography SubmarineCableMap 2024</div>
                 </div>`)
                 .addTo(map);
         });
