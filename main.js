@@ -910,6 +910,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('toggle-temperature')?.addEventListener('change', (e) => {
         toggles.temperature = e.target.checked;
         if (map.getLayer('temperature')) map.setLayoutProperty('temperature', 'visibility', toggles.temperature ? 'visible' : 'none');
+        const legend = document.getElementById('layer-legend');
+        if (!legend) return;
+        legend.style.display = (toggles.sst || toggles.temperature) ? 'flex' : 'none';
+        if (toggles.temperature) legend.innerHTML = '<div class="legend-title">\u{1F321} SURFACE TEMP</div><div class="legend-bar" style="background:linear-gradient(to right,#0a0a6e,#2d6a9f,#00b4d8,#90e0ef,#00ff88,#ffe066,#ffb000,#ff6600,#cc0000)"></div><div class="legend-labels"><span>-50\u00b0C</span><span>0\u00b0C</span><span>+50\u00b0C</span></div>';
+        if (!toggles.temperature && !toggles.sst) { legend.innerHTML = ''; legend.style.display = 'none'; }
     });
 
     document.getElementById('toggle-volcanoes')?.addEventListener('change', (e) => {
@@ -929,9 +934,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('toggle-sst')?.addEventListener('change', (e) => {
         toggles.sst = e.target.checked;
-        if (map.getLayer('ocean-sst')) {
-            map.setLayoutProperty('ocean-sst', 'visibility', toggles.sst ? 'visible' : 'none');
-        }
+        if (map.getLayer('ocean-sst')) map.setLayoutProperty('ocean-sst', 'visibility', toggles.sst ? 'visible' : 'none');
+        const legend = document.getElementById('layer-legend');
+        if (!legend) return;
+        legend.style.display = (toggles.sst || toggles.temperature) ? 'flex' : 'none';
+        if (toggles.sst) legend.innerHTML = '<div class="legend-title">\u{1F30A} OCEAN TEMP</div><div class="legend-bar" style="background:linear-gradient(to right,#0a0a6e,#0077b6,#00b4d8,#90e0ef,#00ff88,#ffb000,#ff6600,#cc0000)"></div><div class="legend-labels"><span>&lt;0\u00b0C</span><span>15\u00b0C</span><span>&gt;30\u00b0C</span></div>';
     });
 
     document.getElementById('toggle-population')?.addEventListener('change', (e) => {
@@ -1114,9 +1121,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 source: 'ocean-sst-src',
                 layout: { visibility: 'none' },
                 paint: {
-                    'raster-opacity': 0.85,
-                    'raster-saturation': 0.4,
-                    'raster-contrast': 0.2
+                    'raster-opacity': 0.5,
+                    'raster-saturation': -0.35,
+                    'raster-contrast': -0.1
                 }
             }, 'terminator-layer');
         } catch(e) { console.warn('Ocean SST layer error:', e.message); }
@@ -1312,7 +1319,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 type: 'raster',
                 source: 'temperature-src',
                 layout: { visibility: 'none' },
-                paint: { 'raster-opacity': 0.75 }
+                paint: { 'raster-opacity': 0.45, 'raster-saturation': -0.25 }
             }, 'terminator-layer');
         } catch(e) { console.warn('Temperature layer error:', e.message); }
     };
@@ -1671,7 +1678,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const fetchLaunches = async () => {
         if (!launchFeed) return;
         try {
-            const res = await fetch('https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=4&format=json');
+            const ctrl = new AbortController();
+            setTimeout(() => ctrl.abort(), 8000);
+            const res = await fetch('https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=5&format=json', { signal: ctrl.signal });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
             const data = await res.json();
             const launches = data?.results || [];
             if (!launches.length) {
