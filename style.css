@@ -150,11 +150,11 @@ header {
 }
 .header-top-row { display: flex; justify-content: space-between; align-items: center; }
 
-/* Main title row — amber, signature color */
-.header-main h1 { font-size: 0.85rem; letter-spacing: 2.5px; font-weight: 700; margin: 0; color: var(--amber) !important; }
-.header-main .sidebar-expand-hint {
-    font-size: 0.75rem; letter-spacing: 2px; font-weight: 600;
-    color: var(--amber); opacity: 0.8; margin: 0;
+/* Main title row — amber, signature color — use ID specificity to guarantee override */
+#sidebar header h1 { font-size: 0.85rem; letter-spacing: 2.5px; font-weight: 700; margin: 0; color: #ffb000; }
+#sidebar .header-main .sidebar-expand-hint {
+    font-size: 0.8rem; letter-spacing: 2px; font-weight: 600;
+    color: #ffb000; opacity: 0.8; margin: 0;
 }
 
 /* Meta row — dimmed, secondary info */
@@ -174,8 +174,7 @@ header h2 { font-size: 0.85rem; letter-spacing: 2.5px; font-weight: 700; margin:
 #intelligence-panel header h2 { color: var(--neon-green); font-size: 0.8rem; }
 
 .version { font-size: 0.6rem; opacity: 0.5; }
-.byline { font-size: 0.52rem; opacity: 0.25; letter-spacing: 1.5px; text-transform: uppercase; }
-.sidebar-expand-hint { font-size: 0.48rem; opacity: 0.3; letter-spacing: 2px; }
+/* Note: .byline and .sidebar-expand-hint are fully controlled by .header-main and .header-meta — no generic override here */
 .sub-header {
     font-size: 0.52rem; opacity: 0.5; display: flex; align-items: center;
     gap: 4px; letter-spacing: 1.2px; color: #fff;
@@ -315,4 +314,7 @@ input:checked + .slider { background: rgba(255,176,0,0.1); }
 .maplibregl-popup-close-button { color: #888 !important; outline: none !important; }
 
 /* Remove legacy elements */
-#about-btn { display: none !important; }
+/* Hide elements when ticker is disabled */
+body.no-ticker .global-ticker { display: none !important; }
+body.no-ticker #sidebar { top: 14px !important; }
+body.no-ticker #intelligence-panel { top: 14px !important; }
