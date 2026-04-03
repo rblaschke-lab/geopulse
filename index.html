@@ -284,6 +284,19 @@
         </footer>
     </div>
 
+    <!-- ARTEMIS MISSION INTELLIGENCE BAR (PERMANENT HUD) -->
+    <div id="artemis-bar">
+        <div class="artemis-label">
+            <i class="fa-solid fa-moon"></i> ARTEMIS_II_MISSION_INTEL
+        </div>
+        <div class="artemis-stats">
+            <div class="stat-item"><span class="label">DAY:</span> <span id="artemis-day">21</span></div>
+            <div class="stat-item"><span class="label">VEL:</span> <span id="artemis-vel">2400 KM/H</span></div>
+            <div class="stat-item"><span class="label">ALT:</span> <span id="artemis-alt">42000 KM</span></div>
+            <div class="stat-item"><span class="label">STATUS:</span> <span id="artemis-status" class="status-active">TRANS-LUNAR_INJECTION</span></div>
+        </div>
+    </div>
+
     <!-- Orientation Hint -->
     <div id="orientation-hint">
         <i class="fa-solid fa-rotate"></i>
@@ -294,9 +307,12 @@
     <div id="layer-legend" style="display:none;"></div>
 
     <!-- MAP BRANDING FOOTER (V8.0) -->
-    <div id="map-branding">
+    <div id="map-branding" style="text-align: center; width: 100%; position: absolute; bottom: 0; z-index: 100; padding-bottom: 5px; color: #ffffff;">
         <div class="branding-line">
-            - RB Design 2026 - Global AI Intelligence Architecture - <a href="./about.html" target="_blank">About the App</a> -
+            - RB Design 2026 - Global AI Intelligence Architecture - <a href="./about.html" target="_blank" style="color: #ffffff; text-decoration: underline;">About the App</a> -
+        </div>
+        <div class="branding-line" style="margin-top:5px; font-size:0.5rem; opacity:0.8; border:none; background:none; text-transform:lowercase; letter-spacing:1px; color: #ffffff;">
+            github_uplink: <span id="session-count" style="color:var(--neon-blue);">1.2K SESSIONS</span> // node_id: <span style="color:var(--amber);">WORLDVIEW_CORE_0402</span>
         </div>
     </div>
 

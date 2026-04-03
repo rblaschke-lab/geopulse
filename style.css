@@ -563,3 +563,69 @@ body.surveillance-active .maplibregl-ctrl {
     .tactical-left, .tactical-right { display: none; } /* Hide heavy side panels on mobile */
     .tactical-footer { padding: 15px 20px; }
 }
+
+/* --- ARTEMIS MISSION BAR --- */
+#artemis-bar {
+    position: fixed;
+    bottom: 50px;
+    left: 20px;
+    width: 320px;
+    background: rgba(0, 5, 10, 0.9);
+    border: 1px solid var(--amber-glow);
+    border-left: 3px solid var(--amber);
+    display: flex;
+    flex-direction: column;
+    padding: 12px 14px;
+    min-height: 110px;
+    z-index: 1000;
+    font-family: 'Share Tech Mono', monospace;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    pointer-events: auto;
+    backdrop-filter: blur(10px);
+}
+
+.artemis-label {
+    font-size: 0.6rem;
+    color: var(--amber);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(255, 176, 0, 0.1);
+    padding-bottom: 4px;
+    width: 100%;
+}
+
+.artemis-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+}
+
+.stat-item {
+    font-size: 0.65rem;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.stat-item .label {
+    opacity: 0.4;
+    font-size: 0.5rem;
+    margin-right: 5px;
+}
+
+#artemis-status.status-active {
+    color: var(--neon-blue);
+    animation: status-pulse 2s infinite;
+    grid-column: span 2;
+    margin-top: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.6rem;
+}
+
+@keyframes status-pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}

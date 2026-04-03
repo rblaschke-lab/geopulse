@@ -3,6 +3,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // CONSTANTS & STATE (V8.2)
     // ----------------------------------------------------
     const VERSION = "8.2";
+    
+    // Increment and get session count
+    const getSessionCount = () => {
+        let count = parseInt(localStorage.getItem('worldviewSessionCount') || '1242', 10);
+        count++;
+        localStorage.setItem('worldviewSessionCount', count);
+        return count;
+    };
+    const sessionCount = getSessionCount();
+    const sessionEl = document.getElementById('session-count');
+    if (sessionEl) sessionEl.innerText = `${(sessionCount).toLocaleString()} SESSIONS ESTABLISHED`;
+
     const toggles = {
         terminator: false, fires: false, weather: false, borders: false,
         ships: false, flights: false, iss: false, starlink: false, earthquakes: false, webcams: false,
@@ -652,22 +664,43 @@ document.addEventListener("DOMContentLoaded", () => {
             globalEarthquakesArray = data.features;
             const geojson = {
                 type: 'FeatureCollection',
-                features: data.features.map(f => ({
-                    type: 'Feature',
-                    geometry: f.geometry,
-                    properties: { ...f.properties, time: new Date(f.properties.time).toLocaleTimeString() }
-                }))
+                features: data.features.map(f => {
+                    const mag = f.properties.mag;
+                    let tsunamiTag = '';
+                    if (mag >= 6.0) {
+                        tsunamiTag = `<div style="margin-top:8px; padding:4px; font-weight:bold; font-size:0.65rem; color:#fff; background:var(--neon-red); border:1px solid #fff;">
+                                        <i class="fa-solid fa-water"></i> ATS-WARNING: REGIONAL TSUNAMI THREAT OR MAJOR SEISMIC DISTURBANCE DETECTED
+                                      </div>`;
+                    }
+                    return {
+                        type: 'Feature',
+                        geometry: f.geometry,
+                        properties: { ...f.properties, time: new Date(f.properties.time).toLocaleTimeString(), tsunamiHTML: tsunamiTag }
+                    }
+                })
             };
             map.getSource('earthquakes').setData(geojson);
             map.on('click', 'earthquakes-core', (e) => {
                 const p = e.features[0].properties;
-                new maplibregl.Popup()
+                new maplibregl.Popup({ offset: 15, maxWidth: '280px' })
                     .setLngLat(e.lngLat)
                     .setHTML(`
-                        <h3>SEISMIC EVENT</h3>
-                        <p>MAG: ${p.mag}</p>
-                        <p>LOC: ${p.place.toUpperCase()}</p>
-                        <p>TIME: ${p.time}</p>
+                        <div style="font-family:'Share Tech Mono',monospace; font-size:0.75rem;">
+                            <h3 style="color:var(--amber); margin:0 0 6px; border-bottom:1px solid rgba(255,176,0,0.1); padding-bottom:4px;">
+                                <i class="fa-solid fa-burst"></i> SEISMIC EVENT
+                            </h3>
+                            <div style="background:rgba(255,255,255,0.03); padding:6px; border-radius:2px;">
+                                <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                                    <span>MAGNITUDE:</span> <span style="color:${p.mag > 5 ? 'var(--neon-red)' : 'var(--neon-blue)'}; font-weight:bold;">${p.mag}</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span>DEPTH:</span> <span>${e.features[0].geometry.coordinates[2].toFixed(1)} KM</span>
+                                </div>
+                            </div>
+                            <div style="margin-top:6px; color:#ccc;">LOC: ${p.place.toUpperCase()}</div>
+                            <div style="font-size:0.6rem; opacity:0.5; margin-top:4px;">TIME: ${p.time}</div>
+                            ${p.tsunamiHTML}
+                        </div>
                     `).addTo(map);
             });
             map.on('mouseenter', 'earthquakes-core', () => map.getCanvas().style.cursor = 'pointer');
@@ -793,15 +826,45 @@ document.addEventListener("DOMContentLoaded", () => {
         // Strait of Hormuz / Persian Gulf
         { name: 'MT FRONT EMPIRE', type: 'tanker', cls: 'VLCC Oil Tanker', lat: 26.68, lon: 56.75, hdg: 120, spd: 0.00004 },
         { name: 'AL KHAZNAH', type: 'tanker', cls: 'LNG Carrier', lat: 26.45, lon: 56.40, hdg: 300, spd: 0.00008 },
-        { name: 'USS GERALD R. FORD', type: 'naval', cls: 'Nuclear Carrier Group', lat: 25.80, lon: 57.20, hdg: 90, spd: 0.00009 },
+        { name: 'USS NIMITZ', type: 'naval', cls: 'Carrier Strike Group', lat: 24.80, lon: 57.20, hdg: 60, spd: 0.00009 },
+        { name: 'IRGC FAST ATTACK SWARM', type: 'naval', cls: 'Asymmetric Fleet', lat: 26.10, lon: 56.90, hdg: 270, spd: 0.00015 },
         // Suez / Red Sea
         { name: 'MAERSK HALIFAX', type: 'cargo', cls: 'U-Large Container', lat: 27.54, lon: 34.25, hdg: 135, spd: 0.00006 },
         { name: 'EVER GIVEN', type: 'cargo', cls: 'Container Ship', lat: 31.8, lon: 32.5, hdg: 180, spd: 0.00006 },
         // Global Strategic
         { name: 'MSC IRINA', type: 'cargo', cls: 'Container Giant', lat: 1.32, lon: 104.12, hdg: 315, spd: 0.00007 },
-        { name: 'HMS QUEEN ELIZABETH', type: 'naval', cls: 'Aircraft Carrier', lat: 48.5, lon: -5.5, hdg: 220, spd: 0.00008 },
+        { name: 'HMS QUEEN ELIZABETH', type: 'naval', cls: 'Carrier Group', lat: 48.5, lon: -5.5, hdg: 220, spd: 0.00008 },
         { name: 'SHANDONG', type: 'naval', cls: 'Carrier Group', lat: 22.1, lon: 114.5, hdg: 10, spd: 0.00006 }
     ];
+
+    // Generate remaining ships up to 100 limit
+    for(let i=0; i<89; i++) {
+        const isHormuzArea = Math.random() > 0.5; // 50% density around Hormuz and Indian Ocean
+        let lat, lon;
+        if(isHormuzArea) {
+            lat = 10 + Math.random() * 20; 
+            lon = 45 + Math.random() * 30; 
+        } else {
+            lat = (Math.random() * 120) - 60;
+            lon = (Math.random() * 360) - 180;
+        }
+        
+        const typeRoll = Math.random();
+        let type = 'cargo';
+        let cls = 'Panamax Bulk Carrier';
+        if(typeRoll > 0.85) { type = 'naval'; cls = 'Guided Missile Destroyer'; }
+        else if(typeRoll > 0.60) { type = 'tanker'; cls = 'Crude Oil Tanker'; }
+
+        fleetData.push({
+            name: (type === 'naval' ? 'TASK_FORCE_' : 'MERCHANT_VESSEL_') + Math.floor(100 + Math.random()*9000),
+            type: type,
+            cls: cls,
+            lat: lat,
+            lon: lon,
+            hdg: Math.random() * 360,
+            spd: 0.00004 + (Math.random() * 0.00008)
+        });
+    }
 
     const initGhostFleet = () => {
         fleetData.forEach(ship => {
@@ -1082,16 +1145,34 @@ document.addEventListener("DOMContentLoaded", () => {
         // Click handler for Intelligence Clusters
         map.on('click', 'intel-clusters-halo', (e) => {
             const props = e.features[0].properties;
+            
+            // Assign a random indicator based on type
+            const indicators = {
+                "MILITARY": ["UHF TROOP COMM DETECTED", "UNREGISTERED ARMOR MOVEMENT", "AA-RADAR LOCK ESTABLISHED"],
+                "MARITIME": ["AIS TRANSPONDER SPOOFING", "ILLEGAL CARGO TRANSFER", "SUBMARINE ACOUSTIC SIGNATURE"],
+                "AEROSPACE": ["UNAUTHORIZED AIRSPACE INCURSION", "HYPERSONIC GLIDE VEHICLE DETECTED", "GPS JAMMING SIGNAL"],
+                "CYBER": ["SCADA SYSTEM INTRUSION", "DDoS ORIGIN NODE DETECTED", "ENCRYPTED BOTNET TRAFFIC"],
+                "ENVIRONMENTAL": ["NIGHTLIGHTS OUTAGE ANOMALY", "THERMAL BLOOM (EXPLOSION?)", "CO2 PLUME DETECTED"]
+            };
+            const possibleInd = indicators[props.typeLabel] || ["UNKNOWN CORRELATION ANOMALY"];
+            const selectedIndicator = possibleInd[Math.floor(Math.random() * possibleInd.length)];
+            
             new maplibregl.Popup({ offset: 10, maxWidth: '300px' })
                 .setLngLat(e.lngLat)
                 .setHTML(`
                     <div style="font-family:'Share Tech Mono',monospace; padding:4px;">
-                        <h3 style="color:${props.color}; margin:0 0 8px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
+                        <h3 style="color:${props.color}; margin:0 0 8px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px; font-size:1rem;">
                             <i class="fa-solid fa-satellite-dish"></i> ${props.typeLabel} ANOMALY
                         </h3>
-                        <div style="font-size:0.85rem; color:#fff; line-height:1.4;">${props.msg}</div>
-                        <div style="margin-top:10px; font-size:0.65rem; opacity:0.6; display:flex; justify-content:space-between;">
-                            <span>SEVERITY: ${props.severity.toUpperCase()}</span>
+                        <div style="font-size:0.85rem; color:#fff; line-height:1.4; border-left:2px solid ${props.color}; padding-left:8px; margin-bottom:8px;">${props.msg}</div>
+                        
+                        <div style="background:rgba(255,255,255,0.05); padding:6px; border:1px solid rgba(255,255,255,0.1); margin-top:8px;">
+                            <div style="font-size:0.6rem; opacity:0.5; letter-spacing:1px; margin-bottom:2px;">INDICATOR OBJECT:</div>
+                            <div style="font-size:0.75rem; color:var(--neon-blue);">${selectedIndicator}</div>
+                        </div>
+
+                        <div style="margin-top:10px; font-size:0.65rem; opacity:0.6; display:flex; justify-content:space-between; border-top:1px dashed rgba(255,255,255,0.2); padding-top:6px;">
+                            <span style="color:${props.severity === 'critical'? 'var(--neon-red)' : 'inherit'}">SEVERITY: ${props.severity.toUpperCase()}</span>
                             <span>DETECTED BY AI_CORE</span>
                         </div>
                     </div>
