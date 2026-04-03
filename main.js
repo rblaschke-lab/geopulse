@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     // ----------------------------------------------------
-    // CONSTANTS & STATE (V8.2)
+    // CONSTANTS & STATE (V8.5)
     // ----------------------------------------------------
-    const VERSION = "8.2";
+    const VERSION = "8.5";
     
     // Increment and get session count
     const getSessionCount = () => {
