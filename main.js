@@ -15,20 +15,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const sessionEl = document.getElementById('session-count');
     if (sessionEl) sessionEl.innerText = `${(sessionCount).toLocaleString()}`;
 
-    // Artemis Mission Live Telemetry Simulation
+    // Artemis Mission Live Telemetry Simulation [Dead-Reckoning Orbital Engine]
     const simulateArtemisTelemetry = () => {
         const timeEl = document.getElementById('artemis-time');
         const velEl = document.getElementById('artemis-vel');
         const distEarthEl = document.getElementById('artemis-dist-earth');
         const distMoonEl = document.getElementById('artemis-dist-moon');
+        const statusEl = document.getElementById('artemis-status');
         
         if(!timeEl || !velEl || !distEarthEl || !distMoonEl) return;
         
-        // Base values simulating a deep space approach
-        let missionStart = Date.now() - (21 * 86400000 + 4 * 3600000 + 12 * 60000); // 21 days 4 hours 12 mins ago
-        let baseDistEarth = 380400.00;
-        let baseDistMoon = 4000.00;
-        let baseVel = 35400.00;
+        // Exact Launch Vector (April 1, 2026)
+        const missionStart = new Date("2026-04-01T14:00:00Z").getTime();
+        const transitDurationMs = 96 * 3600000; // ~96 Hours Trans-Lunar Coast
         
         const formatNum = (num) => num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         
@@ -42,15 +41,29 @@ document.addEventListener("DOMContentLoaded", () => {
             const secs = Math.floor((elapsed % 60000) / 1000);
             timeEl.innerText = `${days}D ${hours.toString().padStart(2, '0')}H ${mins.toString().padStart(2, '0')}M ${secs.toString().padStart(2, '0')}S`;
 
-            // Rapid oscillation algorithm for deep space telemetry variance
-            const noise = (Math.random() - 0.5) * 10;
-            baseDistEarth += (0.01 + (noise / 200)); 
-            baseDistMoon -= (0.01 + Math.abs(noise / 200));
-            baseVel += (noise / 100); // slight speed oscillations
+            // Keplerian Mathematical Trajectory Approximation
+            // Progress goes from 0.0 to 1.0 throughout the 96 hour transit
+            let progress = Math.min(Math.max(elapsed / transitDurationMs, 0), 1);
             
-            velEl.innerText = `${formatNum(baseVel)} KM/H`;
-            distEarthEl.innerText = `${formatNum(baseDistEarth)} KM`;
-            distMoonEl.innerText = `${formatNum(baseDistMoon)} KM`;
+            // Distance Calculation (Logarithmic-style curve leaving Earth gravity)
+            // Starts around 6,000 KM (LEO), Peaks at ~384,400 KM (Moon)
+            let currentDistEarth = 6000 + (378400 * Math.pow(progress, 0.85));
+            let currentDistMoon = 384400 - currentDistEarth;
+            
+            // Velocity Calculation (V drops heavily initially due to Earth's gravity well)
+            // TLI starts at ~39,000 km/h, slows to ~4000 km/h before lunar capture
+            let currentVel = 39000 - (35000 * Math.pow(progress, 0.4));
+            
+            // Update Phase Status based on transit time
+            if (statusEl) {
+                if (progress < 0.05) statusEl.innerText = "TRANS-LUNAR INJECTION";
+                else if (progress < 0.95) statusEl.innerText = "COASTING (OUTBOUND)";
+                else statusEl.innerText = "LUNAR ORBIT INSERTION";
+            }
+
+            velEl.innerText = `${formatNum(currentVel)} KM/H`;
+            distEarthEl.innerText = `${formatNum(currentDistEarth)} KM`;
+            distMoonEl.innerText = `${formatNum(Math.max(currentDistMoon, 0))} KM`;
             
             requestAnimationFrame(tick);
         };
