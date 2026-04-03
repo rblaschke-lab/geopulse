@@ -1,13 +1,13 @@
-# 🌐 Worldview V8.5 — Global Command Center
+# 🌐 Worldview V8.7 — Global Command Center
 
 A real-time global intelligence dashboard built with MapLibre GL JS.
 
-## Key Features (V8.5 Update)
-- **Artemis Live Telemetry HUD**: Real-time JavaScript simulation of orbital velocity and distance metrics.
+## Key Features (V8.7 Update)
+- **Artemis II Keplerian Engine**: High-fidelity orbital physics simulator based on the April 2026 launch trajectory.
 - **USGS Seismic & Tsunami Int**: Direct PTWC Tsunami-warnings parsing for earthquakes > 6.0.
 - **Authentic Geo-Political OSINT**: Hardcoded military surveillance tracking of the Ukraine frontline, Iran/Middle East, and Taiwan Strait.
 - **100+ Live Ships**: Highly dense global maritime traffic layer prioritizing military logistics in the Strait of Hormuz.
-- **Terminal UI**: Hacker/aerospace dark mode with dynamic status popups.
+- **Terminal UI & Mobile HUD**: Cinematic QA aesthetics with phosphor glows, glass-morphism, and full 9:16 portrait mode support.
 
 ## Live Data Sources
 
