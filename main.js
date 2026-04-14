@@ -1495,13 +1495,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 <line x1="11" y1="0" x2="11" y2="22" stroke="${col}" stroke-width="1"/>
                 <circle cx="11" cy="11" r="2.5" fill="${col}" opacity="0.8"/>
             </svg>`;
-            el.style.filter = \`drop-shadow(0 0 4px \${col})\`;
+            el.style.filter = `drop-shadow(0 0 4px ${col})`;
 
             const partiesHtml = c.parties.map(([name, role]) =>
-                \`<div style="background:rgba(255,0,0,.05);padding:3px 7px;border-left:2px solid \${col}55;">
-                    <div style="color:\${col};font-size:.72rem;">\${name}</div>
-                    <div style="opacity:.55;font-size:.62rem;">\${role}</div>
-                </div>\`
+                `<div style="background:rgba(255,0,0,.05);padding:3px 7px;border-left:2px solid ${col}55;">
+                    <div style="color:${col};font-size:.72rem;">${name}</div>
+                    <div style="opacity:.55;font-size:.62rem;">${role}</div>
+                </div>`
             ).join('');
 
             const m = new maplibregl.Marker({ element: el, anchor: 'center' })
@@ -1509,12 +1509,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 
             el.addEventListener('click', () => {
                 window.openBriefing({
-                    id: \`CONF-\${c.name.replace(/\\s+/g,'-').toUpperCase()}\`,
+                    id: `CONF-${c.name.replace(/\s+/g,'-').toUpperCase()}`,
                     title: c.name,
                     severity: c.severity,
-                    what: \`<strong>\${c.type}</strong><br>\${c.status}<br><br><strong>Combatants:</strong><br>\${c.parties.map(p=>\`• \${p[0]} (\${p[1]})\`).join('<br>')}\`,
-                    why: \`<strong>Casualties:</strong> \${c.casualties}<br><strong>Displaced:</strong> \${c.displaced}<br><br>\${c.note}\`,
-                    time: \`Ongoing since \${c.since} (\${duration} yrs)\`,
+                    what: `<strong>${c.type}</strong><br>${c.status}<br><br><strong>Combatants:</strong><br>${c.parties.map(p=>`• ${p[0]} (${p[1]})`).join('<br>')}`,
+                    why: `<strong>Casualties:</strong> ${c.casualties}<br><strong>Displaced:</strong> ${c.displaced}<br><br>${c.note}`,
+                    time: `Ongoing since ${c.since} (${duration} yrs)`,
                     source: 'ACLED / SIPRI / UN OCHA',
                     location: [c.lon, c.lat],
                     relatedLayers: [
@@ -1627,18 +1627,18 @@ document.addEventListener("DOMContentLoaded", () => {
             el.style.cssText = 'width:18px;height:18px;cursor:pointer;background:rgba(0,212,255,0.7);border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;box-shadow:0 0 8px rgba(0,212,255,0.8);';
             el.innerHTML = '<i class="fa-solid fa-video"></i>';
             
-            const popupHtml = \`
+            const popupHtml = `
                 <div style="font-family:'Share Tech Mono',monospace; width:260px; background:rgba(0,10,20,0.95); border:1px solid #00d4ff; padding:8px;">
                     <h3 style="color:#00d4ff; font-size:0.85rem; margin:0 0 6px; border-bottom:1px solid rgba(0,212,255,0.3); padding-bottom:4px;">
-                        <i class="fa-solid fa-video"></i> CCTV_\${code}_\${name.toUpperCase().replace(/\\s+/g,'_')}
+                        <i class="fa-solid fa-video"></i> CCTV_${code}_${name.toUpperCase().replace(/\s+/g,'_')}
                     </h3>
                     <div style="background:#000; width:100%; height:140px; display:flex; align-items:center; justify-content:center; border:1px solid #333; position:relative; overflow:hidden;">
-                        <img src="https://picsum.photos/seed/\${name.replace(/\\s+/g,'')}/260/140?grayscale" style="width:100%; height:100%; object-fit:cover; opacity:0.8; filter:contrast(1.2) brightness(0.9) sepia(0.3) hue-rotate(180deg);"/>
+                        <img src="https://picsum.photos/seed/${name.replace(/\s+/g,'')}/260/140?grayscale" style="width:100%; height:100%; object-fit:cover; opacity:0.8; filter:contrast(1.2) brightness(0.9) sepia(0.3) hue-rotate(180deg);"/>
                         <div style="position:absolute; top:5px; left:5px; font-size:0.6rem; color:#fff; background:rgba(0,0,0,0.5); padding:2px 4px;">LIVE_FEED</div>
                         <div style="position:absolute; bottom:5px; right:5px; font-size:0.5rem; color:#f00; font-weight:bold;">REC &#9679;</div>
                     </div>
                 </div>
-            \`;
+            `;
             
             const m = new maplibregl.Marker({ element: el, anchor: 'center' })
                 .setLngLat([lon, lat])
@@ -1659,7 +1659,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const initISS = () => {
         const el = document.createElement('div');
         el.className = 'marker-iss';
-        el.style.cssText = 'width:24px;height:24px;cursor:pointer;background:url("data:image/svg+xml;utf8,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\' viewBox=\\\'0 0 24 24\\\' fill=\\\'%2300ffcc\\\'><path d=\\\'M21,11V13H19V11H21M17,11V13H15V11H17M13,11V13H11V11H13M9,11V13H7V11H9M5,11V13H3V11H5Z\\\'/></svg>") center/contain no-repeat; filter:drop-shadow(0 0 5px #00ffcc); transition:all 1s linear;';
+        el.style.cssText = 'width:24px;height:24px;cursor:pointer;background:url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%2300ffcc\'><path d=\'M21,11V13H19V11H21M17,11V13H15V11H17M13,11V13H11V11H13M9,11V13H7V11H9M5,11V13H3V11H5Z\'/></svg>") center/contain no-repeat; filter:drop-shadow(0 0 5px #00ffcc); transition:all 1s linear;';
         
         issMarker = new maplibregl.Marker({ element: el })
             .setLngLat([0,0])
