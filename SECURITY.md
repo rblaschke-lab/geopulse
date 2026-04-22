@@ -2,15 +2,15 @@
 
 ## Reporting Vulnerabilities
 
-If you discover a security vulnerability in Worldview, please report it responsibly:
+If you discover a security vulnerability in GEOPULSE, please report it responsibly:
 
 1. **Do NOT open a public GitHub issue** for security vulnerabilities
-2. Email: dev@worldview.local (or use GitHub private vulnerability reporting)
+2. Email: dev@geopulse.local (or use GitHub private vulnerability reporting)
 3. Include steps to reproduce, expected vs actual behavior, and impact assessment
 
 ## Architecture
 
-Worldview is a **static client-side application** hosted on GitHub Pages:
+GEOPULSE is a **static client-side application** hosted on GitHub Pages:
 
 - **No backend server** — all processing happens in the browser
 - **No user authentication** — no accounts, no passwords
@@ -33,5 +33,5 @@ Worldview is a **static client-side application** hosted on GitHub Pages:
 
 | Version | Supported |
 |---------|-----------|
-| 9.0     | ✅ Current |
-| < 9.0   | ❌ No longer maintained |
+| 1.0     | ✅ Current |
+| < 1.0   | ❌ Legacy (formerly Worldview) |

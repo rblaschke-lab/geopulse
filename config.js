@@ -1,6 +1,6 @@
-// Global Worldview Configuration
+// Global GEOPULSE Configuration
 window.WorldviewConfig = {
-    VERSION: "10.0",
+    VERSION: "1.0",
     API_KEYS: {
         AISSTREAM: "" // Get your free key at https://aisstream.io
     },

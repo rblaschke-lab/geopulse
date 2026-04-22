@@ -1,14 +1,14 @@
-# 🌍 Worldview — Global Command Center
+# 🌍 GEOPULSE — Live World Intelligence Map
 
-**Real-time educational world map combining satellite imagery, geopolitical data, and live data feeds into one interactive dashboard.**
+**Free, real-time educational world map combining satellite imagery, geopolitical data, and live intelligence feeds into one interactive dashboard. By RB Design 2026.**
 
-![Version](https://img.shields.io/badge/version-9.0-blue)
+![Version](https://img.shields.io/badge/version-1.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Platform](https://img.shields.io/badge/platform-GitHub%20Pages-orange)
 
 ## 🚀 Live Demo
 
-**➡️ [Launch Worldview](https://rblaschke-lab.github.io/worldview/)**
+**➡️ [Launch GEOPULSE](https://rblaschke-lab.github.io/worldview/)**
 
 ## Features
 
@@ -20,12 +20,14 @@
 
 ### Key Capabilities
 
+- **Guided Tours** — 5 cinematic educational tours (Ring of Fire, Nuclear Legacy, Digital Silk Road, Belt & Road, Cold War)
 - **2-Mode System** — EXPLORE (full satellite view) / ANALYZE (data-focused overlays)
 - **Bilingual Interface** — Switch between English and German (EN/DE) with one click
 - **Global Scenario Presets** — One-click educational presets (Taiwan, Red Sea, Europe Energy, Nuclear Risk)
 - **AI Anomaly Detection** — Spatial anomaly scanner with severity-ranked briefings
+- **Wikipedia Integration** — Click markers for detailed context with direct Wikipedia links
 - **Mobile-First** — Full touch support with swipeable panels and 4-button bottom nav
-- **In-App INFO Panel** — Data source transparency without leaving the map
+- **Welcome Overlay** — First-visit onboarding with tour launcher for students
 
 ## Tech Stack
 
@@ -33,9 +35,9 @@
 |-----------|-----------|
 | Map Engine | [MapLibre GL JS](https://maplibre.org/) V4 |
 | Satellite Imagery | Esri World Imagery |
-| Architecture | Vanilla JavaScript (no frameworks) |
+| Architecture | Vanilla JavaScript (no frameworks, no dependencies) |
 | Hosting | GitHub Pages (static) |
-| Data Sources | USGS, NASA FIRMS, NOAA, OpenSky, AIS, Celestrak |
+| Data Sources | USGS, NASA FIRMS, NOAA, OpenSky, AIS, Celestrak, Smithsonian GVP |
 
 ## Getting Started
 
@@ -98,4 +100,4 @@ This project is open source under the [MIT License](LICENSE).
 
 ---
 
-Built with 🛰️ by [rblaschke-lab](https://github.com/rblaschke-lab)
+**GEOPULSE V1** — Built with 🛰️ by RB Design 2026

@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Increment and get session count
     const getSessionCount = () => {
-        let count = parseInt(localStorage.getItem('worldviewSessionCount') || '1242', 10);
+        let count = parseInt(localStorage.getItem('geopulseSessionCount') || '1242', 10);
         count++;
-        localStorage.setItem('worldviewSessionCount', count);
+        localStorage.setItem('geopulseSessionCount', count);
         return count;
     };
     const sessionCount = getSessionCount();
@@ -62,8 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
             info_src_freedom: 'Regime types, alliances, and geopolitical blocs. Static reference data.',
             info_src_infra: 'Submarine cables and nuclear power plant databases.',
             info_explore_title: '🔬 Explore Further',
-            info_about_title: 'ℹ️ About Worldview',
-            info_about_desc: 'Worldview is an open-source global intelligence dashboard built with MapLibre GL JS and vanilla JavaScript. No API keys, no accounts — just real-time data from public sources.',
+            info_about_title: 'ℹ️ About GEOPULSE',
+            info_about_desc: 'GEOPULSE is an open-source global intelligence dashboard built with MapLibre GL JS and vanilla JavaScript. No API keys, no accounts — just real-time data from public sources. By RB Design 2026.',
             info_full_about: 'Full About Page ↗', info_manual_link: 'Command Manual ↗',
             orientation_hint: 'BEST EXPERIENCED IN LANDSCAPE', launch_connecting: 'CONNECTING TO LAUNCH LIBRARY...'
         },
@@ -108,18 +108,18 @@ document.addEventListener("DOMContentLoaded", () => {
             info_src_freedom: 'Regimetypen, Allianzen und geopolitische Blöcke. Statische Referenzdaten.',
             info_src_infra: 'Unterseekabel- und Kernkraftwerk-Datenbanken.',
             info_explore_title: '🔬 Weiter erkunden',
-            info_about_title: 'ℹ️ Über Worldview',
-            info_about_desc: 'Worldview ist ein Open-Source Global Intelligence Dashboard, gebaut mit MapLibre GL JS und Vanilla JavaScript. Keine API-Schlüssel, keine Konten — nur Echtzeitdaten aus öffentlichen Quellen.',
+            info_about_title: 'ℹ️ Über GEOPULSE',
+            info_about_desc: 'GEOPULSE ist ein Open-Source Global Intelligence Dashboard, gebaut mit MapLibre GL JS und Vanilla JavaScript. Keine API-Schlüssel, keine Konten — nur Echtzeitdaten aus öffentlichen Quellen. Von RB Design 2026.',
             info_full_about: 'Vollständige About-Seite ↗', info_manual_link: 'Kommando-Handbuch ↗',
             orientation_hint: 'AM BESTEN IM QUERFORMAT', launch_connecting: 'VERBINDUNG ZUR LAUNCH LIBRARY...'
         }
     };
 
-    let currentLang = localStorage.getItem('worldviewLang') || 'en';
+    let currentLang = localStorage.getItem('geopulseLang') || 'en';
 
     const setLanguage = (lang) => {
         currentLang = lang;
-        localStorage.setItem('worldviewLang', lang);
+        localStorage.setItem('geopulseLang', lang);
         document.getElementById('app-root')?.setAttribute('lang', lang);
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
         const dict = i18n[lang] || i18n.en;
@@ -2101,7 +2101,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     what: `Aggregated Capability Score: ${cluster.score}/100<br><br>${cluster.desc}`,
                     why: `<strong>Energy & Thermal:</strong> ${cluster.energy}/10 (Power), ${cluster.cooling}/10 (Cooling)<br><strong>Connectivity:</strong> ${cluster.connectivity}/10<br><strong>Geopolitics:</strong> ${cluster.geopolitics}/10<br><strong>Regulation/Friction:</strong> ${cluster.regulation}/10`,
                     time: "Assessed Q2 2026",
-                    source: "Worldview Strategy Core",
+                    source: "GEOPULSE Strategy Core",
                     location: [cluster.lon, cluster.lat],
                     relatedLayers: cluster.related.map(r => ({ label: `Toggle ${r}`, layerId: r }))
                 });
@@ -2178,7 +2178,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const dismissWelcome = (startTourId) => {
         if (!welcomeOverlay) return;
         const dontShow = document.getElementById('welcome-dont-show')?.checked;
-        if (dontShow) localStorage.setItem('worldview_welcomed', '1');
+        if (dontShow) localStorage.setItem('geopulse_welcomed', '1');
         welcomeOverlay.classList.add('hidden');
         if (startTourId) {
             setTimeout(() => startTour(startTourId), 600);
@@ -2186,7 +2186,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (welcomeOverlay) {
-        if (localStorage.getItem('worldview_welcomed') === '1') {
+        if (localStorage.getItem('geopulse_welcomed') === '1') {
             welcomeOverlay.classList.add('hidden');
         }
         document.getElementById('welcome-explore')?.addEventListener('click', () => dismissWelcome(null));
