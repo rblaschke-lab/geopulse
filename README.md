@@ -8,7 +8,7 @@
 
 ## 🚀 Live Demo
 
-**➡️ [Launch GEOPULSE](https://rblaschke-lab.github.io/worldview/)**
+**➡️ [Launch GEOPULSE](https://rblaschke-lab.github.io/geopulse/)**
 
 ## Features
 
@@ -45,8 +45,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/rblaschke-lab/worldview.git
-cd worldview
+git clone https://github.com/rblaschke-lab/geopulse.git
+cd geopulse
 
 # Start a local server (any of these work)
 python -m http.server 8080
@@ -76,7 +76,7 @@ This project is designed for **GitHub Pages** — no build step required.
 1. Push to `master` branch
 2. Go to **Settings → Pages → Source → Deploy from branch**
 3. Select `master` / `/ (root)` → Save
-4. Your site is live at `https://<username>.github.io/worldview/`
+4. Your site is live at `https://<username>.github.io/geopulse/`
 
 ## Security
 

@@ -1127,13 +1127,13 @@
 
     <script>
         // Hydrate config numbers
-        document.querySelectorAll('.dyn-feeds-plus').forEach(el => el.innerText = `${window.WorldviewConfig.METRICS.FEEDS}+`);
-        document.querySelectorAll('.dyn-layers-plus').forEach(el => el.innerText = `${window.WorldviewConfig.METRICS.LAYERS}+`);
-        document.querySelectorAll('.dyn-version').forEach(el => el.innerText = `V${window.WorldviewConfig.VERSION}`);
+        document.querySelectorAll('.dyn-feeds-plus').forEach(el => el.innerText = `${window.GeopulseConfig.METRICS.FEEDS}+`);
+        document.querySelectorAll('.dyn-layers-plus').forEach(el => el.innerText = `${window.GeopulseConfig.METRICS.LAYERS}+`);
+        document.querySelectorAll('.dyn-version').forEach(el => el.innerText = `V${window.GeopulseConfig.VERSION}`);
         
-        document.querySelectorAll('.dyn-feeds-target').forEach(el => el.dataset.target = window.WorldviewConfig.METRICS.FEEDS);
-        document.querySelectorAll('.dyn-countries-target').forEach(el => el.dataset.target = window.WorldviewConfig.METRICS.COUNTRIES);
-        document.querySelectorAll('.dyn-layers-target').forEach(el => el.dataset.target = window.WorldviewConfig.METRICS.LAYERS);
+        document.querySelectorAll('.dyn-feeds-target').forEach(el => el.dataset.target = window.GeopulseConfig.METRICS.FEEDS);
+        document.querySelectorAll('.dyn-countries-target').forEach(el => el.dataset.target = window.GeopulseConfig.METRICS.COUNTRIES);
+        document.querySelectorAll('.dyn-layers-target').forEach(el => el.dataset.target = window.GeopulseConfig.METRICS.LAYERS);
 
         // Scroll animation observer
         const observer = new IntersectionObserver((entries) => {

@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ----------------------------------------------------
     // Security: HTML escape helper to prevent XSS from external API data
     const escHtml = (s) => { const d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML; };
-    const VERSION = window.WorldviewConfig.VERSION;
+    const VERSION = window.GeopulseConfig.VERSION;
 
     // ── RELIABLE FETCH — timeout-safe wrapper for all external API calls ──
     window.reliableFetch = async (url, label, opts = {}) => {
@@ -364,7 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ----------------------------------------------------
     // Non-destructive layer status tracking — preserves all sidebar HTML
     const updateLayerStatus = (id, status, infoMsg = "") => {
-        const meta = window.WorldviewConfig.LAYER_METADATA?.[id];
+        const meta = window.GeopulseConfig.LAYER_METADATA?.[id];
         if (!meta) return;
         meta.status = status;
         meta.lastUpdate = Date.now();
@@ -376,7 +376,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const toggle = item.querySelector('input[type="checkbox"]');
         if (toggle && toggle.id.startsWith('toggle-')) {
             const id = toggle.id.replace('toggle-', '');
-            if (window.WorldviewConfig.LAYER_METADATA?.[id]) item.dataset.layerId = id;
+            if (window.GeopulseConfig.LAYER_METADATA?.[id]) item.dataset.layerId = id;
         }
     });
 
@@ -1774,7 +1774,7 @@ document.addEventListener("DOMContentLoaded", () => {
         toggles.ships = e.target.checked;
         if (map.getLayer('ships-layer')) map.setLayoutProperty('ships-layer', 'visibility', toggles.ships ? 'visible' : 'none');
         if (toggles.ships) {
-            const key = window.WorldviewConfig?.API_KEYS?.AISSTREAM;
+            const key = window.GeopulseConfig?.API_KEYS?.AISSTREAM;
             if (!key) updateLayerStatus('ships', 'STATIC', 'Add AIS key in config.js');
         }
     });
