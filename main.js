@@ -5,6 +5,24 @@ document.addEventListener("DOMContentLoaded", () => {
     // Security: HTML escape helper to prevent XSS from external API data
     const escHtml = (s) => { const d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML; };
     const VERSION = window.WorldviewConfig.VERSION;
+
+    // ── RELIABLE FETCH — timeout-safe wrapper for all external API calls ──
+    window.reliableFetch = async (url, label, opts = {}) => {
+        const timeout = opts.timeout || 10000;
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeout);
+        try {
+            const res = await fetch(url, { signal: controller.signal, ...opts });
+            clearTimeout(timer);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            return { data, status: res.status };
+        } catch (err) {
+            clearTimeout(timer);
+            console.warn(`[reliableFetch] ${label || url}: ${err.message}`);
+            throw err;
+        }
+    };
     
     // Increment and get session count
     const getSessionCount = () => {
@@ -621,6 +639,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     updateLayerStatus('flights', 'LIVE', `${features.length} aircraft`);
                 } catch(err) { updateLayerStatus('flights', 'ERROR', 'Feed timeout'); }
             };
+            window._fetchFlights = fetchFlights;
             setInterval(fetchFlights, 15000);
         } catch(e) { console.warn('[FLIGHTS] Init failed:', e.message); }
 
@@ -1754,11 +1773,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('toggle-ships')?.addEventListener('change', (e) => {
         toggles.ships = e.target.checked;
         if (map.getLayer('ships-layer')) map.setLayoutProperty('ships-layer', 'visibility', toggles.ships ? 'visible' : 'none');
+        if (toggles.ships) {
+            const key = window.WorldviewConfig?.API_KEYS?.AISSTREAM;
+            if (!key) updateLayerStatus('ships', 'STATIC', 'Add AIS key in config.js');
+        }
     });
 
     document.getElementById('toggle-flights')?.addEventListener('change', (e) => {
         toggles.flights = e.target.checked;
         if (map.getLayer('flights-layer')) map.setLayoutProperty('flights-layer', 'visibility', toggles.flights ? 'visible' : 'none');
+        if (toggles.flights && window._fetchFlights) window._fetchFlights();
     });
     
     document.getElementById('toggle-starlink')?.addEventListener('change', (e) => {
