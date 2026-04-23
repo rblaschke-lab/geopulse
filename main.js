@@ -395,6 +395,20 @@ document.addEventListener("DOMContentLoaded", () => {
             const fs = sidebar.querySelector('.collapsible-section:not(.open)');
             if (fs && !sidebar.querySelector('.collapsible-section.open')) fs.classList.add('open');
         }
+        if(target === 'tours') {
+            sidebar.classList.add('active');
+            document.body.classList.add('mobile-panel-open');
+            activeMobilePanel = 'tours';
+            // Open the scenarios section (contains tours) and scroll to it
+            const scenarioSection = document.getElementById('sec-scenarios');
+            if (scenarioSection) {
+                scenarioSection.classList.add('open');
+                setTimeout(() => {
+                    const tourHeading = sidebar.querySelector('.tour-btn');
+                    if (tourHeading) tourHeading.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 200);
+            }
+        }
         if(target === 'intel') {
             intelPanel.classList.add('active');
             document.body.classList.add('mobile-panel-open');
