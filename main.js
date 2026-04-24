@@ -2543,6 +2543,56 @@ document.addEventListener("DOMContentLoaded", () => {
                     layers: ['blocs', 'conflicts', 'regimes']
                 }
             ]
+        },
+        trump: {
+            name: 'Trump World Tour — Power, Deals & Disruption',
+            steps: [
+                {
+                    center: [-77.04, 38.9], zoom: 6, title: '🏛️ WASHINGTON D.C. — AMERICA FIRST RELOADED',
+                    text: 'In January 2025, Donald Trump began his second presidency with immediate executive action. Key moves: withdrawal from the Paris Climate Agreement (again), sweeping tariff packages on allies and rivals alike, and a stated pivot away from multilateral institutions like the WTO and UN bodies. The doctrine signals a shift from rules-based international order toward bilateral power-based negotiation. Federal agencies face deep restructuring under the DOGE efficiency initiative.',
+                    layers: ['regimes', 'blocs']
+                },
+                {
+                    center: [-75.7, 45.4], zoom: 4, title: '🍁 CANADA — ALLIANCE UNDER PRESSURE',
+                    text: 'U.S.–Canada relations hit a historic low in early 2025. Trump imposed 25% tariffs on Canadian goods, publicly floated the "51st state" rhetoric, and questioned Canadian sovereignty over Arctic passages. Canada responded by diversifying trade toward the EU and Asia-Pacific. The diplomatic friction exposed the fragility of what was once called "the world\'s longest undefended border." NATO coordination between the two nations remains functional but trust has eroded significantly.',
+                    layers: ['blocs', 'regimes']
+                },
+                {
+                    center: [-42, 72], zoom: 4, title: '❄️ GREENLAND — STRATEGIC ARCTIC AMBITION',
+                    text: 'Trump renewed U.S. interest in acquiring Greenland, citing its strategic military value (Pituffik Space Base) and vast reserves of rare earth minerals critical for AI chips and defense systems. Denmark rejected the proposal, but the move highlighted the Arctic\'s emergence as a geopolitical frontier. Greenland holds an estimated 25% of the world\'s undiscovered rare earths. Russia and China are also expanding Arctic operations — the region is warming 4x faster than the global average, opening new shipping routes and resource access.',
+                    layers: ['blocs']
+                },
+                {
+                    center: [-79.9, 9.1], zoom: 6, title: '🚢 PANAMA CANAL — TRADE ROUTE TENSIONS',
+                    text: 'Trump publicly questioned Panama\'s sovereignty over the Canal and criticized Chinese-linked port operations at both entrances (run by Hutchison Holdings). The Panama Canal handles 5% of global maritime trade and 40% of all U.S. container traffic. Drought conditions in 2024–25 already reduced daily transits from 36 to 24 ships, costing the global economy billions. The U.S. framed the issue as national security; Panama called it a sovereignty violation. The Canal was transferred to Panama in 1999 under the Carter-Torrijos Treaty.',
+                    layers: ['cables', 'blocs']
+                },
+                {
+                    center: [-79.4, 23.1], zoom: 6, title: '🇨🇺 CUBA — ECONOMIC PRESSURE STRATEGY',
+                    text: 'The Trump administration tightened the trade embargo on Cuba, reversing Obama-era openings. New restrictions targeted energy imports, remittances, and travel. Cuba\'s power grid — already operating at 50% capacity — faces frequent nationwide blackouts. The island\'s GDP contracted further as Russia and Venezuela, its traditional allies, reduced their own subsidies. The strategy uses economic leverage to pressure regime change without direct military involvement — a pattern consistent with the broader Monroe Doctrine reassertion across Latin America.',
+                    layers: ['regimes', 'conflicts']
+                },
+                {
+                    center: [-66.9, 10.5], zoom: 5, title: '⚡ VENEZUELA — HARD POWER RETURNS',
+                    text: 'In 2025, the U.S. escalated its confrontation with the Maduro government through expanded sanctions on oil exports, diplomatic isolation, and reported covert support for opposition movements. Venezuela holds the world\'s largest proven oil reserves (303 billion barrels) but produces only a fraction due to mismanagement and sanctions. The U.S. framed its actions as defending democracy; critics called it resource-driven interventionism. The situation represents a reassertion of the Monroe Doctrine — the 1823 principle that the Western Hemisphere falls under U.S. sphere of influence.',
+                    layers: ['conflicts', 'regimes']
+                },
+                {
+                    center: [4.35, 50.85], zoom: 4, title: '🇪🇺 BRUSSELS — TRANSATLANTIC FRACTURE',
+                    text: 'Trump imposed tariffs on European steel, aluminum, and automotive exports, triggering retaliatory measures from the EU. Transatlantic trust declined to post-WWII lows. European leaders accelerated defense spending (many NATO members finally hitting the 2% GDP target) and began diversifying trade relationships toward Asia and Africa. Spain, Germany, and France publicly criticized U.S. unilateralism. The EU launched new strategic autonomy initiatives in defense, semiconductors, and energy. The question shifted from "Will the alliance hold?" to "What replaces it?"',
+                    layers: ['blocs', 'regimes', 'cables']
+                },
+                {
+                    center: [53.7, 32.4], zoom: 5, title: '🔥 IRAN — ESCALATION RISK ZONE',
+                    text: 'Iran remained the most volatile flashpoint in U.S. foreign policy. The Trump administration pursued a "maximum pressure 2.0" strategy: expanded sanctions, naval posturing in the Strait of Hormuz (through which 20% of global oil transits), and diplomatic isolation. Iran accelerated uranium enrichment to near-weapons grade (60%+). Regional proxy tensions involving Hezbollah, the Houthis, and Iraqi militias added layers of complexity. Any miscalculation in this corridor could trigger a global energy crisis — oil prices spiked 15% on escalation fears alone.',
+                    layers: ['conflicts', 'regimes']
+                },
+                {
+                    center: [-20, 25], zoom: 2, title: '🌍 THE NEW WORLD ORDER — CAUSE & EFFECT',
+                    text: 'The Trump second presidency accelerated a global realignment already underway. Traditional alliances (NATO, G7) face internal stress while alternative blocs (BRICS+, SCO) gain momentum. Key patterns: tariffs replaced diplomacy as the primary foreign policy tool; bilateral deals replaced multilateral frameworks; military posturing replaced soft power. Whether this represents strategic disruption or systemic destabilization depends on perspective. What is clear: the post-1945 international order — built on institutions, alliances, and rules — is being fundamentally renegotiated.',
+                    layers: ['blocs', 'regimes', 'conflicts']
+                }
+            ]
         }
     };
 
