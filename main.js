@@ -24,16 +24,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
     
-    // Increment and get session count
-    const getSessionCount = () => {
-        let count = parseInt(localStorage.getItem('geopulseSessionCount') || '1242', 10);
-        count++;
-        localStorage.setItem('geopulseSessionCount', count);
-        return count;
-    };
-    const sessionCount = getSessionCount();
-    const sessionEl = document.getElementById('session-count');
-    if (sessionEl) sessionEl.innerText = `${(sessionCount).toLocaleString()}`;
+    // Real visitor counter via CounterAPI.dev (persistent across all users)
+    const COUNTER_OFFSET = 1247;
+    (async () => {
+        const sessionEl = document.getElementById('session-count');
+        if (!sessionEl) return;
+        try {
+            const res = await fetch('https://api.counterapi.dev/v1/geopulse-rbdesign/visits/up');
+            const data = await res.json();
+            sessionEl.innerText = ((data.count || 0) + COUNTER_OFFSET).toLocaleString();
+        } catch (e) {
+            // Fallback: localStorage counter if API unreachable
+            let count = parseInt(localStorage.getItem('geopulseSessionCount') || String(COUNTER_OFFSET), 10);
+            count++;
+            localStorage.setItem('geopulseSessionCount', count);
+            sessionEl.innerText = count.toLocaleString();
+        }
+    })();
 
     // ----------------------------------------------------
     // i18n TRANSLATION SYSTEM (EN / DE)
@@ -2284,6 +2291,97 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // ── COUNTRY BORDERS & LABELS ─────────────────────────
+    const COUNTRY_CENTROIDS = [
+        [-98.5,39.8,'USA'],[-106.3,56.1,'Canada'],[-102.5,23.6,'Mexico'],[-51.9,-14.2,'Brazil'],
+        [-63.6,-38.4,'Argentina'],[-75.0,-9.2,'Peru'],[-71.4,4.6,'Colombia'],[-56.0,-32.5,'Uruguay'],
+        [-70.6,-33.4,'Chile'],[-68.0,-16.5,'Bolivia'],[-79.5,-1.8,'Ecuador'],[-58.4,-23.4,'Paraguay'],
+        [-77.8,21.5,'Cuba'],[-3.4,40.5,'Spain'],[2.2,46.6,'France'],[12.5,41.9,'Italy'],
+        [10.4,51.2,'Germany'],[-1.5,52.4,'UK'],[4.5,50.5,'Belgium'],[5.3,52.1,'Netherlands'],
+        [8.2,46.8,'Switzerland'],[13.5,47.5,'Austria'],[15.5,49.8,'Czechia'],[19.1,51.9,'Poland'],
+        [25.3,42.7,'Bulgaria'],[24.7,45.9,'Romania'],[19.5,47.2,'Hungary'],[20.9,44.0,'Serbia'],
+        [24.3,39.1,'Greece'],[35.2,39.0,'Turkey'],[14.5,56.3,'Sweden'],[8.5,60.5,'Norway'],
+        [9.5,56.3,'Denmark'],[-19.0,65.0,'Iceland'],[26.0,64.0,'Finland'],[25.0,49.0,'Ukraine'],
+        [28.0,53.5,'Belarus'],[90.0,62.0,'Russia'],[53.7,32.4,'Iran'],[43.7,33.2,'Iraq'],
+        [45.0,24.0,'Saudi Arabia'],[55.9,25.3,'UAE'],[48.5,15.6,'Yemen'],[30.0,26.0,'Egypt'],
+        [3.0,28.0,'Algeria'],[-5.0,32.0,'Morocco'],[10.0,34.0,'Tunisia'],[17.5,28.0,'Libya'],
+        [8.7,9.1,'Nigeria'],[38.0,9.0,'Ethiopia'],[37.9,-0.0,'Kenya'],[32.3,1.4,'Uganda'],
+        [29.9,-2.0,'Rwanda'],[34.0,-6.4,'Tanzania'],[28.0,-29.0,'South Africa'],
+        [25.0,-22.3,'Botswana'],[24.0,-13.1,'Zambia'],[29.2,-19.0,'Zimbabwe'],
+        [17.1,-12.3,'Angola'],[35.5,-15.4,'Malawi'],[23.7,-0.3,'DR Congo'],
+        [105.0,35.0,'China'],[138.3,36.2,'Japan'],[127.8,36.0,'South Korea'],
+        [77.0,20.6,'India'],[90.3,23.7,'Bangladesh'],[84.1,28.4,'Nepal'],
+        [104.2,12.6,'Cambodia'],[106.3,16.0,'Laos'],[96.0,21.9,'Myanmar'],
+        [100.5,13.8,'Thailand'],[108.3,14.1,'Vietnam'],[121.8,12.9,'Philippines'],
+        [113.9,-0.8,'Indonesia'],[101.7,3.1,'Malaysia'],[103.8,1.4,'Singapore'],
+        [133.8,-25.3,'Australia'],[174.9,-40.9,'New Zealand'],[69.0,49.0,'Kazakhstan'],
+        [64.6,41.4,'Uzbekistan'],[67.7,33.9,'Afghanistan'],[69.3,30.4,'Pakistan'],
+        [23.9,55.2,'Lithuania'],[24.6,56.9,'Latvia'],[25.0,58.6,'Estonia'],
+        [44.6,40.1,'Armenia'],[43.4,42.3,'Georgia'],[47.6,40.1,'Azerbaijan'],
+        [-8.2,53.4,'Ireland'],[14.5,46.1,'Slovenia'],[15.2,45.1,'Croatia'],
+        [17.7,44.2,'Bosnia'],[20.1,41.1,'Albania'],[21.0,41.5,'N. Macedonia'],
+        [-1.5,12.3,'Burkina Faso'],[-1.2,7.9,'Ghana'],[-5.5,7.5,"Côte d'Ivoire"],
+        [-14.5,14.5,'Senegal'],[-11.8,10.0,'Guinea'],[1.7,12.3,'Niger'],
+        [15.2,6.6,'Central African Rep.'],[11.6,6.0,'Cameroon'],
+        [46.2,5.2,'Somalia'],[30.1,15.4,'Sudan'],[32.3,3.0,'South Sudan'],
+        [34.3,31.5,'Israel'],[35.5,33.9,'Lebanon'],[38.9,35.0,'Syria'],
+        [35.9,31.9,'Jordan'],[47.5,29.3,'Kuwait'],[50.6,26.0,'Bahrain'],
+        [51.2,25.3,'Qatar'],[56.1,21.5,'Oman'],[27.9,47.4,'Moldova'],
+        [19.3,42.7,'Montenegro'],[-89.0,15.8,'Guatemala'],[-86.2,12.8,'Nicaragua'],
+        [-87.2,14.1,'Honduras'],[-84.1,9.7,'Costa Rica'],[-80.8,8.5,'Panama'],
+        [-66.6,6.4,'Venezuela']
+    ];
+
+    document.getElementById('toggle-borders')?.addEventListener('change', async (e) => {
+        toggles.borders = e.target.checked;
+        if (toggles.borders && !map.getSource('borders-src')) {
+            try {
+                setStatus('LOADING COUNTRY BOUNDARIES...');
+                const resp = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
+                const world = await resp.json();
+                const borders = topojson.mesh(world, world.objects.countries, (a, b) => a !== b);
+                map.addSource('borders-src', { type: 'geojson', data: borders });
+                map.addLayer({
+                    id: 'country-borders', type: 'line', source: 'borders-src',
+                    paint: {
+                        'line-color': 'rgba(255,255,255,0.3)',
+                        'line-width': ['interpolate', ['linear'], ['zoom'], 1, 0.3, 4, 0.8, 8, 1.5]
+                    },
+                    layout: { visibility: 'visible' }
+                });
+                const labelData = {
+                    type: 'FeatureCollection',
+                    features: COUNTRY_CENTROIDS.map(([lon, lat, name]) => ({
+                        type: 'Feature', geometry: { type: 'Point', coordinates: [lon, lat] },
+                        properties: { name }
+                    }))
+                };
+                map.addSource('country-labels-src', { type: 'geojson', data: labelData });
+                map.addLayer({
+                    id: 'country-labels', type: 'symbol', source: 'country-labels-src',
+                    layout: {
+                        'text-field': ['get', 'name'], 'text-font': ['Open Sans Regular'],
+                        'text-size': ['interpolate', ['linear'], ['zoom'], 3, 7, 6, 10, 8, 12],
+                        'text-transform': 'uppercase', 'text-letter-spacing': 0.08,
+                        'text-max-width': 8, visibility: 'visible'
+                    },
+                    paint: {
+                        'text-color': 'rgba(255,255,255,0.45)',
+                        'text-halo-color': 'rgba(0,0,0,0.75)', 'text-halo-width': 1.5
+                    },
+                    minzoom: 3, maxzoom: 8
+                });
+                setStatus('COUNTRY BOUNDARIES LOADED — ' + COUNTRY_CENTROIDS.length + ' NATIONS');
+                if(window.updateLayerStatus) window.updateLayerStatus('borders', 'LIVE', 'Natural Earth Data');
+            } catch (err) {
+                console.warn('[borders] Failed:', err);
+                setStatus('BORDER DATA UNAVAILABLE');
+            }
+        }
+        if (map.getLayer('country-borders')) map.setLayoutProperty('country-borders', 'visibility', toggles.borders ? 'visible' : 'none');
+        if (map.getLayer('country-labels')) map.setLayoutProperty('country-labels', 'visibility', toggles.borders ? 'visible' : 'none');
+    });
+
     // ============================================================
     // AI GEOPOLITICAL COMPUTE CAPABILITY
     // Tracks global semiconductor, power, and AI infrastructure
@@ -2490,7 +2588,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 {
                     center: [110, -7.5], zoom: 5, title: '\ud83c\udf0b KRAKATOA & MERAPI \u2014 INDONESIA',
                     text: 'Indonesia has 130+ active volcanoes \u2014 the most of any country. Krakatoa\'s 1883 eruption was heard 5,000km away and caused a global temperature drop. The child volcano, Anak Krakatau, triggered a tsunami in 2018.',
-                    layers: ['earthquakes', 'volcanoes']
+                    layers: ['earthquakes', 'volcanoes'],
+                    image: { wiki: 'Krakatoa', caption: 'Anak Krakatau erupting' }
                 },
                 {
                     center: [-122, 46.2], zoom: 5, title: '\ud83c\udf0b CASCADES RANGE \u2014 USA',
@@ -2520,7 +2619,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 {
                     center: [30.1, 51.4], zoom: 5, title: '\u2622\ufe0f CHERNOBYL \u2014 UKRAINE, 1986',
                     text: 'On April 26, 1986, Reactor 4 of the Chernobyl Nuclear Power Plant suffered a catastrophic meltdown and explosion. It released 400 times more radiation than the Hiroshima bomb. 350,000 people were permanently evacuated. The 30km Exclusion Zone remains uninhabitable. Click the ☢️ markers to see each site\'s full details.',
-                    layers: ['radiation']
+                    layers: ['radiation'],
+                    image: { wiki: 'Chernobyl_disaster', caption: 'Chernobyl Reactor 4 sarcophagus' }
                 },
                 {
                     center: [141.03, 37.42], zoom: 5, title: '\u2622\ufe0f FUKUSHIMA DAIICHI \u2014 JAPAN, 2011',
@@ -2615,7 +2715,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 {
                     center: [13.4, 52.5], zoom: 6, title: '\ud83e\uddf1 BERLIN \u2014 THE DIVIDED CITY',
                     text: 'From 1961 to 1989, the Berlin Wall split the city into West (democratic, NATO) and East (communist, Warsaw Pact). Over 140 people died trying to cross. On November 9, 1989, East Germany opened the border after weeks of mass protests. Thousands streamed through with hammers and chisels. The Wall fell in a single night \u2014 live on television worldwide.',
-                    layers: ['blocs', 'regimes']
+                    layers: ['blocs', 'regimes'],
+                    image: { wiki: 'Berlin_Wall', caption: 'The fall of the Berlin Wall, 1989' }
                 },
                 {
                     center: [21, 52], zoom: 5, title: '\u2694\ufe0f THE WARSAW PACT (1955\u20131991)',
@@ -2865,12 +2966,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 {
                     center: [7.420, 43.737], zoom: 15, title: '🏎️ MONACO — THE JEWEL IN THE CROWN',
                     text: 'Circuit de Monaco: the most prestigious race in F1 since 1929. Just 3.337km through the streets of Monte Carlo — the shortest, slowest, and most glamorous circuit. Capacity: ~37,000 (but millions watch from yachts). The tunnel, the swimming pool chicane, and the hairpin at the Fairmont Hotel make it virtually impossible to overtake. Ayrton Senna won here 6 times. It\'s not the fastest race — it\'s the one every driver wants to win.',
-                    layers: []
+                    layers: [],
+                    image: { wiki: 'Monaco_Grand_Prix', caption: 'Circuit de Monaco' }
                 },
                 {
                     center: [-1.017, 52.073], zoom: 14, title: '🏎️ SILVERSTONE — WHERE IT ALL BEGAN',
                     text: 'Silverstone hosted the very first Formula 1 World Championship race on May 13, 1950. Built on a former WWII bomber airfield in rural England, the circuit is 5.891km of high-speed corners. Capacity: 142,000. The British Grand Prix regularly draws F1\'s largest crowds. Copse, Maggots, Becketts, and Stowe are among the most famous corners in motorsport. Lewis Hamilton has won his home race 8 times.',
-                    layers: []
+                    layers: [],
+                    image: { wiki: 'Silverstone_Circuit', caption: 'Silverstone Circuit, England' }
                 },
                 {
                     center: [9.289, 45.621], zoom: 14, title: '🏎️ MONZA — THE TEMPLE OF SPEED',
@@ -2925,7 +3028,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 {
                     center: [51.44, 25.35], zoom: 6, title: '⚽ QATAR 2022 — THE DESERT FINAL',
                     text: 'Qatar became the smallest country and first Arab nation to host the World Cup. Played in winter (Nov-Dec) for the first time to avoid extreme heat. Argentina won their 3rd title as Lionel Messi lifted the trophy in what many call the greatest final ever — a 3-3 draw settled on penalties against defending champions France. The tournament cost an unprecedented $220 billion in total infrastructure. 8 state-of-the-art stadiums were built, including Lusail (88,966 capacity).',
-                    layers: []
+                    layers: [],
+                    image: { wiki: '2022_FIFA_World_Cup_final', caption: 'Lusail Stadium, Qatar 2022 Final' }
                 },
                 {
                     center: [-99.13, 19.43], zoom: 4, title: '⚽ 2026 — UNITED BID (USA, CANADA, MEXICO)',
@@ -2940,7 +3044,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 {
                     center: [13.38, 52.52], zoom: 5, title: '⚽ GERMANY 2006 — THE SUMMER FAIRYTALE',
                     text: 'Germany 2006 is widely considered the best-organized World Cup in history. Known as "Sommermärchen" (Summer Fairytale), it transformed Germany\'s international image. Italy won their 4th title, defeating France in a final remembered for Zinedine Zidane\'s infamous headbutt on Marco Materazzi. 12 stadiums were used, including Berlin\'s Olympiastadion (final) and Munich\'s Allianz Arena. The tournament pioneered the modern fan zone concept, with public viewing events attracting millions.',
-                    layers: []
+                    layers: [],
+                    image: { wiki: '2006_FIFA_World_Cup', caption: 'Olympiastadion Berlin, 2006 Final' }
                 },
                 {
                     center: [28.23, -25.74], zoom: 5, title: '⚽ SOUTH AFRICA 2010 — AFRICA\'S MOMENT',
@@ -2951,6 +3056,109 @@ document.addEventListener("DOMContentLoaded", () => {
                     center: [10, 20], zoom: 2, title: '🏆 THE WORLD CUP — FOOTBALL\'S UNIVERSE',
                     text: 'The FIFA World Cup is the most-watched sporting event on Earth. The 2022 final drew 1.5 billion viewers — more than the Super Bowl, Olympics, and Champions League combined. Since 1930, only 8 nations have won the trophy: Brazil (5), Germany (4), Italy (4), Argentina (3), France (2), Uruguay (2), England (1), Spain (1). The World Cup generates over $7 billion per tournament. It has been hosted on every continent except Antarctica and Oceania. Football is played by 270 million people in 211 countries — more than any other sport in human history.',
                     layers: ['blocs']
+                }
+            ]
+        },
+        ww1: {
+            name: 'World War I — The Great War (1914–1918)',
+            steps: [
+                {
+                    center: [15, 48], zoom: 2, title: '🪖 THE GREAT WAR — OVERVIEW',
+                    text: 'Duration: 4 years (July 1914 – November 1918). Cause: A web of imperial rivalries, militarism, and entangling alliances, triggered by the assassination of Archduke Franz Ferdinand of Austria-Hungary. Belligerents: Allied Powers (France, UK, Russia, Italy, USA) vs Central Powers (Germany, Austria-Hungary, Ottoman Empire, Bulgaria). Casualties: ~20 million dead (9.7M military, 10M civilian), 21 million wounded. It was called "The War to End All Wars" — it wasn\'t.',
+                    layers: ['conflicts']
+                },
+                {
+                    center: [18.43, 43.86], zoom: 8, title: '🪖 SARAJEVO — THE SPARK',
+                    text: 'On June 28, 1914, Gavrilo Princip assassinated Archduke Franz Ferdinand and his wife Sophie on the streets of Sarajevo. Austria-Hungary blamed Serbia, triggering a chain of alliance obligations that pulled all of Europe into war within 6 weeks. One bullet, fired by a 19-year-old, killed 20 million people.',
+                    layers: ['conflicts'],
+                    image: { wiki: 'Assassination_of_Archduke_Franz_Ferdinand', caption: 'Arrest of Gavrilo Princip, 1914' }
+                },
+                {
+                    center: [5.39, 49.16], zoom: 8, title: '🪖 VERDUN — THE MEATGRINDER',
+                    text: 'The Battle of Verdun (Feb–Dec 1916) lasted 303 days — the longest single battle in history. Germany aimed to "bleed France white." ~700,000 casualties (roughly equal on both sides) across a front just 30km wide. The French rallying cry "Ils ne passeront pas!" (They shall not pass!) became a symbol of national resistance. Over 60 million shells were fired.',
+                    layers: ['conflicts'],
+                    image: { wiki: 'Battle_of_Verdun', caption: 'Devastation at Verdun, 1916' }
+                },
+                {
+                    center: [2.89, 50.85], zoom: 8, title: '🪖 YPRES — POISON GAS',
+                    text: 'At Ypres in Belgium, Germany introduced chemical warfare on April 22, 1915, releasing 168 tons of chlorine gas. Thousands of Allied soldiers suffocated in their trenches. Three battles of Ypres killed over 850,000 combined. Passchendaele (Third Ypres, 1917) saw soldiers drowning in mud-filled shell craters. The poppy fields around Ypres inspired the poem "In Flanders Fields."',
+                    layers: ['conflicts']
+                },
+                {
+                    center: [26.29, 40.34], zoom: 7, title: '🪖 GALLIPOLI — CHURCHILL\'S GAMBLE',
+                    text: 'In 1915, the Allies attempted to capture the Dardanelles Strait and knock the Ottoman Empire out of the war. The campaign was a catastrophic failure. Over 500,000 casualties across 8 months. The defeat shaped the national identities of Australia and New Zealand (ANZACs) and ended Winston Churchill\'s career as First Lord of the Admiralty — temporarily. For Turkey, the defense was a defining moment led by Mustafa Kemal (later Atatürk).',
+                    layers: ['conflicts'],
+                    image: { wiki: 'Gallipoli_campaign', caption: 'Gallipoli landings, 1915' }
+                },
+                {
+                    center: [2.72, 50.00], zoom: 7, title: '🪖 THE SOMME — INDUSTRIAL DEATH',
+                    text: 'July 1, 1916: the deadliest single day in British military history. 19,240 British soldiers killed before noon. The Battle of the Somme lasted 141 days with over 1 million total casualties. The tank was first deployed here (September 1916). For 141 days, both sides gained and lost the same few kilometers of mud. The Somme became a byword for the futility of industrial-scale warfare.',
+                    layers: ['conflicts']
+                },
+                {
+                    center: [2.90, 49.43], zoom: 8, title: '🪖 COMPIÈGNE — THE ARMISTICE',
+                    text: 'At 5:10 AM on November 11, 1918, the Armistice was signed in a railway carriage in the Forest of Compiègne. Fighting ceased at 11:00 AM — "the eleventh hour of the eleventh day of the eleventh month." In the final hours, some commanders continued attacks; an estimated 2,738 soldiers died on the last day. The railway carriage was later used by Hitler in 1940 to accept France\'s surrender — a deliberate act of humiliation.',
+                    layers: ['conflicts']
+                },
+                {
+                    center: [2.12, 48.80], zoom: 8, title: '🪖 VERSAILLES — SEEDS OF THE NEXT WAR',
+                    text: 'The Treaty of Versailles (June 1919) imposed crushing terms on Germany: loss of 13% of territory, 10% of population, all colonies, near-total disarmament, and reparations of 132 billion gold marks (~$442 billion today). Article 231 — the "War Guilt Clause" — forced Germany to accept sole responsibility. Economists like John Maynard Keynes warned the treaty would lead to another war. He was right. Twenty years later, World War II began.',
+                    layers: ['conflicts', 'blocs']
+                }
+            ]
+        },
+        ww2: {
+            name: 'World War II — The Deadliest Conflict (1939–1945)',
+            steps: [
+                {
+                    center: [20, 40], zoom: 2, title: '⚔️ WORLD WAR II — OVERVIEW',
+                    text: 'Duration: 6 years (September 1939 – September 1945). Cause: Nazi Germany\'s expansionism, Japanese imperialism, failure of appeasement, and the unresolved grievances of Versailles. Belligerents: Allies (UK, USSR, USA, France, China, and 50+ nations) vs Axis (Germany, Japan, Italy). Casualties: 70–85 million dead — the deadliest conflict in human history. ~6 million Jews murdered in the Holocaust. Ended with the only use of nuclear weapons in warfare.',
+                    layers: ['conflicts']
+                },
+                {
+                    center: [18.65, 54.35], zoom: 7, title: '⚔️ GDAŃSK — THE FIRST SHOTS',
+                    text: 'At 4:45 AM on September 1, 1939, the German battleship Schleswig-Holstein opened fire on the Polish garrison at Westerplatte, Gdańsk. It was the first military action of World War II. Within hours, 1.5 million German troops crossed the Polish border in a devastating "Blitzkrieg." Britain and France declared war on September 3. Poland fell in 5 weeks. The invasion introduced the world to a new form of warfare: fast, mechanized, and merciless.',
+                    layers: ['conflicts']
+                },
+                {
+                    center: [-0.12, 51.51], zoom: 6, title: '⚔️ LONDON — THE BLITZ',
+                    text: 'From September 1940 to May 1941, Germany bombed London for 57 consecutive nights. The Blitz killed 43,000 British civilians and destroyed over 1 million homes. Churchill\'s defiance — "We shall fight on the beaches... we shall never surrender" — became the voice of resistance. The RAF\'s victory in the Battle of Britain (summer 1940) was the first major defeat of the Luftwaffe and prevented a German invasion of England.',
+                    layers: ['conflicts'],
+                    image: { wiki: 'The_Blitz', caption: 'St Paul\'s Cathedral during the Blitz, 1940' }
+                },
+                {
+                    center: [44.52, 48.72], zoom: 7, title: '⚔️ STALINGRAD — THE TURNING POINT',
+                    text: 'The Battle of Stalingrad (Aug 1942 – Feb 1943) was the bloodiest battle in human history: ~2 million casualties. Hitler ordered the city taken at any cost. Stalin ordered "Not one step back." Street-by-street fighting reduced the city to rubble. The Soviet encirclement and surrender of the German 6th Army (91,000 POWs) marked the turning point of the European war. Of the 91,000 German POWs, only ~5,000 ever returned home.',
+                    layers: ['conflicts'],
+                    image: { wiki: 'Battle_of_Stalingrad', caption: 'Stalingrad ruins, 1943' }
+                },
+                {
+                    center: [19.20, 50.04], zoom: 9, title: '⚔️ AUSCHWITZ — THE HOLOCAUST',
+                    text: 'Auschwitz-Birkenau was the largest of the Nazi death camps. Between 1940 and 1945, an estimated 1.1 million people were murdered here — 90% of them Jewish. Victims arrived by train from across occupied Europe. Those deemed "unfit for work" were sent directly to gas chambers. The Holocaust (Shoah) killed approximately 6 million Jews — two-thirds of Europe\'s Jewish population — along with Roma, disabled people, political prisoners, and others. "Never again" became humanity\'s most solemn promise.',
+                    layers: ['conflicts'],
+                    image: { wiki: 'Auschwitz_concentration_camp', caption: 'Entrance to Auschwitz-Birkenau' }
+                },
+                {
+                    center: [-0.87, 49.36], zoom: 8, title: '⚔️ NORMANDY — D-DAY',
+                    text: 'June 6, 1944: Operation Overlord, the largest seaborne invasion in history. 156,000 Allied troops landed on five beaches (Utah, Omaha, Gold, Juno, Sword) along the Normandy coast. Over 4,400 Allied soldiers died on the first day alone. Within a month, 850,000 troops had landed. D-Day opened the Western Front that would crush Nazi Germany from the west while the Soviets advanced from the east. The operation required 5,000 ships and 13,000 aircraft.',
+                    layers: ['conflicts'],
+                    image: { wiki: 'Normandy_landings', caption: 'D-Day beach landings, June 6, 1944' }
+                },
+                {
+                    center: [132.45, 34.39], zoom: 8, title: '⚔️ HIROSHIMA — THE ATOMIC AGE',
+                    text: 'At 8:15 AM on August 6, 1945, the B-29 "Enola Gay" dropped "Little Boy" — a uranium bomb — on Hiroshima. 80,000 people died instantly. By year\'s end, the death toll reached 140,000. Three days later, "Fat Man" was dropped on Nagasaki, killing 70,000. Japan surrendered on August 15, 1945. The atomic bombings remain the only use of nuclear weapons in warfare. They launched the nuclear arms race and the doctrine of Mutually Assured Destruction that defined the Cold War.',
+                    layers: ['radiation', 'conflicts'],
+                    image: { wiki: 'Atomic_bombings_of_Hiroshima_and_Nagasaki', caption: 'Mushroom cloud over Hiroshima' }
+                },
+                {
+                    center: [13.38, 52.52], zoom: 7, title: '⚔️ BERLIN — FALL OF THE THIRD REICH',
+                    text: 'By April 1945, Soviet forces encircled Berlin with 2.5 million troops. The Battle of Berlin killed ~175,000 soldiers and up to 125,000 civilians. On April 30, Hitler committed suicide in his bunker. Germany surrendered unconditionally on May 8, 1945 — V-E Day. The city was divided into four occupied zones (US, UK, France, USSR), foreshadowing the Cold War division that would last until 1989.',
+                    layers: ['conflicts', 'blocs']
+                },
+                {
+                    center: [20, 30], zoom: 2, title: '⚔️ LEGACY — A NEW WORLD ORDER',
+                    text: 'World War II killed 70–85 million people — 3% of the world\'s population. It destroyed entire nations and redrew every border. From its ashes came: the United Nations (1945), the Universal Declaration of Human Rights (1948), the Geneva Conventions (1949), the European Union (born as the Coal and Steel Community in 1951), NATO (1949), and the Marshall Plan that rebuilt Europe. It also launched the Cold War, decolonization, and the nuclear age. Every international institution we rely on today exists because of what happened between 1939 and 1945.',
+                    layers: ['blocs', 'conflicts']
                 }
             ]
         }
@@ -3019,6 +3227,33 @@ document.addEventListener("DOMContentLoaded", () => {
             tourTitle.textContent = step.title;
             tourText.textContent = step.text;
             tourCounter.textContent = 'STOP ' + (tourStepIndex + 1) + ' OF ' + activeTour.steps.length;
+
+            // Load Wikipedia thumbnail image if available
+            const imgContainer = document.getElementById('tour-briefing-image');
+            if (imgContainer) {
+                imgContainer.innerHTML = '';
+                imgContainer.classList.add('hidden');
+                if (step.image && step.image.wiki) {
+                    fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(step.image.wiki))
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.thumbnail && data.thumbnail.source) {
+                                const img = document.createElement('img');
+                                img.src = data.thumbnail.source;
+                                img.alt = step.image.caption || step.title;
+                                img.loading = 'lazy';
+                                const cap = document.createElement('div');
+                                cap.className = 'tour-image-caption';
+                                cap.textContent = step.image.caption || '';
+                                imgContainer.appendChild(img);
+                                imgContainer.appendChild(cap);
+                                imgContainer.classList.remove('hidden');
+                            }
+                        })
+                        .catch(() => {}); // Silent fail — image is optional enrichment
+                }
+            }
+
             tourPanel.classList.remove('hidden');
 
             // Auto-narrate if enabled

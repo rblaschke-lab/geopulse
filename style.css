@@ -1122,6 +1122,29 @@ body.no-ticker #sidebar { top: 14px !important; }
     box-shadow: 0 0 12px rgba(255,176,0,0.2);
 }
 
+/* Tour Image (Wikipedia Thumbnails) */
+.tour-image-container {
+    margin: 10px 0;
+    text-align: center;
+    animation: tour-img-fade 0.5s ease;
+}
+.tour-image-container.hidden { display: none; }
+.tour-image-container img {
+    max-width: 200px;
+    max-height: 130px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,176,0,0.25);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    object-fit: cover;
+}
+.tour-image-caption {
+    font-size: 0.5rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 1px;
+    margin-top: 4px;
+}
+@keyframes tour-img-fade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
 .tour-interact-hint {
     display: flex;
     align-items: center;
