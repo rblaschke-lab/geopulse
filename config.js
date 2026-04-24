@@ -36,14 +36,11 @@ window.GeopulseConfig = {
         "radiation": { id: "radiation", name: "Radiation Sites", status: "STATIC", source: "Safecast", reliabilityScore: 85 }
     },
     FEEDBACK: {
-        // Replace FORM_ID with your Google Form ID after creating the form.
-        // See setup instructions at the bottom of this file.
-        GOOGLE_FORM_URL: "https://docs.google.com/forms/d/e/FORM_ID/viewform",
+        GOOGLE_FORM_URL: "https://docs.google.com/forms/d/e/1FAIpQLSd6IWB0Y9rRQvGkzIPT4I7M3qwNapSzd-LiujURIDGST_5qNg/viewform",
         GITHUB_ISSUES_URL: "https://github.com/rblaschke-lab/geopulse/issues/new",
-        // Google Form field entry IDs (replace after creating form):
-        FIELD_RATING: "entry.1000000",   // Rating (1-5)
-        FIELD_FAVOURITE: "entry.1000001", // Favourite feature
-        FIELD_COMMENT: "entry.1000002",   // Comment text
-        FIELD_WISH: "entry.1000003"       // Feature wish
+        FIELD_RATING: "entry.1132717015",   // How do you rate GEOPULSE? (1-5)
+        FIELD_FAVOURITE: "entry.1226017006", // What do you enjoy most
+        FIELD_COMMENT: "entry.1017448344",   // Any comments or suggestions?
+        FIELD_WISH: "entry.2034568167"       // What feature would you like to see next?
     }
 };
