@@ -661,9 +661,40 @@ document.addEventListener("DOMContentLoaded", () => {
                         type: 'Feature', geometry: { type: 'Point', coordinates: [s[5], s[6]] },
                         properties: { callsign: (s[1]||'').trim(), alt: Math.round(s[7]||0), vel: Math.round((s[9]||0)*3.6) }
                     }));
+                    if (features.length > 0) {
+                        map.getSource('flights-src')?.setData({ type: 'FeatureCollection', features });
+                        updateLayerStatus('flights', 'LIVE', `${features.length} aircraft`);
+                    } else {
+                        throw new Error('No data returned');
+                    }
+                } catch(err) {
+                    // Fallback: show demo aircraft when OpenSky API is rate-limited (429) or blocked
+                    const demoFlights = [
+                        { coords: [8.57, 50.03], callsign: 'DLH1A', alt: 11280, vel: 830 },
+                        { coords: [11.78, 48.35], callsign: 'DLH2B', alt: 10670, vel: 790 },
+                        { coords: [13.40, 52.52], callsign: 'DLH3C', alt: 9140, vel: 760 },
+                        { coords: [6.77, 51.22], callsign: 'DLH4D', alt: 12500, vel: 850 },
+                        { coords: [9.99, 53.55], callsign: 'DLH5E', alt: 8230, vel: 720 },
+                        { coords: [2.35, 48.86], callsign: 'AFR71', alt: 11900, vel: 810 },
+                        { coords: [-0.46, 51.47], callsign: 'BAW62', alt: 10800, vel: 800 },
+                        { coords: [4.76, 52.31], callsign: 'KLM83', alt: 11100, vel: 780 },
+                        { coords: [12.50, 41.90], callsign: 'AZA44', alt: 9800, vel: 750 },
+                        { coords: [-3.70, 40.42], callsign: 'IBE55', alt: 10200, vel: 770 },
+                        { coords: [23.73, 37.94], callsign: 'AEE16', alt: 11400, vel: 820 },
+                        { coords: [18.07, 59.33], callsign: 'SAS27', alt: 10500, vel: 795 },
+                        { coords: [16.37, 48.21], callsign: 'AUA38', alt: 9600, vel: 740 },
+                        { coords: [14.42, 50.08], callsign: 'CSA49', alt: 10100, vel: 760 },
+                        { coords: [21.01, 52.23], callsign: 'LOT10', alt: 11000, vel: 810 }
+                    ];
+                    // Add slight random offset to simulate movement
+                    const features = demoFlights.map(f => ({
+                        type: 'Feature',
+                        geometry: { type: 'Point', coordinates: [f.coords[0] + (Math.random()-0.5)*0.5, f.coords[1] + (Math.random()-0.5)*0.5] },
+                        properties: { callsign: f.callsign, alt: f.alt + Math.round((Math.random()-0.5)*200), vel: f.vel + Math.round((Math.random()-0.5)*30) }
+                    }));
                     map.getSource('flights-src')?.setData({ type: 'FeatureCollection', features });
-                    updateLayerStatus('flights', 'LIVE', `${features.length} aircraft`);
-                } catch(err) { updateLayerStatus('flights', 'ERROR', 'Feed timeout'); }
+                    updateLayerStatus('flights', 'DEMO', `${features.length} aircraft (simulated)`);
+                }
             };
             window._fetchFlights = fetchFlights;
             setInterval(fetchFlights, 15000);
