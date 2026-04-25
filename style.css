@@ -696,30 +696,41 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 
 .btn-narrate-briefing {
-    background: rgba(255,176,0,0.1);
-    border: 1px solid rgba(255,176,0,0.35);
-    color: rgba(255,176,0,0.75);
+    background: rgba(255,176,0,0.15);
+    border: 1px solid rgba(255,176,0,0.5);
+    color: #ffb000;
     cursor: pointer;
-    font-size: 0.82rem;
-    padding: 4px 12px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 5px 14px;
     border-radius: 4px;
     transition: all 0.2s;
     margin-left: auto;
     margin-right: 8px;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
+    text-transform: uppercase;
+    animation: audioGlow 3s ease-in-out infinite;
+}
+@keyframes audioGlow {
+    0%, 100% { box-shadow: 0 0 4px rgba(255,176,0,0.15); }
+    50% { box-shadow: 0 0 12px rgba(255,176,0,0.3); }
 }
 .btn-narrate-briefing:hover {
-    color: #ffb000;
-    border-color: rgba(255,176,0,0.6);
-    background: rgba(255,176,0,0.15);
+    color: #fff;
+    border-color: rgba(255,176,0,0.8);
+    background: rgba(255,176,0,0.25);
+    box-shadow: 0 0 15px rgba(255,176,0,0.4);
 }
 .btn-narrate-briefing.active {
-    color: var(--neon-blue);
-    border-color: rgba(0,212,255,0.5);
-    background: rgba(0,212,255,0.15);
-    box-shadow: 0 0 10px rgba(0,212,255,0.25);
+    color: #00d4ff;
+    border-color: rgba(0,212,255,0.6);
+    background: rgba(0,212,255,0.2);
+    box-shadow: 0 0 15px rgba(0,212,255,0.35);
+    animation: none;
 }
 
 .briefing-body h3 {
