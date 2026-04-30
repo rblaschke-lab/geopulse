@@ -8,13 +8,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ── SPLASH SCREEN — cinematic dissolve after 4s ──
     const splashEl = document.getElementById('splash-screen');
+    const welcomeEl = document.getElementById('welcome-overlay');
     if (splashEl) {
         setTimeout(() => {
             splashEl.classList.add('dissolve');
+            // Reveal welcome overlay as splash fades
+            if (welcomeEl && !welcomeEl.classList.contains('hidden')) {
+                setTimeout(() => welcomeEl.classList.add('splash-done'), 600);
+            }
             splashEl.addEventListener('transitionend', () => splashEl.remove(), { once: true });
             // Fallback removal if transitionend doesn't fire
             setTimeout(() => { if (splashEl.parentNode) splashEl.remove(); }, 2000);
         }, 4000);
+    } else if (welcomeEl) {
+        // No splash — show welcome immediately
+        welcomeEl.classList.add('splash-done');
     }
 
     // ── RELIABLE FETCH — timeout-safe wrapper for all external API calls ──
