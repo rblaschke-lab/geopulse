@@ -101,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
             tour_battery: 'Battery Race', tour_climate: 'Climate Frontlines',
             tour_quakes: 'Earthquakes & Eruptions', tour_olympics: 'Olympic Games History',
             tour_f1: 'Formula 1 World Tour', tour_worldcup: 'FIFA World Cup',
+            tour_romanempire: 'Roman Empire (753 BC–476 AD)',
             // Tour hint
             tour_hint: 'Click the markers on the map for detailed info & Wikipedia links',
             // Welcome overlay
@@ -173,6 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
             tour_battery: 'Batterie-Wettlauf', tour_climate: 'Klima-Frontlinien',
             tour_quakes: 'Erdbeben & Vulkanausbrüche', tour_olympics: 'Olympische Spiele',
             tour_f1: 'Formel 1 Welttour', tour_worldcup: 'FIFA Weltmeisterschaft',
+            tour_romanempire: 'Römisches Reich (753 v. Chr.–476 n. Chr.)',
             // Tour hint
             tour_hint: 'Klicke auf die Marker auf der Karte für Details & Wikipedia-Links',
             // Welcome overlay
@@ -800,6 +802,39 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             map.addLayer({ id: 'population-layer', type: 'raster', source: 'population-src', layout: { visibility: 'none' }, paint: { 'raster-opacity': 0.55 } });
         } catch(e) { console.warn('[POPULATION] Init failed:', e.message); }
+
+        // ── ROMAN EMPIRE TERRITORY (Simplified GeoJSON — 117 AD peak) ──
+        try {
+            map.addSource('roman-empire-src', {
+                type: 'geojson',
+                data: {
+                    type: 'Feature',
+                    properties: { name: 'Roman Empire (117 AD)' },
+                    geometry: {
+                        type: 'Polygon',
+                        coordinates: [[
+                            [-9.5, 37], [-9, 41], [-8.5, 43.5], [-1.5, 43.5], [3, 43], [-2, 51], [0, 53.5], [2, 55.5],
+                            [5, 51], [8, 48.5], [10, 48], [13, 47], [16, 48], [19, 47.5], [22, 44.5], [25, 44],
+                            [28, 44], [29, 41.5], [32, 41], [36, 40], [40, 38], [43, 37.5], [46, 37],
+                            [44, 35], [41, 33], [36, 34], [36, 31.5], [34, 29], [32, 31],
+                            [30, 31.5], [28, 31], [25, 24], [32, 22],
+                            [25, 32], [20, 33], [15, 34], [10, 37], [10, 33], [8, 33],
+                            [5, 36], [2, 36], [-1, 35.5], [-5, 35.5], [-6, 36], [-9.5, 37]
+                        ]]
+                    }
+                }
+            });
+            map.addLayer({
+                id: 'roman-empire-fill', type: 'fill', source: 'roman-empire-src',
+                layout: { visibility: 'none' },
+                paint: { 'fill-color': '#c0392b', 'fill-opacity': 0.18 }
+            });
+            map.addLayer({
+                id: 'roman-empire-border', type: 'line', source: 'roman-empire-src',
+                layout: { visibility: 'none' },
+                paint: { 'line-color': '#e74c3c', 'line-width': 2, 'line-dasharray': [4, 2], 'line-opacity': 0.6 }
+            });
+        } catch(e) { console.warn('[ROMAN EMPIRE] Init failed:', e.message); }
 
         setStatus(currentLang === 'de' ? 'ALLE DATENSTRÖME INITIALISIERT. SYSTEM BEREIT.' : 'ALL DATA STREAMS INITIALIZED. SYSTEM READY.');
 
@@ -3280,6 +3315,59 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             ]
         },
+        romanempire: {
+            name: 'The Roman Empire — Rise, Rule & Ruin',
+            steps: [
+                {
+                    center: [18, 40], zoom: 3, title: '🏛️ THE ROMAN EMPIRE — AT ITS GREATEST EXTENT',
+                    text: 'At its peak under Emperor Trajan in 117 AD, the Roman Empire stretched from Britain to Mesopotamia, controlling the entire Mediterranean — \"Mare Nostrum\" (Our Sea). Territory: 5 million km². Population: 55–70 million (25% of humanity). Duration: 753 BC (founding of Rome) to 476 AD (fall of the West) = 1,229 years. Key periods: Kingdom (753–509 BC), Republic (509–27 BC), Empire (27 BC–476 AD). The Eastern Empire (Byzantium) survived until 1453 AD — nearly 2,200 years of continuous Roman civilization.',
+                    layers: ['@roman-empire-fill', '@roman-empire-border'],
+                    image: { wiki: 'Roman_Empire', caption: 'The Roman Empire at its greatest extent, 117 AD' }
+                },
+                {
+                    center: [12.49, 41.89], zoom: 8, title: '🏛️ ROME — CAPUT MUNDI',
+                    text: 'Rome was the capital of the known world for over 500 years. At its peak (~200 AD), the city had 1 million inhabitants — a size not matched by any European city until London in the 1800s. The Colosseum (72–80 AD) seated 50,000–80,000 spectators. The Forum Romanum was the political, legal, and commercial center of the entire empire. Rome had running water via 11 aqueducts delivering 1 million cubic meters per day, public toilets, heated baths, and a 6-story apartment complex (insulae). The phrase \"All roads lead to Rome\" was literal — 80,000 km of paved roads connected the empire.',
+                    layers: ['@roman-empire-fill', '@roman-empire-border'],
+                    image: { wiki: 'Colosseum', caption: 'The Colosseum, Rome — completed 80 AD' }
+                },
+                {
+                    center: [9.0, 49.5], zoom: 6, title: '⚔️ THE LIMES — ROME\'S FRONTIER IN GERMANIA',
+                    text: 'The Limes Germanicus was a 568-km frontier fortification from the Rhine to the Danube — Rome\'s longest land border. It featured 900 watchtowers and 60 forts, manned by 30,000+ soldiers. Beyond it lived the \"barbarians\" — Germanic tribes Rome could never subdue. The Battle of the Teutoburg Forest (9 AD) destroyed 3 Roman legions (~20,000 men) under Varus. Emperor Augustus allegedly cried: \"Varus, give me back my legions!\" Rome never conquered Germania east of the Rhine.',
+                    layers: ['@roman-empire-fill', '@roman-empire-border'],
+                    image: { wiki: 'Limes_Germanicus', caption: 'Reconstructed Limes watchtower, Germany' }
+                },
+                {
+                    center: [31.25, 30.05], zoom: 6, title: '🏺 EGYPT — ROME\'S BREADBASKET',
+                    text: 'Egypt was Rome\'s most valuable province. Its grain fed 1 million Romans — any disruption could cause revolution. After Cleopatra VII and Mark Antony\'s defeat at Actium (31 BC), Octavian (Augustus) made Egypt his personal property — no senator could visit without permission. The Nile\'s annual flood was monitored by Roman engineers. Alexandria, with 500,000 inhabitants, housed the famous Library and Lighthouse (one of the Seven Wonders). Egypt supplied Rome for 400 years until the Arab conquest in 641 AD.',
+                    layers: ['@roman-empire-fill', '@roman-empire-border'],
+                    image: { wiki: 'Cleopatra', caption: 'The Death of Cleopatra — last Pharaoh of Egypt' }
+                },
+                {
+                    center: [14.49, 40.75], zoom: 9, title: '🌋 POMPEII — FROZEN IN TIME',
+                    text: 'On August 24, 79 AD, Mount Vesuvius erupted and buried Pompeii under 4–6 meters of ash in just 18 hours. The city of 11,000 was perfectly preserved — homes, shops, graffiti, food, and the bodies of victims frozen in their final moments. Discovered in 1748, Pompeii is the most complete snapshot of daily Roman life ever found: bakeries, brothels, election posters, fast-food counters (thermopolia), and even ancient traffic jams. 2,000+ bodies have been recovered. Millions visit annually.',
+                    layers: ['@roman-empire-fill', '@roman-empire-border', 'volcanoes'],
+                    image: { wiki: 'Pompeii', caption: 'Ruins of Pompeii with Vesuvius in the background' }
+                },
+                {
+                    center: [28.98, 41.01], zoom: 8, title: '⭐ CONSTANTINOPLE — THE SECOND ROME',
+                    text: 'In 330 AD, Emperor Constantine moved the capital from Rome to Byzantium, renaming it Constantinople. It became the richest city in the world for 1,000 years. The Theodosian Walls (built 413 AD) were the most sophisticated fortifications of antiquity — they held against every siege for 1,000 years until the Ottoman conquest in 1453. Constantinople sat at the crossroads of Europe and Asia, controlling trade between the Mediterranean and the Silk Road. At its peak, it had 500,000+ inhabitants, the Hagia Sophia (world\'s largest building for 1,000 years), and the Hippodrome (seating 100,000).',
+                    layers: ['@roman-empire-fill', '@roman-empire-border'],
+                    image: { wiki: 'Constantinople', caption: 'Constantinople — capital of the Eastern Roman Empire' }
+                },
+                {
+                    center: [-1.5, 52.5], zoom: 6, title: '🛡️ BRITANNIA — THE EDGE OF THE WORLD',
+                    text: 'Rome invaded Britain in 43 AD under Emperor Claudius and held it for 367 years. Hadrian\'s Wall (built 122 AD) stretched 117 km across northern England — it took 15,000 men 6 years to build. The wall marked the limit of Roman civilization: organized, heated, literate south vs. unconquered Caledonia (Scotland) to the north. Roman Britain had underfloor heating (hypocaust), bathhouses, and cities like Londinium (London, pop. 60,000). Rome withdrew its legions in 410 AD — within a generation, literacy, coinage, and urban life collapsed.',
+                    layers: ['@roman-empire-fill', '@roman-empire-border'],
+                    image: { wiki: 'Hadrian%27s_Wall', caption: 'Hadrian\'s Wall, Northumberland, England' }
+                },
+                {
+                    center: [18, 40], zoom: 3, title: '🌍 FALL & LEGACY — WHY ROME STILL MATTERS',
+                    text: 'The Western Roman Empire fell on September 4, 476 AD when the Germanic chieftain Odoacer deposed the last Emperor, Romulus Augustulus. Causes: overexpansion, military overstretch, economic collapse, political instability (50 emperors in 100 years), and barbarian pressure. But Rome\'s legacy is everywhere: Latin evolved into French, Spanish, Italian, Portuguese, and Romanian. Roman law is the basis of every European legal system. The calendar, concrete, arches, aqueducts, roads, representative government, and the very concept of citizenship — all Roman. The empire is gone, but its DNA is in every Western institution.',
+                    layers: ['@roman-empire-fill', '@roman-empire-border'],
+                    image: { wiki: 'Fall_of_the_Western_Roman_Empire', caption: 'The fall of Rome, 476 AD' }
+                }
+            ]
+        },
         quakes: {
             name: 'Earthquakes & Eruptions — When the Earth Breaks',
             steps: [
@@ -3477,6 +3565,12 @@ document.addEventListener("DOMContentLoaded", () => {
         // Enable required layers
         if (step.layers) {
             step.layers.forEach(layerId => {
+                // Direct map layers prefixed with '@'
+                if (layerId.startsWith('@')) {
+                    const mlId = layerId.slice(1);
+                    if (map.getLayer(mlId)) map.setLayoutProperty(mlId, 'visibility', 'visible');
+                    return;
+                }
                 const toggle = document.getElementById('toggle-' + layerId);
                 if (toggle && !toggle.checked) {
                     toggle.checked = true;
@@ -3594,6 +3688,10 @@ document.addEventListener("DOMContentLoaded", () => {
         tourStepIndex = 0;
         if (tourPanel) tourPanel.classList.add('hidden');
         if (window.speechSynthesis) speechSynthesis.cancel();
+        // Hide tour-specific overlay layers
+        ['roman-empire-fill', 'roman-empire-border'].forEach(id => {
+            if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
+        });
         setStatus(currentLang === 'de' ? 'TOUR ABGESCHLOSSEN — FREI ERKUNDEN' : 'TOUR COMPLETE — EXPLORE FREELY');
     }
 

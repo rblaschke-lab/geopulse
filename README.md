@@ -20,7 +20,7 @@
 
 ### Key Capabilities
 
-- **Guided Tours** — 16 cinematic educational tours across 4 categories: Geopolitics, History (WW1, WW2), Science & Nature (Earthquakes & Eruptions), Sports & Culture (Olympic Games)
+- **Guided Tours** — 17 cinematic educational tours across 4 categories: Geopolitics, History (WW1, WW2, Roman Empire), Science & Nature (Earthquakes & Eruptions), Sports & Culture (Olympic Games)
 - **2-Mode System** — EXPLORE (full satellite view) / ANALYZE (data-focused overlays)
 - **Bilingual Interface** — Switch between English and German (EN/DE) with one click
 - **Global Scenario Presets** — One-click educational presets (Taiwan, Red Sea, Europe Energy, Nuclear Risk)

@@ -32,7 +32,8 @@
         ww1: 'Erster Weltkrieg – Der Große Krieg (1914–1918)',
         ww2: 'Zweiter Weltkrieg – Der tödlichste Konflikt (1939–1945)',
         quakes: 'Erdbeben & Eruptionen – Wenn die Erde bricht',
-        olympics: 'Olympische Spiele – Geschichte der Nationen & des Sports'
+        olympics: 'Olympische Spiele – Geschichte der Nationen & des Sports',
+        romanempire: 'Das Römische Reich – Aufstieg, Herrschaft & Untergang'
     };
     Object.keys(NAMES_DE).forEach(id => {
         if (T[id]) T[id].name_de = NAMES_DE[id];
@@ -249,6 +250,20 @@
         { t: '⚽ DEUTSCHLAND 2006 — DAS SOMMERMÄRCHEN', d: 'Die WM 2006 verwandelte Deutschlands Image. Public Viewing wurde zum Massenphänomen. Italien gewann das Finale gegen Frankreich (Zidanes Kopfstoß gegen Materazzi). Deutschland wurde Dritter. Die WM gilt als Wendepunkt für Deutschlands internationales Ansehen.' },
         { t: '⚽ SÜDAFRIKA 2010 — AFRIKAS MOMENT', d: 'Die erste WM in Afrika. Vuvuzelas wurden zum Symbol des Turniers. Spanien gewann seinen ersten WM-Titel mit dem Tiki-Taka-Stil (1:0 gegen die Niederlande n.V.). Südafrika investierte 5 Milliarden Dollar in Infrastruktur. Die WM stärkte Afrikas Stellung im Weltfußball.' },
         { t: '🏆 DIE WM — FUSSBALL-UNIVERSUM', d: 'Die FIFA WM wird seit 1930 alle 4 Jahre ausgetragen. 211 FIFA-Mitgliedsverbände nehmen teil — mehr als die UN-Mitglieder. Brasilien hat 5 Titel (Rekord), Deutschland und Italien je 4. Das WM-Finale ist das meistgesehene TV-Ereignis der Welt mit über 1 Milliarde Zuschauern für ein einzelnes Spiel.' }
+    ]);
+
+    // ═══════════════════════════════════════════
+    // ROMAN EMPIRE (8 steps)
+    // ═══════════════════════════════════════════
+    applyDE('romanempire', [
+        { t: '🏛️ DAS RÖMISCHE REICH — AUF SEINEM HÖHEPUNKT', d: 'Auf dem Höhepunkt unter Kaiser Trajan 117 n. Chr. erstreckte sich das Römische Reich von Britannien bis Mesopotamien und kontrollierte das gesamte Mittelmeer — „Mare Nostrum" (Unser Meer). Fläche: 5 Millionen km². Bevölkerung: 55–70 Millionen (25% der Menschheit). Dauer: 753 v. Chr. (Gründung Roms) bis 476 n. Chr. (Fall des Westens) = 1.229 Jahre. Epochen: Königszeit (753–509 v. Chr.), Republik (509–27 v. Chr.), Kaiserreich (27 v. Chr.–476 n. Chr.). Das Oströmische Reich (Byzanz) überlebte bis 1453 — fast 2.200 Jahre ununterbrochene römische Zivilisation.' },
+        { t: '🏛️ ROM — CAPUT MUNDI', d: 'Rom war über 500 Jahre die Hauptstadt der bekannten Welt. Auf seinem Höhepunkt (~200 n. Chr.) hatte die Stadt 1 Million Einwohner — eine Größe, die keine europäische Stadt bis zum London des 19. Jahrhunderts erreichte. Das Kolosseum (72–80 n. Chr.) fasste 50.000–80.000 Zuschauer. Rom hatte fließendes Wasser über 11 Aquädukte mit 1 Million Kubikmeter pro Tag, öffentliche Toiletten, beheizte Bäder und 6-stöckige Mietshäuser (Insulae). 80.000 km gepflasterte Straßen verbanden das Reich.' },
+        { t: '⚔️ DER LIMES — ROMS GRENZE IN GERMANIEN', d: 'Der Limes Germanicus war eine 568 km lange Grenzbefestigung vom Rhein zur Donau — Roms längste Landgrenze. Er umfasste 900 Wachtürme und 60 Kastelle, besetzt mit 30.000+ Soldaten. Dahinter lebten die „Barbaren" — germanische Stämme, die Rom nie unterwerfen konnte. Die Varusschlacht im Teutoburger Wald (9 n. Chr.) vernichtete 3 Legionen (~20.000 Mann). Kaiser Augustus soll gerufen haben: „Varus, gib mir meine Legionen zurück!" Rom eroberte nie Germanien östlich des Rheins.' },
+        { t: '🏺 ÄGYPTEN — ROMS KORNKAMMER', d: 'Ägypten war Roms wertvollste Provinz. Sein Getreide ernährte 1 Million Römer — jede Unterbrechung konnte Revolution auslösen. Nach der Niederlage von Kleopatra VII. und Marcus Antonius bei Actium (31 v. Chr.) machte Octavian (Augustus) Ägypten zu seinem Privateigentum. Alexandria mit 500.000 Einwohnern beherbergte die berühmte Bibliothek und den Leuchtturm (eines der Sieben Weltwunder). Ägypten versorgte Rom 400 Jahre lang.' },
+        { t: '🌋 POMPEJI — EINGEFROREN IN DER ZEIT', d: 'Am 24. August 79 n. Chr. brach der Vesuv aus und begrub Pompeji unter 4–6 Metern Asche in nur 18 Stunden. Die Stadt mit 11.000 Einwohnern wurde perfekt konserviert — Häuser, Läden, Graffiti, Essen und die Körper der Opfer in ihren letzten Momenten erstarrt. 1748 wiederentdeckt, ist Pompeji die vollständigste Momentaufnahme des römischen Alltags: Bäckereien, Wahlplakate, Schnellimbisse (Thermopolia) und sogar antike Verkehrsstaus.' },
+        { t: '⭐ KONSTANTINOPEL — DAS ZWEITE ROM', d: '330 n. Chr. verlegte Kaiser Konstantin die Hauptstadt von Rom nach Byzantion und benannte es in Konstantinopel um. Es wurde für 1.000 Jahre die reichste Stadt der Welt. Die Theodosianischen Mauern (erbaut 413 n. Chr.) waren die ausgeklügeltsten Befestigungen der Antike — sie hielten 1.000 Jahre jeder Belagerung stand bis zur osmanischen Eroberung 1453. Konstantinopel kontrollierte den Handel zwischen Mittelmeer und Seidenstraße.' },
+        { t: '🛡️ BRITANNIEN — AM RAND DER WELT', d: 'Rom eroberte Britannien 43 n. Chr. unter Kaiser Claudius und hielt es 367 Jahre. Der Hadrianswall (erbaut 122 n. Chr.) erstreckte sich 117 km quer durch Nordengland — 15.000 Mann brauchten 6 Jahre für den Bau. Römisches Britannien hatte Fußbodenheizung (Hypokaustum), Badehäuser und Städte wie Londinium (London, 60.000 Einwohner). Rom zog 410 n. Chr. seine Legionen ab — innerhalb einer Generation brachen Schriftkultur, Münzwesen und Stadtleben zusammen.' },
+        { t: '🌍 UNTERGANG & VERMÄCHTNIS — WARUM ROM NOCH ZÄHLT', d: 'Das Weströmische Reich fiel am 4. September 476 n. Chr., als der germanische Heerführer Odoaker den letzten Kaiser Romulus Augustulus absetzte. Ursachen: Überdehnung, militärische Überlastung, Wirtschaftskollaps und Barbarendruck. Doch Roms Vermächtnis ist überall: Latein wurde zu Französisch, Spanisch, Italienisch, Portugiesisch und Rumänisch. Römisches Recht ist die Grundlage jedes europäischen Rechtssystems. Kalender, Beton, Bögen, Aquädukte, Straßen und das Konzept der Staatsbürgerschaft — alles römisch.' }
     ]);
 
 })();
