@@ -56,12 +56,14 @@ document.addEventListener("DOMContentLoaded", () => {
             layer_ships: 'AIS Shipping', desc_ships: 'Live vessel positions via AIS transponders. Includes cargo and military ships.',
             layer_flights: 'Lufthansa Flights', desc_flights: 'Real-time aircraft positions via OpenSky Network radar.',
             layer_iss: 'ISS Tracker', desc_iss: 'International Space Station — orbits Earth every 90 minutes at 28,000 km/h.',
+            layer_webcams: 'Live Webcams', desc_webcams: 'Real webcam snapshots from foto-webcam.eu + YouTube live streams. 18 cameras worldwide.',
             layer_earthquakes: 'Earthquakes', desc_earthquakes: 'Live seismic events from USGS. Circle size = magnitude. Updated every 5 min.',
             layer_fires: 'NASA Wildfires', desc_fires: 'Active fire detection by NASA FIRMS satellites. Near real-time hotspots.',
             layer_terminator: 'Day/Night Line', desc_terminator: 'Solar terminator — the real-time boundary between day and night on Earth.',
             layer_regimes: 'Regime Types', desc_regimes: 'Government systems by country — democracy, autocracy, or hybrid regime.',
             layer_blocs: 'Alliances & Blocs', desc_blocs: 'NATO, BRICS, EU, ASEAN — major geopolitical alliance networks.',
             layer_conflicts: 'Active Conflicts', desc_conflicts: 'Currently active war zones and armed conflicts worldwide.',
+            layer_borders: 'Country Borders', desc_borders: 'National boundaries with country name labels. Data: Natural Earth.',
             layer_cables: 'Undersea Cables', desc_cables: 'Submarine fiber optic cables — 95% of global internet traffic travels here.',
             layer_nuclear: 'Nuclear Plants', desc_nuclear: 'Operational nuclear power stations and their energy output worldwide.',
             layer_sst: 'Ocean Temperature', desc_sst: 'Sea surface temperature from NOAA. Red = warmer, blue = cooler than average.',
@@ -87,7 +89,34 @@ document.addEventListener("DOMContentLoaded", () => {
             info_about_title: 'ℹ️ About GEOPULSE',
             info_about_desc: 'GEOPULSE is an open-source global intelligence dashboard built with MapLibre GL JS and vanilla JavaScript. No API keys, no accounts — just real-time data from public sources. By RB Design 2026.',
             info_full_about: 'Full About Page ↗', info_manual_link: 'Command Manual ↗',
-            orientation_hint: 'BEST EXPERIENCED IN LANDSCAPE', launch_connecting: 'CONNECTING TO LAUNCH LIBRARY...'
+            orientation_hint: 'BEST EXPERIENCED IN LANDSCAPE', launch_connecting: 'CONNECTING TO LAUNCH LIBRARY...',
+            // Tour & category labels
+            guided_tours: 'GUIDED TOURS',
+            cat_geopolitics_tours: 'GEOPOLITICS', cat_history_tours: 'HISTORY',
+            cat_science_tours: 'SCIENCE & NATURE', cat_sports_tours: 'SPORTS & CULTURE',
+            tour_coldwar: 'Cold War → Reunification', tour_bri: 'Belt & Road Initiative',
+            tour_trump: 'Trump World Tour', tour_chokepoints: 'Chokepoints', tour_water: 'Water Wars',
+            tour_ww1: 'World War I (1914–1918)', tour_ww2: 'World War II (1939–1945)',
+            tour_ringoffire: 'Ring of Fire', tour_nuclear: 'Nuclear Legacy', tour_cables: 'Digital Silk Road',
+            tour_battery: 'Battery Race', tour_climate: 'Climate Frontlines',
+            tour_quakes: 'Earthquakes & Eruptions', tour_olympics: 'Olympic Games History',
+            tour_f1: 'Formula 1 World Tour', tour_worldcup: 'FIFA World Cup',
+            // Tour hint
+            tour_hint: 'Click the markers on the map for detailed info & Wikipedia links',
+            // Welcome overlay
+            welcome_subtitle: 'INTERACTIVE WORLD MAP',
+            welcome_feat_1: 'Real-time earthquakes & volcanoes',
+            welcome_feat_2: 'Live flights & satellite orbits',
+            welcome_feat_3: 'Geopolitics, conflicts & alliances',
+            welcome_feat_4: 'Nuclear sites & radiation history',
+            welcome_start_tour: 'START GUIDED TOUR', welcome_explore: 'EXPLORE FREELY',
+            welcome_dont_show: "Don't show again",
+            welcome_footer: 'No login · No ads · 100% free & open source · For students & educators',
+            // Feedback widget
+            fb_title: 'FEEDBACK', fb_rate: 'How do you rate GEOPULSE?',
+            fb_enjoy: 'What do you enjoy most?', fb_wish: 'Feature wish (optional)',
+            fb_comment: 'Anything else? (optional)', fb_submit: 'SUBMIT FEEDBACK',
+            fb_bug: 'Report a Bug (GitHub)', fb_footer: 'Feedback goes to a Google Form — no login required.'
         },
         de: {
             mode_explore: 'ERKUNDEN', mode_analyze: 'ANALYSIEREN',
@@ -99,12 +128,14 @@ document.addEventListener("DOMContentLoaded", () => {
             layer_ships: 'AIS Schiffsverkehr', desc_ships: 'Echtzeit-Schiffspositionen via AIS-Transponder. Fracht- und Militärschiffe.',
             layer_flights: 'Lufthansa Flüge', desc_flights: 'Echtzeit-Flugzeugpositionen über OpenSky Network Radar.',
             layer_iss: 'ISS Tracker', desc_iss: 'Internationale Raumstation — umkreist die Erde alle 90 Minuten mit 28.000 km/h.',
+            layer_webcams: 'Live-Webcams', desc_webcams: 'Echtzeit-Webcam-Bilder von foto-webcam.eu + YouTube-Livestreams. 18 Kameras weltweit.',
             layer_earthquakes: 'Erdbeben', desc_earthquakes: 'Live-Seismik von USGS. Kreisgröße = Magnitude. Aktualisierung alle 5 Min.',
             layer_fires: 'NASA Waldbrände', desc_fires: 'Aktive Branderkennung durch NASA FIRMS Satelliten. Nahezu Echtzeit.',
             layer_terminator: 'Tag/Nacht-Linie', desc_terminator: 'Solarterminator — die Echtzeit-Grenze zwischen Tag und Nacht auf der Erde.',
             layer_regimes: 'Regimetypen', desc_regimes: 'Regierungssysteme nach Land — Demokratie, Autokratie oder Hybridregime.',
             layer_blocs: 'Allianzen & Blöcke', desc_blocs: 'NATO, BRICS, EU, ASEAN — große geopolitische Bündnisnetzwerke.',
             layer_conflicts: 'Aktive Konflikte', desc_conflicts: 'Derzeit aktive Kriegsgebiete und bewaffnete Konflikte weltweit.',
+            layer_borders: 'Ländergrenzen', desc_borders: 'Nationale Grenzen mit Ländernamen. Daten: Natural Earth.',
             layer_cables: 'Unterseekabel', desc_cables: 'Unterwasser-Glasfaserkabel — 95% des globalen Internetverkehrs fließen hier.',
             layer_nuclear: 'Kernkraftwerke', desc_nuclear: 'Betriebsbereite Kernkraftwerke und ihre Energieleistung weltweit.',
             layer_sst: 'Ozeantemperatur', desc_sst: 'Meeresoberflächentemperatur von NOAA. Rot = wärmer, blau = kühler als Durchschnitt.',
@@ -130,7 +161,34 @@ document.addEventListener("DOMContentLoaded", () => {
             info_about_title: 'ℹ️ Über GEOPULSE',
             info_about_desc: 'GEOPULSE ist ein Open-Source Global Intelligence Dashboard, gebaut mit MapLibre GL JS und Vanilla JavaScript. Keine API-Schlüssel, keine Konten — nur Echtzeitdaten aus öffentlichen Quellen. Von RB Design 2026.',
             info_full_about: 'Vollständige About-Seite ↗', info_manual_link: 'Kommando-Handbuch ↗',
-            orientation_hint: 'AM BESTEN IM QUERFORMAT', launch_connecting: 'VERBINDUNG ZUR LAUNCH LIBRARY...'
+            orientation_hint: 'AM BESTEN IM QUERFORMAT', launch_connecting: 'VERBINDUNG ZUR LAUNCH LIBRARY...',
+            // Tour & category labels
+            guided_tours: 'GEFÜHRTE TOUREN',
+            cat_geopolitics_tours: 'GEOPOLITIK', cat_history_tours: 'GESCHICHTE',
+            cat_science_tours: 'WISSENSCHAFT & NATUR', cat_sports_tours: 'SPORT & KULTUR',
+            tour_coldwar: 'Kalter Krieg → Wiedervereinigung', tour_bri: 'Neue Seidenstraße',
+            tour_trump: 'Trump Welttour', tour_chokepoints: 'Nadelöhre der Welt', tour_water: 'Wasserkriege',
+            tour_ww1: 'Erster Weltkrieg (1914–1918)', tour_ww2: 'Zweiter Weltkrieg (1939–1945)',
+            tour_ringoffire: 'Pazifischer Feuerring', tour_nuclear: 'Nukleares Erbe', tour_cables: 'Digitale Seidenstraße',
+            tour_battery: 'Batterie-Wettlauf', tour_climate: 'Klima-Frontlinien',
+            tour_quakes: 'Erdbeben & Vulkanausbrüche', tour_olympics: 'Olympische Spiele',
+            tour_f1: 'Formel 1 Welttour', tour_worldcup: 'FIFA Weltmeisterschaft',
+            // Tour hint
+            tour_hint: 'Klicke auf die Marker auf der Karte für Details & Wikipedia-Links',
+            // Welcome overlay
+            welcome_subtitle: 'INTERAKTIVE WELTKARTE',
+            welcome_feat_1: 'Echtzeit-Erdbeben & Vulkane',
+            welcome_feat_2: 'Live-Flüge & Satellitenbahnen',
+            welcome_feat_3: 'Geopolitik, Konflikte & Allianzen',
+            welcome_feat_4: 'Nuklearstandorte & Strahlengeschichte',
+            welcome_start_tour: 'GEFÜHRTE TOUR STARTEN', welcome_explore: 'FREI ERKUNDEN',
+            welcome_dont_show: 'Nicht mehr anzeigen',
+            welcome_footer: 'Kein Login · Keine Werbung · 100% kostenlos & Open Source · Für Schüler & Lehrer',
+            // Feedback widget
+            fb_title: 'FEEDBACK', fb_rate: 'Wie bewerten Sie GEOPULSE?',
+            fb_enjoy: 'Was gefällt Ihnen am besten?', fb_wish: 'Feature-Wunsch (optional)',
+            fb_comment: 'Noch etwas? (optional)', fb_submit: 'FEEDBACK SENDEN',
+            fb_bug: 'Fehler melden (GitHub)', fb_footer: 'Feedback geht an ein Google-Formular — kein Login nötig.'
         }
     };
 
@@ -611,7 +669,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // ── SHIPS (AIS — placeholder source, populated by WebSocket if key set) ──
         map.addSource('ships-src', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-        map.addLayer({ id: 'ships-layer', type: 'circle', source: 'ships-src', layout: { visibility: 'none' }, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 4, 5, 6, 10, 8], 'circle-color': '#00ffcc', 'circle-opacity': 0.8 } });
+        map.addLayer({ id: 'ships-layer', type: 'circle', source: 'ships-src', layout: { visibility: 'none' }, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 5, 5, 8, 10, 12], 'circle-color': '#00ffcc', 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': '#ffffff', 'circle-stroke-opacity': 0.5 } });
 
         // Click handler for ships
         map.on('click', 'ships-layer', (e) => {
@@ -632,7 +690,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // ── FLIGHTS (OpenSky Network — European airspace) ──────
         try {
             map.addSource('flights-src', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-            map.addLayer({ id: 'flights-layer', type: 'circle', source: 'flights-src', layout: { visibility: 'none' }, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 4, 5, 6, 10, 8], 'circle-color': '#00d4ff', 'circle-opacity': 0.8 } });
+            map.addLayer({ id: 'flights-layer', type: 'circle', source: 'flights-src', layout: { visibility: 'none' }, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 5, 5, 8, 10, 12], 'circle-color': '#00d4ff', 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': '#ffffff', 'circle-stroke-opacity': 0.5 } });
 
             // Click handler for flights
             map.on('click', 'flights-layer', (e) => {
@@ -2082,12 +2140,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const issPopup = new maplibregl.Popup({ offset: 20, maxWidth: '280px', closeButton: true });
 
         el.addEventListener('click', () => {
+            // Load ISS Wikipedia image asynchronously
+            const issImgId = 'iss-popup-img-' + Date.now();
             issPopup.setLngLat([issData.longitude, issData.latitude])
-                .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
+                .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;max-width:320px;">
                     <h3 style="color:#00ffcc;margin:0 0 6px;font-size:.8rem;display:flex;align-items:center;gap:6px;">
                         <i class="fa-solid fa-satellite" style="font-size:.7rem;"></i> INTERNATIONAL SPACE STATION
                     </h3>
                     <div style="opacity:.5;font-size:.6rem;margin-bottom:6px;">NASA / ROSCOSMOS / ESA / JAXA / CSA</div>
+                    <div id="${issImgId}" style="text-align:center;margin-bottom:8px;">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/International_Space_Station_after_undocking_of_STS-132.jpg/320px-International_Space_Station_after_undocking_of_STS-132.jpg"
+                             alt="ISS in orbit" style="max-width:100%;height:auto;max-height:140px;border-radius:4px;border:1px solid rgba(0,255,204,0.25);box-shadow:0 4px 15px rgba(0,0,0,0.6);object-fit:cover;"
+                             onerror="this.style.display='none';" />
+                        <div style="font-size:.45rem;color:rgba(255,255,255,0.3);margin-top:3px;letter-spacing:1px;">ISS photographed from Space Shuttle — NASA</div>
+                    </div>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px;">
                         <div style="background:rgba(0,255,204,.05);padding:4px;text-align:center;border-radius:3px;">
                             <div style="opacity:.4;font-size:.5rem;">ALTITUDE</div>
@@ -2098,7 +2164,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div style="color:#00ffcc;font-size:.75rem;">${Math.round(issData.velocity).toLocaleString()} km/h</div>
                         </div>
                     </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px;">
                         <div style="background:rgba(0,255,204,.05);padding:4px;text-align:center;border-radius:3px;">
                             <div style="opacity:.4;font-size:.5rem;">LATITUDE</div>
                             <div style="font-size:.65rem;">${issData.latitude.toFixed(4)}°</div>
@@ -2108,7 +2174,28 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div style="font-size:.65rem;">${issData.longitude.toFixed(4)}°</div>
                         </div>
                     </div>
-                    <div style="opacity:.35;font-size:.5rem;margin-top:6px;letter-spacing:1px;">ORBITS EARTH EVERY 90 MIN · LIVE VIA WHERETHEISS.AT</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:6px;">
+                        <div style="background:rgba(0,255,204,.05);padding:3px;text-align:center;border-radius:3px;">
+                            <div style="opacity:.4;font-size:.45rem;">MASS</div>
+                            <div style="font-size:.6rem;color:#00ffcc;">420,000 kg</div>
+                        </div>
+                        <div style="background:rgba(0,255,204,.05);padding:3px;text-align:center;border-radius:3px;">
+                            <div style="opacity:.4;font-size:.45rem;">CREW</div>
+                            <div style="font-size:.6rem;color:#00ffcc;">7 persons</div>
+                        </div>
+                        <div style="background:rgba(0,255,204,.05);padding:3px;text-align:center;border-radius:3px;">
+                            <div style="opacity:.4;font-size:.45rem;">SINCE</div>
+                            <div style="font-size:.6rem;color:#00ffcc;">1998</div>
+                        </div>
+                    </div>
+                    <div style="font-size:.55rem;opacity:.55;line-height:1.5;margin-bottom:6px;">
+                        109m × 73m — largest structure in space. Orbits at ~28,000 km/h. Visible from Earth with naked eye. Has hosted 280+ astronauts from 21 countries.
+                    </div>
+                    <a href="https://en.wikipedia.org/wiki/International_Space_Station" target="_blank" rel="noopener"
+                       style="display:block;font-size:.6rem;color:#00d4ff;text-decoration:none;letter-spacing:1px;border-top:1px solid rgba(0,212,255,.15);padding-top:4px;">
+                        📚 Learn more on Wikipedia ↗
+                    </a>
+                    <div style="opacity:.3;font-size:.45rem;margin-top:4px;letter-spacing:1px;">ORBITS EARTH EVERY 90 MIN · LIVE VIA WHERETHEISS.AT</div>
                 </div>`)
                 .addTo(map);
         });
@@ -3190,6 +3277,116 @@ document.addEventListener("DOMContentLoaded", () => {
                     center: [20, 30], zoom: 2, title: '⚔️ LEGACY — A NEW WORLD ORDER',
                     text: 'World War II killed 70–85 million people — 3% of the world\'s population. It destroyed entire nations and redrew every border. From its ashes came: the United Nations (1945), the Universal Declaration of Human Rights (1948), the Geneva Conventions (1949), the European Union (born as the Coal and Steel Community in 1951), NATO (1949), and the Marshall Plan that rebuilt Europe. It also launched the Cold War, decolonization, and the nuclear age. Every international institution we rely on today exists because of what happened between 1939 and 1945.',
                     layers: ['blocs', 'conflicts']
+                }
+            ]
+        },
+        quakes: {
+            name: 'Earthquakes & Eruptions — When the Earth Breaks',
+            steps: [
+                {
+                    center: [142.37, 38.32], zoom: 5, title: '🌊 TŌHOKU EARTHQUAKE — JAPAN, 2011',
+                    text: 'On March 11, 2011, a magnitude 9.1 earthquake struck off the Pacific coast of Japan — the 4th most powerful ever recorded. The resulting tsunami reached heights of 40 meters and traveled up to 10 km inland. 19,759 people died, 6,242 were injured, and 2,553 remain missing. The tsunami triggered the Fukushima Daiichi nuclear disaster (INES Level 7). Japan\'s earthquake early warning system gave just 8–30 seconds of notice. Economic damage: $235 billion — the costliest natural disaster in history.',
+                    layers: ['earthquakes', 'volcanoes'],
+                    image: { wiki: '2011_Tōhoku_earthquake_and_tsunami', caption: 'Tsunami wave hitting Miyako, 2011' }
+                },
+                {
+                    center: [80.2, 7.0], zoom: 4, title: '🌊 INDIAN OCEAN TSUNAMI — 2004',
+                    text: 'On December 26, 2004, a magnitude 9.1 earthquake off Sumatra triggered the deadliest tsunami in recorded history. Waves up to 30 meters struck 14 countries across the Indian Ocean. Death toll: 227,898 people across Indonesia (170,000), Sri Lanka (35,000), India (16,000), and Thailand (8,000). The tsunami traveled at 800 km/h — the speed of a jet aircraft. There was no tsunami warning system in the Indian Ocean at the time. One was installed by 2006.',
+                    layers: ['earthquakes'],
+                    image: { wiki: '2004_Indian_Ocean_earthquake_and_tsunami', caption: 'Tsunami waves striking the coast of Thailand, 2004' }
+                },
+                {
+                    center: [-72.3, 18.5], zoom: 7, title: '💔 HAITI EARTHQUAKE — 2010',
+                    text: 'On January 12, 2010, a magnitude 7.0 earthquake struck just 25 km from Port-au-Prince, Haiti\'s capital. The earthquake killed an estimated 220,000–316,000 people, injured 300,000, and left 1.5 million homeless — in a country that was already the poorest in the Western Hemisphere. 250,000 homes and 30,000 commercial buildings collapsed. International aid exceeded $13 billion, but reconstruction was plagued by mismanagement. The earthquake exposed catastrophic building code failures.',
+                    layers: ['earthquakes'],
+                    image: { wiki: '2010_Haiti_earthquake', caption: 'Devastation in Port-au-Prince, 2010' }
+                },
+                {
+                    center: [36.2, 37.2], zoom: 5, title: '💔 TURKEY-SYRIA EARTHQUAKE — 2023',
+                    text: 'On February 6, 2023, two massive earthquakes (M7.8 and M7.7) struck southeastern Turkey and northern Syria within 9 hours. Death toll: 59,259 (Turkey: 50,783, Syria: 8,476). Over 120,000 were injured. 14 million people were affected across both countries. The quake was felt in Egypt, 1,500 km away. In Turkey, 520,000+ buildings were damaged or destroyed — many due to corrupt construction practices that ignored building codes. It was Turkey\'s deadliest natural disaster in modern history.',
+                    layers: ['earthquakes'],
+                    image: { wiki: '2023_Turkey–Syria_earthquake', caption: 'Collapsed buildings in Hatay, Turkey, 2023' }
+                },
+                {
+                    center: [14.43, 40.82], zoom: 7, title: '🌋 VESUVIUS — POMPEII, 79 AD',
+                    text: 'On August 24, 79 AD, Mount Vesuvius erupted with a force estimated at VEI-5, burying the Roman cities of Pompeii and Herculaneum under 4–6 meters of volcanic ash and pumice. An estimated 16,000 people died from pyroclastic flows reaching 700°C and moving at 100 km/h. The cities were preserved in extraordinary detail — frozen in time for 1,700 years until their rediscovery in 1748. Today, 3 million people live in the danger zone around Vesuvius. It is considered one of the most dangerous volcanoes on Earth.',
+                    layers: ['volcanoes'],
+                    image: { wiki: 'Eruption_of_Mount_Vesuvius_in_79_AD', caption: 'The Destruction of Pompeii and Herculaneum by John Martin' }
+                },
+                {
+                    center: [105.42, -6.10], zoom: 6, title: '🌋 KRAKATOA — INDONESIA, 1883',
+                    text: 'On August 27, 1883, Krakatoa erupted in one of the most violent volcanic events in recorded history (VEI-6). The explosion was heard 4,800 km away in Australia — the loudest sound in modern history. It produced tsunamis up to 30 meters high, killing 36,417 people. The eruption ejected 25 km³ of rock and ash, causing global temperatures to drop by 1.2°C for 5 years. Vivid red sunsets were observed worldwide for months. The child volcano, Anak Krakatau, emerged in 1927 and caused a deadly tsunami in 2018.',
+                    layers: ['volcanoes', 'earthquakes'],
+                    image: { wiki: '1883_eruption_of_Krakatoa', caption: 'Lithograph of the 1883 Krakatoa eruption' }
+                },
+                {
+                    center: [118.0, -8.4], zoom: 6, title: '🌋 TAMBORA — THE YEAR WITHOUT A SUMMER, 1815',
+                    text: 'Mount Tambora\'s eruption on April 10, 1815 was the most powerful volcanic eruption in recorded human history — VEI-7. It ejected 160 km³ of material and the eruption column reached 43 km into the stratosphere. Direct deaths: ~10,000. But the global climate effects killed far more: the sulfur dioxide blocked sunlight, causing 1816 to be known as the "Year Without a Summer." Crop failures caused famine across Europe and North America. An estimated 90,000 people died from famine and disease. Global temperatures dropped 0.4–0.7°C.',
+                    layers: ['volcanoes'],
+                    image: { wiki: 'Mount_Tambora', caption: 'Mount Tambora caldera, Indonesia' }
+                },
+                {
+                    center: [30, 15], zoom: 2, title: '🌍 EARTHQUAKES & ERUPTIONS — THE NUMBERS',
+                    text: 'Earth experiences approximately 500,000 detectable earthquakes per year. Of these, 100,000 can be felt, and ~100 cause damage. The deadliest earthquake in history: Shaanxi, China (1556) — 830,000 dead. The most powerful ever recorded: Chile (1960) — magnitude 9.5. There are approximately 1,500 potentially active volcanoes worldwide, with 50–70 erupting each year. The Pacific Ring of Fire accounts for 75% of all volcanic eruptions and 90% of all earthquakes. Since 1900, earthquakes and eruptions have killed over 2.5 million people.',
+                    layers: ['earthquakes', 'volcanoes']
+                }
+            ]
+        },
+        olympics: {
+            name: 'Olympic Games — A History of Nations & Sport',
+            steps: [
+                {
+                    center: [23.72, 37.97], zoom: 7, title: '🏛️ ATHENS 1896 — THE REVIVAL',
+                    text: 'The first modern Olympic Games were held in Athens, Greece, April 6–15, 1896. Organized by Pierre de Coubertin, the Games revived a tradition dormant for 1,500 years. Participants: 241 athletes from 14 nations. Sports: 9 (athletics, cycling, fencing, gymnastics, shooting, swimming, tennis, weightlifting, wrestling). No women competed. The Panathenaic Stadium, originally built in 329 BC, was restored for the occasion. Spectators: ~80,000. James Connolly (USA) won the first Olympic gold in the triple jump.',
+                    layers: [],
+                    image: { wiki: '1896_Summer_Olympics', caption: 'Opening ceremony at the Panathenaic Stadium, Athens 1896' }
+                },
+                {
+                    center: [13.38, 52.52], zoom: 7, title: '✊ BERLIN 1936 — PROPAGANDA & DEFIANCE',
+                    text: 'Adolf Hitler intended the 1936 Berlin Olympics to showcase Aryan supremacy. Instead, African-American athlete Jesse Owens won 4 gold medals, defying Nazi racial ideology before 100,000 spectators. Participants: 3,963 athletes from 49 nations. Sports: 19. These were the first Games to be televised (to 162,000 viewers). The Olympic torch relay was introduced here — designed by Hitler\'s regime as propaganda. Jewish athletes were banned from the German team. Several nations debated boycotting but ultimately attended.',
+                    layers: [],
+                    image: { wiki: '1936_Summer_Olympics', caption: 'Jesse Owens at the Berlin Olympics, 1936' }
+                },
+                {
+                    center: [139.77, 35.68], zoom: 7, title: '🇯🇵 TOKYO 1964 — ASIA\'S DEBUT',
+                    text: 'Tokyo 1964 was the first Olympics held in Asia and symbolized Japan\'s post-war recovery. The Games introduced satellite broadcasting to 600 million viewers worldwide — the first truly global sports event. Participants: 5,151 athletes from 93 nations. Sports: 19. Japan built the Shinkansen (bullet train) specifically for these Games — it debuted 9 days before the opening ceremony. Spectators: 2.6 million. Judo and volleyball were introduced as Olympic sports. The $2.7 billion investment transformed Tokyo into a modern metropolis.',
+                    layers: [],
+                    image: { wiki: '1964_Summer_Olympics', caption: 'Tokyo National Stadium, 1964 Opening Ceremony' }
+                },
+                {
+                    center: [11.58, 48.14], zoom: 7, title: '😢 MUNICH 1972 — TERROR AT THE GAMES',
+                    text: 'The Munich Olympics were intended as the "Cheerful Games" to erase memories of Berlin 1936. On September 5, Palestinian terrorists (Black September) took 11 Israeli athletes hostage. All 11 hostages, 5 terrorists, and 1 German police officer were killed during a failed rescue attempt. Despite the tragedy, the IOC controversially continued the Games after a 34-hour pause. Participants: 7,134 athletes from 121 nations. Sports: 21. USA swimmer Mark Spitz won 7 gold medals — a record that stood for 36 years. Spectators: 4 million. TV viewers: 900 million.',
+                    layers: [],
+                    image: { wiki: '1972_Summer_Olympics', caption: 'Memorial ceremony, Munich 1972' }
+                },
+                {
+                    center: [2.17, 41.38], zoom: 7, title: '🇪🇸 BARCELONA 1992 — THE GOLDEN ERA',
+                    text: 'Barcelona 1992 is widely considered the greatest Olympics of the modern era. It was the first Games without a boycott since 1972, and the first since the end of the Cold War — allowing athletes from the former Soviet Union and East Germany to compete freely. The "Dream Team" (USA basketball with Jordan, Magic, Bird) debuted. Participants: 9,356 athletes from 169 nations. Sports: 25. The Games transformed Barcelona from an industrial city into a global tourist destination. Spectators: 3.4 million. TV viewers: 3.5 billion.',
+                    layers: [],
+                    image: { wiki: '1992_Summer_Olympics', caption: 'Opening ceremony at Montjuïc, Barcelona 1992' }
+                },
+                {
+                    center: [116.39, 39.91], zoom: 7, title: '🇨🇳 BEIJING 2008 — THE SPECTACLE',
+                    text: 'China invested $42 billion to create the most lavish Olympics in history. The Bird\'s Nest stadium (91,000 capacity) and Water Cube became architectural icons. The opening ceremony, directed by Zhang Yimou, is considered the greatest in Olympic history — 15,000 performers, 29,000 fireworks. Participants: 10,942 athletes from 204 nations (record). Sports: 28. Usain Bolt announced himself with 3 gold medals and 3 world records. Michael Phelps won 8 golds — the most ever in a single Games. TV viewers: 4.7 billion.',
+                    layers: [],
+                    image: { wiki: '2008_Summer_Olympics', caption: 'Beijing Bird\'s Nest Stadium, 2008' }
+                },
+                {
+                    center: [-0.12, 51.51], zoom: 7, title: '🇬🇧 LONDON 2012 — LEGACY GAMES',
+                    text: 'London became the first city to host the Olympics three times (1908, 1948, 2012). The Games regenerated the impoverished East London area with £9 billion in infrastructure. Danny Boyle\'s opening ceremony celebrated the NHS and British culture to 900 million viewers. Participants: 10,568 athletes from 204 nations. Sports: 26. Usain Bolt defended his sprint titles. Team GB won 65 medals — their best in 104 years. For the first time, every competing nation included female athletes. Saudi Arabia, Qatar, and Brunei sent women for the first time ever.',
+                    layers: [],
+                    image: { wiki: '2012_Summer_Olympics', caption: 'Olympic Stadium during London 2012 opening' }
+                },
+                {
+                    center: [2.35, 48.86], zoom: 7, title: '🇫🇷 PARIS 2024 — THE OPEN GAMES',
+                    text: 'Paris hosted its third Olympics (after 1900 and 1924) with a revolutionary open-air concept. The opening ceremony took place on the Seine River with 6,000 athletes on 85 boats — the first ceremony held outside a stadium. Participants: 10,714 athletes from 206 nations. Sports: 32 (including breaking/breakdancing for the first time). Events were held at iconic venues: beach volleyball at the Eiffel Tower, equestrian at Versailles, fencing at the Grand Palais. TV viewers: estimated 4 billion. Budget: €8.8 billion.',
+                    layers: [],
+                    image: { wiki: '2024_Summer_Olympics', caption: 'Seine River opening ceremony, Paris 2024' }
+                },
+                {
+                    center: [10, 30], zoom: 2, title: '🏅 OLYMPIC GAMES — BY THE NUMBERS',
+                    text: 'The modern Olympics have been held 33 times since 1896 (Summer) and 24 times since 1924 (Winter). A total of 206 nations participate under the Olympic flag. Over 150,000 athletes have competed across 50+ sports. The USA leads the all-time medal count with 2,600+ medals, followed by the USSR/Russia, Great Britain, Germany, and France. The Olympic Games generate $7+ billion per edition. 5 billion people — 60% of humanity — watched at least part of the 2024 Paris Games. The next Summer Games: Los Angeles 2028 (34 sports, $6.9B budget). The Olympic motto: Citius, Altius, Fortius — Communiter (Faster, Higher, Stronger — Together).',
+                    layers: []
                 }
             ]
         }

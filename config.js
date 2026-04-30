@@ -1,6 +1,6 @@
 // Global GEOPULSE Configuration
 window.GeopulseConfig = {
-    VERSION: "1.0",
+    VERSION: "1.1",
     API_KEYS: {
         AISSTREAM: "" // Get your free key at https://aisstream.io
     },

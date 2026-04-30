@@ -714,6 +714,9 @@ body.no-ticker #sidebar { top: 14px !important; }
     gap: 6px;
     text-transform: uppercase;
     animation: audioGlow 3s ease-in-out infinite;
+    min-width: 80px;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 @keyframes audioGlow {
     0%, 100% { box-shadow: 0 0 4px rgba(255,176,0,0.15); }
