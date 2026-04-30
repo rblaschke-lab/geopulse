@@ -91,25 +91,38 @@
     ]);
 
     // ═══════════════════════════════════════════
-    // COLD WAR
+    // COLD WAR (full)
     // ═══════════════════════════════════════════
     applyDE('coldwar', [
-        { t: '🧱 BERLIN — DIE GETEILTE STADT', d: 'Am 13. August 1961 begann die DDR mit dem Bau der Berliner Mauer — dem Symbol des Kalten Krieges. 28 Jahre lang teilte sie Familien, Freunde und eine Nation. Mindestens 140 Menschen starben beim Fluchtversuch. Am 9. November 1989 fiel die Mauer in einer friedlichen Revolution.' },
-        { t: '🧱 MOSKAU — HERZ DES SOWJETREICHS', d: 'Moskau war das Zentrum des Sowjetimperiums, das von 1922 bis 1991 bestand. Der Kreml kontrollierte 15 Republiken, den Warschauer Pakt und ein nukleares Arsenal von 40.000 Sprengköpfen. Der Zusammenbruch der UdSSR 1991 beendete den Kalten Krieg.' }
+        { t: '🧱 BERLIN — DIE GETEILTE STADT', d: 'Von 1961 bis 1989 teilte die Berliner Mauer die Stadt in West (demokratisch, NATO) und Ost (kommunistisch, Warschauer Pakt). Über 140 Menschen starben beim Fluchtversuch. Am 9. November 1989 öffnete die DDR die Grenze nach wochenlangen Massenprotesten. Tausende strömten mit Hämmern und Meißeln durch. Die Mauer fiel in einer einzigen Nacht — live im Fernsehen weltweit.' },
+        { t: '⚔️ DER WARSCHAUER PAKT (1955–1991)', d: 'Der Warschauer Pakt vereinte 8 kommunistische Staaten unter sowjetischer Militärführung: UdSSR, Polen, DDR, Tschechoslowakei, Ungarn, Rumänien, Bulgarien und Albanien. Auf dem Höhepunkt hatte er 6 Millionen Soldaten und 60.000 Panzer, die der NATO am Eisernen Vorhang gegenüberstanden.' },
+        { t: '⭐ MOSKAU — DAS ZENTRUM KOLLABIERT', d: 'Michail Gorbatschows Reformen — Glasnost (Offenheit) und Perestroika (Umgestaltung) — zersetzten unbeabsichtigt die Sowjetunion. Am 25. Dezember 1991 wurde die Sowjetflagge ein letztes Mal über dem Kreml eingeholt. 15 unabhängige Nationen entstanden aus den Trümmern des größten Landes der Welt.' },
+        { t: '🇪🇺 DIE OSTERWEITERUNG', d: 'Nach dem Mauerfall drängten die ehemaligen Warschauer-Pakt-Staaten Richtung Westen. Polen, Tschechien und Ungarn traten 1999 der NATO bei. Die baltischen Staaten folgten 2004. Bis 2024 waren sogar Finnland und Schweden beigetreten. Russland betrachtet diese Erweiterung als existenzielle Bedrohung.' },
+        { t: '🇺🇦 UKRAINE — DIE UNVOLLENDETE GESCHICHTE', d: 'Die Ukraine liegt genau an der Bruchlinie zwischen dem ehemaligen Warschauer Pakt und der NATO. 2014 stürzte die Euromaidan-Revolution einen pro-russischen Präsidenten. Russland annektierte die Krim. Im Februar 2022 startete Russland eine Vollinvasion — der größte europäische Krieg seit 1945.' },
+        { t: '🌍 VOM EISERNEN VORHANG ZU NEUEN FRONTLINIEN', d: 'Der Kalte Krieg endete 1991, aber seine Echos bestimmen die heutige Welt. Die NATO wuchs von 16 auf 32 Mitglieder. Russland wandelte sich vom Supermacht zum isolierten Aggressor. China stieg von ländlicher Armut zur zweitgrößten Volkswirtschaft auf. Der Eiserne Vorhang ist weg, aber neue Trennlinien haben seinen Platz eingenommen.' }
     ]);
 
     // ═══════════════════════════════════════════
-    // WORLD WAR I (partial)
+    // DIGITAL SILK ROAD (cables)
     // ═══════════════════════════════════════════
-    applyDE('ww1', [
-        { t: '🪖 SARAJEVO — DER FUNKE', d: 'Am 28. Juni 1914 erschoss Gavrilo Princip den österreichisch-ungarischen Thronfolger Erzherzog Franz Ferdinand in Sarajevo. Dieses Attentat löste eine Kettenreaktion von Bündnisverpflichtungen aus, die innerhalb von 5 Wochen ganz Europa in den Krieg stürzte. Vier Großreiche sollten untergehen.' }
+    applyDE('cables', [
+        { t: '🌐 CORNWALL — KABELKNOTENPUNKT', d: '95% des interkontinentalen Datenverkehrs laufen durch unterseeische Glasfaserkabel — NICHT über Satelliten. Cornwall, England, ist einer der wichtigsten Kabellandepunkte der Welt. Kabel zu den USA, Europa und Afrika laufen hier zusammen. Ein einzelnes Kabel kann 250 Terabit pro Sekunde übertragen.' },
+        { t: '🌐 SUEZKANAL & ROTES MEER — ENGPASS', d: 'Über ein Dutzend Unterseekabel verlaufen durch das Rote Meer und den Suez-Korridor und transportieren Internetverkehr zwischen Europa und Asien. 2024 beschädigten Huthi-Angriffe 3 Kabel und unterbrachen 25% des Datenverkehrs für Monate.' },
+        { t: '🌐 SINGAPUR — ASIENS DIGITALE KREUZUNG', d: 'Singapur ist der größte Unterseekabel-Knotenpunkt in Asien. Es beherbergt über 70 Rechenzentren. Wenn Singapurs Kabelverbindungen durchtrennt würden, würde das halbe Internet Südostasiens ausfallen.' },
+        { t: '🌐 TRANSATLANTIKKABEL — DAS RÜCKGRAT', d: 'Das erste transatlantische Telegrafenkabel wurde 1858 verlegt. Heute verbinden über 15 Glasfaserkabel Nordamerika mit Europa. Google, Meta, Microsoft und Amazon haben Milliarden in private Kabel investiert.' },
+        { t: '🌍 DAS GLOBALE KABELNETZWERK', d: 'Es gibt über 550 aktive Unterseekabel mit 1,4 Millionen Kilometer Länge auf dem Meeresboden. Sie sind nur 3 cm dick, transportieren aber täglich Finanztransaktionen im Wert von 10 Billionen Dollar. Ohne diese Kabel würde das moderne Internet aufhören zu existieren.' }
     ]);
 
     // ═══════════════════════════════════════════
-    // WORLD WAR II (partial)
+    // BELT & ROAD INITIATIVE
     // ═══════════════════════════════════════════
-    applyDE('ww2', [
-        { t: '⚔️ GDAŃSK — DER BEGINN', d: 'Am 1. September 1939 eröffnete das deutsche Schlachtschiff Schleswig-Holstein das Feuer auf die polnische Garnison auf der Westerplatte in Danzig. Dies markierte den Beginn des Zweiten Weltkriegs — des tödlichsten Konflikts der Menschheitsgeschichte mit 70–85 Millionen Toten.' }
+    applyDE('bri', [
+        { t: '🛤️ XI\'AN — WO ALLES BEGINNT', d: 'Xi\'an war vor 2.000 Jahren der Ausgangspunkt der antiken Seidenstraße. 2013 verkündete Präsident Xi Jinping hier die Belt and Road Initiative (BRI) — das größte Infrastrukturprojekt der Menschheitsgeschichte. Über 1 Billion Dollar investiert in 150+ Ländern.' },
+        { t: '🛤️ CPEC — CHINA-PAKISTAN-KORRIDOR', d: 'Der China-Pakistan-Wirtschaftskorridor (CPEC) ist das BRI-Flaggschiff: ein 62-Milliarden-Dollar-Netzwerk aus Straßen, Eisenbahnen und Pipelines. Es verbindet Kaschgar in Westchina mit dem Hafen Gwadar am Arabischen Meer und gibt China direkten Zugang zum Indischen Ozean.' },
+        { t: '🛤️ PIRÄUS — CHINAS TOR ZU EUROPA', d: '2016 erwarb der chinesische Staatskonzern COSCO 67% des Hafens Piräus in Griechenland für 1,5 Milliarden Euro. Der Containerumschlag ist seitdem um 700% gestiegen. Piräus ist nun Chinas Einstiegspunkt in den europäischen Markt.' },
+        { t: '🛤️ DSCHIBUTI — CHINAS MILITÄRISCHER FUSSABDRUCK', d: 'Dieses winzige ostafrikanische Land beherbergt Chinas erste Militärbasis im Ausland (eröffnet 2017), nur 10 km vom US-Stützpunkt Camp Lemonnier entfernt. Dschibutis Schulden gegenüber China übersteigen 70% des BIP.' },
+        { t: '🛤️ NAIROBI — AFRIKAS BRI-KNOTENPUNKT', d: 'Kenias 3,6-Milliarden-Dollar-Eisenbahn Mombasa–Nairobi wurde von China gebaut. Sie verkürzte die Reisezeit von 12 auf 4,5 Stunden. China ist mittlerweile Afrikas größter bilateraler Kreditgeber mit über 170 Milliarden Dollar an Darlehen seit 2000.' },
+        { t: '🌍 NEUE SEIDENSTRASSE — DAS GESAMTBILD', d: 'Die BRI umfasst 150+ Länder und 1 Billion Dollar an Investitionen. Kritiker nennen es Schuldenfallendiplomatie — Sri Lanka übergab den Hafen Hambantota für 99 Jahre nach einem Zahlungsausfall. Befürworter sagen, es füllt eine 40-Billionen-Dollar-Infrastrukturlücke. So oder so verändert es die Weltordnung.' }
     ]);
 
 })();
