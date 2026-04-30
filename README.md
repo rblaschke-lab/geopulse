@@ -29,6 +29,8 @@
 - **Mobile-First** — Full touch support with swipeable panels and 4-button bottom nav
 - **Welcome Overlay** — First-visit onboarding with tour launcher for students
 - **Tour Images** — Wikipedia thumbnails displayed at key historical/geographic stops
+- **🎬 Video Pilot** — Embedded YouTube clips at select tour stops (Earthquakes & Olympics)
+- **Bilingual Audio** — Text-to-speech narration in English and German with smart voice picker
 - **Country Borders** — Natural Earth 110m boundaries + 121 country labels (zoom-dependent)
 
 ## Tech Stack
