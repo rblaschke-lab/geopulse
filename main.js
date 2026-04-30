@@ -6,6 +6,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const escHtml = (s) => { const d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML; };
     const VERSION = window.GeopulseConfig.VERSION;
 
+    // ── SPLASH SCREEN — cinematic dissolve after 4s ──
+    const splashEl = document.getElementById('splash-screen');
+    if (splashEl) {
+        setTimeout(() => {
+            splashEl.classList.add('dissolve');
+            splashEl.addEventListener('transitionend', () => splashEl.remove(), { once: true });
+            // Fallback removal if transitionend doesn't fire
+            setTimeout(() => { if (splashEl.parentNode) splashEl.remove(); }, 2000);
+        }, 4000);
+    }
+
     // ── RELIABLE FETCH — timeout-safe wrapper for all external API calls ──
     window.reliableFetch = async (url, label, opts = {}) => {
         const timeout = opts.timeout || 10000;
