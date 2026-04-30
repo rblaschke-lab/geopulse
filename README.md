@@ -2,7 +2,7 @@
 
 **Free, real-time educational world map combining satellite imagery, geopolitical data, and live intelligence feeds into one interactive dashboard. By RB Design 2026.**
 
-![Version](https://img.shields.io/badge/version-1.0-blue)
+![Version](https://img.shields.io/badge/version-1.1-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Platform](https://img.shields.io/badge/platform-GitHub%20Pages-orange)
 
@@ -20,7 +20,7 @@
 
 ### Key Capabilities
 
-- **Guided Tours** — 14 cinematic educational tours across 4 categories: Geopolitics, History (WW1, WW2), Science & Nature, Sports & Culture
+- **Guided Tours** — 16 cinematic educational tours across 4 categories: Geopolitics, History (WW1, WW2), Science & Nature (Earthquakes & Eruptions), Sports & Culture (Olympic Games)
 - **2-Mode System** — EXPLORE (full satellite view) / ANALYZE (data-focused overlays)
 - **Bilingual Interface** — Switch between English and German (EN/DE) with one click
 - **Global Scenario Presets** — One-click educational presets (Taiwan, Red Sea, Europe Energy, Nuclear Risk)
@@ -102,4 +102,4 @@ This project is open source under the [MIT License](LICENSE).
 
 ---
 
-**GEOPULSE V1** — Built with 🛰️ by RB Design 2026
+**GEOPULSE V1.1** — Built with 🛰️ by RB Design 2026
