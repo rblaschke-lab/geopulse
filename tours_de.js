@@ -169,4 +169,86 @@
         { t: '🌍 DIE NEUE WELTORDNUNG — URSACHE & WIRKUNG', d: 'Trumps zweite Präsidentschaft beschleunigte eine globale Neuausrichtung. Traditionelle Allianzen (NATO, G7) stehen unter Druck, während alternative Blöcke (BRICS+, SCO) an Dynamik gewinnen. Zölle ersetzten Diplomatie; bilaterale Deals ersetzten multilaterale Rahmenwerke; militärisches Posieren ersetzte Soft Power. Die Nachkriegsordnung von 1945 wird grundlegend neu verhandelt.' }
     ]);
 
+    // ═══════════════════════════════════════════
+    // CHOKEPOINTS (8 steps)
+    // ═══════════════════════════════════════════
+    applyDE('chokepoints', [
+        { t: '⛽ STRASSE VON HORMUZ — DAS ÖLTOR', d: 'Durch die Straße von Hormuz fließen täglich 21 Millionen Barrel Öl — 21% des weltweiten Verbrauchs. Die engste Stelle ist nur 33 km breit. Iran kann sie mit einer Raketensperre innerhalb von Minuten schließen. Jede Blockade würde den Ölpreis über Nacht verdoppeln. Die USA unterhalten hier permanent die 5. Flotte.' },
+        { t: '🚢 SUEZKANAL — DIE ABKÜRZUNG, DIE ALLES VERÄNDERTE', d: 'Der Suezkanal verbindet Mittelmeer und Rotes Meer und erspart Schiffen 10.000 km Umweg um Afrika. 12% des Welthandels passieren ihn. 2021 blockierte die Ever Given den Kanal 6 Tage lang und verursachte Schäden von 10 Milliarden Dollar pro Tag. Ägypten verdient jährlich 9 Milliarden Dollar an Kanalgebühren.' },
+        { t: '⚓ STRASSE VON MALAKKA — ASIENS LEBENSADER', d: 'Die Straße von Malakka zwischen Malaysia und Indonesien ist nur 2,8 km breit an der engsten Stelle. 25% des gesamten Welthandels passieren diese Meerenge — darunter 80% von Chinas Ölimporten. Eine Blockade würde die Weltwirtschaft lähmen.' },
+        { t: '🚢 BAB EL-MANDEB — DAS TOR DER TRÄNEN', d: 'Diese 29 km breite Meerenge zwischen Jemen und Dschibuti verbindet Suezkanal und Indischen Ozean. 2024 zwangen Huthi-Angriffe auf Handelsschiffe große Reedereien zur Umleitung um das Kap der Guten Hoffnung — 10 Tage länger, 1 Million Dollar mehr Treibstoff pro Fahrt.' },
+        { t: '🌍 STRASSE VON GIBRALTAR — MITTELMEERTOR', d: 'Nur 14 km trennen Europa von Afrika an der Straße von Gibraltar. Alle Schiffe, die ins Mittelmeer oder hinaus wollen, müssen hier durch. Die strategische Lage kontrolliert den Zugang für NATO-Flotten und den gesamten Mittelmeerhandel.' },
+        { t: '🇹🇷 TÜRKISCHE MEERENGEN — RUSSLANDS WARMES WASSER', d: 'Bosporus und Dardanellen sind Russlands einziger Zugang vom Schwarzen Meer zum Mittelmeer. Die Türkei kontrolliert diese Passage gemäß der Konvention von Montreux (1936). Russlands Schwarzmeerflotte ist davon abhängig — eine geopolitische Schwachstelle seit Jahrhunderten.' },
+        { t: '🚢 PANAMAKANAL — DIE GROSSE ABKÜRZUNG', d: 'Der Panamakanal spart Schiffen 12.000 km Umweg um Südamerika. 14.000 Schiffe passieren jährlich mit 5% des Welthandels. Die 2016 eröffnete Erweiterung verdoppelte die Kapazität, aber Dürre reduzierte 2024 die Durchfahrten dramatisch.' },
+        { t: '🗺️ DIE NADELÖHR-KARTE — FRAGIL VON DESIGN', d: 'Sieben schmale Wasserstraßen kontrollieren den Großteil des Welthandels. Eine einzige Blockade kann Lieferketten weltweit lahmlegen. Die Globalisierung hat ein System geschaffen, das effizient ist, aber auf wenigen verwundbaren Punkten basiert. Kriege, Piraterie, Klimawandel und geopolitische Spannungen bedrohen diese Lebensadern ständig.' }
+    ]);
+
+    // ═══════════════════════════════════════════
+    // BATTERY RACE (7 steps)
+    // ═══════════════════════════════════════════
+    applyDE('battery', [
+        { t: '⛏️ KONGO — DIE KOBALTMINEN', d: 'Die Demokratische Republik Kongo produziert 70% des weltweiten Kobalts — unverzichtbar für Lithium-Ionen-Batterien. Über 40.000 Kinder arbeiten in handwerklichen Minen unter lebensgefährlichen Bedingungen. Die Gewinne fließen zu internationalen Konzernen und chinesischen Verarbeitern.' },
+        { t: '⛏️ LITHIUM-DREIECK — DAS WEISSE GOLD', d: 'Argentinien, Bolivien und Chile bilden das Lithium-Dreieck mit 60% der weltweiten Reserven. Lithium ist unverzichtbar für jede Batterie in Elektroautos und Smartphones. Der Abbau verbraucht massive Wassermengen in einer der trockensten Regionen der Erde.' },
+        { t: '🇦🇺 AUSTRALIEN — HARTGESTEIN-LITHIUM', d: 'Australien ist der weltgrößte Lithiumproduzent durch Hartgesteinabbau. Die Minen in Westaustralien liefern das Rohmaterial, das in China zu batterietauglichem Lithium verarbeitet wird.' },
+        { t: '🇨🇳 CHINA — DAS VERARBEITUNGSMONOPOL', d: 'China kontrolliert 60-80% der weltweiten Batterie-Lieferkette. Es verarbeitet Kobalt, Lithium und seltene Erden und produziert 77% aller Batteriezellen weltweit. Diese Dominanz gibt China enormen geopolitischen Einfluss.' },
+        { t: '🔋 TAIWAN — DER CHIP-ENGPASS', d: 'Jedes Elektroauto enthält Tausende Computerchips. TSMC in Taiwan produziert 90% der fortschrittlichsten Chips weltweit. Eine chinesische Invasion Taiwans würde die globale Automobil- und Elektronikindustrie zum Stillstand bringen.' },
+        { t: '🏭 GIGAFACTORIES — DAS FLIESSBAND', d: 'Tesla, CATL, BYD und andere bauen riesige Batteriefabriken weltweit. Die USA investieren über 100 Milliarden Dollar durch den Inflation Reduction Act, um Chinas Dominanz zu brechen und eine eigene Lieferkette aufzubauen.' },
+        { t: '🗺️ DIE BATTERIE-LIEFERKETTE — KARTIERT', d: 'Vom kongolesischen Kobalt über chilenisches Lithium, chinesische Verarbeitung bis zur Gigafactory: Ihr Smartphone-Akku hat 50.000 km Lieferkette hinter sich. Wer die Batterie-Lieferkette kontrolliert, kontrolliert die industrielle Zukunft.' }
+    ]);
+
+    // ═══════════════════════════════════════════
+    // CLIMATE FRONTLINES (7 steps)
+    // ═══════════════════════════════════════════
+    applyDE('climate', [
+        { t: '❄️ SVALBARD — DER ARKTISCHE KANARIENVOGEL', d: 'Svalbard erwärmt sich 6-mal schneller als der globale Durchschnitt. Der Permafrost taut und bedroht den Svalbard Global Seed Vault — die Weltnotfall-Saatgutbank. Eisbären verlieren ihr Jagdgebiet, da das Meereis schmilzt. Die Arktis könnte bis 2040 im Sommer eisfrei sein.' },
+        { t: '🐠 GREAT BARRIER REEF — MASSENBLEICHE', d: 'Das größte Korallenriff der Welt hat 2024 seine schwerste Massenbleiche erlebt. 73% aller Riffabschnitte waren betroffen. Steigende Meerestemperaturen von nur 1°C über dem Normalwert töten die symbiotischen Algen. Ohne Korallen verlieren 25% aller Meeresspezies ihren Lebensraum.' },
+        { t: '🌳 AMAZONAS — DIE LUNGE BRENNT', d: 'Der Amazonas-Regenwald produziert 20% des weltweiten Sauerstoffs. Zwischen 2001 und 2023 gingen 17% der Waldfläche durch Abholzung und Brände verloren. Der Amazonas nähert sich dem Kipppunkt, an dem er sich in eine Savanne verwandeln könnte — mit katastrophalen Folgen für das Weltklima.' },
+        { t: '🌊 BANGLADESCH — ERTRINKEN IN ZEITLUPE', d: 'Bangladesch liegt größtenteils weniger als 5 Meter über dem Meeresspiegel. 30 Millionen Menschen sind bis 2050 von Überschwemmungen bedroht. Zyklone werden häufiger und stärker. Jedes Jahr werden 700.000 Menschen durch klimabedingte Katastrophen vertrieben.' },
+        { t: '🏝️ TUVALU — DIE NATION, DIE VERSCHWINDET', d: 'Tuvalu im Pazifik hat einen höchsten Punkt von nur 4,6 Metern. Bei aktuellem Meeresspiegelanstieg wird der Inselstaat bis 2100 unbewohnbar. 2023 schloss Tuvalu ein Abkommen mit Australien für „digitale Staatsbürgerschaft" — ein Staat ohne Land.' },
+        { t: '🔥 KALIFORNIEN — FEUERSAISON IST GANZJÄHRIG', d: 'Waldbrände in Kalifornien haben sich in den letzten 20 Jahren verfünffacht. 2020 brannten über 1,7 Millionen Hektar — eine Fläche größer als Connecticut. Dürre, Wind und 100 Jahre Brandunterdrückung haben einen perfekten Sturm geschaffen.' },
+        { t: '🗺️ KLIMAFRONTEN — DIE KARTE LÜGT NICHT', d: 'Die ärmsten Nationen, die am wenigsten zum Klimawandel beigetragen haben, leiden am stärksten. Die 10 verletzlichsten Länder emittieren zusammen weniger als 1% der globalen CO₂-Emissionen. Die Kosten der Klimaanpassung für Entwicklungsländer werden auf 300 Milliarden Dollar jährlich geschätzt.' }
+    ]);
+
+    // ═══════════════════════════════════════════
+    // WATER WARS (7 steps)
+    // ═══════════════════════════════════════════
+    applyDE('water', [
+        { t: '🏞️ NIL — DER GROSSE STAUDAMM-STREIT', d: 'Äthiopiens GERD-Staudamm (Grand Ethiopian Renaissance Dam) ist der größte Staudamm Afrikas. Er könnte Ägypten 25% seiner Wasserversorgung kosten — den Nil, von dem 100 Millionen Ägypter abhängen. Ägypten drohte mit militärischer Gewalt. Die Verhandlungen sind seit Jahren festgefahren.' },
+        { t: '🇹🇷 TIGRIS-EUPHRAT — DIE TÜRKEI KONTROLLIERT DEN HAHN', d: 'Die Türkei kontrolliert mit 22 Staudämmen die Quellen von Tigris und Euphrat. Der Ilisu-Staudamm hat den Tigris-Zufluss zum Irak um 60% reduziert. Syrien und Irak — bereits destabilisiert — verlieren landwirtschaftliches Wasser. Wasserknappheit war ein Katalysator des syrischen Bürgerkriegs.' },
+        { t: '🇮🇳 INDUS — ZWEI ATOMMÄCHTE, EIN FLUSS', d: 'Der Indus-Wasservertrag von 1960 zwischen Indien und Pakistan gilt als eines der stabilsten Wasserabkommen der Welt. Doch steigende Spannungen zwischen den Atommächten und Indiens wachsender Wasserbedarf setzen den Vertrag unter Druck. Der Indus speist 80% von Pakistans Landwirtschaft.' },
+        { t: '🏜️ COLORADO RIVER — TROCKNET AUS', d: 'Der Colorado River versorgt 40 Millionen Menschen in 7 US-Bundesstaaten und Mexiko. Seit 2000 ist sein Wasserstand um 20% gefallen. Lake Mead — der größte Stausee der USA — erreichte 2022 seinen niedrigsten Stand seit der Füllung 1937. Wasserrationierung ist bereits Realität.' },
+        { t: '💀 ARALSEE — DIE GRÖSSTE UMWELTKATASTROPHE', d: 'Der Aralsee war einst das viertgrößte Binnengewässer der Welt. Sowjetische Bewässerungsprojekte für Baumwolle leiteten seine Zuflüsse um. Bis 2014 war er auf 10% seiner ursprünglichen Größe geschrumpft. Zurück blieben giftige Salzwüsten, Schiffswracks und eine Gesundheitskrise für Millionen.' },
+        { t: '🌍 TSCHADSEE — DIE KRISE EINES KONTINENTS', d: 'Der Tschadsee ist seit 1960 um 90% geschrumpft. 30 Millionen Menschen in 4 Ländern (Nigeria, Niger, Tschad, Kamerun) sind auf sein Wasser angewiesen. Die Wasserknappheit treibt Konflikte zwischen Bauern, Fischern und Hirten und befeuert die Boko-Haram-Krise.' },
+        { t: '🗺️ WASSERKRIEGE — DIE BEDROHUNG DES 21. JAHRHUNDERTS', d: '2,2 Milliarden Menschen haben keinen Zugang zu sauberem Trinkwasser. Bis 2025 werden 1,8 Milliarden in Regionen mit absolutem Wassermangel leben. Die Weltbank warnt: Wasserknappheit könnte das BIP-Wachstum einiger Regionen bis 2050 um 6% reduzieren.' }
+    ]);
+
+    // ═══════════════════════════════════════════
+    // FORMULA 1 (9 steps)
+    // ═══════════════════════════════════════════
+    applyDE('f1', [
+        { t: '🏎️ MONACO — DAS JUWEL IN DER KRONE', d: 'Der GP von Monaco ist das prestigeträchtigste Rennen der Welt — durch die Straßen des zweitkleinsten Staats der Erde. Die Strecke ist 3,337 km lang mit 19 Kurven. Durchschnittsgeschwindigkeit: nur 160 km/h, aber jeder Fehler endet in der Leitplanke. Das Rennen wird seit 1929 ausgetragen.' },
+        { t: '🏎️ SILVERSTONE — WO ALLES BEGANN', d: 'Silverstone richtete am 13. Mai 1950 das allererste Formel-1-Rennen aus. Giuseppe Farina gewann im Alfa Romeo. Die ehemalige RAF-Landebahn wurde zum Herzstück des britischen Motorsports. Noch heute gilt Silverstone als ultimativer Fahrertest.' },
+        { t: '🏎️ MONZA — DER TEMPEL DER GESCHWINDIGKEIT', d: 'Der Autodromo di Monza ist die schnellste Strecke im F1-Kalender — Durchschnittsgeschwindigkeit über 260 km/h. Die Tifosi (Ferrari-Fans) verwandeln jedes Heimrennen in ein Fußballstadion. Monza ist seit 1922 aktiv — eine der ältesten Rennstrecken der Welt.' },
+        { t: '🏎️ SPA-FRANCORCHAMPS — DIE FAHRERLIEBLINGSSTRECKE', d: 'Spa in den belgischen Ardennen ist 7,004 km lang — die längste im Kalender. Die berühmte Eau Rouge / Raidillon-Kombination ist die ikonischste Kurve des Motorsports. Das Wetter kann sich in Minuten ändern — Regen auf einer Seite, Sonne auf der anderen.' },
+        { t: '🏎️ SUZUKA — PRÄZISIONSTECHNIK', d: 'Suzuka ist die einzige Achterschleife im F1-Kalender. Die 130R-Kurve wird mit über 300 km/h durchfahren. Japan und Honda sind eng mit der F1 verbunden — Ayrton Sennas legendäre Duelle mit Alain Prost in Suzuka definierten eine Ära.' },
+        { t: '🏎️ INTERLAGOS — WO LEGENDEN GEBOREN WERDEN', d: 'Interlagos in São Paulo ist die spirituelle Heimat von Ayrton Senna. Die Strecke verläuft gegen den Uhrzeigersinn und ist bekannt für dramatische Schlussrennen. Brasiliens Leidenschaft für den Motorsport macht jeden GP zu einem Nationalereignis.' },
+        { t: '🏎️ SINGAPUR — DAS NACHTSPEKTAKEL', d: 'Singapur war 2008 das erste Nachtrennen der F1-Geschichte. Die beleuchtete Strecke durch Marina Bay ist visuell atemberaubend. Das Rennen dauert 2 Stunden bei 30°C und 80% Luftfeuchtigkeit — die physisch anspruchsvollste Herausforderung.' },
+        { t: '🏎️ YAS MARINA — DAS SAISONFINALE', d: 'Abu Dhabis Yas Marina Circuit beendet traditionell die F1-Saison. Die Strecke verläuft durch einen Yachthafen und unter einem Hotel hindurch. Das Dämmerungsrennen — Start bei Tag, Ziel bei Nacht — ist eines der spektakulärsten im Kalender.' },
+        { t: '🏁 FORMEL 1 — DER GLOBALE ZIRKUS', d: 'Die Formel 1 fährt auf 5 Kontinenten in 24 Ländern. Jedes Auto kostet über 150 Millionen Dollar pro Saison. Motoren drehen bis 15.000 U/min. Jährlich schauen 1,5 Milliarden TV-Zuschauer zu. Die F1 generiert über 3 Milliarden Dollar Jahresumsatz. Von Fangio über Senna bis Hamilton — die F1 produziert die größten Rennlegenden der Geschichte.' }
+    ]);
+
+    // ═══════════════════════════════════════════
+    // FIFA WORLD CUP (8 steps)
+    // ═══════════════════════════════════════════
+    applyDE('worldcup', [
+        { t: '⚽ BRASILIEN 2014 — FUSSBALL KOMMT NACH HAUSE', d: 'Brasilien gab 15 Milliarden Dollar für die WM aus — Stadien, Infrastruktur, Sicherheit. Deutschland demütigte Brasilien 7:1 im Halbfinale — das schockierendste Ergebnis in der WM-Geschichte. Deutschland gewann den Titel mit 1:0 n.V. gegen Argentinien. 3,4 Milliarden TV-Zuschauer.' },
+        { t: '⚽ RUSSLAND 2018 — OST TRIFFT WEST', d: 'Russland richtete die teuerste WM der Geschichte aus (14 Milliarden Dollar). Frankreich gewann den Titel mit 4:2 gegen Kroatien. Russland überraschte als Gastgeber und erreichte das Viertelfinale. Die VAR-Technologie (Video Assistant Referee) wurde erstmals bei einer WM eingesetzt.' },
+        { t: '⚽ KATAR 2022 — DAS WÜSTENFINALE', d: 'Die erste Winter-WM wegen der extremen Hitze. Kosten: geschätzt 220 Milliarden Dollar — die teuerste Sportveranstaltung der Geschichte. Argentinien und Messi gewannen das vielleicht beste Finale aller Zeiten (3:3, 4:2 n.E.) gegen Frankreich. 5 Milliarden TV-Zuschauer — das meistgesehene Sportereignis der Geschichte.' },
+        { t: '⚽ 2026 — VEREINTE BEWERBUNG (USA, KANADA, MEXIKO)', d: 'Die erste WM mit 48 Teams (statt 32). 104 Spiele in 16 Städten über 3 Länder verteilt. Das MetLife Stadium in New York wird voraussichtlich das Finale ausrichten. Das erweiterte Format wird den Wettbewerb für kleinere Nationen öffnen.' },
+        { t: '⚽ 2034 — SAUDI-ARABIEN', d: 'Saudi-Arabien wird die WM 2034 ausrichten. Das Land plant den Bau neuer Stadien als Teil der Vision 2030. Kontroversen um Menschenrechte und Arbeitsbedingungen begleiten die Vergabe — ähnlich wie bei Katar 2022.' },
+        { t: '⚽ DEUTSCHLAND 2006 — DAS SOMMERMÄRCHEN', d: 'Die WM 2006 verwandelte Deutschlands Image. Public Viewing wurde zum Massenphänomen. Italien gewann das Finale gegen Frankreich (Zidanes Kopfstoß gegen Materazzi). Deutschland wurde Dritter. Die WM gilt als Wendepunkt für Deutschlands internationales Ansehen.' },
+        { t: '⚽ SÜDAFRIKA 2010 — AFRIKAS MOMENT', d: 'Die erste WM in Afrika. Vuvuzelas wurden zum Symbol des Turniers. Spanien gewann seinen ersten WM-Titel mit dem Tiki-Taka-Stil (1:0 gegen die Niederlande n.V.). Südafrika investierte 5 Milliarden Dollar in Infrastruktur. Die WM stärkte Afrikas Stellung im Weltfußball.' },
+        { t: '🏆 DIE WM — FUSSBALL-UNIVERSUM', d: 'Die FIFA WM wird seit 1930 alle 4 Jahre ausgetragen. 211 FIFA-Mitgliedsverbände nehmen teil — mehr als die UN-Mitglieder. Brasilien hat 5 Titel (Rekord), Deutschland und Italien je 4. Das WM-Finale ist das meistgesehene TV-Ereignis der Welt mit über 1 Milliarde Zuschauern für ein einzelnes Spiel.' }
+    ]);
+
 })();
