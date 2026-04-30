@@ -621,7 +621,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const p = e.features[0].properties;
                 const t = new Date(p.time).toLocaleString();
                 new maplibregl.Popup({ maxWidth: '260px' }).setLngLat(e.lngLat).setHTML(
-                    `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;"><h3 style="color:#ff6600;margin:0 0 5px;border-bottom:1px solid #ff660044;padding-bottom:4px;">🌍 SEISMIC EVENT</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:5px;"><div style="background:rgba(255,100,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">MAGNITUDE</div><div style="color:#ff6600;font-size:1.1rem;font-weight:bold;">${escHtml(p.mag)}</div></div><div style="background:rgba(255,100,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">DEPTH</div><div>${escHtml(Math.round(e.features[0].geometry.coordinates[2]))} km</div></div></div><div style="font-size:.65rem;opacity:.75;line-height:1.4;">${escHtml(p.place)}</div><div style="font-size:.55rem;opacity:.3;margin-top:5px;">${escHtml(t)} — USGS</div></div>`
+                    `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;"><h3 style="color:#ff6600;margin:0 0 5px;border-bottom:1px solid #ff660044;padding-bottom:4px;">🌍 ${currentLang==='de'?'SEISMISCHES EREIGNIS':'SEISMIC EVENT'}</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:5px;"><div style="background:rgba(255,100,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'STÄRKE':'MAGNITUDE'}</div><div style="color:#ff6600;font-size:1.1rem;font-weight:bold;">${escHtml(p.mag)}</div></div><div style="background:rgba(255,100,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'TIEFE':'DEPTH'}</div><div>${escHtml(Math.round(e.features[0].geometry.coordinates[2]))} km</div></div></div><div style="font-size:.65rem;opacity:.75;line-height:1.4;">${escHtml(p.place)}</div><div style="font-size:.55rem;opacity:.3;margin-top:5px;">${escHtml(t)} — USGS</div></div>`
                 ).addTo(map);
             });
             map.on('mouseenter', 'earthquakes-core', () => map.getCanvas().style.cursor = 'pointer');
@@ -678,8 +678,8 @@ document.addEventListener("DOMContentLoaded", () => {
             new maplibregl.Popup({ offset: 6, maxWidth: '240px' })
                 .setLngLat(coords)
                 .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
-                    <h3 style="color:#00ffcc;margin:0 0 4px;font-size:.75rem;">🚢 ${escHtml(p.name || p.mmsi || 'VESSEL')}</h3>
-                    <div style="opacity:.5;font-size:.6rem;">${escHtml(p.type || 'AIS Transponder Signal')}</div>
+                    <h3 style="color:#00ffcc;margin:0 0 4px;font-size:.75rem;">🚢 ${escHtml(p.name || p.mmsi || (currentLang==='de'?'SCHIFF':'VESSEL'))}</h3>
+                    <div style="opacity:.5;font-size:.6rem;">${escHtml(p.type || (currentLang==='de'?'AIS-Transpondersignal':'AIS Transponder Signal'))}</div>
                     <div style="opacity:.35;font-size:.5rem;margin-top:4px;letter-spacing:1px;">VIA AIS STREAM · LIVE</div>
                 </div>`)
                 .addTo(map);
@@ -699,10 +699,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 new maplibregl.Popup({ offset: 6, maxWidth: '240px' })
                     .setLngLat(coords)
                     .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
-                        <h3 style="color:#00d4ff;margin:0 0 4px;font-size:.75rem;">✈️ ${escHtml(p.callsign || 'UNKNOWN')}</h3>
+                        <h3 style="color:#00d4ff;margin:0 0 4px;font-size:.75rem;">✈️ ${escHtml(p.callsign || (currentLang==='de'?'UNBEKANNT':'UNKNOWN'))}</h3>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;">
-                            <div style="background:rgba(0,212,255,.05);padding:3px;text-align:center;"><div style="opacity:.4;font-size:.5rem;">ALTITUDE</div><div style="color:#00d4ff;">${p.alt ? p.alt.toLocaleString() + ' m' : 'N/A'}</div></div>
-                            <div style="background:rgba(0,212,255,.05);padding:3px;text-align:center;"><div style="opacity:.4;font-size:.5rem;">SPEED</div><div style="color:#00d4ff;">${p.vel ? p.vel.toLocaleString() + ' km/h' : 'N/A'}</div></div>
+                            <div style="background:rgba(0,212,255,.05);padding:3px;text-align:center;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'HÖHE':'ALTITUDE'}</div><div style="color:#00d4ff;">${p.alt ? p.alt.toLocaleString() + ' m' : 'N/A'}</div></div>
+                            <div style="background:rgba(0,212,255,.05);padding:3px;text-align:center;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'GESCHW.':'SPEED'}</div><div style="color:#00d4ff;">${p.vel ? p.vel.toLocaleString() + ' km/h' : 'N/A'}</div></div>
                         </div>
                         <div style="opacity:.35;font-size:.5rem;margin-top:4px;letter-spacing:1px;">VIA OPENSKY NETWORK · LIVE</div>
                     </div>`)
@@ -777,13 +777,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 new maplibregl.Popup({ offset: 6, maxWidth: '240px' })
                     .setLngLat(coords)
                     .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
-                        <h3 style="color:#fff;margin:0 0 4px;font-size:.75rem;">🛰️ STARLINK SATELLITE</h3>
-                        <div style="opacity:.5;font-size:.6rem;margin-bottom:4px;">SpaceX LEO Constellation</div>
+                        <h3 style="color:#fff;margin:0 0 4px;font-size:.75rem;">🛰️ ${currentLang==='de'?'STARLINK-SATELLIT':'STARLINK SATELLITE'}</h3>
+                        <div style="opacity:.5;font-size:.6rem;margin-bottom:4px;">${currentLang==='de'?'SpaceX LEO-Konstellation':'SpaceX LEO Constellation'}</div>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;">
-                            <div style="background:rgba(255,255,255,.05);padding:3px;text-align:center;"><div style="opacity:.4;font-size:.5rem;">ORBIT</div><div style="color:#00d4ff;">~550 km</div></div>
-                            <div style="background:rgba(255,255,255,.05);padding:3px;text-align:center;"><div style="opacity:.4;font-size:.5rem;">SPEED</div><div style="color:#00d4ff;">27,000 km/h</div></div>
+                            <div style="background:rgba(255,255,255,.05);padding:3px;text-align:center;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'UMLAUFBAHN':'ORBIT'}</div><div style="color:#00d4ff;">~550 km</div></div>
+                            <div style="background:rgba(255,255,255,.05);padding:3px;text-align:center;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'GESCHW.':'SPEED'}</div><div style="color:#00d4ff;">27.000 km/h</div></div>
                         </div>
-                        <div style="opacity:.35;font-size:.5rem;margin-top:4px;letter-spacing:1px;">SIMULATED POSITION · 5,500+ SATS IN ORBIT</div>
+                        <div style="opacity:.35;font-size:.5rem;margin-top:4px;letter-spacing:1px;">${currentLang==='de'?'SIMULIERTE POSITION · 5.500+ SATS IM ORBIT':'SIMULATED POSITION · 5,500+ SATS IN ORBIT'}</div>
                     </div>`)
                     .addTo(map);
             });
@@ -2145,57 +2145,57 @@ document.addEventListener("DOMContentLoaded", () => {
             issPopup.setLngLat([issData.longitude, issData.latitude])
                 .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;max-width:320px;">
                     <h3 style="color:#00ffcc;margin:0 0 6px;font-size:.8rem;display:flex;align-items:center;gap:6px;">
-                        <i class="fa-solid fa-satellite" style="font-size:.7rem;"></i> INTERNATIONAL SPACE STATION
+                        <i class="fa-solid fa-satellite" style="font-size:.7rem;"></i> ${currentLang==='de'?'INTERNATIONALE RAUMSTATION':'INTERNATIONAL SPACE STATION'}
                     </h3>
                     <div style="opacity:.5;font-size:.6rem;margin-bottom:6px;">NASA / ROSCOSMOS / ESA / JAXA / CSA</div>
                     <div id="${issImgId}" style="text-align:center;margin-bottom:8px;">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/International_Space_Station_after_undocking_of_STS-132.jpg/320px-International_Space_Station_after_undocking_of_STS-132.jpg"
                              alt="ISS in orbit" style="max-width:100%;height:auto;max-height:140px;border-radius:4px;border:1px solid rgba(0,255,204,0.25);box-shadow:0 4px 15px rgba(0,0,0,0.6);object-fit:cover;"
                              onerror="this.style.display='none';" />
-                        <div style="font-size:.45rem;color:rgba(255,255,255,0.3);margin-top:3px;letter-spacing:1px;">ISS photographed from Space Shuttle — NASA</div>
+                        <div style="font-size:.45rem;color:rgba(255,255,255,0.3);margin-top:3px;letter-spacing:1px;">${currentLang==='de'?'ISS fotografiert vom Space Shuttle — NASA':'ISS photographed from Space Shuttle — NASA'}</div>
                     </div>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px;">
                         <div style="background:rgba(0,255,204,.05);padding:4px;text-align:center;border-radius:3px;">
-                            <div style="opacity:.4;font-size:.5rem;">ALTITUDE</div>
+                            <div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'HÖHE':'ALTITUDE'}</div>
                             <div style="color:#00ffcc;font-size:.75rem;">${Math.round(issData.altitude)} km</div>
                         </div>
                         <div style="background:rgba(0,255,204,.05);padding:4px;text-align:center;border-radius:3px;">
-                            <div style="opacity:.4;font-size:.5rem;">SPEED</div>
+                            <div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'GESCHW.':'SPEED'}</div>
                             <div style="color:#00ffcc;font-size:.75rem;">${Math.round(issData.velocity).toLocaleString()} km/h</div>
                         </div>
                     </div>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px;">
                         <div style="background:rgba(0,255,204,.05);padding:4px;text-align:center;border-radius:3px;">
-                            <div style="opacity:.4;font-size:.5rem;">LATITUDE</div>
+                            <div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'BREITENGRAD':'LATITUDE'}</div>
                             <div style="font-size:.65rem;">${issData.latitude.toFixed(4)}°</div>
                         </div>
                         <div style="background:rgba(0,255,204,.05);padding:4px;text-align:center;border-radius:3px;">
-                            <div style="opacity:.4;font-size:.5rem;">LONGITUDE</div>
+                            <div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'LÄNGENGRAD':'LONGITUDE'}</div>
                             <div style="font-size:.65rem;">${issData.longitude.toFixed(4)}°</div>
                         </div>
                     </div>
                     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:6px;">
                         <div style="background:rgba(0,255,204,.05);padding:3px;text-align:center;border-radius:3px;">
-                            <div style="opacity:.4;font-size:.45rem;">MASS</div>
-                            <div style="font-size:.6rem;color:#00ffcc;">420,000 kg</div>
+                            <div style="opacity:.4;font-size:.45rem;">${currentLang==='de'?'MASSE':'MASS'}</div>
+                            <div style="font-size:.6rem;color:#00ffcc;">420.000 kg</div>
                         </div>
                         <div style="background:rgba(0,255,204,.05);padding:3px;text-align:center;border-radius:3px;">
-                            <div style="opacity:.4;font-size:.45rem;">CREW</div>
-                            <div style="font-size:.6rem;color:#00ffcc;">7 persons</div>
+                            <div style="opacity:.4;font-size:.45rem;">${currentLang==='de'?'BESATZUNG':'CREW'}</div>
+                            <div style="font-size:.6rem;color:#00ffcc;">${currentLang==='de'?'7 Personen':'7 persons'}</div>
                         </div>
                         <div style="background:rgba(0,255,204,.05);padding:3px;text-align:center;border-radius:3px;">
-                            <div style="opacity:.4;font-size:.45rem;">SINCE</div>
+                            <div style="opacity:.4;font-size:.45rem;">${currentLang==='de'?'SEIT':'SINCE'}</div>
                             <div style="font-size:.6rem;color:#00ffcc;">1998</div>
                         </div>
                     </div>
                     <div style="font-size:.55rem;opacity:.55;line-height:1.5;margin-bottom:6px;">
-                        109m × 73m — largest structure in space. Orbits at ~28,000 km/h. Visible from Earth with naked eye. Has hosted 280+ astronauts from 21 countries.
+                        ${currentLang==='de'?'109m × 73m — größtes Bauwerk im All. Umkreist die Erde mit ~28.000 km/h. Mit bloßem Auge sichtbar. Hat 280+ Astronauten aus 21 Ländern beherbergt.':'109m × 73m — largest structure in space. Orbits at ~28,000 km/h. Visible from Earth with naked eye. Has hosted 280+ astronauts from 21 countries.'}
                     </div>
-                    <a href="https://en.wikipedia.org/wiki/International_Space_Station" target="_blank" rel="noopener"
+                    <a href="https://${currentLang==='de'?'de':'en'}.wikipedia.org/wiki/${currentLang==='de'?'Internationale_Raumstation':'International_Space_Station'}" target="_blank" rel="noopener"
                        style="display:block;font-size:.6rem;color:#00d4ff;text-decoration:none;letter-spacing:1px;border-top:1px solid rgba(0,212,255,.15);padding-top:4px;">
-                        📚 Learn more on Wikipedia ↗
+                        📚 ${currentLang==='de'?'Mehr auf Wikipedia erfahren ↗':'Learn more on Wikipedia ↗'}
                     </a>
-                    <div style="opacity:.3;font-size:.45rem;margin-top:4px;letter-spacing:1px;">ORBITS EARTH EVERY 90 MIN · LIVE VIA WHERETHEISS.AT</div>
+                    <div style="opacity:.3;font-size:.45rem;margin-top:4px;letter-spacing:1px;">${currentLang==='de'?'UMKREIST DIE ERDE ALLE 90 MIN · LIVE VIA WHERETHEISS.AT':'ORBITS EARTH EVERY 90 MIN · LIVE VIA WHERETHEISS.AT'}</div>
                 </div>`)
                 .addTo(map);
         });
