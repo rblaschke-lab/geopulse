@@ -3391,6 +3391,49 @@ document.addEventListener("DOMContentLoaded", () => {
             ]
         }
     };
+    window._TOURS_REF = TOURS; // Expose for tours_de.js translations
+    // ── Voice Picker: find the most natural-sounding voice ──
+    let _voiceCache = {};
+    function getBestVoice(lang) {
+        if (_voiceCache[lang]) return _voiceCache[lang];
+        const voices = window.speechSynthesis?.getVoices() || [];
+        const isDE = lang === 'de';
+        const langPrefix = isDE ? 'de' : 'en';
+        const langVoices = voices.filter(v => v.lang.startsWith(langPrefix));
+        // Prefer natural/neural voices (Google, Microsoft Neural, Apple)
+        const preferred = langVoices.find(v =>
+            /natural|neural|online|premium|enhanced/i.test(v.name)
+        ) || langVoices.find(v =>
+            /google|microsoft/i.test(v.name)
+        ) || langVoices[0] || null;
+        if (preferred) _voiceCache[lang] = preferred;
+        return preferred;
+    }
+    // Preload voices (Chrome loads them async)
+    if (window.speechSynthesis) {
+        speechSynthesis.onvoiceschanged = () => { _voiceCache = {}; };
+        speechSynthesis.getVoices();
+    }
+
+    // ── Bilingual tour text helper ──
+    function getTourTitle(step) {
+        return (currentLang === 'de' && step.title_de) ? step.title_de : step.title;
+    }
+    function getTourText(step) {
+        return (currentLang === 'de' && step.text_de) ? step.text_de : step.text;
+    }
+    function speakText(text) {
+        if (!window.speechSynthesis) return;
+        speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        const lang = (currentLang === 'de') ? 'de' : 'en';
+        utter.lang = (lang === 'de') ? 'de-DE' : 'en-US';
+        utter.rate = 0.95;
+        utter.pitch = 1.05;
+        const voice = getBestVoice(lang);
+        if (voice) utter.voice = voice;
+        speechSynthesis.speak(utter);
+    }
 
     let activeTour = null;
     let tourStepIndex = 0;
@@ -3410,6 +3453,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showTourStep();
         setStatus('GUIDED TOUR: ' + tour.name.toUpperCase() + ' INITIATED');
     }
+
 
     function showTourStep() {
         if (!activeTour || !tourPanel) return;
@@ -3452,9 +3496,11 @@ document.addEventListener("DOMContentLoaded", () => {
         // Show briefing AFTER flight completes
         map.once('moveend', () => {
             tourPanel.classList.remove('flying');
-            tourTitle.textContent = step.title;
-            tourText.textContent = step.text;
-            tourCounter.textContent = 'STOP ' + (tourStepIndex + 1) + ' OF ' + activeTour.steps.length;
+            const stepTitle = getTourTitle(step);
+            const stepText = getTourText(step);
+            tourTitle.textContent = stepTitle;
+            tourText.textContent = stepText;
+            tourCounter.textContent = (currentLang === 'de' ? 'STOPP ' : 'STOP ') + (tourStepIndex + 1) + (currentLang === 'de' ? ' VON ' : ' OF ') + activeTour.steps.length;
 
             // Load Wikipedia thumbnail image if available
             const imgContainer = document.getElementById('tour-briefing-image');
@@ -3486,11 +3532,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Auto-narrate if enabled
             const narrateActive = document.getElementById('tour-narrate');
-            if (narrateActive && narrateActive.classList.contains('active') && window.speechSynthesis) {
-                const utter = new SpeechSynthesisUtterance(step.text);
-                utter.rate = 0.92; utter.pitch = 1;
-                utter.lang = (currentLang === 'de') ? 'de-DE' : 'en-US';
-                speechSynthesis.speak(utter);
+            if (narrateActive && narrateActive.classList.contains('active')) {
+                speakText(stepText);
             }
 
             // Re-enable nav
@@ -3534,19 +3577,9 @@ document.addEventListener("DOMContentLoaded", () => {
             narrateBtn.classList.toggle('active');
             if (narrateBtn.classList.contains('active')) {
                 // Start narrating the current step text
-                if (window.speechSynthesis && activeTour) {
-                    speechSynthesis.cancel();
+                if (activeTour) {
                     const currentText = document.getElementById('tour-briefing-text')?.textContent;
-                    if (currentText) {
-                        const utter = new SpeechSynthesisUtterance(currentText);
-                        utter.rate = 0.92;
-                        utter.pitch = 1;
-                        utter.lang = (currentLang === 'de') ? 'de-DE' : 'en-US';
-                        utter.onend = () => {
-                            // Don't remove active — user may want next steps narrated too
-                        };
-                        speechSynthesis.speak(utter);
-                    }
+                    if (currentText) speakText(currentText);
                 }
             } else {
                 // Deactivated — stop speaking
