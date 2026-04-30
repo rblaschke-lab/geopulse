@@ -333,7 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 }
                 
-                if(window.setStatus) setStatus(`SCENARIO LOADED: ${scenario.title.toUpperCase()}`);
+                if(window.setStatus) setStatus(currentLang === 'de' ? `SZENARIO GELADEN: ${scenario.title.toUpperCase()}` : `SCENARIO LOADED: ${scenario.title.toUpperCase()}`);
                 
                 // Fall back to ANALYZE mode automatically for full dashboard visibility
                 if (switchMode && currentMode !== 'ANALYZE') switchMode('ANALYZE');
@@ -351,7 +351,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             if(window.closeBriefing) window.closeBriefing();
             map.flyTo({ center: [15.0, 48.0], zoom: 2.2, pitch: 0, duration: 3000 });
-            if(window.setStatus) setStatus(`ALL LAYERS RESET`);
+            if(window.setStatus) setStatus(currentLang === 'de' ? 'ALLE EBENEN ZURÜCKGESETZT' : 'ALL LAYERS RESET');
         });
     }, 500);
 
@@ -590,7 +590,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // MAP LOAD — Initialize All Data Layers
     // ============================================================
     map.on('load', async () => {
-        setStatus('MAP LOADED. INITIALIZING DATA STREAMS...');
+        setStatus(currentLang === 'de' ? 'KARTE GELADEN. DATENSTRÖME WERDEN INITIALISIERT...' : 'MAP LOADED. INITIALIZING DATA STREAMS...');
 
         // ── EARTHQUAKES (USGS — Live GeoJSON) ──────────────────
         try {
@@ -801,7 +801,7 @@ document.addEventListener("DOMContentLoaded", () => {
             map.addLayer({ id: 'population-layer', type: 'raster', source: 'population-src', layout: { visibility: 'none' }, paint: { 'raster-opacity': 0.55 } });
         } catch(e) { console.warn('[POPULATION] Init failed:', e.message); }
 
-        setStatus('ALL DATA STREAMS INITIALIZED. SYSTEM READY.');
+        setStatus(currentLang === 'de' ? 'ALLE DATENSTRÖME INITIALISIERT. SYSTEM BEREIT.' : 'ALL DATA STREAMS INITIALIZED. SYSTEM READY.');
 
         // Kick off periodic data fetches
         fetchNewsTicker();
@@ -1869,7 +1869,7 @@ document.addEventListener("DOMContentLoaded", () => {
             conflictMarkers.push(m);
             if (toggles.conflicts) m.addTo(map);
         });
-        setStatus('CONFLICT ZONE DATABASE LOADED.');
+        setStatus(currentLang === 'de' ? 'KONFLIKTZONE-DATENBANK GELADEN.' : 'CONFLICT ZONE DATABASE LOADED.');
     };
 
     document.getElementById('toggle-conflicts')?.addEventListener('change', (e) => {
@@ -2110,7 +2110,7 @@ document.addEventListener("DOMContentLoaded", () => {
         webcamRefreshTimers.push(refreshInterval);
 
         if (window.updateLayerStatus) updateLayerStatus('webcams', 'LIVE', `${fotoWebcamCount} snapshot + ${ytCount} stream feeds`);
-        setStatus(`WEBCAMS ONLINE: ${fotoWebcamCount} live snapshots, ${ytCount} YouTube streams`);
+        setStatus(currentLang === 'de' ? `WEBCAMS ONLINE: ${fotoWebcamCount} Live-Bilder, ${ytCount} YouTube-Streams` : `WEBCAMS ONLINE: ${fotoWebcamCount} live snapshots, ${ytCount} YouTube streams`);
     };
 
     document.getElementById('toggle-webcams')?.addEventListener('change', (e) => {
@@ -2396,7 +2396,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 cb.dispatchEvent(new Event('change'));
             }
         });
-        setStatus(isOn ? 'SYSTEM OVERRIDE: ALL LAYERS ACTIVATED' : 'SYSTEM OVERRIDE: ALL LAYERS DEACTIVATED');
+        setStatus(isOn ? (currentLang === 'de' ? 'SYSTEM-OVERRIDE: ALLE EBENEN AKTIVIERT' : 'SYSTEM OVERRIDE: ALL LAYERS ACTIVATED') : (currentLang === 'de' ? 'SYSTEM-OVERRIDE: ALLE EBENEN DEAKTIVIERT' : 'SYSTEM OVERRIDE: ALL LAYERS DEACTIVATED'));
     });
 
     // ── NEWS BAND TOGGLE (toggle-ticker) ──────────────────
@@ -2454,7 +2454,7 @@ document.addEventListener("DOMContentLoaded", () => {
         toggles.borders = e.target.checked;
         if (toggles.borders && !map.getSource('borders-src')) {
             try {
-                setStatus('LOADING COUNTRY BOUNDARIES...');
+                setStatus(currentLang === 'de' ? 'LÄNDERGRENZEN WERDEN GELADEN...' : 'LOADING COUNTRY BOUNDARIES...');
                 const resp = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
                 const world = await resp.json();
                 const borders = topojson.mesh(world, world.objects.countries, (a, b) => a !== b);
@@ -2489,11 +2489,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     },
                     minzoom: 3, maxzoom: 8
                 });
-                setStatus('COUNTRY BOUNDARIES LOADED — ' + COUNTRY_CENTROIDS.length + ' NATIONS');
+                setStatus(currentLang === 'de' ? 'LÄNDERGRENZEN GELADEN — ' + COUNTRY_CENTROIDS.length + ' NATIONEN' : 'COUNTRY BOUNDARIES LOADED — ' + COUNTRY_CENTROIDS.length + ' NATIONS');
                 if(window.updateLayerStatus) window.updateLayerStatus('borders', 'LIVE', 'Natural Earth Data');
             } catch (err) {
                 console.warn('[borders] Failed:', err);
-                setStatus('BORDER DATA UNAVAILABLE');
+                setStatus(currentLang === 'de' ? 'GRENZDATEN NICHT VERFÜGBAR' : 'BORDER DATA UNAVAILABLE');
             }
         }
         if (map.getLayer('country-borders')) map.setLayoutProperty('country-borders', 'visibility', toggles.borders ? 'visible' : 'none');
@@ -3454,13 +3454,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const tourNext = document.getElementById('tour-next');
     const tourClose = document.getElementById('tour-close');
 
+    function getTourName(tour) {
+        return (currentLang === 'de' && tour.name_de) ? tour.name_de : tour.name;
+    }
     function startTour(tourId) {
         const tour = TOURS[tourId];
         if (!tour) return;
         activeTour = tour;
+        activeTourId = tourId;
         tourStepIndex = 0;
         showTourStep();
-        setStatus('GUIDED TOUR: ' + tour.name.toUpperCase() + ' INITIATED');
+        const nm = getTourName(tour).toUpperCase();
+        setStatus(currentLang === 'de' ? 'GEFÜHRTE TOUR: ' + nm + ' GESTARTET' : 'GUIDED TOUR: ' + nm + ' INITIATED');
     }
 
 
@@ -3585,9 +3590,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function endTour() {
         activeTour = null;
+        activeTourId = null;
         tourStepIndex = 0;
         if (tourPanel) tourPanel.classList.add('hidden');
-        setStatus('TOUR COMPLETE \u2014 EXPLORE FREELY');
+        if (window.speechSynthesis) speechSynthesis.cancel();
+        setStatus(currentLang === 'de' ? 'TOUR ABGESCHLOSSEN — FREI ERKUNDEN' : 'TOUR COMPLETE — EXPLORE FREELY');
     }
 
     tourPrev?.addEventListener('click', () => {

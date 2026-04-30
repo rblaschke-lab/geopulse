@@ -15,6 +15,29 @@
         });
     }
 
+    // ── Tour names (DE) ──
+    const NAMES_DE = {
+        ringoffire: 'Feuerring',
+        nuclear: 'Nukleares Erbe',
+        cables: 'Digitale Seidenstraße',
+        bri: 'Neue Seidenstraße',
+        coldwar: 'Kalter Krieg bis Wiedervereinigung',
+        trump: 'Trump Welttour – Macht, Deals & Disruption',
+        chokepoints: 'Nadelöhre – Die Welt hängt am seidenen Faden',
+        battery: 'Der Batterie-Wettlauf – Woher kommt dein Handy?',
+        climate: 'Klimafronten – Wer verbrennt, wer ertrinkt',
+        water: 'Wasserkriege – Der nächste globale Konflikt',
+        f1: 'Formel 1 – Der globale Geschwindigkeitszirkus',
+        worldcup: 'FIFA Weltmeisterschaft – Die größte Bühne des Fußballs',
+        ww1: 'Erster Weltkrieg – Der Große Krieg (1914–1918)',
+        ww2: 'Zweiter Weltkrieg – Der tödlichste Konflikt (1939–1945)',
+        quakes: 'Erdbeben & Eruptionen – Wenn die Erde bricht',
+        olympics: 'Olympische Spiele – Geschichte der Nationen & des Sports'
+    };
+    Object.keys(NAMES_DE).forEach(id => {
+        if (T[id]) T[id].name_de = NAMES_DE[id];
+    });
+
     // ═══════════════════════════════════════════
     // RING OF FIRE
     // ═══════════════════════════════════════════
