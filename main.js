@@ -3485,10 +3485,11 @@ document.addEventListener("DOMContentLoaded", () => {
             tourPanel.classList.remove('hidden');
 
             // Auto-narrate if enabled
-            const narrateBtn = document.getElementById('tour-narrate');
-            if (narrateBtn && narrateBtn.classList.contains('active') && window.speechSynthesis) {
+            const narrateActive = document.getElementById('tour-narrate');
+            if (narrateActive && narrateActive.classList.contains('active') && window.speechSynthesis) {
                 const utter = new SpeechSynthesisUtterance(step.text);
-                utter.rate = 0.92; utter.pitch = 1; utter.lang = 'en-US';
+                utter.rate = 0.92; utter.pitch = 1;
+                utter.lang = (currentLang === 'de') ? 'de-DE' : 'en-US';
                 speechSynthesis.speak(utter);
             }
 
@@ -3524,6 +3525,36 @@ document.addEventListener("DOMContentLoaded", () => {
             endTour();
         }
     });
+    // Audio narrate button — speak current step immediately on click
+    const narrateBtn = document.getElementById('tour-narrate');
+    if (narrateBtn) {
+        // Remove inline onclick (set in HTML) and use proper handler
+        narrateBtn.removeAttribute('onclick');
+        narrateBtn.addEventListener('click', () => {
+            narrateBtn.classList.toggle('active');
+            if (narrateBtn.classList.contains('active')) {
+                // Start narrating the current step text
+                if (window.speechSynthesis && activeTour) {
+                    speechSynthesis.cancel();
+                    const currentText = document.getElementById('tour-briefing-text')?.textContent;
+                    if (currentText) {
+                        const utter = new SpeechSynthesisUtterance(currentText);
+                        utter.rate = 0.92;
+                        utter.pitch = 1;
+                        utter.lang = (currentLang === 'de') ? 'de-DE' : 'en-US';
+                        utter.onend = () => {
+                            // Don't remove active — user may want next steps narrated too
+                        };
+                        speechSynthesis.speak(utter);
+                    }
+                }
+            } else {
+                // Deactivated — stop speaking
+                if (window.speechSynthesis) speechSynthesis.cancel();
+            }
+        });
+    }
+
     tourClose?.addEventListener('click', () => endTour());
 
     // Sidebar tour buttons
