@@ -1155,6 +1155,59 @@ document.addEventListener("DOMContentLoaded", () => {
     // GEOPOLITICAL BLOCS — NATO / BRICS / SCO / AUKUS / Neutral
     // ============================================================
     const blocMarkers = [];
+    // Capital + population lookup for bloc popup enrichment
+    const COUNTRY_META = {
+        'USA':            { cap: 'Washington D.C.', pop: '334M' },
+        'UK':             { cap: 'London',          pop: '68M'  },
+        'France':         { cap: 'Paris',           pop: '68M'  },
+        'Germany':        { cap: 'Berlin',          pop: '84M'  },
+        'Italy':          { cap: 'Rome',            pop: '59M'  },
+        'Spain':          { cap: 'Madrid',          pop: '48M'  },
+        'Netherlands':    { cap: 'Amsterdam',       pop: '18M'  },
+        'Sweden':         { cap: 'Stockholm',       pop: '10M'  },
+        'Finland':        { cap: 'Helsinki',        pop: '5.6M' },
+        'Denmark':        { cap: 'Copenhagen',      pop: '5.9M' },
+        'Norway':         { cap: 'Oslo',            pop: '5.5M' },
+        'Portugal':       { cap: 'Lisbon',          pop: '10M'  },
+        'Ireland':        { cap: 'Dublin',          pop: '5.1M' },
+        'Hungary':        { cap: 'Budapest',        pop: '10M'  },
+        'Poland':         { cap: 'Warsaw',          pop: '38M'  },
+        'Czech Republic': { cap: 'Prague',          pop: '11M'  },
+        'Slovakia':       { cap: 'Bratislava',      pop: '5.4M' },
+        'Romania':        { cap: 'Bucharest',       pop: '19M'  },
+        'Bulgaria':       { cap: 'Sofia',           pop: '6.5M' },
+        'Austria':        { cap: 'Vienna',          pop: '9.1M' },
+        'Lithuania':      { cap: 'Vilnius',         pop: '2.8M' },
+        'Latvia':         { cap: 'Riga',            pop: '1.8M' },
+        'Estonia':        { cap: 'Tallinn',         pop: '1.3M' },
+        'Canada':         { cap: 'Ottawa',          pop: '40M'  },
+        'Australia':      { cap: 'Canberra',        pop: '26M'  },
+        'New Zealand':    { cap: 'Wellington',       pop: '5.2M' },
+        'Japan':          { cap: 'Tokyo',           pop: '124M' },
+        'South Korea':    { cap: 'Seoul',           pop: '52M'  },
+        'Turkey':         { cap: 'Ankara',          pop: '85M'  },
+        'Greece':         { cap: 'Athens',          pop: '10M'  },
+        'Albania':        { cap: 'Tirana',          pop: '2.8M' },
+        'Montenegro':     { cap: 'Podgorica',       pop: '0.6M' },
+        'North Macedonia':{ cap: 'Skopje',          pop: '1.8M' },
+        'Russia':         { cap: 'Moscow',          pop: '144M' },
+        'China':          { cap: 'Beijing',         pop: '1,425M'},
+        'Brazil':         { cap: 'Brasília',        pop: '216M' },
+        'India':          { cap: 'New Delhi',       pop: '1,442M'},
+        'South Africa':   { cap: 'Pretoria',        pop: '60M'  },
+        'Iran':           { cap: 'Tehran',          pop: '88M'  },
+        'Egypt':          { cap: 'Cairo',           pop: '111M' },
+        'Ethiopia':       { cap: 'Addis Ababa',     pop: '126M' },
+        'UAE':            { cap: 'Abu Dhabi',       pop: '10M'  },
+        'Uzbekistan':     { cap: 'Tashkent',        pop: '35M'  },
+        'Pakistan':       { cap: 'Islamabad',       pop: '231M' },
+        'Kazakhstan':     { cap: 'Astana',          pop: '20M'  },
+        'Kyrgyzstan':     { cap: 'Bishkek',         pop: '7M'   },
+        'Tajikistan':     { cap: 'Dushanbe',        pop: '10M'  },
+        'Nepal':          { cap: 'Kathmandu',       pop: '30M'  },
+        'Switzerland':    { cap: 'Bern',            pop: '8.8M' },
+        'Mexico':         { cap: 'Mexico City',     pop: '129M' }
+    };
     const initGeoBlocs = () => {
         // [lon, lat, country, bloc, since, note]
         const blocs = [
@@ -1225,13 +1278,29 @@ document.addEventListener("DOMContentLoaded", () => {
             const size = bloc === 'NEUTRAL' ? '7px' : '10px';
             el.style.cssText = `width:${size};height:${size};border-radius:50%;background:transparent;border:2px solid ${c};cursor:pointer;`;
             el.style.filter = `drop-shadow(0 0 3px ${c})`;
-            const popup = new maplibregl.Popup({ offset: 8, maxWidth: '240px' }).setHTML(`
+            const meta = COUNTRY_META[country];
+            const capLabel = currentLang === 'de' ? 'HAUPTSTADT' : 'CAPITAL';
+            const popLabel = currentLang === 'de' ? 'BEVÖLKERUNG' : 'POPULATION';
+            const sinceLabel = currentLang === 'de' ? `Mitglied seit ${since}` : `Member since ${since}`;
+            const nonLabel = currentLang === 'de' ? 'Kein Mitglied' : 'Non-member';
+            const metaRow = meta ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:5px;">
+                <div style="background:rgba(255,255,255,.04);padding:3px 6px;">
+                    <div style="opacity:.45;font-size:.55rem;">${capLabel}</div>
+                    <div style="color:#fff;font-size:.7rem;">${meta.cap}</div>
+                </div>
+                <div style="background:rgba(255,255,255,.04);padding:3px 6px;">
+                    <div style="opacity:.45;font-size:.55rem;">${popLabel}</div>
+                    <div style="color:#fff;font-size:.7rem;">${meta.pop}</div>
+                </div>
+            </div>` : '';
+            const popup = new maplibregl.Popup({ offset: 8, maxWidth: '260px' }).setHTML(`
                 <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
                 <h3 style="color:${c};margin:0 0 5px;border-bottom:1px solid ${c}44;padding-bottom:3px;">${country}</h3>
+                ${metaRow}
                 <div style="background:${c}22;padding:4px 7px;border-left:2px solid ${c};margin-bottom:5px;">
-                    <strong>${bloc}</strong>${since ? ` &mdash; Member since ${since}` : ' &mdash; Non-member'}
+                    <strong>${bloc}</strong>${since ? ` &mdash; ${sinceLabel}` : ` &mdash; ${nonLabel}`}
                 </div>
-                <div style="font-size:.65rem;opacity:.75;">${note || 'No additional data.'}</div>
+                <div style="font-size:.65rem;opacity:.75;">${note || (currentLang === 'de' ? 'Keine weiteren Daten.' : 'No additional data.')}</div>
                 </div>`);
             const m = new maplibregl.Marker({ element: el, anchor: 'center' })
                 .setLngLat([lon, lat]).setPopup(popup);
