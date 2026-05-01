@@ -46,7 +46,7 @@
 
     <script src="./fetchWrapper.js"></script>
     <script src="./config.js"></script>
-    <link rel="stylesheet" href="./style.css?v=1.1">
+    <link rel="stylesheet" href="./style.css?v=1.2">
 </head>
 <body class="theme-clean">
     <!-- ═══ CINEMATIC SPLASH SCREEN ═══ -->
@@ -71,6 +71,20 @@
             <div class="splash-credit">by <strong>RB Design</strong> 2026</div>
         </div>
     </div>
+
+    <!-- Failsafe: always dismiss splash after 4.5s, even if main.js fails -->
+    <script>
+    (function(){
+        var s = document.getElementById('splash-screen');
+        if(s) setTimeout(function(){
+            s.style.transition = 'opacity 1.2s ease, filter 1s ease';
+            s.style.opacity = '0';
+            s.style.filter = 'blur(12px)';
+            s.style.pointerEvents = 'none';
+            setTimeout(function(){ if(s.parentNode) s.parentNode.removeChild(s); }, 1500);
+        }, 4500);
+    })();
+    </script>
 
     <div id="map"></div>
     
@@ -570,7 +584,7 @@
         <a href="./changelog.html" target="_blank" title="Changelog"><i class="fa-solid fa-code-branch"></i> Changelog</a>
     </div>
 
-    <script src="./main.js?v=1.1"></script>
+    <script src="./main.js?v=1.2"></script>
     <script src="./tours_de.js?v=1.1"></script>
 </body>
 </html>

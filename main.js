@@ -1,29 +1,27 @@
+// ── SPLASH SCREEN — isolated so it ALWAYS dismisses even if main.js has errors ──
+(function dismissSplash() {
+    const splashEl = document.getElementById('splash-screen');
+    if (!splashEl) return;
+    const dismiss = () => {
+        splashEl.classList.add('dissolve');
+        splashEl.addEventListener('transitionend', () => splashEl.remove(), { once: true });
+        // Fallback removal if transitionend doesn't fire
+        setTimeout(() => { if (splashEl.parentNode) splashEl.remove(); }, 2000);
+    };
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => setTimeout(dismiss, 4000));
+    } else {
+        setTimeout(dismiss, 4000);
+    }
+})();
+
 document.addEventListener("DOMContentLoaded", () => {
     // ----------------------------------------------------
     // CONSTANTS & STATE
     // ----------------------------------------------------
     // Security: HTML escape helper to prevent XSS from external API data
     const escHtml = (s) => { const d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML; };
-    const VERSION = window.GeopulseConfig.VERSION;
-
-    // ── SPLASH SCREEN — cinematic dissolve after 4s ──
-    const splashEl = document.getElementById('splash-screen');
-    const welcomeEl = document.getElementById('welcome-overlay');
-    if (splashEl) {
-        setTimeout(() => {
-            splashEl.classList.add('dissolve');
-            // Reveal welcome overlay as splash fades
-            if (welcomeEl && !welcomeEl.classList.contains('hidden')) {
-                setTimeout(() => welcomeEl.classList.add('splash-done'), 600);
-            }
-            splashEl.addEventListener('transitionend', () => splashEl.remove(), { once: true });
-            // Fallback removal if transitionend doesn't fire
-            setTimeout(() => { if (splashEl.parentNode) splashEl.remove(); }, 2000);
-        }, 4000);
-    } else if (welcomeEl) {
-        // No splash — show welcome immediately
-        welcomeEl.classList.add('splash-done');
-    }
+    const VERSION = window.GeopulseConfig?.VERSION || '1.2';
 
     // ── RELIABLE FETCH — timeout-safe wrapper for all external API calls ──
     window.reliableFetch = async (url, label, opts = {}) => {
