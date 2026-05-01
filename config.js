@@ -1,8 +1,8 @@
 // Global GEOPULSE Configuration
 window.GeopulseConfig = {
-    VERSION: "1.1",
+    VERSION: "1.2",
     API_KEYS: {
-        AISSTREAM: "" // Get your free key at https://aisstream.io
+        // No API keys required — all data sources are free and keyless
     },
     METRICS: {
         FEEDS: 18,
@@ -11,8 +11,7 @@ window.GeopulseConfig = {
     },
     LAYER_METADATA: {
         "weather": { id: "weather", name: "Weather Radar", status: "STATIC", source: "RainViewer API", reliabilityScore: 99 },
-        "ships": { id: "ships", name: "AIS Shipping", status: "STATIC", source: "Global AIS", reliabilityScore: 95 },
-        "flights": { id: "flights", name: "Lufthansa", status: "STATIC", source: "OpenSky Network", reliabilityScore: 85 },
+        "flights": { id: "flights", name: "Live Flights", status: "LIVE", source: "ADSB.lol", reliabilityScore: 95 },
         "iss": { id: "iss", name: "ISS Track", status: "STATIC", source: "WhereTheISS API", reliabilityScore: 99 },
         "fires": { id: "fires", name: "NASA Wildfires", status: "STATIC", source: "NASA FIRMS", reliabilityScore: 100 },
         "earthquakes": { id: "earthquakes", name: "Seismic Activity", status: "STATIC", source: "USGS Feed", reliabilityScore: 99 },
@@ -29,7 +28,7 @@ window.GeopulseConfig = {
         "sst": { id: "sst", name: "Ocean Temp", status: "STATIC", source: "NOAA", reliabilityScore: 98 },
         "population": { id: "population", name: "Population", status: "STATIC", source: "CIESIN", reliabilityScore: 95 },
         "temperature": { id: "temperature", name: "Surface Temp", status: "STATIC", source: "Global Temp", reliabilityScore: 98 },
-        "webcams": { id: "webcams", name: "Live Webcams", status: "LIVE", source: "foto-webcam.eu + YouTube", reliabilityScore: 80 },
+        "webcams": { id: "webcams", name: "Live Webcams", status: "LIVE", source: "foto-webcam.eu", reliabilityScore: 92 },
         "starlink": { id: "starlink", name: "Starlink Net", status: "STATIC", source: "Orbital Sim", reliabilityScore: 100 },
         "satellites": { id: "satellites", name: "Sat & Debris", status: "STATIC", source: "SpaceTrack", reliabilityScore: 92 },
         "volcanoes": { id: "volcanoes", name: "Volcanoes", status: "STATIC", source: "Smithsonian", reliabilityScore: 95 },

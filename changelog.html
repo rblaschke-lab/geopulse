@@ -305,9 +305,32 @@
 
     <div class="timeline">
 
-        <!-- V1.1 -->
+        <!-- V1.2 -->
         <div class="version-entry">
             <div class="version-dot current"></div>
+            <div class="version-header">
+                <span class="version-number">V1.2</span>
+                <span class="version-type type-major">MAJOR</span>
+                <span class="version-name">Tactical Layer Stabilization</span>
+                <span class="version-date">MAY 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon feat">✦</span> <strong>Flight Tracker Upgrade</strong> — Replaced OpenSky Network with <strong>ADSB.lol</strong> (free, keyless, community ADS-B data). Now shows 300+ real aircraft with callsign, type, registration, altitude &amp; speed</li>
+                <li><span class="change-icon feat">✦</span> Flight data is <strong>viewport-aware</strong> — queries aircraft within 250nm of the current map center for relevant results anywhere on Earth</li>
+                <li><span class="change-icon fix">●</span> <strong>ISS Tracker Fix</strong> — Popup now uses native MapLibre <code>.setPopup()</code> pattern for reliable click interaction. Telemetry updates on each open</li>
+                <li><span class="change-icon fix">●</span> <strong>Earthquake &amp; Volcano Visibility</strong> — Fixed toggle/layer initialization issue causing layers to remain invisible when toggled on</li>
+                <li><span class="change-icon ui">◆</span> <strong>Webcam Curation</strong> — Removed all 8 unreliable YouTube-based webcams. Curated <strong>9 alpine &amp; city cameras</strong> (Zugspitze, Feldberg, Nebelhorn, Munich, Innsbruck, Vienna, Salzburg, Sonnblick, Konkordiahütte) — all foto-webcam.eu verified snapshots</li>
+                <li><span class="change-icon ui">◆</span> <strong>Ships Layer Removed</strong> — No free, keyless AIS API exists for real-time vessel tracking. Layer and sidebar toggle removed cleanly</li>
+                <li><span class="change-icon fix">●</span> Removed demo/simulated flight data fallback — all aircraft data is now real</li>
+                <li><span class="change-icon perf">⚡</span> Flight popup enhanced: shows aircraft type (A320, B77W), registration (D-AIXS), altitude in feet, speed in km/h</li>
+                <li><span class="change-icon perf">⚡</span> Webcam markers unified to single green color scheme (no more amber YouTube markers)</li>
+                <li><span class="change-icon fix">●</span> Scenario presets updated: removed ships from Taiwan &amp; Red Sea layer sets</li>
+            </ul>
+        </div>
+
+        <!-- V1.1 -->
+        <div class="version-entry">
+            <div class="version-dot major"></div>
             <div class="version-header">
                 <span class="version-number">V1.1</span>
                 <span class="version-type type-major">MAJOR</span>

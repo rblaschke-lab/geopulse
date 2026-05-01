@@ -72,10 +72,9 @@ document.addEventListener("DOMContentLoaded", () => {
             reset_layers: 'RESET LAYERS', command_manual: 'COMMAND MANUAL',
             cat_realtime: 'REAL-TIME TRACKING', cat_geopolitics: 'GEOPOLITICS',
             cat_environment: 'ENVIRONMENT & SPACE',
-            layer_ships: 'AIS Shipping', desc_ships: 'Live vessel positions via AIS transponders. Includes cargo and military ships.',
-            layer_flights: 'Lufthansa Flights', desc_flights: 'Real-time aircraft positions via OpenSky Network radar.',
+            layer_flights: 'Live Flights', desc_flights: 'Real-time aircraft positions worldwide via ADS-B (ADSB.lol). Free, open-source data.',
             layer_iss: 'ISS Tracker', desc_iss: 'International Space Station — orbits Earth every 90 minutes at 28,000 km/h.',
-            layer_webcams: 'Live Webcams', desc_webcams: 'Real webcam snapshots from foto-webcam.eu + YouTube live streams. 18 cameras worldwide.',
+            layer_webcams: 'Live Webcams', desc_webcams: '9 curated alpine & city webcams with real-time snapshots from foto-webcam.eu.',
             layer_earthquakes: 'Earthquakes', desc_earthquakes: 'Live seismic events from USGS. Circle size = magnitude. Updated every 5 min.',
             layer_fires: 'NASA Wildfires', desc_fires: 'Active fire detection by NASA FIRMS satellites. Near real-time hotspots.',
             layer_terminator: 'Day/Night Line', desc_terminator: 'Solar terminator — the real-time boundary between day and night on Earth.',
@@ -145,10 +144,9 @@ document.addEventListener("DOMContentLoaded", () => {
             reset_layers: 'EBENEN ZURÜCKSETZEN', command_manual: 'KOMMANDO-HANDBUCH',
             cat_realtime: 'ECHTZEIT-TRACKING', cat_geopolitics: 'GEOPOLITIK',
             cat_environment: 'UMWELT & WELTRAUM',
-            layer_ships: 'AIS Schiffsverkehr', desc_ships: 'Echtzeit-Schiffspositionen via AIS-Transponder. Fracht- und Militärschiffe.',
-            layer_flights: 'Lufthansa Flüge', desc_flights: 'Echtzeit-Flugzeugpositionen über OpenSky Network Radar.',
+            layer_flights: 'Live-Flüge', desc_flights: 'Echtzeit-Flugzeugpositionen weltweit via ADS-B (ADSB.lol). Kostenlose, offene Daten.',
             layer_iss: 'ISS Tracker', desc_iss: 'Internationale Raumstation — umkreist die Erde alle 90 Minuten mit 28.000 km/h.',
-            layer_webcams: 'Live-Webcams', desc_webcams: 'Echtzeit-Webcam-Bilder von foto-webcam.eu + YouTube-Livestreams. 18 Kameras weltweit.',
+            layer_webcams: 'Live-Webcams', desc_webcams: '9 kuratierte Alpen- & Stadt-Webcams mit Echtzeit-Schnappschüssen von foto-webcam.eu.',
             layer_earthquakes: 'Erdbeben', desc_earthquakes: 'Live-Seismik von USGS. Kreisgröße = Magnitude. Aktualisierung alle 5 Min.',
             layer_fires: 'NASA Waldbrände', desc_fires: 'Aktive Branderkennung durch NASA FIRMS Satelliten. Nahezu Echtzeit.',
             layer_terminator: 'Tag/Nacht-Linie', desc_terminator: 'Solarterminator — die Echtzeit-Grenze zwischen Tag und Nacht auf der Erde.',
@@ -236,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const toggles = {
         terminator: false, fires: false, weather: false, borders: false,
-        ships: false, flights: false, iss: false, starlink: false, earthquakes: false, webcams: false,
+        flights: false, iss: false, starlink: false, earthquakes: false, webcams: false,
         nightlights: false, population: false, satellites: false, temperature: false,
         volcanoes: false, radiation: false, internet: false, power: false,
         cables: false, datacenters: false, nuclear: false, conflicts: false, regimes: false, blocs: false, aiAtlas: false
@@ -244,7 +242,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let issMarker = null;
     let flightMarkers = [];
-    let shipMarkers = [];
     let webcamMarkers = [];
     let powerMarkers = [];
 
@@ -259,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
         EXPLORE: {
             autoActiveLayers: ['terminator'],
             uiState: { sidebarCollapsed: true },
-            disablePolling: ['flights', 'iss', 'earthquakes', 'ships']
+            disablePolling: ['flights', 'iss', 'earthquakes']
         },
         ANALYZE: {
             autoActiveLayers: ['cables', 'blocs'],
@@ -282,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
             severity: "HIGH"
         },
         taiwan: {
-            layers: ['ships', 'flights', 'cables', 'conflicts', 'regimes', 'nukes'],
+            layers: ['flights', 'cables', 'conflicts', 'regimes', 'nukes'],
             title: "Taiwan Escalation",
             what: "A sudden military mobilization in the Taiwan Strait disrupts global commercial shipping and reroutes international flights.",
             why: "Strategic undersea internet cables are flagged at high risk, and regional tension escalates to DEFCON alert levels.",
@@ -291,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
             severity: "CRITICAL"
         },
         redsea: {
-            layers: ['ships', 'conflicts', 'power', 'internet', 'regimes'],
+            layers: ['conflicts', 'power', 'internet', 'regimes'],
             title: "Red Sea Crisis",
             what: "Asymmetric attacks and naval posturing in the Red Sea cause a massive rerouting of global shipping around the Cape of Good Hope.",
             why: "Critical energy transit is delayed, and regional IT infrastructure experiences anomalous outages.",
@@ -688,44 +685,30 @@ document.addEventListener("DOMContentLoaded", () => {
             terminatorInterval = setInterval(() => { const s = map.getSource('terminator-src'); if(s) s.setData(calcTerminator()); }, 300000);
         } catch(e) { console.warn('[TERMINATOR] Init failed:', e.message); }
 
-        // ── SHIPS (AIS — placeholder source, populated by WebSocket if key set) ──
-        map.addSource('ships-src', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-        map.addLayer({ id: 'ships-layer', type: 'circle', source: 'ships-src', layout: { visibility: 'none' }, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 5, 5, 8, 10, 12], 'circle-color': '#00ffcc', 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': '#ffffff', 'circle-stroke-opacity': 0.5 } });
+        // ── SHIPS layer removed — no free keyless AIS API available ──
 
-        // Click handler for ships
-        map.on('click', 'ships-layer', (e) => {
-            const p = e.features[0].properties;
-            const coords = e.features[0].geometry.coordinates;
-            new maplibregl.Popup({ offset: 6, maxWidth: '240px' })
-                .setLngLat(coords)
-                .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
-                    <h3 style="color:#00ffcc;margin:0 0 4px;font-size:.75rem;">🚢 ${escHtml(p.name || p.mmsi || (currentLang==='de'?'SCHIFF':'VESSEL'))}</h3>
-                    <div style="opacity:.5;font-size:.6rem;">${escHtml(p.type || (currentLang==='de'?'AIS-Transpondersignal':'AIS Transponder Signal'))}</div>
-                    <div style="opacity:.35;font-size:.5rem;margin-top:4px;letter-spacing:1px;">VIA AIS STREAM · LIVE</div>
-                </div>`)
-                .addTo(map);
-        });
-        map.on('mouseenter', 'ships-layer', () => { map.getCanvas().style.cursor = 'pointer'; });
-        map.on('mouseleave', 'ships-layer', () => { map.getCanvas().style.cursor = ''; });
-
-        // ── FLIGHTS (OpenSky Network — European airspace) ──────
+        // ── FLIGHTS (ADSB.lol — free, keyless real-time ADS-B data) ──────
         try {
             map.addSource('flights-src', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-            map.addLayer({ id: 'flights-layer', type: 'circle', source: 'flights-src', layout: { visibility: 'none' }, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 5, 5, 8, 10, 12], 'circle-color': '#00d4ff', 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': '#ffffff', 'circle-stroke-opacity': 0.5 } });
+            map.addLayer({ id: 'flights-layer', type: 'circle', source: 'flights-src', layout: { visibility: 'none' }, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 4, 5, 6, 10, 9], 'circle-color': '#00d4ff', 'circle-opacity': 0.85, 'circle-stroke-width': 1.2, 'circle-stroke-color': '#ffffff', 'circle-stroke-opacity': 0.4 } });
 
             // Click handler for flights
             map.on('click', 'flights-layer', (e) => {
                 const p = e.features[0].properties;
                 const coords = e.features[0].geometry.coordinates;
-                new maplibregl.Popup({ offset: 6, maxWidth: '240px' })
+                new maplibregl.Popup({ offset: 6, maxWidth: '260px' })
                     .setLngLat(coords)
                     .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
-                        <h3 style="color:#00d4ff;margin:0 0 4px;font-size:.75rem;">✈️ ${escHtml(p.callsign || (currentLang==='de'?'UNBEKANNT':'UNKNOWN'))}</h3>
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;">
-                            <div style="background:rgba(0,212,255,.05);padding:3px;text-align:center;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'HÖHE':'ALTITUDE'}</div><div style="color:#00d4ff;">${p.alt ? p.alt.toLocaleString() + ' m' : 'N/A'}</div></div>
-                            <div style="background:rgba(0,212,255,.05);padding:3px;text-align:center;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'GESCHW.':'SPEED'}</div><div style="color:#00d4ff;">${p.vel ? p.vel.toLocaleString() + ' km/h' : 'N/A'}</div></div>
+                        <h3 style="color:#00d4ff;margin:0 0 5px;font-size:.75rem;border-bottom:1px solid rgba(0,212,255,0.2);padding-bottom:4px;">✈️ ${escHtml(p.callsign || (currentLang==='de'?'UNBEKANNT':'UNKNOWN'))}</h3>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:4px;">
+                            <div style="background:rgba(0,212,255,.05);padding:3px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'TYP':'TYPE'}</div><div style="color:#00d4ff;font-size:.65rem;">${escHtml(p.type || 'N/A')}</div></div>
+                            <div style="background:rgba(0,212,255,.05);padding:3px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">REG</div><div style="font-size:.65rem;">${escHtml(p.reg || 'N/A')}</div></div>
                         </div>
-                        <div style="opacity:.35;font-size:.5rem;margin-top:4px;letter-spacing:1px;">VIA OPENSKY NETWORK · LIVE</div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;">
+                            <div style="background:rgba(0,212,255,.05);padding:3px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'HÖHE':'ALTITUDE'}</div><div style="color:#00d4ff;">${p.alt ? Number(p.alt).toLocaleString() + ' ft' : 'N/A'}</div></div>
+                            <div style="background:rgba(0,212,255,.05);padding:3px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'GESCHW.':'SPEED'}</div><div style="color:#00d4ff;">${p.gs ? Math.round(Number(p.gs) * 1.852) + ' km/h' : 'N/A'}</div></div>
+                        </div>
+                        <div style="opacity:.3;font-size:.45rem;margin-top:5px;letter-spacing:1px;">VIA ADSB.LOL · LIVE ADS-B</div>
                     </div>`)
                     .addTo(map);
             });
@@ -734,45 +717,36 @@ document.addEventListener("DOMContentLoaded", () => {
             const fetchFlights = async () => {
                 if (!toggles.flights) return;
                 try {
-                    const result = await window.reliableFetch('https://opensky-network.org/api/states/all?lamin=35&lamax=60&lomin=-10&lomax=30', 'flights', { timeout: 12000 });
-                    const states = result.data?.states || [];
-                    const features = states.slice(0, 200).filter(s => s[5] && s[6]).map(s => ({
-                        type: 'Feature', geometry: { type: 'Point', coordinates: [s[5], s[6]] },
-                        properties: { callsign: (s[1]||'').trim(), alt: Math.round(s[7]||0), vel: Math.round((s[9]||0)*3.6) }
-                    }));
+                    // ADSB.lol: free, no key required, real ADS-B data
+                    const center = map.getCenter();
+                    const result = await window.reliableFetch(
+                        `https://api.adsb.lol/v2/lat/${center.lat.toFixed(2)}/lon/${center.lng.toFixed(2)}/dist/250`,
+                        'flights', { timeout: 15000 }
+                    );
+                    const aircraft = result.data?.ac || [];
+                    const features = aircraft
+                        .filter(a => a.lat && a.lon && a.alt_baro !== 'ground')
+                        .slice(0, 300)
+                        .map(a => ({
+                            type: 'Feature',
+                            geometry: { type: 'Point', coordinates: [a.lon, a.lat] },
+                            properties: {
+                                callsign: (a.flight || '').trim(),
+                                type: a.t || '',
+                                reg: a.r || '',
+                                alt: a.alt_baro || 0,
+                                gs: a.gs || 0
+                            }
+                        }));
                     if (features.length > 0) {
                         map.getSource('flights-src')?.setData({ type: 'FeatureCollection', features });
                         updateLayerStatus('flights', 'LIVE', `${features.length} aircraft`);
                     } else {
-                        throw new Error('No data returned');
+                        updateLayerStatus('flights', 'STATIC', 'No aircraft in view');
                     }
                 } catch(err) {
-                    // Fallback: show demo aircraft when OpenSky API is rate-limited (429) or blocked
-                    const demoFlights = [
-                        { coords: [8.57, 50.03], callsign: 'DLH1A', alt: 11280, vel: 830 },
-                        { coords: [11.78, 48.35], callsign: 'DLH2B', alt: 10670, vel: 790 },
-                        { coords: [13.40, 52.52], callsign: 'DLH3C', alt: 9140, vel: 760 },
-                        { coords: [6.77, 51.22], callsign: 'DLH4D', alt: 12500, vel: 850 },
-                        { coords: [9.99, 53.55], callsign: 'DLH5E', alt: 8230, vel: 720 },
-                        { coords: [2.35, 48.86], callsign: 'AFR71', alt: 11900, vel: 810 },
-                        { coords: [-0.46, 51.47], callsign: 'BAW62', alt: 10800, vel: 800 },
-                        { coords: [4.76, 52.31], callsign: 'KLM83', alt: 11100, vel: 780 },
-                        { coords: [12.50, 41.90], callsign: 'AZA44', alt: 9800, vel: 750 },
-                        { coords: [-3.70, 40.42], callsign: 'IBE55', alt: 10200, vel: 770 },
-                        { coords: [23.73, 37.94], callsign: 'AEE16', alt: 11400, vel: 820 },
-                        { coords: [18.07, 59.33], callsign: 'SAS27', alt: 10500, vel: 795 },
-                        { coords: [16.37, 48.21], callsign: 'AUA38', alt: 9600, vel: 740 },
-                        { coords: [14.42, 50.08], callsign: 'CSA49', alt: 10100, vel: 760 },
-                        { coords: [21.01, 52.23], callsign: 'LOT10', alt: 11000, vel: 810 }
-                    ];
-                    // Add slight random offset to simulate movement
-                    const features = demoFlights.map(f => ({
-                        type: 'Feature',
-                        geometry: { type: 'Point', coordinates: [f.coords[0] + (Math.random()-0.5)*0.5, f.coords[1] + (Math.random()-0.5)*0.5] },
-                        properties: { callsign: f.callsign, alt: f.alt + Math.round((Math.random()-0.5)*200), vel: f.vel + Math.round((Math.random()-0.5)*30) }
-                    }));
-                    map.getSource('flights-src')?.setData({ type: 'FeatureCollection', features });
-                    updateLayerStatus('flights', 'DEMO', `${features.length} aircraft (simulated)`);
+                    console.warn('[FLIGHTS] ADSB.lol fetch failed:', err.message);
+                    updateLayerStatus('flights', 'OFFLINE', 'API unavailable');
                 }
             };
             window._fetchFlights = fetchFlights;
@@ -2039,14 +2013,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return d.toISOString().split('T')[0];
     };
 
-    document.getElementById('toggle-ships')?.addEventListener('change', (e) => {
-        toggles.ships = e.target.checked;
-        if (map.getLayer('ships-layer')) map.setLayoutProperty('ships-layer', 'visibility', toggles.ships ? 'visible' : 'none');
-        if (toggles.ships) {
-            const key = window.GeopulseConfig?.API_KEYS?.AISSTREAM;
-            if (!key) updateLayerStatus('ships', 'STATIC', 'Add AIS key in config.js');
-        }
-    });
+    // Ships toggle removed — no free keyless AIS API available
 
     document.getElementById('toggle-flights')?.addEventListener('change', (e) => {
         toggles.flights = e.target.checked;
@@ -2081,22 +2048,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // ── WEBCAM CAMERA CATALOG ─────────────────────────────
     // Each camera: { id, title, location, country, lat, lon, src, srcType, provider, tags }
     // srcType: 'foto-webcam' = real snapshot from foto-webcam.eu (verified working)
-    //          'youtube'     = YouTube embed (channel-based, less reliable)
-    //          'iframe'      = third-party iframe embed
+    // All cameras use foto-webcam.eu real snapshots (verified cross-origin working)
     const WEBCAM_CATALOG = [
-        // ── TIER 1: foto-webcam.eu — Verified working real snapshots ──
+        // ── Curated foto-webcam.eu cameras — verified working real snapshots ──
         { id: 'zugspitze', title: 'Zugspitze Summit', location: 'Garmisch-Partenkirchen', country: 'DEU',
           lat: 47.421, lon: 10.985, src: 'zugspitze', srcType: 'foto-webcam',
           provider: 'foto-webcam.eu', tags: ['alps', 'mountain', 'germany'] },
         { id: 'feldberg-ts', title: 'Großer Feldberg', location: 'Taunus / Wiesbaden Area', country: 'DEU',
           lat: 50.222, lon: 8.446, src: 'feldberg-ts', srcType: 'foto-webcam',
           provider: 'foto-webcam.eu', tags: ['taunus', 'hessen', 'wiesbaden'] },
-        { id: 'konkordiahuette', title: 'Konkordiahütte', location: 'Aletsch Glacier, Switzerland', country: 'CHE',
-          lat: 46.495, lon: 8.041, src: 'konkordiahuette', srcType: 'foto-webcam',
-          provider: 'foto-webcam.eu', tags: ['alps', 'glacier', 'switzerland'] },
-        { id: 'wank', title: 'Wankhaus Panorama', location: 'Garmisch → Zugspitze View', country: 'DEU',
-          lat: 47.510, lon: 11.144, src: 'wank', srcType: 'foto-webcam',
+        { id: 'nebelhorn', title: 'Nebelhorn Panorama', location: 'Oberstdorf, Allgäu Alps', country: 'DEU',
+          lat: 47.408, lon: 10.343, src: 'nebelhorn', srcType: 'foto-webcam',
           provider: 'foto-webcam.eu', tags: ['alps', 'panorama', 'germany'] },
+        { id: 'muenchen', title: 'Munich Panorama', location: 'Munich, Bavaria', country: 'DEU',
+          lat: 48.137, lon: 11.576, src: 'muenchen', srcType: 'foto-webcam',
+          provider: 'foto-webcam.eu', tags: ['city', 'bavaria', 'germany'] },
         { id: 'innsbruck', title: 'Innsbruck Seegrube', location: 'Innsbruck, Austria', country: 'AUT',
           lat: 47.306, lon: 11.388, src: 'innsbruck', srcType: 'foto-webcam',
           provider: 'foto-webcam.eu', tags: ['city', 'alps', 'austria'] },
@@ -2106,38 +2072,14 @@ document.addEventListener("DOMContentLoaded", () => {
         { id: 'salzburg', title: 'Salzburg Panorama', location: 'Hochstaufen View', country: 'AUT',
           lat: 47.760, lon: 12.873, src: 'salzburg', srcType: 'foto-webcam',
           provider: 'foto-webcam.eu', tags: ['city', 'alps', 'austria'] },
-        { id: 'husum', title: 'Husum North Sea', location: 'Dockkoog, North Sea Coast', country: 'DEU',
-          lat: 54.472, lon: 9.034, src: 'husum-dockkoog', srcType: 'foto-webcam',
-          provider: 'foto-webcam.eu', tags: ['coast', 'sea', 'germany'] },
-        { id: 'darmstadt', title: 'Darmstadt', location: 'Darmstadt West', country: 'DEU',
-          lat: 49.873, lon: 8.641, src: 'darmstadt-west', srcType: 'foto-webcam',
-          provider: 'foto-webcam.eu', tags: ['city', 'hessen', 'germany'] },
-        // ── TIER 2: YouTube channel embeds — less reliable but globally available ──
-        { id: 'matterhorn', title: 'Matterhorn / Zermatt', location: 'Zermatt, Valais', country: 'CHE',
-          lat: 46.020, lon: 7.749, src: 'UCHVzwGqlyFnMfPGJHVPJVgg', srcType: 'youtube',
-          provider: 'Zermatt Tourism', tags: ['alps', 'mountain', 'switzerland'] },
-        { id: 'kyiv', title: 'Kyiv Live', location: 'Kyiv, Ukraine', country: 'UKR',
-          lat: 50.450, lon: 30.523, src: 'UC_EmOEnNM--EhIIIrDAkMUg', srcType: 'youtube',
-          provider: 'Kyiv Live', tags: ['city', 'ukraine'] },
-        { id: 'newyork', title: 'New York City', location: 'Manhattan, New York', country: 'USA',
-          lat: 40.758, lon: -73.985, src: 'UCMrmna5UY7m3G1P2hJvEZ5w', srcType: 'youtube',
-          provider: 'NYC Live', tags: ['city', 'usa'] },
-        { id: 'tokyo', title: 'Tokyo Shibuya', location: 'Shibuya Crossing', country: 'JPN',
-          lat: 35.659, lon: 139.700, src: 'UCgdHxnHSXvcAi4PaMIY1Gfg', srcType: 'youtube',
-          provider: 'Shibuya Community News', tags: ['city', 'japan'] },
-        { id: 'paris', title: 'Paris Panorama', location: 'Paris, France', country: 'FRA',
-          lat: 48.858, lon: 2.294, src: 'UCk1flTPTx8gHrt6q6ekJJMg', srcType: 'youtube',
-          provider: 'Paris Live', tags: ['city', 'france'] },
-        { id: 'london', title: 'London Skyline', location: 'London, United Kingdom', country: 'GBR',
-          lat: 51.507, lon: -0.075, src: 'UC7s_mvL6cjZSXqoGRxMFqQA', srcType: 'youtube',
-          provider: 'London Live', tags: ['city', 'uk'] },
-        { id: 'beijing', title: 'Beijing / Peking', location: 'Beijing, China', country: 'CHN',
-          lat: 39.914, lon: 116.397, src: 'UCEKBScNgjDNnJCnGwc_pLRg', srcType: 'youtube',
-          provider: 'CGTN', tags: ['city', 'china'] },
-        { id: 'yosemite', title: 'Yosemite Valley', location: 'Yosemite National Park, CA', country: 'USA',
-          lat: 37.745, lon: -119.593, src: 'UCnE1BYIaPwwFQ0EOvRQqJtg', srcType: 'youtube',
-          provider: 'Yosemite Conservancy', tags: ['nature', 'park', 'usa'] },
+        { id: 'sonnblick', title: 'Sonnblick Observatory', location: '3106m, Hohe Tauern', country: 'AUT',
+          lat: 47.054, lon: 12.957, src: 'sonnblick', srcType: 'foto-webcam',
+          provider: 'foto-webcam.eu', tags: ['alps', 'science', 'austria'] },
+        { id: 'konkordiahuette', title: 'Konkordiahütte', location: 'Aletsch Glacier, Switzerland', country: 'CHE',
+          lat: 46.495, lon: 8.041, src: 'konkordiahuette', srcType: 'foto-webcam',
+          provider: 'foto-webcam.eu', tags: ['alps', 'glacier', 'switzerland'] },
     ];
+
 
     let webcamRefreshTimers = [];
 
@@ -2168,40 +2110,16 @@ document.addEventListener("DOMContentLoaded", () => {
                         SOURCE: ${escHtml(cam.provider)} · AUTO-REFRESH 60s · <span style="color:rgba(0,212,255,0.4);">foto-webcam.eu</span>
                     </div>
                 </div>`;
-        } else if (cam.srcType === 'youtube') {
-            // YouTube channel link — opens live stream in new tab (avoids blank embed when offline)
-            const channelUrl = `https://www.youtube.com/channel/${cam.src}/live`;
-            return `
-                <div style="font-family:'Share Tech Mono',monospace; width:320px; background:rgba(0,10,20,0.97); border:1px solid #ffb000; padding:0; border-radius:4px; overflow:hidden;">
-                    <div style="padding:6px 10px; border-bottom:1px solid rgba(255,176,0,0.2); display:flex; justify-content:space-between; align-items:center;">
-                        <span style="color:#ffb000; font-size:0.72rem; letter-spacing:1px;"><i class="fa-solid fa-video" style="margin-right:4px;"></i>${escHtml(cam.title)}</span>
-                        <span style="font-size:0.5rem; color:#ffb000; letter-spacing:1px; opacity:0.7;">▶ STREAM</span>
-                    </div>
-                    <a href="${channelUrl}" target="_blank" rel="noopener" style="display:block; text-decoration:none; position:relative; width:100%; background:#000;">
-                        <div style="width:100%; height:160px; display:flex; align-items:center; justify-content:center; flex-direction:column; background:linear-gradient(135deg, rgba(20,15,30,1) 0%, rgba(40,20,10,1) 100%);">
-                            <i class="fa-brands fa-youtube" style="color:#ff0000; font-size:2.5rem; margin-bottom:10px; filter:drop-shadow(0 0 8px rgba(255,0,0,0.4));"></i>
-                            <span style="color:#ffb000; font-size:0.72rem; letter-spacing:2px; font-family:'Share Tech Mono',monospace;">OPEN LIVE STREAM</span>
-                            <span style="color:rgba(255,255,255,0.35); font-size:0.5rem; margin-top:4px; letter-spacing:1px;">Opens YouTube in new tab</span>
-                        </div>
-                    </a>
-                    <div style="padding:5px 10px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.06);">
-                        <span style="font-size:0.5rem; color:rgba(255,255,255,0.35);">${escHtml(cam.location)}</span>
-                        <span style="font-size:0.42rem; color:rgba(255,176,0,0.4); letter-spacing:1px;">VIA ${escHtml(cam.provider)}</span>
-                    </div>
-                </div>`;
-        }
         return '<div style="padding:10px;color:#888;font-size:0.7rem;">No feed available</div>';
     };
 
     const initWebcams = () => {
-        const fotoWebcamCount = WEBCAM_CATALOG.filter(c => c.srcType === 'foto-webcam').length;
-        const ytCount = WEBCAM_CATALOG.filter(c => c.srcType === 'youtube').length;
+        const camCount = WEBCAM_CATALOG.length;
 
         WEBCAM_CATALOG.forEach(cam => {
             const el = document.createElement('div');
-            const isFotoWebcam = cam.srcType === 'foto-webcam';
-            const markerColor = isFotoWebcam ? 'rgba(0,255,136,0.85)' : 'rgba(255,176,0,0.7)';
-            const glowColor = isFotoWebcam ? 'rgba(0,255,136,0.6)' : 'rgba(255,176,0,0.5)';
+            const markerColor = 'rgba(0,255,136,0.85)';
+            const glowColor = 'rgba(0,255,136,0.6)';
             el.className = 'marker-webcam';
             el.style.cssText = `width:20px;height:20px;cursor:pointer;`;
             el.innerHTML = `<div style="width:20px;height:20px;background:${markerColor};border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;box-shadow:0 0 10px ${glowColor};transition:transform 0.2s;"><i class="fa-solid fa-video" style="font-size:8px;"></i></div>`;
@@ -2232,8 +2150,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 60000);
         webcamRefreshTimers.push(refreshInterval);
 
-        if (window.updateLayerStatus) updateLayerStatus('webcams', 'LIVE', `${fotoWebcamCount} snapshot + ${ytCount} stream feeds`);
-        setStatus(currentLang === 'de' ? `WEBCAMS ONLINE: ${fotoWebcamCount} Live-Bilder, ${ytCount} YouTube-Streams` : `WEBCAMS ONLINE: ${fotoWebcamCount} live snapshots, ${ytCount} YouTube streams`);
+        if (window.updateLayerStatus) updateLayerStatus('webcams', 'LIVE', `${camCount} live snapshot cameras`);
+        setStatus(currentLang === 'de' ? `WEBCAMS ONLINE: ${camCount} Live-Kameras (foto-webcam.eu)` : `WEBCAMS ONLINE: ${camCount} live cameras (foto-webcam.eu)`);
     };
 
     document.getElementById('toggle-webcams')?.addEventListener('change', (e) => {
@@ -2262,16 +2180,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const issPopup = new maplibregl.Popup({ offset: 20, maxWidth: '280px', closeButton: true });
 
-        el.addEventListener('click', () => {
-            // Load ISS Wikipedia image asynchronously
-            const issImgId = 'iss-popup-img-' + Date.now();
-            issPopup.setLngLat([issData.longitude, issData.latitude])
-                .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;max-width:320px;">
+        const buildISSPopupHTML = () => `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;max-width:320px;">
                     <h3 style="color:#00ffcc;margin:0 0 6px;font-size:.8rem;display:flex;align-items:center;gap:6px;">
                         <i class="fa-solid fa-satellite" style="font-size:.7rem;"></i> ${currentLang==='de'?'INTERNATIONALE RAUMSTATION':'INTERNATIONAL SPACE STATION'}
                     </h3>
                     <div style="opacity:.5;font-size:.6rem;margin-bottom:6px;">NASA / ROSCOSMOS / ESA / JAXA / CSA</div>
-                    <div id="${issImgId}" style="text-align:center;margin-bottom:8px;">
+                    <div style="text-align:center;margin-bottom:8px;">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/International_Space_Station_after_undocking_of_STS-132.jpg/320px-International_Space_Station_after_undocking_of_STS-132.jpg"
                              alt="ISS in orbit" style="max-width:100%;height:auto;max-height:140px;border-radius:4px;border:1px solid rgba(0,255,204,0.25);box-shadow:0 4px 15px rgba(0,0,0,0.6);object-fit:cover;"
                              onerror="this.style.display='none';" />
@@ -2319,13 +2233,16 @@ document.addEventListener("DOMContentLoaded", () => {
                         📚 ${currentLang==='de'?'Mehr auf Wikipedia erfahren ↗':'Learn more on Wikipedia ↗'}
                     </a>
                     <div style="opacity:.3;font-size:.45rem;margin-top:4px;letter-spacing:1px;">${currentLang==='de'?'UMKREIST DIE ERDE ALLE 90 MIN · LIVE VIA WHERETHEISS.AT':'ORBITS EARTH EVERY 90 MIN · LIVE VIA WHERETHEISS.AT'}</div>
-                </div>`)
-                .addTo(map);
+                </div>`;
+
+        // Update popup content on each open so telemetry is fresh
+        el.addEventListener('click', () => {
+            issPopup.setHTML(buildISSPopupHTML());
         });
         
         issMarker = new maplibregl.Marker({ element: el })
             .setLngLat([0,0])
-            ;
+            .setPopup(issPopup);
 
         const trackISS = async () => {
             try {
