@@ -305,9 +305,32 @@
 
     <div class="timeline">
 
-        <!-- V1.2 -->
+        <!-- V1.3 — CURRENT -->
         <div class="version-entry">
             <div class="version-dot current"></div>
+            <div class="version-header">
+                <span class="version-number">V1.3</span>
+                <span class="version-type type-major">MAJOR</span>
+                <span class="version-name">Cinematic Gateway &amp; Stability Overhaul</span>
+                <span class="version-date">MAY 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon feat">✦</span> <strong>Enter Gateway</strong> — Premium pre-splash screen with GEOPULSE branding. Click "▶ ENTER" to begin the experience</li>
+                <li><span class="change-icon feat">✦</span> <strong>Cinematic Audio Drone</strong> — Procedural Web Audio API soundtrack during splash intro (4-layer synth: sub drone, warm pad, ethereal shimmer, radar ping). Zero external files</li>
+                <li><span class="change-icon feat">✦</span> <strong>🔥 Trump World Tour</strong> — 9 interactive stops: Washington → Canada → Greenland → Panama → Cuba → Venezuela → EU → Iran → New World Order. Fact-based geopolitical analysis of 2025–2026 U.S. foreign policy shifts</li>
+                <li><span class="change-icon fix">●</span> <strong>Splash Screen Hang</strong> — Splash would never dismiss if main.js errors occurred. Isolated into gateway controller with inline failsafe</li>
+                <li><span class="change-icon fix">●</span> <strong>Map Not Rendering</strong> — Missing <code>}</code> in buildWebcamPopup() caused silent syntax error preventing all JS execution</li>
+                <li><span class="change-icon fix">●</span> <strong>German Tour Translations</strong> — Fixed timing bug: tours_de.js ran before TOURS were defined. Refactored to callable function with dual-trigger</li>
+                <li><span class="change-icon ui">◆</span> Gateway hover effects: neon-blue glow, pulsing enter button, animated title shimmer</li>
+                <li><span class="change-icon ui">◆</span> Audio fades in over 1.2s, sustains during radar animation, fades out with splash dissolve</li>
+                <li><span class="change-icon perf">⚡</span> Version unified to semantic V1.x across all files (config, index, about, manual, changelog)</li>
+                <li><span class="change-icon perf">⚡</span> Cache-busting bumped to v=1.3 across all script and stylesheet references</li>
+            </ul>
+        </div>
+
+        <!-- V1.2 -->
+        <div class="version-entry">
+            <div class="version-dot"></div>
             <div class="version-header">
                 <span class="version-number">V1.2</span>
                 <span class="version-type type-major">MAJOR</span>

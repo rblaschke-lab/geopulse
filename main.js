@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ----------------------------------------------------
     // Security: HTML escape helper to prevent XSS from external API data
     const escHtml = (s) => { const d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML; };
-    const VERSION = window.GeopulseConfig?.VERSION || '1.2';
+    const VERSION = window.GeopulseConfig?.VERSION || '1.3';
 
     // ── RELIABLE FETCH — timeout-safe wrapper for all external API calls ──
     window.reliableFetch = async (url, label, opts = {}) => {

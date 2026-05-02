@@ -1,6 +1,6 @@
 // Global GEOPULSE Configuration
 window.GeopulseConfig = {
-    VERSION: "1.2",
+    VERSION: "1.3",
     API_KEYS: {
         // No API keys required — all data sources are free and keyless
     },
