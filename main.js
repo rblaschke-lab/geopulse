@@ -2108,6 +2108,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         SOURCE: ${escHtml(cam.provider)} · AUTO-REFRESH 60s · <span style="color:rgba(0,212,255,0.4);">foto-webcam.eu</span>
                     </div>
                 </div>`;
+        }
         return '<div style="padding:10px;color:#888;font-size:0.7rem;">No feed available</div>';
     };
 
@@ -3844,4 +3845,4 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-});
+}); // end DOMContentLoaded
