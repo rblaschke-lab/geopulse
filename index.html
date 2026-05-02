@@ -46,9 +46,17 @@
 
     <script src="./fetchWrapper.js"></script>
     <script src="./config.js"></script>
-    <link rel="stylesheet" href="./style.css?v=1.2">
+    <link rel="stylesheet" href="./style.css?v=1.3">
 </head>
 <body class="theme-clean">
+    <!-- ═══ ENTER GATEWAY — enables audio via user gesture ═══ -->
+    <div id="enter-gateway">
+        <div class="gateway-title"><span class="gw-geo">GEO</span><span class="gw-pulse">PULSE</span></div>
+        <div class="gateway-sub">LIVE WORLD INTELLIGENCE</div>
+        <div class="gateway-enter">▶ ENTER</div>
+        <div class="gateway-credit">by RB Design 2026</div>
+    </div>
+
     <!-- ═══ CINEMATIC SPLASH SCREEN ═══ -->
     <div id="splash-screen">
         <div class="splash-grid"></div>
@@ -72,17 +80,124 @@
         </div>
     </div>
 
-    <!-- Failsafe: always dismiss splash after 4.5s, even if main.js fails -->
+    <!-- Gateway + Cinematic Audio Controller -->
     <script>
     (function(){
-        var s = document.getElementById('splash-screen');
-        if(s) setTimeout(function(){
-            s.style.transition = 'opacity 1.2s ease, filter 1s ease';
-            s.style.opacity = '0';
-            s.style.filter = 'blur(12px)';
-            s.style.pointerEvents = 'none';
-            setTimeout(function(){ if(s.parentNode) s.parentNode.removeChild(s); }, 1500);
-        }, 4500);
+        var gw = document.getElementById('enter-gateway');
+        var sp = document.getElementById('splash-screen');
+        if (!gw) return;
+
+        // Hide splash until gateway is dismissed
+        if (sp) sp.style.opacity = '0';
+
+        gw.addEventListener('click', function() {
+            gw.classList.add('dismissed');
+            setTimeout(function(){ if(gw.parentNode) gw.parentNode.removeChild(gw); }, 900);
+
+            // Show splash
+            if (sp) {
+                sp.style.transition = 'opacity 0.6s ease';
+                sp.style.opacity = '1';
+            }
+
+            // ── CINEMATIC AUDIO DRONE (Web Audio API — procedural) ──
+            var audioCtx;
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            } catch(e) { /* no audio support */ }
+
+            if (audioCtx) {
+                var now = audioCtx.currentTime;
+                var duration = 5.5; // matches splash duration
+
+                // Master gain (overall volume — "dezent")
+                var master = audioCtx.createGain();
+                master.gain.setValueAtTime(0, now);
+                master.gain.linearRampToValueAtTime(0.12, now + 1.2); // fade in
+                master.gain.linearRampToValueAtTime(0.14, now + 3.5); // sustain
+                master.gain.linearRampToValueAtTime(0, now + duration); // fade out
+                master.connect(audioCtx.destination);
+
+                // Layer 1: Deep sub drone (40Hz)
+                var sub = audioCtx.createOscillator();
+                sub.type = 'sine';
+                sub.frequency.setValueAtTime(40, now);
+                sub.frequency.linearRampToValueAtTime(48, now + duration);
+                var subGain = audioCtx.createGain();
+                subGain.gain.value = 0.6;
+                sub.connect(subGain);
+                subGain.connect(master);
+                sub.start(now);
+                sub.stop(now + duration);
+
+                // Layer 2: Warm pad (sawtooth through low-pass filter)
+                var pad = audioCtx.createOscillator();
+                pad.type = 'sawtooth';
+                pad.frequency.setValueAtTime(55, now); // A1
+                var padFilter = audioCtx.createBiquadFilter();
+                padFilter.type = 'lowpass';
+                padFilter.frequency.setValueAtTime(200, now);
+                padFilter.frequency.exponentialRampToValueAtTime(800, now + 2.5); // filter sweep up
+                padFilter.frequency.exponentialRampToValueAtTime(300, now + duration); // sweep back
+                padFilter.Q.value = 2;
+                var padGain = audioCtx.createGain();
+                padGain.gain.value = 0.15;
+                pad.connect(padFilter);
+                padFilter.connect(padGain);
+                padGain.connect(master);
+                pad.start(now);
+                pad.stop(now + duration);
+
+                // Layer 3: Ethereal shimmer (detuned triangle pair)
+                [110.5, 109.5].forEach(function(freq) {
+                    var osc = audioCtx.createOscillator();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now);
+                    var g = audioCtx.createGain();
+                    g.gain.setValueAtTime(0, now);
+                    g.gain.linearRampToValueAtTime(0.06, now + 2);
+                    g.gain.linearRampToValueAtTime(0, now + duration);
+                    osc.connect(g);
+                    g.connect(master);
+                    osc.start(now + 0.5);
+                    osc.stop(now + duration);
+                });
+
+                // Layer 4: Single "ping" radar blip at 1.5s
+                var ping = audioCtx.createOscillator();
+                ping.type = 'sine';
+                ping.frequency.setValueAtTime(1200, now + 1.5);
+                ping.frequency.exponentialRampToValueAtTime(600, now + 1.9);
+                var pingGain = audioCtx.createGain();
+                pingGain.gain.setValueAtTime(0, now);
+                pingGain.gain.setValueAtTime(0.08, now + 1.5);
+                pingGain.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
+                ping.connect(pingGain);
+                pingGain.connect(master);
+                ping.start(now + 1.5);
+                ping.stop(now + 2.3);
+
+                // Store context for cleanup
+                window._splashAudioCtx = audioCtx;
+            }
+
+            // ── SPLASH DISMISS TIMER ──
+            if (sp) {
+                setTimeout(function(){
+                    sp.style.transition = 'opacity 1.2s ease, filter 1s ease';
+                    sp.style.opacity = '0';
+                    sp.style.filter = 'blur(12px)';
+                    sp.style.pointerEvents = 'none';
+                    setTimeout(function(){
+                        if(sp.parentNode) sp.parentNode.removeChild(sp);
+                        // Close audio context
+                        if (window._splashAudioCtx) {
+                            try { window._splashAudioCtx.close(); } catch(e){}
+                        }
+                    }, 1500);
+                }, 4500);
+            }
+        }, { once: true });
     })();
     </script>
 

@@ -1,11 +1,12 @@
-// ── SPLASH SCREEN — isolated so it ALWAYS dismisses even if main.js has errors ──
+// ── SPLASH SCREEN — fallback dismiss if gateway is missing ──
 (function dismissSplash() {
+    // If Enter Gateway exists, it controls splash timing (with audio)
+    if (document.getElementById('enter-gateway')) return;
     const splashEl = document.getElementById('splash-screen');
     if (!splashEl) return;
     const dismiss = () => {
         splashEl.classList.add('dissolve');
         splashEl.addEventListener('transitionend', () => splashEl.remove(), { once: true });
-        // Fallback removal if transitionend doesn't fire
         setTimeout(() => { if (splashEl.parentNode) splashEl.remove(); }, 2000);
     };
     if (document.readyState === 'loading') {

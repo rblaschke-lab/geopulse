@@ -12,6 +12,70 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
+   ENTER GATEWAY — Premium entry screen (enables audio)
+   ═══════════════════════════════════════════════════════════ */
+#enter-gateway {
+    position: fixed; inset: 0; z-index: 100000;
+    background: radial-gradient(ellipse at center, #0a0e14 0%, #020304 60%, #000 100%);
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+    cursor: pointer;
+    transition: opacity 0.8s ease, filter 0.8s ease;
+}
+#enter-gateway.dismissed {
+    opacity: 0; filter: blur(16px); pointer-events: none;
+}
+.gateway-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    letter-spacing: 0.35em;
+    color: #fff;
+    text-shadow: 0 0 30px rgba(0,212,255,0.4), 0 0 60px rgba(0,212,255,0.15);
+    animation: gateway-glow 3s ease-in-out infinite alternate;
+    margin-bottom: 6px;
+}
+.gateway-title .gw-geo { color: #fff; }
+.gateway-title .gw-pulse { color: var(--neon-blue); }
+.gateway-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(0.5rem, 1.2vw, 0.72rem);
+    letter-spacing: 0.5em;
+    color: rgba(255,176,0,0.5);
+    margin-bottom: 48px;
+}
+.gateway-enter {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(0.65rem, 1.3vw, 0.85rem);
+    letter-spacing: 0.4em;
+    color: rgba(255,255,255,0.35);
+    border: 1px solid rgba(0,212,255,0.15);
+    padding: 14px 48px;
+    border-radius: 2px;
+    transition: all 0.4s ease;
+    animation: gateway-pulse 2.5s ease-in-out infinite;
+}
+.gateway-enter:hover {
+    color: #fff;
+    border-color: var(--neon-blue);
+    background: rgba(0,212,255,0.06);
+    box-shadow: 0 0 30px rgba(0,212,255,0.15);
+    text-shadow: 0 0 10px rgba(0,212,255,0.5);
+}
+.gateway-credit {
+    position: absolute; bottom: 28px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.55rem; letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.12);
+}
+@keyframes gateway-glow {
+    0% { text-shadow: 0 0 20px rgba(0,212,255,0.2), 0 0 40px rgba(0,212,255,0.08); }
+    100% { text-shadow: 0 0 40px rgba(0,212,255,0.45), 0 0 80px rgba(0,212,255,0.2); }
+}
+@keyframes gateway-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════════════
    CINEMATIC SPLASH SCREEN
    ═══════════════════════════════════════════════════════════ */
 #splash-screen {
