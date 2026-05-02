@@ -3493,6 +3493,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
     window._TOURS_REF = TOURS; // Expose for tours_de.js translations
+    // Apply German translations (tours_de.js may have loaded already or not yet)
+    if (typeof window._applyToursDE === 'function') window._applyToursDE();
     // ── Voice Picker: find the most natural-sounding voice ──
     let _voiceCache = {};
     function getBestVoice(lang) {

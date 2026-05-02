@@ -1,7 +1,8 @@
 // GEOPULSE — German Tour Translations
 // Injects title_de / text_de into existing TOURS steps after main.js loads
-(function() {
-    if (!window._TOURS_REF) return;
+window._applyToursDE = function() {
+    if (!window._TOURS_REF || window._toursDE_applied) return;
+    window._toursDE_applied = true;
     const T = window._TOURS_REF;
 
     // ── Helper: apply DE translations to a tour ──
@@ -266,4 +267,10 @@
         { t: '🌍 UNTERGANG & VERMÄCHTNIS — WARUM ROM NOCH ZÄHLT', d: 'Das Weströmische Reich fiel am 4. September 476 n. Chr., als der germanische Heerführer Odoaker den letzten Kaiser Romulus Augustulus absetzte. Ursachen: Überdehnung, militärische Überlastung, Wirtschaftskollaps und Barbarendruck. Doch Roms Vermächtnis ist überall: Latein wurde zu Französisch, Spanisch, Italienisch, Portugiesisch und Rumänisch. Römisches Recht ist die Grundlage jedes europäischen Rechtssystems. Kalender, Beton, Bögen, Aquädukte, Straßen und das Konzept der Staatsbürgerschaft — alles römisch.' }
     ]);
 
-})();
+};
+// Auto-apply after DOM is ready (in case main.js has already set _TOURS_REF)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(window._applyToursDE, 100));
+} else {
+    setTimeout(window._applyToursDE, 100);
+}
