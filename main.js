@@ -3606,11 +3606,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (map.getSource('tour-sites-src')) return;
         map.addSource('tour-sites-src', { type: 'geojson', data: allTourSitesGeoJSON });
 
-        // Outer glow ring — all tour sites (visible cyan halo)
+        // Outer glow ring — all tour sites (hidden by default, reserved for future use)
         map.addLayer({
             id: 'tour-sites-glow',
             type: 'circle',
             source: 'tour-sites-src',
+            layout: { visibility: 'none' },
             paint: {
                 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 8, 3, 12, 6, 18, 10, 24],
                 'circle-color': 'rgba(0, 212, 255, 0.0)',
@@ -3620,11 +3621,12 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Core dot — all tour sites (visible cyan dot)
+        // Core dot — all tour sites (hidden by default)
         map.addLayer({
             id: 'tour-sites-core',
             type: 'circle',
             source: 'tour-sites-src',
+            layout: { visibility: 'none' },
             paint: {
                 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 2, 3, 3, 6, 4.5, 10, 6],
                 'circle-color': 'rgba(0, 212, 255, 0.25)',
@@ -4146,9 +4148,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ['roman-empire-fill', 'roman-empire-border'].forEach(id => {
             if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
         });
-        // Clear active tour highlight and restore ambient glow
+        // Clear active tour highlight (no ambient glow — dots only appear during tours)
         updateActiveTourLayer(null);
-        setTourSitesGlowVisible(true);
 
         // Restore layers that were active before the tour started
         restoreLayersAfterTour();
@@ -4300,6 +4301,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 fbPanel.classList.add('hidden');
             }, 2000);
         });
+    }
+
+    // ── LIVE CLOCK (bottom-left quick-links) ──
+    const clockEl = document.getElementById('live-clock');
+    if (clockEl) {
+        const tickClock = () => {
+            const now = new Date();
+            const d = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+            const t = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+            clockEl.textContent = `${d} ${t}`;
+        };
+        tickClock();
+        setInterval(tickClock, 1000);
     }
 
 }); // end DOMContentLoaded

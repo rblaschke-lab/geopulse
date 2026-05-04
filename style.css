@@ -1568,6 +1568,17 @@ body.no-ticker #sidebar { top: 14px !important; }
     background: rgba(0, 212, 255, 0.08) !important;
 }
 
+#live-clock {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.22);
+    padding: 5px 10px;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+}
+
 /* -------------------------------------------------------
    FEEDBACK WIDGET
 ------------------------------------------------------- */
