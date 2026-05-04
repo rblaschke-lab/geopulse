@@ -239,6 +239,8 @@ document.addEventListener("DOMContentLoaded", () => {
         cables: false, datacenters: false, nuclear: false, conflicts: false, regimes: false, blocs: false, aiAtlas: false
     };
 
+    let _tourActive = false; // Guard: blocks all data refreshes during active tours
+
     let issMarker = null;
     let flightMarkers = [];
     let webcamMarkers = [];
@@ -738,6 +740,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             }
                         }));
                     if (features.length > 0) {
+                        if (_tourActive) return; // Block flight updates during tours
                         map.getSource('flights-src')?.setData({ type: 'FeatureCollection', features });
                         updateLayerStatus('flights', 'LIVE', `${features.length} aircraft`);
                     } else {
@@ -2250,7 +2253,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = result.data;
                 issData = { latitude: data.latitude, longitude: data.longitude, altitude: data.altitude, velocity: data.velocity };
                 issMarker.setLngLat([data.longitude, data.latitude]);
-                if (toggles.iss && !issMarker._map) issMarker.addTo(map);
+                if (toggles.iss && !issMarker._map && !_tourActive) issMarker.addTo(map);
             } catch(e) {}
         };
         trackISS();
@@ -3603,29 +3606,29 @@ document.addEventListener("DOMContentLoaded", () => {
         if (map.getSource('tour-sites-src')) return;
         map.addSource('tour-sites-src', { type: 'geojson', data: allTourSitesGeoJSON });
 
-        // Outer glow ring — all tour sites (gossamer hint, barely visible)
+        // Outer glow ring — all tour sites (visible cyan halo)
         map.addLayer({
             id: 'tour-sites-glow',
             type: 'circle',
             source: 'tour-sites-src',
             paint: {
-                'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 6, 4, 10, 8, 16],
+                'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 8, 3, 12, 6, 18, 10, 24],
                 'circle-color': 'rgba(0, 212, 255, 0.0)',
-                'circle-stroke-color': 'rgba(0, 212, 255, 0.06)',
-                'circle-stroke-width': 1,
-                'circle-blur': 0.8
+                'circle-stroke-color': 'rgba(0, 212, 255, 0.25)',
+                'circle-stroke-width': 1.5,
+                'circle-blur': 0.6
             }
         });
 
-        // Core dot — all tour sites (extremely subtle)
+        // Core dot — all tour sites (visible cyan dot)
         map.addLayer({
             id: 'tour-sites-core',
             type: 'circle',
             source: 'tour-sites-src',
             paint: {
-                'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 1.5, 4, 2.5, 8, 4],
-                'circle-color': 'rgba(0, 212, 255, 0.08)',
-                'circle-stroke-color': 'rgba(0, 212, 255, 0.04)',
+                'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 2, 3, 3, 6, 4.5, 10, 6],
+                'circle-color': 'rgba(0, 212, 255, 0.25)',
+                'circle-stroke-color': 'rgba(0, 212, 255, 0.15)',
                 'circle-stroke-width': 0.5
             }
         });
@@ -3694,6 +3697,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Directly removes every marker from every array — doesn't rely on checkbox toggles alone
     let _tourPreviousToggles = [];  // checkbox IDs that were checked before tour
     function deactivateAllLayersForTour() {
+        _tourActive = true; // Block all data refreshes
         _tourPreviousToggles = [];
 
         // 1. FORCE-REMOVE every DOM marker from all marker arrays
@@ -3711,14 +3715,19 @@ document.addEventListener("DOMContentLoaded", () => {
             try { issMarker.remove(); } catch(e) {}
         }
 
-        // 2. Hide all MapLibre native layers (lines, fills, circles, rasters)
+        // 2. Hide ALL MapLibre native layers (comprehensive — matches actual layer IDs)
         const mlLayersToHide = [
-            'cables-layer', 'flights-layer', 'earthquakes-circles', 'earthquakes-glow',
-            'starlink-points', 'starlink-glow', 'terminator-fill',
-            'fires-layer', 'fires-glow', 'borders-layer',
-            'population-layer', 'temperature-layer', 'sst-layer',
-            'nightlights-layer', 'internet-layer', 'weather-layer',
-            'satellites-layer'
+            // Data layers
+            'cables-layer', 'flights-layer',
+            'earthquakes-core', 'earthquakes-ring',
+            'starlink-layer',
+            'terminator-layer',
+            'fires-layer',
+            'country-borders', 'country-labels',
+            'population-layer', 'temp-layer', 'sst-layer',
+            'ai-atlas-lines',
+            // Tour ambient dots (replaced by tour-active-glow/core during tours)
+            'tour-sites-glow', 'tour-sites-core'
         ];
         mlLayersToHide.forEach(id => {
             if (map.getLayer(id)) {
@@ -3741,6 +3750,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Helper: restore layers that were active before the tour started
     function restoreLayersAfterTour() {
+        _tourActive = false; // Re-enable data refreshes
         _tourPreviousToggles.forEach(cbId => {
             const cb = document.getElementById(cbId);
             if (cb && !cb.checked) {
