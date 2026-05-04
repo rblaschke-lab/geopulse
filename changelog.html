@@ -305,9 +305,34 @@
 
     <div class="timeline">
 
-        <!-- V1.3 — CURRENT -->
+        <!-- V1.4 — CURRENT -->
         <div class="version-entry">
             <div class="version-dot current"></div>
+            <div class="version-header">
+                <span class="version-number">V1.4</span>
+                <span class="version-type type-major">MAJOR</span>
+                <span class="version-name">Welcome Tour &amp; Narration Engine V2</span>
+                <span class="version-date">MAY 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon feat">✦</span> <strong>Welcome Demo Tour</strong> — 3-step onboarding tour auto-starts for first-time visitors. Showcases real-time data, guided tours, and the 20+ layer command center</li>
+                <li><span class="change-icon feat">✦</span> <strong>Demo Tour Button</strong> — Returning users can replay the welcome tour anytime via cyan "Demo" link in the bottom-left quick-links bar</li>
+                <li><span class="change-icon feat">✦</span> <strong>Narration Engine V2</strong> — Documentary-quality TTS with sentence-level pacing, scored neural voice selection (Microsoft Jenny, Google US English, Samantha), and dynamic rate modulation for statistics</li>
+                <li><span class="change-icon feat">✦</span> <strong>Breathing Pauses</strong> — 350–470ms calculated pauses between sentences based on complexity, length, and punctuation</li>
+                <li><span class="change-icon feat">✦</span> <strong>Smart Voice Picker</strong> — Platform-aware heuristic scores 20+ known voices per language; selects best available neural voice automatically</li>
+                <li><span class="change-icon fix">●</span> <strong>Tour Layer Isolation (v2)</strong> — Complete rewrite: force-removes all 12 marker arrays + hides 17 MapLibre layers + DOM checkbox sweep. Guaranteed clean map during tours</li>
+                <li><span class="change-icon fix">●</span> <strong>Reserved Word Fix</strong> — Renamed <code>protected</code> variable to <code>safeText</code> in sentence splitter (JS reserved word caused syntax error)</li>
+                <li><span class="change-icon fix">●</span> <strong>Cancellation Routing</strong> — All <code>speechSynthesis.cancel()</code> calls now route through <code>stopNarration()</code> to properly clear the sentence queue</li>
+                <li><span class="change-icon ui">◆</span> Welcome tour excluded from global tour-sites ambient glow layer (no misleading dots)</li>
+                <li><span class="change-icon ui">◆</span> First-visit detection via localStorage — welcome overlay only shown once</li>
+                <li><span class="change-icon perf">⚡</span> Version bumped to V1.4 with cache-busting across all script/stylesheet references</li>
+                <li><span class="change-icon perf">⚡</span> Total tours: <strong>18</strong> (including welcome demo) across 4 categories + welcome onboarding</li>
+            </ul>
+        </div>
+
+        <!-- V1.3 -->
+        <div class="version-entry">
+            <div class="version-dot major"></div>
             <div class="version-header">
                 <span class="version-number">V1.3</span>
                 <span class="version-type type-major">MAJOR</span>
@@ -317,7 +342,7 @@
             <ul class="version-changes">
                 <li><span class="change-icon feat">✦</span> <strong>Enter Gateway</strong> — Premium pre-splash screen with GEOPULSE branding. Click "▶ ENTER" to begin the experience</li>
                 <li><span class="change-icon feat">✦</span> <strong>Cinematic Audio Drone</strong> — Procedural Web Audio API soundtrack during splash intro (4-layer synth: sub drone, warm pad, ethereal shimmer, radar ping). Zero external files</li>
-                <li><span class="change-icon feat">✦</span> <strong>🔥 Trump World Tour</strong> — 9 interactive stops: Washington → Canada → Greenland → Panama → Cuba → Venezuela → EU → Iran → New World Order. Fact-based geopolitical analysis of 2025–2026 U.S. foreign policy shifts</li>
+                <li><span class="change-icon feat">✦</span> <strong>🔥 Trump World Tour</strong> — 10 interactive stops: Washington → Canada → Greenland → Panama → Cuba → Venezuela → EU → Germany → Iran → New World Order. Fact-based geopolitical analysis of 2025–2026 U.S. foreign policy shifts</li>
                 <li><span class="change-icon fix">●</span> <strong>Splash Screen Hang</strong> — Splash would never dismiss if main.js errors occurred. Isolated into gateway controller with inline failsafe</li>
                 <li><span class="change-icon fix">●</span> <strong>Map Not Rendering</strong> — Missing <code>}</code> in buildWebcamPopup() caused silent syntax error preventing all JS execution</li>
                 <li><span class="change-icon fix">●</span> <strong>German Tour Translations</strong> — Fixed timing bug: tours_de.js ran before TOURS were defined. Refactored to callable function with dual-trigger</li>
@@ -459,7 +484,7 @@
             </div>
             <ul class="version-changes">
                 <li><span class="change-icon feat">✦</span> New Guided Tour: "Trump World Tour — Power, Deals &amp; Disruption (2025–2026)"</li>
-                <li><span class="change-icon feat">✦</span> 9 interactive stops: Washington → Canada → Greenland → Panama → Cuba → Venezuela → EU → Iran → Global Summary</li>
+                <li><span class="change-icon feat">✦</span> 10 interactive stops: Washington → Canada → Greenland → Panama → Cuba → Venezuela → EU → Germany → Iran → Global Summary</li>
                 <li><span class="change-icon feat">✦</span> Fact-based geopolitical analysis of U.S. foreign policy shifts and global consequences</li>
                 <li><span class="change-icon ui">◆</span> Each stop auto-activates relevant layers (Regimes, Alliances, Conflicts, Cables)</li>
                 <li><span class="change-icon ui">◆</span> Distinctive orange-red (#ff6633) accent for tour button</li>

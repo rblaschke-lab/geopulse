@@ -18,6 +18,7 @@ window._applyToursDE = function() {
 
     // ── Tour names (DE) ──
     const NAMES_DE = {
+        welcome: 'Willkommen bei GEOPULSE',
         ringoffire: 'Feuerring',
         nuclear: 'Nukleares Erbe',
         cables: 'Digitale Seidenstraße',
@@ -157,7 +158,7 @@ window._applyToursDE = function() {
     ]);
 
     // ═══════════════════════════════════════════
-    // TRUMP WORLD TOUR (9 steps)
+    // TRUMP WORLD TOUR (10 steps)
     // ═══════════════════════════════════════════
     applyDE('trump', [
         { t: '🏛️ WASHINGTON D.C. — AMERICA FIRST RELOADED', d: 'Im Januar 2025 begann Donald Trump seine zweite Präsidentschaft mit sofortigen Exekutivmaßnahmen. Kernpunkte: Austritt aus dem Pariser Klimaabkommen (erneut), umfassende Zollpakete auf Verbündete und Rivalen gleichermaßen. Die Doktrin signalisiert einen Wandel von der regelbasierten internationalen Ordnung hin zu bilateralen Machtverhandlungen.' },
@@ -167,6 +168,7 @@ window._applyToursDE = function() {
         { t: '🇨🇺 KUBA — WIRTSCHAFTLICHE DRUCKSTRATEGIE', d: 'Die Trump-Regierung verschärfte das Handelsembargo gegen Kuba. Neue Beschränkungen betrafen Energieimporte, Überweisungen und Reisen. Kubas Stromnetz — bereits bei 50% Kapazität — leidet unter häufigen landesweiten Blackouts. Die Strategie nutzt wirtschaftlichen Hebel, um Regimewechsel ohne direkte militärische Eingriffe zu erzwingen.' },
         { t: '⚡ VENEZUELA — HARTE MACHTPOLITIK', d: '2025 eskalierte die USA die Konfrontation mit der Maduro-Regierung durch erweiterte Sanktionen auf Ölexporte und diplomatische Isolation. Venezuela besitzt die weltgrößten nachgewiesenen Ölreserven (303 Milliarden Barrel). Die USA rahmten ihre Aktionen als Demokratieverteidigung; Kritiker nannten es ressourcengetriebenen Interventionismus — eine Wiederbehauptung der Monroe-Doktrin.' },
         { t: '🇪🇺 BRÜSSEL — TRANSATLANTISCHER BRUCH', d: 'Trump erhob Zölle auf europäischen Stahl, Aluminium und Automobilexporte. Das transatlantische Vertrauen sank auf Tiefststände seit dem Zweiten Weltkrieg. Europäische Staaten beschleunigten Verteidigungsausgaben und begannen, Handelsbeziehungen nach Asien und Afrika zu diversifizieren.' },
+        { t: '🇩🇪 DEUTSCHLAND — IM FADENKREUZ & ISOLIERT', d: 'Deutschland wurde zur direkten Zielscheibe US-amerikanischen Drucks, nachdem Bundeskanzler Friedrich Merz Trumps Außenpolitik und Zollstrategie öffentlich kritisiert hatte. Das Weiße Haus reagierte mit zwei Strafmaßnahmen: dem Abzug von mindestens 5.000 US-Soldaten von deutschen Stützpunkten (darunter Ramstein Air Base und U.S. EUCOM in Stuttgart) sowie neuen 25%-Zöllen auf deutsche Automobilexporte — BMW, Mercedes-Benz, Volkswagen und Porsche betroffen. Deutschland exportiert jährlich ca. 30 Mrd. Euro an Fahrzeugen in die USA und ist damit die am stärksten exponierte europäische Volkswirtschaft. Der Truppenabzug schwächt die östliche NATO-Logistikdrehscheibe und signalisiert eine fundamentale Neubewertung der US-Vorwärtspräsenz in Europa. Berlin steht vor einer Doppelkrise: wirtschaftlicher Schaden durch Auto-Zölle und ein Sicherheitsvakuum durch den Rückzug des wichtigsten Militärverbündeten. Das Risiko einer deutschen Isolation innerhalb von NATO und EU wächst — gefangen zwischen US-Feindseligkeit und europäischen Partnern, die entschlossenere Führung fordern.' },
         { t: '🔥 IRAN — ESKALATIONSZONE', d: 'Iran blieb der brisanteste Brennpunkt der US-Außenpolitik. Die Trump-Regierung verfolgte „Maximum Pressure 2.0": erweiterte Sanktionen, Marinepräsenz in der Straße von Hormuz (durch die 20% des globalen Öls fließen). Iran beschleunigte die Urananreicherung auf nahezu waffenfähiges Niveau (60%+). Jede Fehlkalkulation könnte eine globale Energiekrise auslösen.' },
         { t: '🌍 DIE NEUE WELTORDNUNG — URSACHE & WIRKUNG', d: 'Trumps zweite Präsidentschaft beschleunigte eine globale Neuausrichtung. Traditionelle Allianzen (NATO, G7) stehen unter Druck, während alternative Blöcke (BRICS+, SCO) an Dynamik gewinnen. Zölle ersetzten Diplomatie; bilaterale Deals ersetzten multilaterale Rahmenwerke; militärisches Posieren ersetzte Soft Power. Die Nachkriegsordnung von 1945 wird grundlegend neu verhandelt.' }
     ]);

@@ -334,6 +334,9 @@ body, html { width: 100%; height: 100%; overflow: hidden; background: #000; colo
 @media (max-width: 768px) {
     #ticker-top { transform: translateY(0); opacity: 1; }
     #ticker-bottom { transform: translateY(0); opacity: 1; bottom: var(--mobile-nav-h); border-bottom: none; }
+
+    /* Accelerate ticker on mobile — 120s is painfully slow on small viewports */
+    .ticker-content { animation-duration: 45s; }
     
     #mobile-nav { display: flex; z-index: 1000; }
     #mobile-menu-btn { display: none !important; }
@@ -450,6 +453,15 @@ body, html { width: 100%; height: 100%; overflow: hidden; background: #000; colo
     max-height: 42px;
 }
 #sidebar:hover { max-height: 90vh; overflow-y: auto; width: 320px; box-shadow: 0 0 30px var(--amber-dim); }
+
+/* iPad/touch: prevent sticky :hover — collapse when tapping outside */
+@media (hover: none) and (pointer: coarse) {
+    #sidebar { transition: max-height 0.35s ease, width 0.35s ease; }
+    #sidebar:hover { max-height: 42px; width: 300px; overflow: hidden; box-shadow: none; }
+    #sidebar.touch-open { max-height: 90vh !important; overflow-y: auto !important; width: 320px !important; box-shadow: 0 0 30px var(--amber-dim) !important; }
+    #info-panel:hover { max-height: 42px; width: 240px; overflow: hidden; box-shadow: none; }
+    #info-panel.touch-open { max-height: 85vh !important; overflow-y: auto !important; width: 340px !important; box-shadow: 0 0 30px rgba(0,212,255,0.15) !important; }
+}
 
 
 
@@ -1302,11 +1314,12 @@ body.no-ticker #sidebar { top: 14px !important; }
 .tour-briefing-panel {
     position: fixed;
     bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 20px;
     z-index: 2000;
     width: 420px;
     max-width: calc(100vw - 30px);
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
     background: rgba(5, 10, 20, 0.95);
     border: 1px solid rgba(255,176,0,0.35);
     border-radius: 6px;
@@ -1319,7 +1332,7 @@ body.no-ticker #sidebar { top: 14px !important; }
 
 .tour-briefing-panel.hidden {
     opacity: 0;
-    transform: translateX(-50%) translateY(30px);
+    transform: translateY(30px);
     pointer-events: none;
 }
 
@@ -1436,6 +1449,7 @@ body.no-ticker #sidebar { top: 14px !important; }
     overflow: hidden;
     border: 1px solid rgba(255,51,85,0.3);
     box-shadow: 0 4px 20px rgba(255,51,85,0.15);
+    background: #111;
 }
 .tour-video-wrapper iframe {
     position: absolute;
@@ -1443,6 +1457,8 @@ body.no-ticker #sidebar { top: 14px !important; }
     width: 100%;
     height: 100%;
     border: none;
+    background: #000;
+    color-scheme: normal;
 }
 
 .tour-interact-hint {
@@ -1487,7 +1503,9 @@ body.no-ticker #sidebar { top: 14px !important; }
 @media (max-width: 768px) {
     .tour-briefing-panel {
         bottom: calc(var(--mobile-nav-h) + 10px);
+        left: 10px;
         width: calc(100vw - 20px);
+        max-height: calc(100vh - var(--mobile-nav-h) - 60px);
     }
     #welcome-card {
         padding: 28px 20px 20px;
@@ -1540,6 +1558,14 @@ body.no-ticker #sidebar { top: 14px !important; }
 #quick-links a i {
     font-size: 0.55rem;
     opacity: 0.7;
+}
+
+#demo-tour-link {
+    color: rgba(0, 212, 255, 0.5) !important;
+}
+#demo-tour-link:hover {
+    color: var(--cyan) !important;
+    background: rgba(0, 212, 255, 0.08) !important;
 }
 
 /* -------------------------------------------------------

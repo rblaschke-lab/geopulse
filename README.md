@@ -2,7 +2,7 @@
 
 **Free, real-time educational world map combining satellite imagery, geopolitical data, and live intelligence feeds into one interactive dashboard. By RB Design 2026.**
 
-![Version](https://img.shields.io/badge/version-1.1-blue)
+![Version](https://img.shields.io/badge/version-1.3-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Platform](https://img.shields.io/badge/platform-GitHub%20Pages-orange)
 
@@ -14,7 +14,7 @@
 
 | Category | Layers |
 |----------|--------|
-| **🛰️ Real-Time Tracking** | AIS Shipping, ISS Tracker, Earthquakes (USGS), NASA Wildfires, Flights, Day/Night Terminator |
+| **🛰️ Real-Time Tracking** | Live Flights (ADSB.lol), ISS Tracker, Earthquakes (USGS), NASA Wildfires, Day/Night Terminator, Live Webcams |
 | **🌐 Geopolitics** | Regime Types, Alliances & Blocs, Active Conflicts, Country Borders & Labels, Undersea Cables, Nuclear Plants |
 | **🌋 Environment & Space** | Ocean Temperature, Surface Temperature, Population Density, Volcanoes, Radiation Sites, Starlink |
 
@@ -41,7 +41,7 @@
 | Satellite Imagery | Esri World Imagery |
 | Architecture | Vanilla JavaScript (no frameworks, no dependencies) |
 | Hosting | GitHub Pages (static) |
-| Data Sources | USGS, NASA FIRMS, NOAA, OpenSky, AIS, Celestrak, Smithsonian GVP |
+| Data Sources | USGS, NASA FIRMS, NOAA, ADSB.lol, Celestrak, Smithsonian GVP, foto-webcam.eu |
 
 ## Getting Started
 
@@ -61,17 +61,7 @@ npx -y http-server . -p 8080
 open http://localhost:8080
 ```
 
-### Optional: AIS Ship Tracking
-
-To enable real-time ship tracking, get a free API key from [aisstream.io](https://aisstream.io) and add it to `config.js`:
-
-```javascript
-API_KEYS: {
-    AISSTREAM: "your-key-here"
-}
-```
-
-> ⚠️ **Do not commit your API key.** The key field is empty by default.
+> **Zero API keys required.** All data sources are free and keyless.
 
 ## Deployment
 
@@ -104,4 +94,4 @@ This project is open source under the [MIT License](LICENSE).
 
 ---
 
-**GEOPULSE V1.1** — Built with 🛰️ by RB Design 2026
+**GEOPULSE V1.3** — Built with 🛰️ by RB Design 2026

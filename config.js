@@ -1,13 +1,11 @@
 // Global GEOPULSE Configuration
 window.GeopulseConfig = {
-    VERSION: "1.3",
-    API_KEYS: {
-        // No API keys required — all data sources are free and keyless
-    },
+    VERSION: "1.4",
+    // Zero API keys — all data sources are free and keyless
     METRICS: {
         FEEDS: 18,
         COUNTRIES: 102,
-        LAYERS: 18
+        LAYERS: 20
     },
     LAYER_METADATA: {
         "weather": { id: "weather", name: "Weather Radar", status: "STATIC", source: "RainViewer API", reliabilityScore: 99 },

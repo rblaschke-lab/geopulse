@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ----------------------------------------------------
     // Security: HTML escape helper to prevent XSS from external API data
     const escHtml = (s) => { const d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML; };
-    const VERSION = window.GeopulseConfig?.VERSION || '1.3';
+    const VERSION = window.GeopulseConfig?.VERSION || '1.4';
 
     // ── RELIABLE FETCH — timeout-safe wrapper for all external API calls ──
     window.reliableFetch = async (url, label, opts = {}) => {
@@ -2694,15 +2694,40 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const sidePanel = document.getElementById('sidebar');
+    const infoPanel = document.getElementById('info-panel');
     const expandHint = document.querySelector('.sidebar-expand-hint');
+    const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
     if (expandHint && sidePanel) {
         expandHint.addEventListener('click', () => {
-            if (sidePanel.style.maxHeight === '90vh') {
-                sidePanel.style.maxHeight = '42px';
+            if (isTouchDevice) {
+                sidePanel.classList.toggle('touch-open');
             } else {
-                sidePanel.style.maxHeight = '90vh';
-                sidePanel.style.overflowY = 'auto';
+                if (sidePanel.style.maxHeight === '90vh') {
+                    sidePanel.style.maxHeight = '42px';
+                } else {
+                    sidePanel.style.maxHeight = '90vh';
+                    sidePanel.style.overflowY = 'auto';
+                }
             }
+        });
+    }
+
+    // iPad/touch: toggle info-panel on header tap
+    if (isTouchDevice && infoPanel) {
+        const infoHeader = infoPanel.querySelector('header');
+        if (infoHeader) {
+            infoHeader.addEventListener('click', () => {
+                infoPanel.classList.toggle('touch-open');
+            });
+        }
+    }
+
+    // iPad/touch: close panels when tapping the map
+    if (isTouchDevice) {
+        document.getElementById('map')?.addEventListener('click', () => {
+            sidePanel?.classList.remove('touch-open');
+            infoPanel?.classList.remove('touch-open');
         });
     }
 
@@ -2710,6 +2735,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // WELCOME OVERLAY (First Visit Experience)
     // ============================================================
     const welcomeOverlay = document.getElementById('welcome-overlay');
+    const isFirstVisit = localStorage.getItem('geopulse_welcomed') !== '1';
+
     const dismissWelcome = (startTourId) => {
         if (!welcomeOverlay) return;
         const dontShow = document.getElementById('welcome-dont-show')?.checked;
@@ -2721,20 +2748,61 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (welcomeOverlay) {
-        if (localStorage.getItem('geopulse_welcomed') === '1') {
+        if (!isFirstVisit) {
             welcomeOverlay.classList.add('hidden');
         }
-        document.getElementById('welcome-explore')?.addEventListener('click', () => dismissWelcome(null));
+        // "START GUIDED TOUR" → launches the welcome mini-tour
         document.getElementById('welcome-tour')?.addEventListener('click', () => {
-            const tourId = document.getElementById('welcome-tour')?.dataset.tour || 'ringoffire';
-            dismissWelcome(tourId);
+            dismissWelcome('welcome');
+        });
+        // "EXPLORE FREELY" → first-timers still get the welcome tour (gentle nudge)
+        // Returning users just dismiss
+        document.getElementById('welcome-explore')?.addEventListener('click', () => {
+            if (isFirstVisit) {
+                dismissWelcome('welcome');
+            } else {
+                dismissWelcome(null);
+            }
         });
     }
+
+    // Expose startTour globally for the quick-links demo button
+    window._geopulseStartTour = (tourId) => { if (typeof startTour === 'function') startTour(tourId); };
 
     // ============================================================
     // GUIDED TOUR ENGINE
     // ============================================================
     const TOURS = {
+        welcome: {
+            name: 'Welcome to GEOPULSE',
+            name_de: 'Willkommen bei GEOPULSE',
+            steps: [
+                {
+                    center: [140, 35], zoom: 4,
+                    title: '🌍 REAL-TIME DATA — LIVE FROM SPACE',
+                    title_de: '🌍 ECHTZEIT-DATEN — LIVE AUS DEM ALL',
+                    text: 'Welcome to GEOPULSE! Right now, seismic sensors around the world are streaming earthquake data to this map. Toggle "Earthquakes" in the sidebar to see today\'s seismic activity — each circle is a real event detected by USGS in the last 24 hours. You can also track live flights, wildfires, and the ISS orbit.',
+                    text_de: 'Willkommen bei GEOPULSE! Gerade jetzt streamen seismische Sensoren weltweit Erdbebendaten auf diese Karte. Schalten Sie "Erdbeben" in der Seitenleiste ein, um die heutige Aktivität zu sehen — jeder Kreis ist ein reales Ereignis der letzten 24 Stunden. Sie können auch Flüge, Waldbrände und die ISS-Umlaufbahn live verfolgen.',
+                    layers: []
+                },
+                {
+                    center: [-77.04, 38.9], zoom: 4,
+                    title: '🏛️ GUIDED TOURS — LEARN BY EXPLORING',
+                    title_de: '🏛️ GEFÜHRTE TOUREN — LERNEN DURCH ENTDECKEN',
+                    text: 'GEOPULSE offers 17 guided tours on geopolitics, history, and the environment. Each tour flies you to key locations with expert briefings and Wikipedia references. Try the "Trump World Tour" to trace U.S. foreign policy across 9 countries — or explore nuclear history, the Cold War, and climate change.',
+                    text_de: 'GEOPULSE bietet 17 geführte Touren zu Geopolitik, Geschichte und Umwelt. Jede Tour fliegt Sie zu Schlüsselorten mit Expertenbriefings und Wikipedia-Referenzen. Probieren Sie die "Trump Welttour" mit 9 Ländern — oder erkunden Sie Nukleargeschichte, den Kalten Krieg und Klimawandel.',
+                    layers: []
+                },
+                {
+                    center: [20, 20], zoom: 2,
+                    title: '🗺️ YOUR COMMAND CENTER — 20+ LAYERS',
+                    title_de: '🗺️ IHRE KOMMANDOZENTRALE — 20+ EBENEN',
+                    text: 'Open the sidebar (top-right) to access 20+ data layers: political regimes, military alliances, conflict zones, submarine cables, nuclear sites, and more. Combine layers to discover patterns — like how conflict zones overlap with resource routes. This is your global intelligence dashboard. Start exploring!',
+                    text_de: 'Öffnen Sie die Seitenleiste (oben rechts) für 20+ Datenebenen: Regierungsformen, Militärbündnisse, Konfliktzonen, Seekabel, Atomstandorte und mehr. Kombinieren Sie Ebenen, um Muster zu entdecken — etwa wie Konfliktzonen sich mit Ressourcenrouten überschneiden. Dies ist Ihr globales Nachrichtenzentrum. Viel Spaß beim Erkunden!',
+                    layers: []
+                }
+            ]
+        },
         ringoffire: {
             name: 'Ring of Fire',
             steps: [
@@ -2942,6 +3010,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     layers: ['blocs', 'regimes', 'cables']
                 },
                 {
+                    center: [10.45, 51.16], zoom: 5, title: '🇩🇪 GERMANY — TARGETED & ISOLATED',
+                    text: 'Germany became a direct target of U.S. pressure after Chancellor Friedrich Merz publicly criticized Trump\'s foreign policy and tariff strategy. The White House responded with two punitive measures: a withdrawal of at least 5,000 U.S. troops from German bases (including Ramstein Air Base and U.S. EUCOM in Stuttgart) and a new 25% tariff on German automobile exports — hitting BMW, Mercedes-Benz, Volkswagen, and Porsche. Germany exports ~€30 billion in vehicles to the U.S. annually, making it the most exposed European economy. The troop drawdown weakens NATO\'s eastern logistics hub and signals a fundamental reassessment of U.S. forward presence in Europe. Berlin faces a dual crisis: economic damage from auto tariffs and a security vacuum as its most important military ally scales back. The risk of German isolation within both NATO and EU decision-making is rising — caught between U.S. hostility and European partners demanding more assertive leadership.',
+                    layers: ['blocs', 'regimes', 'conflicts']
+                },
+                {
                     center: [53.7, 32.4], zoom: 5, title: '🔥 IRAN — ESCALATION RISK ZONE',
                     text: 'Iran remained the most volatile flashpoint in U.S. foreign policy. The Trump administration pursued a "maximum pressure 2.0" strategy: expanded sanctions, naval posturing in the Strait of Hormuz (through which 20% of global oil transits), and diplomatic isolation. Iran accelerated uranium enrichment to near-weapons grade (60%+). Regional proxy tensions involving Hezbollah, the Houthis, and Iraqi militias added layers of complexity. Any miscalculation in this corridor could trigger a global energy crisis — oil prices spiked 15% on escalation fears alone.',
                     layers: ['conflicts', 'regimes']
@@ -3122,7 +3195,7 @@ document.addEventListener("DOMContentLoaded", () => {
             name: 'Formula 1 — The Global Speed Circuit',
             steps: [
                 {
-                    center: [7.420, 43.737], zoom: 15, title: '🏎️ MONACO — THE JEWEL IN THE CROWN',
+                    center: [7.420, 43.737], zoom: 14, title: '🏎️ MONACO — THE JEWEL IN THE CROWN',
                     text: 'Circuit de Monaco: the most prestigious race in F1 since 1929. Just 3.337km through the streets of Monte Carlo — the shortest, slowest, and most glamorous circuit. Capacity: ~37,000 (but millions watch from yachts). The tunnel, the swimming pool chicane, and the hairpin at the Fairmont Hotel make it virtually impossible to overtake. Ayrton Senna won here 6 times. It\'s not the fastest race — it\'s the one every driver wants to win.',
                     layers: [],
                     image: { wiki: 'Monaco_Grand_Prix', caption: 'Circuit de Monaco' }
@@ -3496,27 +3569,321 @@ document.addEventListener("DOMContentLoaded", () => {
     window._TOURS_REF = TOURS; // Expose for tours_de.js translations
     // Apply German translations (tours_de.js may have loaded already or not yet)
     if (typeof window._applyToursDE === 'function') window._applyToursDE();
-    // ── Voice Picker: find the most natural-sounding voice ──
+
+    // ── GLOBAL TOUR SITES GLOW LAYER ──────────────────────────
+    // Build a GeoJSON of all tour stop locations for a subtle ambient glow
+    const TOUR_MARKER_LAYERS = new Set(['regimes', 'blocs', 'conflicts', 'nuclear', 'radiation']);
+    const allTourSitesFeatures = [];
+    const tourSitesMap = {}; // tourId → [feature indices]
+    let featureIdx = 0;
+    Object.entries(TOURS).forEach(([tourId, tour]) => {
+        // Skip the welcome tour — its locations are generic overviews, not POIs
+        if (tourId === 'welcome') return;
+        tourSitesMap[tourId] = [];
+        tour.steps.forEach((step, stepIdx) => {
+            allTourSitesFeatures.push({
+                type: 'Feature',
+                geometry: { type: 'Point', coordinates: step.center },
+                properties: {
+                    tourId: tourId,
+                    stepIdx: stepIdx,
+                    title: step.title || '',
+                    tourName: tour.name || ''
+                }
+            });
+            tourSitesMap[tourId].push(featureIdx);
+            featureIdx++;
+        });
+    });
+
+    const allTourSitesGeoJSON = { type: 'FeatureCollection', features: allTourSitesFeatures };
+
+    // Add global tour-sites source and layers after map is ready
+    const initTourSitesLayer = () => {
+        if (map.getSource('tour-sites-src')) return;
+        map.addSource('tour-sites-src', { type: 'geojson', data: allTourSitesGeoJSON });
+
+        // Outer glow ring — all tour sites (gossamer hint, barely visible)
+        map.addLayer({
+            id: 'tour-sites-glow',
+            type: 'circle',
+            source: 'tour-sites-src',
+            paint: {
+                'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 6, 4, 10, 8, 16],
+                'circle-color': 'rgba(0, 212, 255, 0.0)',
+                'circle-stroke-color': 'rgba(0, 212, 255, 0.06)',
+                'circle-stroke-width': 1,
+                'circle-blur': 0.8
+            }
+        });
+
+        // Core dot — all tour sites (extremely subtle)
+        map.addLayer({
+            id: 'tour-sites-core',
+            type: 'circle',
+            source: 'tour-sites-src',
+            paint: {
+                'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 1.5, 4, 2.5, 8, 4],
+                'circle-color': 'rgba(0, 212, 255, 0.08)',
+                'circle-stroke-color': 'rgba(0, 212, 255, 0.04)',
+                'circle-stroke-width': 0.5
+            }
+        });
+
+        // Active tour highlight source (used when a tour is running)
+        map.addSource('tour-active-src', {
+            type: 'geojson',
+            data: { type: 'FeatureCollection', features: [] }
+        });
+
+        // Active tour glow ring (amber — only current tour's stops)
+        map.addLayer({
+            id: 'tour-active-glow',
+            type: 'circle',
+            source: 'tour-active-src',
+            paint: {
+                'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 10, 4, 16, 8, 24],
+                'circle-color': 'rgba(255, 176, 0, 0.0)',
+                'circle-stroke-color': 'rgba(255, 176, 0, 0.25)',
+                'circle-stroke-width': 1.5,
+                'circle-blur': 0.5
+            }
+        });
+
+        // Active tour core dot (amber)
+        map.addLayer({
+            id: 'tour-active-core',
+            type: 'circle',
+            source: 'tour-active-src',
+            paint: {
+                'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 3, 4, 4, 8, 6],
+                'circle-color': 'rgba(255, 176, 0, 0.45)',
+                'circle-stroke-color': 'rgba(255, 176, 0, 0.2)',
+                'circle-stroke-width': 0.5
+            }
+        });
+    };
+
+    // Initialize once map is idle (layers loaded)
+    if (map.loaded()) {
+        initTourSitesLayer();
+    } else {
+        map.on('load', initTourSitesLayer);
+    }
+
+    // Helper: show/hide the global tour sites ambient glow
+    function setTourSitesGlowVisible(visible) {
+        const vis = visible ? 'visible' : 'none';
+        if (map.getLayer('tour-sites-glow')) map.setLayoutProperty('tour-sites-glow', 'visibility', vis);
+        if (map.getLayer('tour-sites-core')) map.setLayoutProperty('tour-sites-core', 'visibility', vis);
+    }
+
+    // Helper: update active tour highlight layer
+    function updateActiveTourLayer(tourId) {
+        const src = map.getSource('tour-active-src');
+        if (!src) return;
+        if (!tourId || !tourSitesMap[tourId]) {
+            src.setData({ type: 'FeatureCollection', features: [] });
+            return;
+        }
+        const features = tourSitesMap[tourId].map(idx => allTourSitesFeatures[idx]);
+        src.setData({ type: 'FeatureCollection', features });
+    }
+
+    // Helper: deactivate ALL markers and layers for a completely clean tour view
+    // Directly removes every marker from every array — doesn't rely on checkbox toggles alone
+    let _tourPreviousToggles = [];  // checkbox IDs that were checked before tour
+    function deactivateAllLayersForTour() {
+        _tourPreviousToggles = [];
+
+        // 1. FORCE-REMOVE every DOM marker from all marker arrays
+        //    This is the nuclear option — guarantees no stray markers
+        [
+            regimeMarkers, blocMarkers, conflictMarkers, dcMarkers,
+            nuclearMarkers, nukeArsenalMarkers, volcanoMarkers, radiationMarkers,
+            webcamMarkers, flightMarkers, powerMarkers, aiAtlasMarkers
+        ].forEach(arr => {
+            arr.forEach(m => { try { m.remove(); } catch(e) {} });
+        });
+
+        // Also remove ISS marker if present
+        if (issMarker && issMarker._map) {
+            try { issMarker.remove(); } catch(e) {}
+        }
+
+        // 2. Hide all MapLibre native layers (lines, fills, circles, rasters)
+        const mlLayersToHide = [
+            'cables-layer', 'flights-layer', 'earthquakes-circles', 'earthquakes-glow',
+            'starlink-points', 'starlink-glow', 'terminator-fill',
+            'fires-layer', 'fires-glow', 'borders-layer',
+            'population-layer', 'temperature-layer', 'sst-layer',
+            'nightlights-layer', 'internet-layer', 'weather-layer',
+            'satellites-layer'
+        ];
+        mlLayersToHide.forEach(id => {
+            if (map.getLayer(id)) {
+                try { map.setLayoutProperty(id, 'visibility', 'none'); } catch(e) {}
+            }
+        });
+
+        // 3. Uncheck ALL toggle checkboxes (comprehensive DOM sweep)
+        document.querySelectorAll('.control-item input[type="checkbox"]').forEach(cb => {
+            if (cb.id === 'toggle-all' || cb.id === 'toggle-ticker') return;
+            if (cb.checked) {
+                _tourPreviousToggles.push(cb.id);
+                cb.checked = false;
+                // Update the toggles object directly
+                const key = cb.id.replace('toggle-', '');
+                if (key in toggles) toggles[key] = false;
+            }
+        });
+    }
+
+    // Helper: restore layers that were active before the tour started
+    function restoreLayersAfterTour() {
+        _tourPreviousToggles.forEach(cbId => {
+            const cb = document.getElementById(cbId);
+            if (cb && !cb.checked) {
+                cb.checked = true;
+                cb.dispatchEvent(new Event('change'));
+            }
+        });
+        _tourPreviousToggles = [];
+    }
+    // ════════════════════════════════════════════════════════════
+    // ENHANCED NARRATION ENGINE (V2 — Documentary-Quality TTS)
+    // ════════════════════════════════════════════════════════════
+    // Uses Web Speech API with:
+    //   • Scored voice ranking (platform-aware neural voice selection)
+    //   • Sentence-by-sentence delivery with breathing pauses
+    //   • Dynamic rate variation (slower for stats, normal for narrative)
+    //   • Warm documentary-style pitch
+
     let _voiceCache = {};
+    let _narrationQueue = [];
+    let _narrationActive = false;
+
+    // ── Scored Voice Ranking ──
+    // Each known voice gets a quality score; highest wins.
+    // Unknown voices get a baseline score from heuristic rules.
+    const VOICE_SCORES_EN = {
+        // Microsoft Edge Neural voices (best on Windows)
+        'microsoft jenny': 95, 'microsoft aria': 94, 'microsoft guy': 93,
+        'microsoft ryan': 92, 'microsoft sara': 91,
+        // Google Chrome voices
+        'google us english': 85, 'google uk english female': 84,
+        'google uk english male': 83,
+        // Apple macOS / iOS
+        'samantha': 80, 'alex': 78, 'karen': 77, 'daniel': 76,
+        // Fallback heuristic keywords
+        'neural': 70, 'natural': 70, 'enhanced': 65, 'premium': 65,
+        'online': 60
+    };
+    const VOICE_SCORES_DE = {
+        'microsoft katja': 95, 'microsoft conrad': 94,
+        'microsoft stefan': 93,
+        'google deutsch': 85,
+        'anna': 80, 'petra': 78, 'markus': 77,
+        'neural': 70, 'natural': 70, 'enhanced': 65, 'premium': 65,
+        'online': 60
+    };
+
+    function scoreVoice(voice, lang) {
+        const scores = (lang === 'de') ? VOICE_SCORES_DE : VOICE_SCORES_EN;
+        const nameLower = voice.name.toLowerCase();
+
+        // Check exact known voices first
+        for (const [key, score] of Object.entries(scores)) {
+            if (key.length > 10 && nameLower.includes(key)) return score;
+        }
+        // Then check keyword matches
+        for (const [key, score] of Object.entries(scores)) {
+            if (key.length <= 10 && nameLower.includes(key)) return score;
+        }
+        // Prefer non-local voices (cloud/remote tend to be higher quality)
+        if (!voice.localService) return 50;
+        return 30;
+    }
+
     function getBestVoice(lang) {
         if (_voiceCache[lang]) return _voiceCache[lang];
         const voices = window.speechSynthesis?.getVoices() || [];
-        const isDE = lang === 'de';
-        const langPrefix = isDE ? 'de' : 'en';
+        const langPrefix = (lang === 'de') ? 'de' : 'en';
         const langVoices = voices.filter(v => v.lang.startsWith(langPrefix));
-        // Prefer natural/neural voices (Google, Microsoft Neural, Apple)
-        const preferred = langVoices.find(v =>
-            /natural|neural|online|premium|enhanced/i.test(v.name)
-        ) || langVoices.find(v =>
-            /google|microsoft/i.test(v.name)
-        ) || langVoices[0] || null;
-        if (preferred) _voiceCache[lang] = preferred;
-        return preferred;
+        if (langVoices.length === 0) return null;
+
+        // Score and sort — highest score wins
+        langVoices.sort((a, b) => scoreVoice(b, lang) - scoreVoice(a, lang));
+
+        const best = langVoices[0];
+        _voiceCache[lang] = best;
+        console.log(`[NARRATION] Selected voice: "${best.name}" (${best.lang}, score: ${scoreVoice(best, lang)}, local: ${best.localService})`);
+        return best;
     }
+
     // Preload voices (Chrome loads them async)
     if (window.speechSynthesis) {
         speechSynthesis.onvoiceschanged = () => { _voiceCache = {}; };
         speechSynthesis.getVoices();
+    }
+
+    // ── Sentence Splitter ──
+    // Splits text at sentence boundaries while preserving abbreviations
+    function splitSentences(text) {
+        // Handle common abbreviations that use periods
+        const safeText = text
+            .replace(/\bDr\./g, 'Dr\u2024')
+            .replace(/\bMr\./g, 'Mr\u2024')
+            .replace(/\bMrs\./g, 'Mrs\u2024')
+            .replace(/\bvs\./g, 'vs\u2024')
+            .replace(/\bSt\./g, 'St\u2024')
+            .replace(/\betc\./g, 'etc\u2024')
+            .replace(/\bi\.e\./g, 'i\u2024e\u2024')
+            .replace(/\be\.g\./g, 'e\u2024g\u2024')
+            .replace(/\bU\.S\./g, 'U\u2024S\u2024')
+            .replace(/\bv\.\s*Chr\./g, 'v\u2024 Chr\u2024')
+            .replace(/\bn\.\s*Chr\./g, 'n\u2024 Chr\u2024')
+            .replace(/(\d)\./g, '$1\u2024');  // Protect decimal numbers
+
+        // Split on sentence-ending punctuation followed by space + uppercase
+        const raw = safeText.split(/(?<=[.!?])\s+(?=[A-ZÄÖÜ\u201e\u201c"])/);
+
+        // Restore protected periods
+        return raw.map(s => s.replace(/\u2024/g, '.').trim()).filter(s => s.length > 0);
+    }
+
+    // ── Dynamic Rate Calculator ──
+    // Sentences heavy with numbers/statistics get read slightly slower
+    function getSentenceRate(sentence) {
+        const baseRate = 0.92;
+        const numCount = (sentence.match(/\d[\d,.]+/g) || []).length;
+        const hasPercent = /%/.test(sentence);
+        const hasCurrency = /\$|€|£|billion|million|trillion/i.test(sentence);
+        const isShort = sentence.length < 60;
+
+        let rate = baseRate;
+        // Slow down for data-heavy sentences
+        if (numCount >= 3) rate -= 0.06;
+        else if (numCount >= 1) rate -= 0.03;
+        if (hasPercent || hasCurrency) rate -= 0.02;
+        // Slightly faster for short transitional sentences
+        if (isShort && numCount === 0) rate += 0.03;
+
+        return Math.max(0.78, Math.min(0.98, rate));
+    }
+
+    // ── Breathing Pause Calculator ──
+    // Longer pauses after complex sentences, shorter after simple ones
+    function getBreathingPause(sentence) {
+        const base = 350;
+        const isLong = sentence.length > 150;
+        const endsQuestion = sentence.endsWith('?');
+        const endsDramatic = /—[^—]*$/.test(sentence) || sentence.endsWith('...');
+
+        if (isLong) return base + 120;
+        if (endsDramatic) return base + 80;
+        if (endsQuestion) return base + 50;
+        return base;
     }
 
     // ── Bilingual tour text helper ──
@@ -3526,17 +3893,77 @@ document.addEventListener("DOMContentLoaded", () => {
     function getTourText(step) {
         return (currentLang === 'de' && step.text_de) ? step.text_de : step.text;
     }
+
+    // ── Main Narration Function ──
+    // Speaks text sentence-by-sentence with natural pacing
     function speakText(text) {
         if (!window.speechSynthesis) return;
+
+        // Cancel any active narration
         speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
+        _narrationQueue = [];
+        _narrationActive = false;
+
         const lang = (currentLang === 'de') ? 'de' : 'en';
-        utter.lang = (lang === 'de') ? 'de-DE' : 'en-US';
-        utter.rate = 0.95;
-        utter.pitch = 1.05;
         const voice = getBestVoice(lang);
+        const langTag = (lang === 'de') ? 'de-DE' : 'en-US';
+
+        // Split into sentences
+        const sentences = splitSentences(text);
+        if (sentences.length === 0) return;
+
+        // Queue all sentences
+        _narrationQueue = sentences.map((sentence, idx) => ({
+            text: sentence,
+            rate: getSentenceRate(sentence),
+            pause: (idx < sentences.length - 1) ? getBreathingPause(sentence) : 0,
+            isFirst: idx === 0,
+            isLast: idx === sentences.length - 1
+        }));
+
+        _narrationActive = true;
+        _speakNextSentence(voice, langTag);
+    }
+
+    // ── Sequential Sentence Speaker ──
+    function _speakNextSentence(voice, langTag) {
+        if (!_narrationActive || _narrationQueue.length === 0) {
+            _narrationActive = false;
+            return;
+        }
+
+        const item = _narrationQueue.shift();
+        const utter = new SpeechSynthesisUtterance(item.text);
+        utter.lang = langTag;
+        utter.rate = item.rate;
+        utter.pitch = 0.95;  // Slightly lower — warm, authoritative documentary tone
+        utter.volume = 1.0;
         if (voice) utter.voice = voice;
+
+        utter.onend = () => {
+            if (!_narrationActive) return;
+            if (_narrationQueue.length > 0) {
+                // Breathing pause before next sentence
+                setTimeout(() => _speakNextSentence(voice, langTag), item.pause);
+            } else {
+                _narrationActive = false;
+            }
+        };
+
+        utter.onerror = (e) => {
+            console.warn('[NARRATION] Utterance error:', e.error);
+            _narrationActive = false;
+            _narrationQueue = [];
+        };
+
         speechSynthesis.speak(utter);
+    }
+
+    // ── Stop narration (called by cancel / tour close / step change) ──
+    function stopNarration() {
+        _narrationActive = false;
+        _narrationQueue = [];
+        if (window.speechSynthesis) speechSynthesis.cancel();
     }
 
     let activeTour = null;
@@ -3555,6 +3982,13 @@ document.addEventListener("DOMContentLoaded", () => {
     function startTour(tourId) {
         const tour = TOURS[tourId];
         if (!tour) return;
+
+        // ── CLEAN SLATE: deactivate all data layers for an uncluttered tour view ──
+        deactivateAllLayersForTour();
+
+        // Hide the global tour-sites glow (only show current tour's amber stops)
+        setTourSitesGlowVisible(false);
+
         activeTour = tour;
         activeTourId = tourId;
         tourStepIndex = 0;
@@ -3569,25 +4003,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const step = activeTour.steps[tourStepIndex];
         if (!step) return;
 
-        // Enable required layers
+        // Update active tour highlight on map
+        updateActiveTourLayer(activeTourId);
+
+        // During tours: ONLY activate tour-specific @-prefixed overlays (e.g. roman-empire)
+        // All other layers are suppressed for a clean, focused tour experience
         if (step.layers) {
             step.layers.forEach(layerId => {
-                // Direct map layers prefixed with '@'
+                // Only allow direct map layers prefixed with '@' (tour-specific overlays)
                 if (layerId.startsWith('@')) {
                     const mlId = layerId.slice(1);
                     if (map.getLayer(mlId)) map.setLayoutProperty(mlId, 'visibility', 'visible');
-                    return;
                 }
-                const toggle = document.getElementById('toggle-' + layerId);
-                if (toggle && !toggle.checked) {
-                    toggle.checked = true;
-                    toggle.dispatchEvent(new Event('change'));
-                }
+                // All toggle-based layers (regimes, blocs, conflicts, earthquakes, etc.)
+                // are intentionally NOT activated — tour uses its own amber highlight dots
             });
         }
 
         // Stop any ongoing narration
-        if (window.speechSynthesis) speechSynthesis.cancel();
+        stopNarration();
 
         // Hide briefing during flight
         tourPanel.classList.add('hidden');
@@ -3655,10 +4089,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     const wrapper = document.createElement('div');
                     wrapper.className = 'tour-video-wrapper';
                     const iframe = document.createElement('iframe');
-                    iframe.src = 'https://www.youtube.com/embed/' + step.video + '?rel=0&modestbranding=1';
+                    iframe.src = 'https://www.youtube-nocookie.com/embed/' + step.video + '?rel=0&modestbranding=1&playsinline=1';
                     iframe.setAttribute('allowfullscreen', '');
                     iframe.setAttribute('loading', 'lazy');
-                    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+                    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+                    iframe.setAttribute('frameborder', '0');
+                    iframe.setAttribute('width', '280');
+                    iframe.setAttribute('height', '158');
                     iframe.title = stepTitle;
                     wrapper.appendChild(iframe);
                     vidContainer.appendChild(badge);
@@ -3694,11 +4131,18 @@ document.addEventListener("DOMContentLoaded", () => {
         activeTourId = null;
         tourStepIndex = 0;
         if (tourPanel) tourPanel.classList.add('hidden');
-        if (window.speechSynthesis) speechSynthesis.cancel();
+        stopNarration();
         // Hide tour-specific overlay layers
         ['roman-empire-fill', 'roman-empire-border'].forEach(id => {
             if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
         });
+        // Clear active tour highlight and restore ambient glow
+        updateActiveTourLayer(null);
+        setTourSitesGlowVisible(true);
+
+        // Restore layers that were active before the tour started
+        restoreLayersAfterTour();
+
         setStatus(currentLang === 'de' ? 'TOUR ABGESCHLOSSEN — FREI ERKUNDEN' : 'TOUR COMPLETE — EXPLORE FREELY');
     }
 
@@ -3728,7 +4172,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             } else {
                 // Deactivated — stop speaking
-                if (window.speechSynthesis) speechSynthesis.cancel();
+                stopNarration();
             }
         });
     }
