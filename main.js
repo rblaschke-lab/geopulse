@@ -722,7 +722,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const center = map.getCenter();
                     const result = await window.reliableFetch(
                         `https://api.adsb.lol/v2/lat/${center.lat.toFixed(2)}/lon/${center.lng.toFixed(2)}/dist/250`,
-                        'flights', { timeout: 15000 }
+                        'flights', { timeout: 15000, mode: 'cors' }
                     );
                     const aircraft = result.data?.ac || [];
                     const features = aircraft
@@ -788,11 +788,12 @@ document.addEventListener("DOMContentLoaded", () => {
             map.on('mouseleave', 'starlink-layer', () => { map.getCanvas().style.cursor = ''; });
         } catch(e) { console.warn('[STARLINK] Init failed:', e.message); }
 
-        // ── POPULATION DENSITY (NASA GIBS SEDAC) ──────────────
+        // ── POPULATION DENSITY (NASA GIBS SEDAC GPW v4) ──────────────
         try {
+            const popDateStr = getYesterdaysDateForGIBS();
             map.addSource('population-src', {
                 type: 'raster',
-                tiles: ['https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/SEDAC_POP_2000-2005-01-01T00:00:00Z/default/2000-01-01/GoogleMapsCompatible_Level7/{z}/{y}/{x}.png'],
+                tiles: ['https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/SEDAC_POP_2000-2005-01-01T00:00:00Z/default/' + popDateStr + '/GoogleMapsCompatible_Level7/{z}/{y}/{x}.png'],
                 tileSize: 256
             });
             map.addLayer({ id: 'population-layer', type: 'raster', source: 'population-src', layout: { visibility: 'none' }, paint: { 'raster-opacity': 0.55 } });
@@ -2292,6 +2293,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (map.getLayer('sst-layer')) {
             map.setLayoutProperty('sst-layer', 'visibility', toggles.sst ? 'visible' : 'none');
         }
+        // Show/hide SST legend
+        const sstLegend = document.getElementById('layer-legend');
+        if (sstLegend) sstLegend.style.display = toggles.sst ? 'block' : 'none';
+        if (toggles.sst && sstLegend) {
+            sstLegend.innerHTML = `<div class="legend-title">🌊 ${currentLang==='de'?'OZEANTEMPERATUR':'SEA SURFACE TEMP'} (°C)</div><div class="legend-bar" style="background:linear-gradient(90deg,#0000cc,#0066ff,#00ccff,#33ff99,#ffff00,#ff9900,#ff0000);"></div><div class="legend-labels"><span>-2</span><span>10</span><span>20</span><span>30+</span></div>`;
+        }
     });
 
     document.getElementById('toggle-temperature')?.addEventListener('change', (e) => {
@@ -2316,6 +2323,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (map.getLayer('temp-layer')) {
             map.setLayoutProperty('temp-layer', 'visibility', toggles.temperature ? 'visible' : 'none');
         }
+        // Show/hide temperature legend
+        const tempLegend = document.getElementById('layer-legend');
+        if (tempLegend) tempLegend.style.display = toggles.temperature ? 'block' : 'none';
+        if (toggles.temperature && tempLegend) {
+            tempLegend.innerHTML = `<div class="legend-title">🌡️ ${currentLang==='de'?'OBERFLÄCHENTEMPERATUR':'SURFACE TEMP'} (°C)</div><div class="legend-bar" style="background:linear-gradient(90deg,#1a0533,#2b1577,#0044cc,#00bbff,#44ff88,#ccff00,#ffcc00,#ff5500,#cc0022);"></div><div class="legend-labels"><span>-25</span><span>0</span><span>25</span><span>50+</span></div>`;
+        }
     });
 
     // ── POPULATION DENSITY TOGGLE ─────────────────────────
@@ -2323,6 +2336,12 @@ document.addEventListener("DOMContentLoaded", () => {
         toggles.population = e.target.checked;
         if (map.getLayer('population-layer'))
             map.setLayoutProperty('population-layer', 'visibility', toggles.population ? 'visible' : 'none');
+        // Show/hide population legend
+        const popLegend = document.getElementById('layer-legend');
+        if (popLegend) popLegend.style.display = toggles.population ? 'block' : 'none';
+        if (toggles.population && popLegend) {
+            popLegend.innerHTML = `<div class="legend-title">👥 ${currentLang==='de'?'BEVÖLKERUNGSDICHTE':'POPULATION DENSITY'} (per km²)</div><div class="legend-bar" style="background:linear-gradient(90deg,#000420,#0a1a4a,#1a3a7a,#3366bb,#5599dd,#88ccff,#ffee77,#ffaa33,#ff5500,#cc0000);"></div><div class="legend-labels"><span>0</span><span>50</span><span>500</span><span>5000+</span></div>`;
+        }
     });
 
     // ── VOLCANOES (Smithsonian GVP — curated dataset) ─────

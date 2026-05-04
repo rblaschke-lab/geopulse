@@ -1580,6 +1580,44 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 
 /* -------------------------------------------------------
+   LAYER LEGEND (temperature / SST overlays)
+------------------------------------------------------- */
+#layer-legend {
+    position: fixed;
+    bottom: 38px;
+    left: 10px;
+    z-index: 500;
+    background: rgba(5, 10, 20, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 5px;
+    padding: 8px 12px;
+    min-width: 180px;
+    pointer-events: none;
+}
+.legend-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 5px;
+}
+.legend-bar {
+    height: 6px;
+    border-radius: 3px;
+    width: 100%;
+    margin-bottom: 3px;
+}
+.legend-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.48rem;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.5px;
+}
+
+/* -------------------------------------------------------
    FEEDBACK WIDGET
 ------------------------------------------------------- */
 #feedback-widget {
