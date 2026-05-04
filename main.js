@@ -3586,6 +3586,101 @@ document.addEventListener("DOMContentLoaded", () => {
                     layers: []
                 }
             ]
+        },
+        summits14: {
+            name: '14 Summits — The 8000ers',
+            category: 'sports',
+            steps: [
+                {
+                    center: [86.925, 27.988], zoom: 12, title: '🏔️ MOUNT EVEREST — 8,849m',
+                    text: '⛰ HEIGHT: 8,849m (29,032 ft) — highest point on Earth.\n🏅 FIRST SUMMIT: May 29, 1953 — Edmund Hillary (New Zealand) & Tenzing Norgay (Nepal/India) via the South Col route.\n💀 DEATH TOLL: ~320 fatalities (as of 2024). 1 in 34 climbers have died attempting the summit.\n📊 Over 6,000 successful summits. Base camp sits at 5,364m. The "Death Zone" above 8,000m leaves climbers with only one-third of sea-level oxygen. The 1996 disaster killed 8 climbers in a single storm, inspiring Jon Krakauer\'s "Into Thin Air." Nepal charges $11,000 per permit.',
+                    layers: [],
+                    image: { wiki: 'Mount_Everest', caption: 'Mount Everest from Kalapatthar, Nepal' }
+                },
+                {
+                    center: [76.513, 35.880], zoom: 12, title: '🏔️ K2 — 8,611m',
+                    text: '⛰ HEIGHT: 8,611m (28,251 ft) — the "Savage Mountain."\n🏅 FIRST SUMMIT: July 31, 1954 — Achille Compagnoni & Lino Lacedelli (Italian expedition).\n💀 DEATH TOLL: ~92 fatalities. 1 in 4 climbers who attempt K2 die — the highest fatality rate of any 8000er.\n📊 Fewer than 400 successful summits (compared to 6,000+ on Everest). The Bottleneck couloir at 8,200m passes beneath a massive ice serac. In 2008, 11 climbers died when the serac collapsed. K2 has never been climbed in winter until 2021, when a Nepali team finally succeeded. Located on the China-Pakistan border in the Karakoram range.',
+                    layers: [],
+                    image: { wiki: 'K2', caption: 'K2 from Concordia, Pakistan' }
+                },
+                {
+                    center: [85.802, 27.703], zoom: 12, title: '🏔️ KANGCHENJUNGA — 8,586m',
+                    text: '⛰ HEIGHT: 8,586m (28,169 ft) — the world\'s third highest peak.\n🏅 FIRST SUMMIT: May 25, 1955 — Joe Brown & George Band (British expedition).\n💀 DEATH TOLL: ~53 fatalities. Fatality rate around 14%.\n📊 The mountain\'s name means "Five Treasures of the Snow" in Tibetan. By tradition, climbers stop just short of the true summit out of respect for the sacred mountain — a promise the first ascenders made to the Chogyal of Sikkim. Located on the Nepal-India border, it was considered the world\'s highest peak until 1852.',
+                    layers: [],
+                    image: { wiki: 'Kangchenjunga', caption: 'Kangchenjunga from Darjeeling, India' }
+                },
+                {
+                    center: [84.560, 28.596], zoom: 12, title: '🏔️ LHOTSE — 8,516m',
+                    text: '⛰ HEIGHT: 8,516m (27,940 ft) — the fourth highest mountain.\n🏅 FIRST SUMMIT: May 18, 1956 — Fritz Luchsinger & Ernst Reiss (Swiss expedition).\n💀 DEATH TOLL: ~13 fatalities. Relatively low fatality rate (~1.5%).\n📊 Lhotse shares the South Col approach with Everest — climbers on both peaks follow the same route until Camp III. The Lhotse Face is a 1,125m wall of glacial blue ice at a 40-50° angle. The South Face of Lhotse, at 3,300m tall, is one of the largest rock faces on Earth. Only 850+ summits have been recorded.',
+                    layers: [],
+                    image: { wiki: 'Lhotse', caption: 'Lhotse South Face from Everest Base Camp' }
+                },
+                {
+                    center: [86.660, 27.962], zoom: 12, title: '🏔️ MAKALU — 8,485m',
+                    text: '⛰ HEIGHT: 8,485m (27,838 ft) — a perfect pyramid of rock and ice.\n🏅 FIRST SUMMIT: May 15, 1955 — Jean Couzy & Lionel Terray (French expedition).\n💀 DEATH TOLL: ~34 fatalities. Fatality rate around 9%.\n📊 Makalu is considered one of the most difficult 8000ers due to its steep, technical terrain and isolated location. The entire 1955 French team of 9 climbers reached the summit — an unprecedented achievement. The mountain has four sharp ridges rising from a square base. Located 19km southeast of Everest in the Mahalangur Himalayas.',
+                    layers: [],
+                    image: { wiki: 'Makalu', caption: 'Makalu from the northeast' }
+                },
+                {
+                    center: [76.957, 35.238], zoom: 12, title: '🏔️ CHO OYU — 8,188m',
+                    text: '⛰ HEIGHT: 8,188m (26,864 ft) — the "easiest" 8000er.\n🏅 FIRST SUMMIT: October 19, 1954 — Herbert Tichy, Joseph Jöchler & Pasang Dawa Lama (Austrian expedition).\n💀 DEATH TOLL: ~49 fatalities. Fatality rate around 1.4% — the lowest of all 8000ers.\n📊 Cho Oyu means "Turquoise Goddess" in Tibetan. Its relatively straightforward northwest ridge makes it the most popular training peak for Everest aspirants. Over 3,700 summits recorded. Located on the Nepal-Tibet border, 20km west of Everest. The 1954 first ascent was achieved by a small team of just 3 climbers — no supplemental oxygen.',
+                    layers: [],
+                    image: { wiki: 'Cho_Oyu', caption: 'Cho Oyu from Gokyo Ri, Nepal' }
+                },
+                {
+                    center: [84.627, 28.697], zoom: 12, title: '🏔️ DHAULAGIRI — 8,167m',
+                    text: '⛰ HEIGHT: 8,167m (26,795 ft) — the "White Mountain."\n🏅 FIRST SUMMIT: May 13, 1960 — Kurt Diemberger, Peter Diener, Nawang Dorje & Nima Dorje (Swiss/Austrian expedition).\n💀 DEATH TOLL: ~73 fatalities. Fatality rate around 16%.\n📊 Dhaulagiri was the world\'s highest known peak from 1808 to 1838. Its name comes from Sanskrit: dhavala (white) + giri (mountain). The expedition that first climbed it used a small airplane (a Pilatus Porter) to fly supplies to base camp — the first time an aircraft was used in Himalayan mountaineering. The south face drops 4,000m in a single sweep.',
+                    layers: [],
+                    image: { wiki: 'Dhaulagiri', caption: 'Dhaulagiri from Poon Hill, Nepal' }
+                },
+                {
+                    center: [84.561, 28.549], zoom: 12, title: '🏔️ MANASLU — 8,163m',
+                    text: '⛰ HEIGHT: 8,163m (26,781 ft) — "Mountain of the Spirit."\n🏅 FIRST SUMMIT: May 9, 1956 — Toshio Imanishi & Gyalzen Norbu (Japanese expedition).\n💀 DEATH TOLL: ~68 fatalities. Fatality rate around 10%.\n📊 Manaslu was effectively the "Japanese mountain" — Japan organized four expeditions between 1952 and 1956. The first reconnaissance team tragically triggered an avalanche that destroyed a village, killing 18 locals. Reinhold Messner called it "a just peak — steep enough to be interesting, high enough to be dangerous." It has become increasingly popular as an alternative to the overcrowded Everest.',
+                    layers: [],
+                    image: { wiki: 'Manaslu', caption: 'Manaslu from Samagaun, Nepal' }
+                },
+                {
+                    center: [76.668, 35.236], zoom: 12, title: '🏔️ NANGA PARBAT — 8,126m',
+                    text: '⛰ HEIGHT: 8,126m (26,660 ft) — the "Killer Mountain."\n🏅 FIRST SUMMIT: July 3, 1953 — Hermann Buhl (Austrian), solo without oxygen or fixed ropes — one of mountaineering\'s greatest feats.\n💀 DEATH TOLL: ~77 fatalities. Fatality rate around 21% — second deadliest after K2.\n📊 The Rupal Face is the highest mountain face on Earth: 4,600m of vertical rock and ice. Between 1895 and 1953, 31 climbers died before the first ascent. The 1934 and 1937 German expeditions were complete disasters. In 2013, Taliban gunmen killed 10 climbers at base camp. Hermann Buhl\'s solo 41-hour summit push remains one of the most audacious climbs in history.',
+                    layers: [],
+                    image: { wiki: 'Nanga_Parbat', caption: 'Nanga Parbat Rupal Face, Pakistan' }
+                },
+                {
+                    center: [83.490, 28.397], zoom: 12, title: '🏔️ ANNAPURNA I — 8,091m',
+                    text: '⛰ HEIGHT: 8,091m (26,545 ft) — the first 8000er ever climbed.\n🏅 FIRST SUMMIT: June 3, 1950 — Maurice Herzog & Louis Lachenal (French expedition).\n💀 DEATH TOLL: ~72 fatalities. Fatality rate of ~27% for the south face — the most dangerous route on any 8000er.\n📊 Annapurna\'s first ascent was a landmark of human achievement but came at a terrible cost: Herzog suffered severe frostbite and lost all his fingers and toes. The south face was first climbed by Don Whillans and Dougal Haston in 1970. Only ~365 successful summits recorded. The Annapurna massif receives some of the heaviest snowfall in the Himalayas, making avalanches a constant threat.',
+                    layers: [],
+                    image: { wiki: 'Annapurna', caption: 'Annapurna I South Face from ABC' }
+                },
+                {
+                    center: [77.695, 35.724], zoom: 12, title: '🏔️ GASHERBRUM I — 8,080m',
+                    text: '⛰ HEIGHT: 8,080m (26,510 ft) — "Beautiful Mountain."\n🏅 FIRST SUMMIT: July 5, 1958 — Pete Schoening & Andy Kauffman (American expedition).\n💀 DEATH TOLL: ~29 fatalities. Fatality rate around 9%.\n📊 Also known as "Hidden Peak" because it cannot be seen from the standard approach through the Baltoro Glacier. Reinhold Messner and Peter Habeler made the first alpine-style ascent in 1975 — climbing it in just 3 days without fixed camps, porters, or supplemental oxygen. This revolutionary approach changed Himalayan climbing forever. Located in the Karakoram, Pakistan.',
+                    layers: [],
+                    image: { wiki: 'Gasherbrum_I', caption: 'Gasherbrum I (Hidden Peak), Karakoram' }
+                },
+                {
+                    center: [76.653, 35.758], zoom: 12, title: '🏔️ BROAD PEAK — 8,051m',
+                    text: '⛰ HEIGHT: 8,051m (26,414 ft) — named for its 1.5km-wide summit ridge.\n🏅 FIRST SUMMIT: June 9, 1957 — Fritz Wintersteller, Marcus Schmuck, Kurt Diemberger & Hermann Buhl (Austrian expedition).\n💀 DEATH TOLL: ~21 fatalities. Fatality rate around 5%.\n📊 Broad Peak was the first 8000er climbed without supplemental oxygen or high-altitude porters above base camp. Hermann Buhl — who had soloed Nanga Parbat 4 years earlier — made the first ascent but tragically died just 16 days later when a cornice collapsed on nearby Chogolisa. The summit ridge is so broad that climbers often mistake the fore-summit for the true peak.',
+                    layers: [],
+                    image: { wiki: 'Broad_Peak', caption: 'Broad Peak from Concordia, Pakistan' }
+                },
+                {
+                    center: [77.658, 35.762], zoom: 12, title: '🏔️ GASHERBRUM II — 8,034m',
+                    text: '⛰ HEIGHT: 8,034m (26,358 ft) — one of the most accessible 8000ers.\n🏅 FIRST SUMMIT: July 7, 1956 — Fritz Moravec, Josef Larch & Hans Willenpart (Austrian expedition).\n💀 DEATH TOLL: ~22 fatalities. Fatality rate around 2.3%.\n📊 Gasherbrum II is considered one of the safer 8000-meter peaks and is often climbed together with Gasherbrum I in a single expedition (the "GI-GII traverse"). In 2012, a team completed the first ski descent from the summit. The mountain is the third-highest peak in the Karakoram range. Its relatively moderate technical difficulty makes it a popular first 8000er for aspiring high-altitude climbers.',
+                    layers: [],
+                    image: { wiki: 'Gasherbrum_II', caption: 'Gasherbrum II from basecamp' }
+                },
+                {
+                    center: [77.581, 35.811], zoom: 12, title: '🏔️ SHISHAPANGMA — 8,027m',
+                    text: '⛰ HEIGHT: 8,027m (26,335 ft) — the lowest of the 14 eight-thousanders.\n🏅 FIRST SUMMIT: May 2, 1964 — Xǔ Jìng & 9 other Chinese climbers — the last 8000er to be climbed.\n💀 DEATH TOLL: ~25 fatalities. Fatality rate around 8%.\n📊 Shishapangma lies entirely within Tibet, making it the only 8000er completely inside Chinese territory. It was the last to be climbed partly because China restricted access. In 1999, American climber Alex Lowe and cameraman David Bridges were killed by an avalanche on its slopes — their bodies were found 17 years later. The name means "Crest above the grassy plains" in Tibetan.',
+                    layers: [],
+                    image: { wiki: 'Shishapangma', caption: 'Shishapangma from the north, Tibet' }
+                },
+                {
+                    center: [82, 32], zoom: 2, title: '🏔️ THE 14 SUMMITS — BY THE NUMBERS',
+                    text: '⛰ ALL 14 PEAKS ABOVE 8,000 METERS — spread across the Himalaya and Karakoram ranges in Nepal, Pakistan, Tibet/China, and India.\n\n🏅 FIRST TO CLIMB ALL 14: Reinhold Messner (Italy) — completed October 16, 1986, all without supplemental oxygen. The greatest mountaineering achievement in history.\n\n📊 KEY STATISTICS:\n• Combined death toll: ~950+ fatalities\n• Total successful summits across all 14: ~14,000\n• Most deadly: Annapurna (27% fatality rate on south face)\n• Most climbed: Everest (6,000+ summits)\n• Least climbed: Annapurna (~365 summits)\n• Only 45 people have climbed all 14 peaks\n• Nirmal "Nims" Purja completed all 14 in just 6 months and 6 days (2019) — shattering the previous record of 7 years\n• K2 was the last to be climbed in winter (January 2021, Nepali team)',
+                    layers: []
+                }
+            ]
         }
     };
     window._TOURS_REF = TOURS; // Expose for tours_de.js translations

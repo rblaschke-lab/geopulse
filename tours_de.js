@@ -35,7 +35,8 @@ window._applyToursDE = function() {
         ww2: 'Zweiter Weltkrieg – Der tödlichste Konflikt (1939–1945)',
         quakes: 'Erdbeben & Eruptionen – Wenn die Erde bricht',
         olympics: 'Olympische Spiele – Geschichte der Nationen & des Sports',
-        romanempire: 'Das Römische Reich – Aufstieg, Herrschaft & Untergang'
+        romanempire: 'Das Römische Reich – Aufstieg, Herrschaft & Untergang',
+        summits14: '14 Achttausender – Die höchsten Gipfel der Welt'
     };
     Object.keys(NAMES_DE).forEach(id => {
         if (T[id]) T[id].name_de = NAMES_DE[id];
