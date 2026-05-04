@@ -2697,7 +2697,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const sidePanel = document.getElementById('sidebar');
-    const infoPanel = document.getElementById('info-panel');
+    // infoPanel already declared above — reuse it
     const expandHint = document.querySelector('.sidebar-expand-hint');
     const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
