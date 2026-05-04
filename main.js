@@ -4007,6 +4007,62 @@ document.addEventListener("DOMContentLoaded", () => {
     const tourNext = document.getElementById('tour-next');
     const tourClose = document.getElementById('tour-close');
 
+    // ── DRAGGABLE TOUR PANEL (mouse + touch) ──
+    if (tourPanel) {
+        const dragHeader = tourPanel.querySelector('.tour-briefing-header');
+        let isDragging = false, dragOffX = 0, dragOffY = 0;
+
+        const onDragStart = (clientX, clientY) => {
+            isDragging = true;
+            const rect = tourPanel.getBoundingClientRect();
+            dragOffX = clientX - rect.left;
+            dragOffY = clientY - rect.top;
+            tourPanel.style.transition = 'none';
+        };
+        const onDragMove = (clientX, clientY) => {
+            if (!isDragging) return;
+            let nx = clientX - dragOffX;
+            let ny = clientY - dragOffY;
+            // Clamp within viewport
+            nx = Math.max(0, Math.min(nx, window.innerWidth - 60));
+            ny = Math.max(0, Math.min(ny, window.innerHeight - 40));
+            tourPanel.style.left = nx + 'px';
+            tourPanel.style.top = ny + 'px';
+            tourPanel.style.bottom = 'auto';
+            tourPanel.style.right = 'auto';
+        };
+        const onDragEnd = () => {
+            isDragging = false;
+            tourPanel.style.transition = '';
+        };
+
+        // Mouse events
+        if (dragHeader) {
+            dragHeader.addEventListener('mousedown', (e) => {
+                if (e.target.closest('button')) return; // Don't drag when clicking buttons
+                e.preventDefault();
+                onDragStart(e.clientX, e.clientY);
+            });
+        }
+        document.addEventListener('mousemove', (e) => onDragMove(e.clientX, e.clientY));
+        document.addEventListener('mouseup', onDragEnd);
+
+        // Touch events
+        if (dragHeader) {
+            dragHeader.addEventListener('touchstart', (e) => {
+                if (e.target.closest('button')) return;
+                const t = e.touches[0];
+                onDragStart(t.clientX, t.clientY);
+            }, { passive: true });
+        }
+        document.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const t = e.touches[0];
+            onDragMove(t.clientX, t.clientY);
+        }, { passive: true });
+        document.addEventListener('touchend', onDragEnd);
+    }
+
     function getTourName(tour) {
         return (currentLang === 'de' && tour.name_de) ? tour.name_de : tour.name;
     }
@@ -4054,7 +4110,11 @@ document.addEventListener("DOMContentLoaded", () => {
         // Stop any ongoing narration
         stopNarration();
 
-        // Hide briefing during flight
+        // Hide briefing during flight + reset drag position to default
+        tourPanel.style.left = '';
+        tourPanel.style.top = '';
+        tourPanel.style.bottom = '';
+        tourPanel.style.right = '';
         tourPanel.classList.add('hidden');
         tourPanel.classList.add('flying');
 
@@ -4063,13 +4123,17 @@ document.addEventListener("DOMContentLoaded", () => {
         if (tourNext) tourNext.disabled = true;
 
         // Fly to location — mid speed, cinematic
+        // Zoom boost: push in closer for richer satellite detail at historic sites
+        // Overview/world steps (zoom ≤ 2.5) are untouched; others get +3, capped at 14
+        const baseZoom = step.zoom;
+        const boostedZoom = baseZoom <= 2.5 ? baseZoom : Math.min(baseZoom + 3, 14);
         map.flyTo({
             center: step.center,
-            zoom: step.zoom,
+            zoom: boostedZoom,
             duration: 5500,
             essential: true,
             curve: 1.5,
-            pitch: step.zoom >= 6 ? 30 : 0,
+            pitch: boostedZoom >= 8 ? 35 : 0,
             bearing: 0
         });
 
