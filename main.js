@@ -2743,11 +2743,15 @@ document.addEventListener("DOMContentLoaded", () => {
             if (isTouchDevice) {
                 sidePanel.classList.toggle('touch-open');
             } else {
-                if (sidePanel.style.maxHeight === '90vh') {
+                sidePanel.classList.toggle('sidebar-collapsed');
+                if (sidePanel.classList.contains('sidebar-collapsed')) {
                     sidePanel.style.maxHeight = '42px';
+                    sidePanel.style.overflowY = 'hidden';
+                    expandHint.textContent = '▼ EXPAND';
                 } else {
                     sidePanel.style.maxHeight = '90vh';
                     sidePanel.style.overflowY = 'auto';
+                    expandHint.textContent = '▲ COLLAPSE';
                 }
             }
         });
