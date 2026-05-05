@@ -1304,9 +1304,9 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 
 .welcome-credit {
-    font-size: 0.5rem;
+    font-size: 0.55rem;
     letter-spacing: 1.5px;
-    color: rgba(255,255,255,0.3);
+    color: rgba(255,176,0,0.5);
     margin: 0 0 18px;
 }
 

@@ -696,7 +696,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // ── FLIGHTS (airplanes.live — free, keyless, CORS-enabled ADS-B) ──────
         try {
             map.addSource('flights-src', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-            map.addLayer({ id: 'flights-layer', type: 'circle', source: 'flights-src', layout: { visibility: 'none' }, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 4, 5, 6, 10, 9], 'circle-color': '#00d4ff', 'circle-opacity': 0.85, 'circle-stroke-width': 1.2, 'circle-stroke-color': '#ffffff', 'circle-stroke-opacity': 0.4 } });
+            map.addLayer({ id: 'flights-layer', type: 'circle', source: 'flights-src', layout: { visibility: 'none' }, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 1.5, 3, 2.5, 5, 4, 8, 6, 12, 10], 'circle-color': '#00d4ff', 'circle-opacity': 0.75, 'circle-stroke-width': 0.8, 'circle-stroke-color': '#ffffff', 'circle-stroke-opacity': 0.3 } });
 
             // Click handler for flights
             map.on('click', 'flights-layer', (e) => {
@@ -723,31 +723,47 @@ document.addEventListener("DOMContentLoaded", () => {
             const fetchFlights = async () => {
                 if (!toggles.flights) return;
                 try {
-                    // airplanes.live: free, keyless, CORS-enabled ADS-B data
-                    const center = map.getCenter();
-                    const url = `https://api.airplanes.live/v2/point/${center.lat.toFixed(2)}/${center.lng.toFixed(2)}/250`;
-                    const result = await window.reliableFetch(url, 'flights', { timeout: 15000, mode: 'cors' });
-                    const aircraft = result.data?.ac || [];
-                    const features = aircraft
-                        .filter(a => a.lat && a.lon && a.alt_baro !== 'ground')
-                        .slice(0, 400)
-                        .map(a => ({
-                            type: 'Feature',
-                            geometry: { type: 'Point', coordinates: [a.lon, a.lat] },
-                            properties: {
-                                callsign: (a.flight || '').trim(),
-                                type: a.t || '',
-                                reg: a.r || '',
-                                alt: a.alt_baro || 0,
-                                gs: a.gs || 0
+                    // airplanes.live: fetch from 6 global regions for worldwide coverage
+                    const points = [
+                        { lat: 50, lon: 10 },    // Europe
+                        { lat: 40, lon: -90 },   // North America
+                        { lat: 35, lon: 120 },   // East Asia
+                        { lat: 25, lon: 55 },    // Middle East
+                        { lat: -23, lon: -46 },  // South America
+                        { lat: -33, lon: 151 }   // Oceania
+                    ];
+                    const allFeatures = [];
+                    const seen = new Set();
+                    for (const pt of points) {
+                        try {
+                            const url = `https://api.airplanes.live/v2/point/${pt.lat}/${pt.lon}/250`;
+                            const result = await window.reliableFetch(url, 'flights', { timeout: 12000, mode: 'cors' });
+                            const aircraft = result.data?.ac || [];
+                            for (const a of aircraft) {
+                                if (!a.lat || !a.lon || a.alt_baro === 'ground') continue;
+                                const key = a.hex || `${a.lat},${a.lon}`;
+                                if (seen.has(key)) continue;
+                                seen.add(key);
+                                allFeatures.push({
+                                    type: 'Feature',
+                                    geometry: { type: 'Point', coordinates: [a.lon, a.lat] },
+                                    properties: {
+                                        callsign: (a.flight || '').trim(),
+                                        type: a.t || '',
+                                        reg: a.r || '',
+                                        alt: a.alt_baro || 0,
+                                        gs: a.gs || 0
+                                    }
+                                });
                             }
-                        }));
-                    if (features.length > 0) {
+                        } catch(e) { /* skip failed region */ }
+                    }
+                    if (allFeatures.length > 0) {
                         if (_tourActive) return;
-                        map.getSource('flights-src')?.setData({ type: 'FeatureCollection', features });
-                        updateLayerStatus('flights', 'LIVE', `${features.length} aircraft`);
+                        map.getSource('flights-src')?.setData({ type: 'FeatureCollection', features: allFeatures });
+                        updateLayerStatus('flights', 'LIVE', `${allFeatures.length} aircraft`);
                     } else {
-                        updateLayerStatus('flights', 'STATIC', 'No aircraft in view');
+                        updateLayerStatus('flights', 'STATIC', 'No aircraft data');
                     }
                 } catch(err) {
                     console.warn('[FLIGHTS] airplanes.live fetch failed:', err.message);
@@ -755,7 +771,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             };
             window._fetchFlights = fetchFlights;
-            setInterval(fetchFlights, 15000);
+            setInterval(fetchFlights, 30000);
         } catch(e) { console.warn('[FLIGHTS] Init failed:', e.message); }
 
         // ── STARLINK (Simulated LEO Constellation — 500 sats) ──
