@@ -2757,12 +2757,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // WELCOME OVERLAY (First Visit Experience)
     // ============================================================
     const welcomeOverlay = document.getElementById('welcome-overlay');
-    const isFirstVisit = localStorage.getItem('geopulse_welcomed') !== '1';
 
     const dismissWelcome = (startTourId) => {
         if (!welcomeOverlay) return;
-        const dontShow = document.getElementById('welcome-dont-show')?.checked;
-        if (dontShow) localStorage.setItem('geopulse_welcomed', '1');
         welcomeOverlay.classList.add('hidden');
         if (startTourId) {
             setTimeout(() => startTour(startTourId), 600);
@@ -2770,21 +2767,19 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (welcomeOverlay) {
-        if (!isFirstVisit) {
-            welcomeOverlay.classList.add('hidden');
-        }
+        // Always show the welcome overlay as an impressive gateway
+        welcomeOverlay.classList.remove('hidden');
         // "START GUIDED TOUR" → launches the welcome mini-tour
         document.getElementById('welcome-tour')?.addEventListener('click', () => {
             dismissWelcome('welcome');
         });
-        // "EXPLORE FREELY" → first-timers still get the welcome tour (gentle nudge)
-        // Returning users just dismiss
+        // "OPEN MANUAL" → opens manual (handled by onclick in HTML)
+        document.getElementById('welcome-manual')?.addEventListener('click', () => {
+            dismissWelcome(null);
+        });
+        // "EXPLORE FREELY" → just close and explore
         document.getElementById('welcome-explore')?.addEventListener('click', () => {
-            if (isFirstVisit) {
-                dismissWelcome('welcome');
-            } else {
-                dismissWelcome(null);
-            }
+            dismissWelcome(null);
         });
     }
 

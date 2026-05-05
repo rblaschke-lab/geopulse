@@ -567,11 +567,7 @@
 
     <div id="layer-legend" style="display:none;"></div>
 
-    <div id="map-branding">
-        <div class="branding-line tactical-footer-hud">
-            [ UPLINK_ACTIVE ] // <span style="color:var(--amber);opacity:0.9;">RB Design 2026</span> // <a href="./about.html" target="_blank">ABOUT_APP</a> // GEOPULSE_USE: <span id="session-count" class="neon-number"></span>
-        </div>
-    </div>
+
 
     <!-- WELCOME OVERLAY (First Visit) -->
     <div id="welcome-overlay">
@@ -581,14 +577,14 @@
             <h1 class="welcome-title">GEOPULSE</h1>
             <p class="welcome-subtitle">INTERACTIVE WORLD MAP · <span style="opacity:0.7;">by RB Design 2026</span></p>
             <div class="welcome-features">
+                <div class="welcome-feat"><i class="fa-solid fa-route"></i> <span data-i18n="welcome_feat_tours">22 guided tours — history, science, wonders</span></div>
                 <div class="welcome-feat"><i class="fa-solid fa-earth-americas"></i> <span data-i18n="welcome_feat_1">Real-time earthquakes &amp; volcanoes</span></div>
                 <div class="welcome-feat"><i class="fa-solid fa-plane"></i> <span data-i18n="welcome_feat_2">Live flights &amp; satellite orbits</span></div>
                 <div class="welcome-feat"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="welcome_feat_3">Geopolitics, conflicts &amp; alliances</span></div>
-                <div class="welcome-feat"><i class="fa-solid fa-atom"></i> <span data-i18n="welcome_feat_4">Nuclear sites &amp; radiation history</span></div>
             </div>
             <div class="welcome-actions">
                 <button id="welcome-tour" class="welcome-btn welcome-btn-primary" data-tour="welcome">
-                    <i class="fa-solid fa-route"></i> <span data-i18n="welcome_start_tour">START GUIDED TOUR</span>
+                    <i class="fa-solid fa-route"></i> <span data-i18n="welcome_start_tour">START DEMO TOUR</span>
                 </button>
                 <button id="welcome-manual" class="welcome-btn welcome-btn-secondary" onclick="window.open('./manual.html','_blank'); return false;">
                     <i class="fa-solid fa-book"></i> <span data-i18n="welcome_manual">OPEN MANUAL</span>
@@ -597,9 +593,6 @@
                     <i class="fa-solid fa-compass"></i> <span data-i18n="welcome_explore">EXPLORE FREELY</span>
                 </button>
             </div>
-            <label class="welcome-remember">
-                <input type="checkbox" id="welcome-dont-show" checked> <span data-i18n="welcome_dont_show">Don't show again</span>
-            </label>
             <div class="welcome-footer" data-i18n="welcome_footer">No login · No ads · 100% free &amp; open source · For students &amp; educators</div>
         </div>
     </div>
@@ -708,10 +701,11 @@
         <a href="./manual.html" target="_blank" title="Command Manual"><i class="fa-solid fa-book"></i> Manual</a>
         <a href="./changelog.html" target="_blank" title="Changelog"><i class="fa-solid fa-code-branch"></i> Changelog</a>
         <a href="#" id="demo-tour-link" title="Quick Demo Tour" onclick="event.preventDefault(); if(window._geopulseStartTour) window._geopulseStartTour('welcome');"><i class="fa-solid fa-play-circle"></i> Demo</a>
+        <a href="#" id="feedback-link" title="Send Feedback" onclick="event.preventDefault(); var p=document.getElementById('feedback-panel'); if(p) p.classList.toggle('hidden');"><i class="fa-solid fa-comment-dots"></i> Feedback</a>
         <span id="live-clock" title="UTC Time"></span>
     </div>
 
-    <script src="./main.js?v=1.4"></script>
-    <script src="./tours_de.js?v=1.4"></script>
+    <script src="./main.js?v=1.5"></script>
+    <script src="./tours_de.js?v=1.5"></script>
 </body>
 </html>

@@ -659,9 +659,7 @@ input:checked + .slider:before {
    V7.1 MAP BRANDING & POPUPS
 ------------------------------------------------------- */
 #map-branding {
-    position: fixed; bottom: 28px; left: 0; width: 100%;
-    z-index: 499; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    pointer-events: none; gap: 0;
+    display: none;
 }
 .tactical-footer-hud {
     font-size: 0.52rem; color: rgba(255,255,255,0.5);
@@ -1608,7 +1606,7 @@ body.no-ticker #sidebar { top: 14px !important; }
 ------------------------------------------------------- */
 #layer-legend {
     position: fixed;
-    bottom: 52px;
+    bottom: 32px;
     left: 10px;
     z-index: 500;
     background: rgba(5, 10, 20, 0.85);
@@ -1652,17 +1650,7 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 
 #feedback-toggle {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: rgba(255,255,255,0.4);
-    font-size: 0.8rem;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.3s;
-    box-shadow: none;
-    backdrop-filter: blur(6px);
+    display: none;
 }
 #feedback-toggle:hover {
     transform: scale(1.08);
