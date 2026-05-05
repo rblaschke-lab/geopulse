@@ -36,7 +36,10 @@ window._applyToursDE = function() {
         quakes: 'Erdbeben & Eruptionen – Wenn die Erde bricht',
         olympics: 'Olympische Spiele – Geschichte der Nationen & des Sports',
         romanempire: 'Das Römische Reich – Aufstieg, Herrschaft & Untergang',
-        summits14: '14 Achttausender – Die höchsten Gipfel der Welt'
+        summits14: '14 Achttausender – Die höchsten Gipfel der Welt',
+        spacerace: 'Wettlauf ins All – Von Apollo bis Mars',
+        extremeearth: 'Extreme Erde – Planet der Rekorde',
+        lostwonders: 'Verlorene Wunder – Monumente der Menschheit'
     };
     Object.keys(NAMES_DE).forEach(id => {
         if (T[id]) T[id].name_de = NAMES_DE[id];
