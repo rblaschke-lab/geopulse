@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
             tour_f1: 'Formula 1 World Tour', tour_worldcup: 'FIFA World Cup',
             tour_romanempire: 'Roman Empire (753 BC–476 AD)',
             // Tour hint
-            tour_hint: 'Click the markers on the map for detailed info & Wikipedia links',
+            tour_hint: 'Read more on Wikipedia',
             // Welcome overlay
             welcome_subtitle: 'INTERACTIVE WORLD MAP',
             welcome_feat_1: 'Real-time earthquakes & volcanoes',
@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
             tour_f1: 'Formel 1 Welttour', tour_worldcup: 'FIFA Weltmeisterschaft',
             tour_romanempire: 'Römisches Reich (753 v. Chr.–476 n. Chr.)',
             // Tour hint
-            tour_hint: 'Klicke auf die Marker auf der Karte für Details & Wikipedia-Links',
+            tour_hint: 'Mehr auf Wikipedia lesen',
             // Welcome overlay
             welcome_subtitle: 'INTERAKTIVE WELTKARTE',
             welcome_feat_1: 'Echtzeit-Erdbeben & Vulkane',
@@ -4360,23 +4360,42 @@ document.addEventListener("DOMContentLoaded", () => {
                 imgContainer.innerHTML = '';
                 imgContainer.classList.add('hidden');
                 if (step.image && step.image.wiki) {
+                    const wikiLang = (currentLang === 'de') ? 'de' : 'en';
+                    const wikiUrl = 'https://' + wikiLang + '.wikipedia.org/wiki/' + encodeURIComponent(step.image.wiki);
                     fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(step.image.wiki))
                         .then(r => r.json())
                         .then(data => {
                             if (data.thumbnail && data.thumbnail.source) {
+                                const link = document.createElement('a');
+                                link.href = wikiUrl;
+                                link.target = '_blank';
+                                link.rel = 'noopener';
+                                link.title = (currentLang === 'de') ? 'Wikipedia-Artikel öffnen' : 'Open Wikipedia article';
                                 const img = document.createElement('img');
                                 img.src = data.thumbnail.source;
                                 img.alt = step.image.caption || step.title;
                                 img.loading = 'lazy';
+                                img.style.cursor = 'pointer';
+                                link.appendChild(img);
                                 const cap = document.createElement('div');
                                 cap.className = 'tour-image-caption';
                                 cap.textContent = step.image.caption || '';
-                                imgContainer.appendChild(img);
+                                imgContainer.appendChild(link);
                                 imgContainer.appendChild(cap);
                                 imgContainer.classList.remove('hidden');
                             }
                         })
                         .catch(() => {}); // Silent fail — image is optional enrichment
+                    // Update wiki link in hint
+                    const wikiLink = document.getElementById('tour-wiki-link');
+                    if (wikiLink) {
+                        wikiLink.href = wikiUrl;
+                        wikiLink.style.display = '';
+                    }
+                } else {
+                    // No wiki image — hide wiki link
+                    const wikiLink = document.getElementById('tour-wiki-link');
+                    if (wikiLink) wikiLink.style.display = 'none';
                 }
             }
 
