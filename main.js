@@ -122,12 +122,12 @@ document.addEventListener("DOMContentLoaded", () => {
             // Tour hint
             tour_hint: 'Read more on Wikipedia',
             // Welcome overlay
-            welcome_subtitle: 'INTERACTIVE WORLD MAP',
-            welcome_feat_1: 'Real-time earthquakes & volcanoes',
-            welcome_feat_2: 'Live flights & satellite orbits',
-            welcome_feat_3: 'Geopolitics, conflicts & alliances',
-            welcome_feat_4: 'Nuclear sites & radiation history',
-            welcome_start_tour: 'START GUIDED TOUR', welcome_explore: 'EXPLORE FREELY',
+            welcome_subtitle: 'EXPLORE HISTORY. UNDERSTAND THE WORLD.',
+            welcome_feat_tours: '25 guided tours — fly to real locations with satellite imagery',
+            welcome_feat_1: 'World Wars, Roman Empire, Forbidden Zones & Lost Wonders',
+            welcome_feat_2: 'Live earthquakes, volcanoes, flights & satellite orbits',
+            welcome_feat_3: 'Built for students — Geography, History, Science & Politics',
+            welcome_start_tour: 'START DEMO TOUR', welcome_explore: 'EXPLORE FREELY',
             welcome_dont_show: "Don't show again",
             welcome_footer: 'No login · No ads · 100% free & open source · For students & educators',
             // Feedback widget
@@ -194,12 +194,12 @@ document.addEventListener("DOMContentLoaded", () => {
             // Tour hint
             tour_hint: 'Mehr auf Wikipedia lesen',
             // Welcome overlay
-            welcome_subtitle: 'INTERAKTIVE WELTKARTE',
-            welcome_feat_1: 'Echtzeit-Erdbeben & Vulkane',
-            welcome_feat_2: 'Live-Flüge & Satellitenbahnen',
-            welcome_feat_3: 'Geopolitik, Konflikte & Allianzen',
-            welcome_feat_4: 'Nuklearstandorte & Strahlengeschichte',
-            welcome_start_tour: 'GEFÜHRTE TOUR STARTEN', welcome_explore: 'FREI ERKUNDEN',
+            welcome_subtitle: 'GESCHICHTE ERLEBEN. DIE WELT VERSTEHEN.',
+            welcome_feat_tours: '25 geführte Touren — fliege zu echten Orten mit Satellitenbildern',
+            welcome_feat_1: 'Weltkriege, Römisches Reich, Verbotene Zonen & Weltwunder',
+            welcome_feat_2: 'Echtzeit-Erdbeben, Vulkane, Flüge & Satelliten',
+            welcome_feat_3: 'Für Schüler — Erdkunde, Geschichte, Naturwissenschaft & Politik',
+            welcome_start_tour: 'DEMO-TOUR STARTEN', welcome_explore: 'FREI ERKUNDEN',
             welcome_dont_show: 'Nicht mehr anzeigen',
             welcome_footer: 'Kein Login · Keine Werbung · 100% kostenlos & Open Source · Für Schüler & Lehrer',
             // Feedback widget
