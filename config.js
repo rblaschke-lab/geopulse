@@ -1,6 +1,6 @@
 // Global GEOPULSE Configuration
 window.GeopulseConfig = {
-    VERSION: "1.4",
+    VERSION: "1.5",
     // Zero API keys — all data sources are free and keyless
     METRICS: {
         FEEDS: 18,

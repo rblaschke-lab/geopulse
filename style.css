@@ -283,7 +283,7 @@ body, html { width: 100%; height: 100%; overflow: hidden; background: #000; colo
 }
 
 #ticker-top { top: 0; border-top: none; transform: translateY(-40px); opacity: 0; }
-#ticker-bottom { bottom: 0; border-bottom: none; }
+#ticker-bottom { bottom: 0; border-bottom: none; display: none; }
 
 .ticker-content {
     white-space: nowrap;
@@ -659,19 +659,19 @@ input:checked + .slider:before {
    V7.1 MAP BRANDING & POPUPS
 ------------------------------------------------------- */
 #map-branding {
-    position: fixed; bottom: 45px; left: 0; width: 100%;
-    z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    pointer-events: none; gap: 4px;
+    position: fixed; bottom: 28px; left: 0; width: 100%;
+    z-index: 499; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    pointer-events: none; gap: 0;
 }
 .tactical-footer-hud {
-    font-size: 0.58rem; color: rgba(255,255,255,0.7);
+    font-size: 0.52rem; color: rgba(255,255,255,0.5);
     letter-spacing: 1.5px; font-family: 'Share Tech Mono', monospace;
-    background: rgba(0,0,0,0.65); padding: 5px 16px; border-radius: 4px;
-    border-top: 1px solid rgba(255,176,0,0.6); border-bottom: 1px solid rgba(255,176,0,0.2);
-    backdrop-filter: blur(6px); pointer-events: auto; text-shadow: 0 0 4px rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.55); padding: 3px 16px; border-radius: 0;
+    border-top: 1px solid rgba(255,176,0,0.3); border-bottom: none;
+    backdrop-filter: blur(6px); pointer-events: auto; text-shadow: none;
 }
-.tactical-footer-hud a { color: #fff; text-decoration: none; margin: 0 2px; transition: 0.2s; }
-.tactical-footer-hud a:hover { opacity: 1; text-shadow: 0 0 5px var(--amber); }
+.tactical-footer-hud a { color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 2px; transition: 0.2s; }
+.tactical-footer-hud a:hover { color: var(--amber); text-shadow: 0 0 5px var(--amber); }
 .neon-number { color: var(--neon-blue); text-shadow: 0 0 5px rgba(0, 212, 255, 0.5); }
 
 /* Popup Dark Mode Correction */
@@ -687,6 +687,12 @@ input:checked + .slider:before {
 }
 .maplibregl-popup-tip { border-top-color: var(--panel-bg) !important; }
 .maplibregl-popup-close-button { color: #888 !important; outline: none !important; }
+
+/* MapLibre attribution — collapsed by default */
+.maplibregl-ctrl-attrib { font-size: 0 !important; background: transparent !important; }
+.maplibregl-ctrl-attrib.maplibregl-compact { min-height: 20px; }
+.maplibregl-ctrl-attrib-button { opacity: 0.3; }
+.maplibregl-ctrl-attrib-button:hover { opacity: 0.7; }
 
 /* Remove legacy elements */
 /* Hide elements when ticker is disabled */
@@ -1529,31 +1535,36 @@ body.no-ticker #sidebar { top: 14px !important; }
 ------------------------------------------------------- */
 #quick-links {
     position: fixed;
-    bottom: 32px;
-    left: 10px;
-    z-index: 500;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 501;
     display: flex;
-    gap: 2px;
-    background: rgba(5, 10, 20, 0.8);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 5px;
+    justify-content: center;
+    gap: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0;
     overflow: hidden;
     pointer-events: auto;
+    height: 28px;
 }
 
 #quick-links a {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.5px;
-    color: rgba(255,255,255,0.4);
+    font-size: 0.55rem;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.45);
     text-decoration: none;
-    padding: 5px 10px;
+    text-transform: uppercase;
+    padding: 0 12px;
     display: flex;
     align-items: center;
+    height: 28px;
     gap: 5px;
     transition: all 0.2s;
-    border-right: 1px solid rgba(255,255,255,0.04);
+    border-right: 1px solid rgba(255,255,255,0.06);
 }
 
 #quick-links a:last-child {
@@ -1580,10 +1591,13 @@ body.no-ticker #sidebar { top: 14px !important; }
 
 #live-clock {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.52rem;
+    font-size: 0.55rem;
     letter-spacing: 1px;
     color: rgba(255,255,255,0.7);
-    padding: 5px 10px;
+    padding: 0 12px;
+    height: 28px;
+    display: flex;
+    align-items: center;
     white-space: nowrap;
     pointer-events: none;
     user-select: none;
@@ -1594,7 +1608,7 @@ body.no-ticker #sidebar { top: 14px !important; }
 ------------------------------------------------------- */
 #layer-legend {
     position: fixed;
-    bottom: 58px;
+    bottom: 52px;
     left: 10px;
     z-index: 500;
     background: rgba(5, 10, 20, 0.85);
@@ -1632,28 +1646,29 @@ body.no-ticker #sidebar { top: 14px !important; }
 ------------------------------------------------------- */
 #feedback-widget {
     position: fixed;
-    bottom: 10px;
+    bottom: 30px;
     right: 10px;
     z-index: 2500;
 }
 
 #feedback-toggle {
-    width: 44px; height: 44px;
+    width: 32px; height: 32px;
     border-radius: 50%;
-    background: linear-gradient(135deg, rgba(255,176,0,0.2), rgba(255,100,0,0.15));
-    border: 1px solid rgba(255,176,0,0.4);
-    color: var(--amber);
-    font-size: 1.1rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.4);
+    font-size: 0.8rem;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: all 0.3s;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    backdrop-filter: blur(8px);
+    box-shadow: none;
+    backdrop-filter: blur(6px);
 }
 #feedback-toggle:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(255,176,0,0.3);
-    border-color: var(--amber);
+    transform: scale(1.08);
+    background: rgba(255,176,0,0.12);
+    border-color: rgba(255,176,0,0.4);
+    color: var(--amber);
 }
 
 #feedback-panel {
