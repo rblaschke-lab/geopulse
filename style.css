@@ -1296,11 +1296,18 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 
 .welcome-subtitle {
-    font-size: 0.7rem;
-    letter-spacing: 2px;
+    font-size: 0.72rem;
+    letter-spacing: 2.5px;
     color: var(--neon-blue);
-    opacity: 0.8;
-    margin: 0 0 20px;
+    opacity: 1;
+    margin: 0 0 2px;
+}
+
+.welcome-credit {
+    font-size: 0.5rem;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.3);
+    margin: 0 0 18px;
 }
 
 .welcome-features {
@@ -1310,12 +1317,12 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 
 .welcome-feat {
-    font-size: 0.72rem;
-    color: rgba(255,255,255,0.7);
+    font-size: 0.74rem;
+    color: rgba(255,255,255,0.88);
     display: flex; align-items: center; gap: 10px;
-    padding: 6px 10px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.06);
+    padding: 7px 12px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: 4px;
 }
 
@@ -1372,8 +1379,8 @@ body.no-ticker #sidebar { top: 14px !important; }
 .welcome-remember input { accent-color: var(--amber); }
 
 .welcome-footer {
-    font-size: 0.55rem;
-    color: rgba(255,255,255,0.25);
+    font-size: 0.58rem;
+    color: rgba(255,255,255,0.4);
     letter-spacing: 1px;
 }
 
