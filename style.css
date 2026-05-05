@@ -1310,6 +1310,29 @@ body.no-ticker #sidebar { top: 14px !important; }
     margin: 0 0 18px;
 }
 
+.welcome-lang-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 2;
+}
+.welcome-lang-btn:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: var(--amber);
+}
+.welcome-lang-flag {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.7);
+}
+
 .welcome-features {
     display: flex; flex-direction: column; gap: 6px;
     margin-bottom: 24px;

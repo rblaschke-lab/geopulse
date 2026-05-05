@@ -599,6 +599,9 @@
     <div id="welcome-overlay">
         <div id="welcome-card">
             <div class="welcome-glow"></div>
+            <button id="welcome-lang-toggle" class="welcome-lang-btn" onclick="var l=document.documentElement.lang==='de'?'en':'de'; if(window.setLanguage){setLanguage(l)}else{var e=new CustomEvent('setLang',{detail:l});document.dispatchEvent(e)}" title="Switch language">
+                <span class="welcome-lang-flag" id="welcome-lang-label">DE</span>
+            </button>
             <div class="welcome-icon">🌍</div>
             <h1 class="welcome-title">GEOPULSE</h1>
             <p class="welcome-subtitle"><span data-i18n="welcome_subtitle">EXPLORE HISTORY. UNDERSTAND THE WORLD.</span></p>

@@ -216,13 +216,18 @@ document.addEventListener("DOMContentLoaded", () => {
         currentLang = lang;
         localStorage.setItem('geopulseLang', lang);
         document.getElementById('app-root')?.setAttribute('lang', lang);
+        document.documentElement.lang = lang;
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
         const dict = i18n[lang] || i18n.en;
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.dataset.i18n;
             if (dict[key]) el.textContent = dict[key];
         });
+        // Update welcome lang toggle label (show opposite language)
+        const lbl = document.getElementById('welcome-lang-label');
+        if (lbl) lbl.textContent = (lang === 'de') ? 'EN' : 'DE';
     };
+    window.setLanguage = setLanguage;
 
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
