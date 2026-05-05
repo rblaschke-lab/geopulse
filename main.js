@@ -3982,44 +3982,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ── Scored Voice Ranking ──
     // Each known voice gets a quality score; highest wins.
-    // Unknown voices get a baseline score from heuristic rules.
+    // Neural/Online/Natural voices are dramatically better than legacy ones.
     const VOICE_SCORES_EN = {
-        // Microsoft Edge Neural voices (best on Windows)
-        'microsoft jenny': 95, 'microsoft aria': 94, 'microsoft guy': 93,
-        'microsoft ryan': 92, 'microsoft sara': 91,
-        // Google Chrome voices
-        'google us english': 85, 'google uk english female': 84,
-        'google uk english male': 83,
-        // Apple macOS / iOS
-        'samantha': 80, 'alex': 78, 'karen': 77, 'daniel': 76,
-        // Fallback heuristic keywords
-        'neural': 70, 'natural': 70, 'enhanced': 65, 'premium': 65,
-        'online': 60
+        // Microsoft Windows 11 Neural voices (best quality on Windows)
+        'microsoft jenny online': 98, 'microsoft aria online': 97,
+        'microsoft guy online': 96, 'microsoft ryan online': 95,
+        'microsoft sara online': 94, 'microsoft michelle online': 93,
+        'microsoft eric online': 92, 'microsoft christopher online': 91,
+        // Without "online" suffix (still neural on Win11)
+        'microsoft jenny': 88, 'microsoft aria': 87, 'microsoft guy': 86,
+        'microsoft ryan': 85, 'microsoft sara': 84, 'microsoft michelle': 83,
+        // Google Chrome voices (cloud-streamed, decent quality)
+        'google us english': 75, 'google uk english female': 74,
+        'google uk english male': 73,
+        // Apple macOS (Sequoia has improved voices)
+        'samantha': 72, 'alex': 70, 'karen': 69, 'daniel': 68,
+        'ava': 71, 'tom': 67, 'fiona': 66,
+        // Android
+        'google espeak': 20
     };
     const VOICE_SCORES_DE = {
-        'microsoft katja': 95, 'microsoft conrad': 94,
-        'microsoft stefan': 93,
-        'google deutsch': 85,
-        'anna': 80, 'petra': 78, 'markus': 77,
-        'neural': 70, 'natural': 70, 'enhanced': 65, 'premium': 65,
-        'online': 60
+        'microsoft katja online': 98, 'microsoft conrad online': 97,
+        'microsoft stefan online': 96,
+        'microsoft katja': 88, 'microsoft conrad': 87, 'microsoft stefan': 86,
+        'google deutsch': 75,
+        'anna': 72, 'petra': 70, 'markus': 69, 'yannick': 68,
+        'google espeak': 20
     };
 
     function scoreVoice(voice, lang) {
         const scores = (lang === 'de') ? VOICE_SCORES_DE : VOICE_SCORES_EN;
         const nameLower = voice.name.toLowerCase();
 
-        // Check exact known voices first
-        for (const [key, score] of Object.entries(scores)) {
-            if (key.length > 10 && nameLower.includes(key)) return score;
+        // Check exact known voices (longest keys first for specificity)
+        const sortedEntries = Object.entries(scores).sort((a, b) => b[0].length - a[0].length);
+        for (const [key, score] of sortedEntries) {
+            if (nameLower.includes(key)) return score;
         }
-        // Then check keyword matches
-        for (const [key, score] of Object.entries(scores)) {
-            if (key.length <= 10 && nameLower.includes(key)) return score;
-        }
-        // Prefer non-local voices (cloud/remote tend to be higher quality)
+
+        // Heuristic: detect neural/natural quality indicators in voice name
+        const hasNeural = /online|natural|neural|enhanced|premium/i.test(nameLower);
+        if (hasNeural) return 70;
+
+        // Prefer non-local voices (cloud-streamed tend to be higher quality)
         if (!voice.localService) return 50;
-        return 30;
+
+        // Legacy local voices (David, Zira, etc.) — lowest priority
+        return 20;
     }
 
     function getBestVoice(lang) {
@@ -4034,14 +4043,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const best = langVoices[0];
         _voiceCache[lang] = best;
-        console.log(`[NARRATION] Selected voice: "${best.name}" (${best.lang}, score: ${scoreVoice(best, lang)}, local: ${best.localService})`);
+        console.log(`[NARRATION] Best voice: "${best.name}" (${best.lang}, score: ${scoreVoice(best, lang)}, local: ${best.localService})`);
+        // Log top 3 candidates for debugging
+        langVoices.slice(0, 3).forEach((v, i) => {
+            console.log(`  #${i+1}: "${v.name}" score=${scoreVoice(v, lang)} local=${v.localService}`);
+        });
         return best;
     }
 
-    // Preload voices (Chrome loads them async)
+    // Preload voices (Chrome loads them async — need multiple probes)
     if (window.speechSynthesis) {
         speechSynthesis.onvoiceschanged = () => { _voiceCache = {}; };
         speechSynthesis.getVoices();
+        // Chrome sometimes doesn't fire onvoiceschanged — force re-probe after 2s
+        setTimeout(() => { _voiceCache = {}; speechSynthesis.getVoices(); }, 2000);
     }
 
     // ── Sentence Splitter ──
@@ -4070,36 +4085,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ── Dynamic Rate Calculator ──
-    // Sentences heavy with numbers/statistics get read slightly slower
+    // Neural voices sound best at 0.85-0.88 range; slow down for data
     function getSentenceRate(sentence) {
-        const baseRate = 0.92;
+        const baseRate = 0.87;
         const numCount = (sentence.match(/\d[\d,.]+/g) || []).length;
         const hasPercent = /%/.test(sentence);
-        const hasCurrency = /\$|€|£|billion|million|trillion/i.test(sentence);
+        const hasCurrency = /\$|€|£|billion|million|trillion|milliarden|millionen/i.test(sentence);
         const isShort = sentence.length < 60;
 
         let rate = baseRate;
-        // Slow down for data-heavy sentences
-        if (numCount >= 3) rate -= 0.06;
+        // Slow down for data-heavy sentences (numbers need time)
+        if (numCount >= 3) rate -= 0.05;
         else if (numCount >= 1) rate -= 0.03;
         if (hasPercent || hasCurrency) rate -= 0.02;
         // Slightly faster for short transitional sentences
-        if (isShort && numCount === 0) rate += 0.03;
+        if (isShort && numCount === 0) rate += 0.02;
 
-        return Math.max(0.78, Math.min(0.98, rate));
+        return Math.max(0.78, Math.min(0.92, rate));
     }
 
     // ── Breathing Pause Calculator ──
-    // Longer pauses after complex sentences, shorter after simple ones
+    // Longer pauses = more natural, documentary-like rhythm
     function getBreathingPause(sentence) {
-        const base = 350;
+        const base = 450;
         const isLong = sentence.length > 150;
         const endsQuestion = sentence.endsWith('?');
         const endsDramatic = /—[^—]*$/.test(sentence) || sentence.endsWith('...');
 
-        if (isLong) return base + 120;
-        if (endsDramatic) return base + 80;
-        if (endsQuestion) return base + 50;
+        if (isLong) return base + 150;
+        if (endsDramatic) return base + 100;
+        if (endsQuestion) return base + 60;
         return base;
     }
 
@@ -4125,8 +4140,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const voice = getBestVoice(lang);
         const langTag = (lang === 'de') ? 'de-DE' : 'en-US';
 
+        // Clean text for speech — remove emoji and special chars that break TTS
+        const cleanText = text
+            .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
+            .replace(/[📍🏢📊🔒📏☢️🌱🚫💀📜🔧💰🏴‍☠️💣⚡🌋🏛️⚓🚢🏝️🐍]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+
         // Split into sentences
-        const sentences = splitSentences(text);
+        const sentences = splitSentences(cleanText);
         if (sentences.length === 0) return;
 
         // Queue all sentences
@@ -4153,7 +4175,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const utter = new SpeechSynthesisUtterance(item.text);
         utter.lang = langTag;
         utter.rate = item.rate;
-        utter.pitch = 0.95;  // Slightly lower — warm, authoritative documentary tone
+        utter.pitch = 1.0;   // Natural pitch — avoid hollow sound from low pitch
         utter.volume = 1.0;
         if (voice) utter.voice = voice;
 
