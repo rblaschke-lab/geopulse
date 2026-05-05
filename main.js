@@ -791,12 +791,11 @@ document.addEventListener("DOMContentLoaded", () => {
             map.on('mouseleave', 'starlink-layer', () => { map.getCanvas().style.cursor = ''; });
         } catch(e) { console.warn('[STARLINK] Init failed:', e.message); }
 
-        // ── POPULATION DENSITY (NASA GIBS SEDAC GPW v4) ──────────────
+        // ── POPULATION DENSITY (NASA GIBS — GPW v4.11, 2020) ──────────────
         try {
-            const popDateStr = getYesterdaysDateForGIBS();
             map.addSource('population-src', {
                 type: 'raster',
-                tiles: ['https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/SEDAC_POP_2000-2005-01-01T00:00:00Z/default/' + popDateStr + '/GoogleMapsCompatible_Level7/{z}/{y}/{x}.png'],
+                tiles: ['https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/GPW_Population_Density_2020/default/GoogleMapsCompatible_Level7/{z}/{y}/{x}.png'],
                 tileSize: 256
             });
             map.addLayer({ id: 'population-layer', type: 'raster', source: 'population-src', layout: { visibility: 'none' }, paint: { 'raster-opacity': 0.55 } });
