@@ -188,6 +188,9 @@
                     sp.style.opacity = '0';
                     sp.style.filter = 'blur(12px)';
                     sp.style.pointerEvents = 'none';
+                    // Show welcome overlay after splash fades
+                    var wo = document.getElementById('welcome-overlay');
+                    if (wo) wo.classList.add('splash-done');
                     setTimeout(function(){
                         if(sp.parentNode) sp.parentNode.removeChild(sp);
                         // Close audio context
