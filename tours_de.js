@@ -39,7 +39,10 @@ window._applyToursDE = function() {
         summits14: '14 Achttausender – Die höchsten Gipfel der Welt',
         spacerace: 'Wettlauf ins All – Von Apollo bis Mars',
         extremeearth: 'Extreme Erde – Planet der Rekorde',
-        lostwonders: 'Verlorene Wunder – Monumente der Menschheit'
+        lostwonders: 'Verlorene Wunder – Monumente der Menschheit',
+        techcapitals: 'Tech-Hauptstädte – Wo die Zukunft gebaut wird',
+        forbiddenzones: 'Verbotene Zonen – Orte, die man nicht betreten darf',
+        shipwrecks: 'Schiffswracks & Verlorene Schätze'
     };
     Object.keys(NAMES_DE).forEach(id => {
         if (T[id]) T[id].name_de = NAMES_DE[id];
