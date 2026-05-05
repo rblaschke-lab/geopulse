@@ -693,7 +693,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // ── SHIPS layer removed — no free keyless AIS API available ──
 
-        // ── FLIGHTS (ADSB.lol — free, keyless real-time ADS-B data) ──────
+        // ── FLIGHTS (OpenSky Network — free, keyless real-time ADS-B data) ──────
         try {
             map.addSource('flights-src', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
             map.addLayer({ id: 'flights-layer', type: 'circle', source: 'flights-src', layout: { visibility: 'none' }, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 4, 5, 6, 10, 9], 'circle-color': '#00d4ff', 'circle-opacity': 0.85, 'circle-stroke-width': 1.2, 'circle-stroke-color': '#ffffff', 'circle-stroke-opacity': 0.4 } });
@@ -714,7 +714,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div style="background:rgba(0,212,255,.05);padding:3px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'HÖHE':'ALTITUDE'}</div><div style="color:#00d4ff;">${p.alt ? Number(p.alt).toLocaleString() + ' ft' : 'N/A'}</div></div>
                             <div style="background:rgba(0,212,255,.05);padding:3px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'GESCHW.':'SPEED'}</div><div style="color:#00d4ff;">${p.gs ? Math.round(Number(p.gs) * 1.852) + ' km/h' : 'N/A'}</div></div>
                         </div>
-                        <div style="opacity:.3;font-size:.45rem;margin-top:5px;letter-spacing:1px;">VIA ADSB.LOL · LIVE ADS-B</div>
+                        <div style="opacity:.3;font-size:.45rem;margin-top:5px;letter-spacing:1px;">VIA OPENSKY NETWORK · LIVE ADS-B</div>
                     </div>`)
                     .addTo(map);
             });
@@ -723,25 +723,23 @@ document.addEventListener("DOMContentLoaded", () => {
             const fetchFlights = async () => {
                 if (!toggles.flights) return;
                 try {
-                    // ADSB.lol: free, no key required, real ADS-B data
-                    const center = map.getCenter();
-                    const result = await window.reliableFetch(
-                        `https://api.adsb.lol/v2/lat/${center.lat.toFixed(2)}/lon/${center.lng.toFixed(2)}/dist/250`,
-                        'flights', { timeout: 15000, mode: 'cors' }
-                    );
-                    const aircraft = result.data?.ac || [];
-                    const features = aircraft
-                        .filter(a => a.lat && a.lon && a.alt_baro !== 'ground')
-                        .slice(0, 300)
-                        .map(a => ({
+                    // OpenSky Network: free, no key required, real ADS-B data
+                    const bounds = map.getBounds();
+                    const url = `https://opensky-network.org/api/states/all?lamin=${bounds.getSouth().toFixed(2)}&lomin=${bounds.getWest().toFixed(2)}&lamax=${bounds.getNorth().toFixed(2)}&lomax=${bounds.getEast().toFixed(2)}`;
+                    const result = await window.reliableFetch(url, 'flights', { timeout: 15000, mode: 'cors' });
+                    const states = result.data?.states || [];
+                    const features = states
+                        .filter(s => s[6] !== null && s[5] !== null && s[8] !== true) // has lat/lon, not on ground
+                        .slice(0, 400)
+                        .map(s => ({
                             type: 'Feature',
-                            geometry: { type: 'Point', coordinates: [a.lon, a.lat] },
+                            geometry: { type: 'Point', coordinates: [s[5], s[6]] },
                             properties: {
-                                callsign: (a.flight || '').trim(),
-                                type: a.t || '',
-                                reg: a.r || '',
-                                alt: a.alt_baro || 0,
-                                gs: a.gs || 0
+                                callsign: (s[1] || '').trim(),
+                                type: '',
+                                reg: s[0] || '',
+                                alt: s[7] ? Math.round(s[7] * 3.281) : 0,  // meters to feet
+                                gs: s[9] ? Math.round(s[9] * 1.944) : 0    // m/s to knots
                             }
                         }));
                     if (features.length > 0) {
@@ -752,7 +750,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         updateLayerStatus('flights', 'STATIC', 'No aircraft in view');
                     }
                 } catch(err) {
-                    console.warn('[FLIGHTS] ADSB.lol fetch failed:', err.message);
+                    console.warn('[FLIGHTS] OpenSky fetch failed:', err.message);
                     updateLayerStatus('flights', 'OFFLINE', 'API unavailable');
                 }
             };
