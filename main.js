@@ -815,6 +815,81 @@ document.addEventListener("DOMContentLoaded", () => {
                 tileSize: 256
             });
             map.addLayer({ id: 'population-layer', type: 'raster', source: 'population-src', layout: { visibility: 'none' }, paint: { 'raster-opacity': 0.55 } });
+
+            // Metro city markers — shown when population layer is active
+            const metroCities = [
+                [139.69,35.68,'Tokyo','Japan','37.4M',1],
+                [77.21,28.61,'Delhi','India','32.9M',2],
+                [121.47,31.23,'Shanghai','China','29.2M',3],
+                [113.26,23.13,'Guangzhou','China','27.0M',4],
+                [-46.63,-23.55,'São Paulo','Brazil','22.4M',5],
+                [72.88,19.08,'Mumbai','India','21.7M',6],
+                [116.40,39.90,'Beijing','China','21.5M',7],
+                [-99.13,19.43,'Mexico City','Mexico','21.8M',8],
+                [-43.17,-22.91,'Rio de Janeiro','Brazil','13.6M',9],
+                [31.24,30.04,'Cairo','Egypt','22.0M',10],
+                [90.41,23.81,'Dhaka','Bangladesh','23.2M',11],
+                [126.98,37.57,'Seoul','South Korea','21.8M',12],
+                [-73.94,40.67,'New York','USA','18.8M',13],
+                [135.50,34.69,'Osaka','Japan','19.1M',14],
+                [100.50,13.75,'Bangkok','Thailand','17.6M',15],
+                [67.01,24.86,'Karachi','Pakistan','17.1M',16],
+                [-118.24,34.05,'Los Angeles','USA','12.5M',17],
+                [28.98,41.01,'Istanbul','Turkey','16.0M',18],
+                [-87.63,41.88,'Chicago','USA','8.9M',19],
+                [106.85,-6.21,'Jakarta','Indonesia','35.4M',20],
+                [37.62,55.75,'Moscow','Russia','12.6M',21],
+                [-0.12,51.51,'London','UK','9.5M',22],
+                [2.35,48.86,'Paris','France','11.1M',23],
+                [13.40,52.52,'Berlin','Germany','3.7M',24],
+                [-77.04,38.91,'Washington D.C.','USA','6.4M',25],
+                [55.27,25.20,'Dubai','UAE','3.5M',26],
+                [174.76,-36.85,'Auckland','New Zealand','1.7M',27],
+                [151.21,-33.87,'Sydney','Australia','5.4M',28],
+                [18.42,-33.93,'Cape Town','South Africa','4.7M',29],
+                [-58.38,-34.60,'Buenos Aires','Argentina','15.4M',30]
+            ];
+            const metroFeatures = metroCities.map(c => ({
+                type: 'Feature',
+                geometry: { type: 'Point', coordinates: [c[0], c[1]] },
+                properties: { city: c[2], country: c[3], pop: c[4], rank: c[5], popNum: parseFloat(c[4]) }
+            }));
+            map.addSource('metro-cities-src', { type: 'geojson', data: { type: 'FeatureCollection', features: metroFeatures } });
+            map.addLayer({ id: 'metro-cities-layer', type: 'circle', source: 'metro-cities-src', layout: { visibility: 'none' },
+                paint: {
+                    'circle-radius': ['interpolate', ['linear'], ['get', 'popNum'], 1, 4, 10, 7, 20, 10, 35, 14],
+                    'circle-color': '#ff6633',
+                    'circle-opacity': 0.8,
+                    'circle-stroke-width': 1.5,
+                    'circle-stroke-color': '#ffffff',
+                    'circle-stroke-opacity': 0.6
+                }
+            });
+            map.addLayer({ id: 'metro-cities-label', type: 'symbol', source: 'metro-cities-src', layout: { visibility: 'none',
+                'text-field': ['get', 'city'], 'text-size': 11, 'text-offset': [0, 1.4], 'text-anchor': 'top',
+                'text-font': ['Open Sans Bold']
+            }, paint: { 'text-color': '#ffffff', 'text-halo-color': 'rgba(0,0,0,0.7)', 'text-halo-width': 1 } });
+            map.on('click', 'metro-cities-layer', (e) => {
+                const p = e.features[0].properties;
+                const coords = e.features[0].geometry.coordinates;
+                new maplibregl.Popup({ offset: 8, maxWidth: '240px' })
+                    .setLngLat(coords)
+                    .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
+                        <h3 style="color:#ff6633;margin:0 0 5px;font-size:.8rem;border-bottom:1px solid rgba(255,102,51,0.3);padding-bottom:4px;">🏙️ ${escHtml(p.city)}</h3>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:4px;">
+                            <div style="background:rgba(255,102,51,.08);padding:4px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'LAND':'COUNTRY'}</div><div style="color:#ff6633;font-size:.65rem;">${escHtml(p.country)}</div></div>
+                            <div style="background:rgba(255,102,51,.08);padding:4px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">RANK</div><div style="color:#ff6633;font-size:.65rem;">#${p.rank}</div></div>
+                        </div>
+                        <div style="background:rgba(255,102,51,.08);padding:4px 6px;border-radius:2px;text-align:center;">
+                            <div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'METROPOLREGION':'METRO POPULATION'}</div>
+                            <div style="color:#ff6633;font-size:1rem;font-weight:bold;">${escHtml(p.pop)}</div>
+                        </div>
+                        <div style="opacity:.3;font-size:.45rem;margin-top:5px;letter-spacing:1px;">${currentLang==='de'?'QUELLE: UN WORLD URBANIZATION PROSPECTS 2024':'SOURCE: UN WORLD URBANIZATION PROSPECTS 2024'}</div>
+                    </div>`)
+                    .addTo(map);
+            });
+            map.on('mouseenter', 'metro-cities-layer', () => { map.getCanvas().style.cursor = 'pointer'; });
+            map.on('mouseleave', 'metro-cities-layer', () => { map.getCanvas().style.cursor = ''; });
         } catch(e) { console.warn('[POPULATION] Init failed:', e.message); }
 
         // ── ROMAN EMPIRE TERRITORY (Simplified GeoJSON — 117 AD peak) ──
@@ -2352,8 +2427,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // ── POPULATION DENSITY TOGGLE ─────────────────────────
     document.getElementById('toggle-population')?.addEventListener('change', (e) => {
         toggles.population = e.target.checked;
+        const vis = toggles.population ? 'visible' : 'none';
         if (map.getLayer('population-layer'))
-            map.setLayoutProperty('population-layer', 'visibility', toggles.population ? 'visible' : 'none');
+            map.setLayoutProperty('population-layer', 'visibility', vis);
+        if (map.getLayer('metro-cities-layer'))
+            map.setLayoutProperty('metro-cities-layer', 'visibility', vis);
+        if (map.getLayer('metro-cities-label'))
+            map.setLayoutProperty('metro-cities-label', 'visibility', vis);
         // Show/hide population legend
         const popLegend = document.getElementById('layer-legend');
         if (popLegend) popLegend.style.display = toggles.population ? 'block' : 'none';
