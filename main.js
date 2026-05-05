@@ -4440,7 +4440,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const starRating = document.getElementById('star-rating');
     const starLabel = document.getElementById('star-label');
     let selectedRating = 0;
-    const STAR_LABELS = ['', 'POOR', 'FAIR', 'GOOD', 'GREAT', 'EXCELLENT'];
+    const STAR_LABELS = ['', '😕 POOR — Needs work', '😐 FAIR — Has potential', '👍 GOOD — Solid', '🔥 GREAT — Impressed', '🚀 EXCELLENT — Love it!'];
 
     if (fbToggle && fbPanel) {
         fbToggle.addEventListener('click', () => fbPanel.classList.toggle('hidden'));
