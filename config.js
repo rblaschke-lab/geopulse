@@ -9,7 +9,7 @@ window.GeopulseConfig = {
     },
     LAYER_METADATA: {
         "weather": { id: "weather", name: "Weather Radar", status: "STATIC", source: "RainViewer API", reliabilityScore: 99 },
-        "flights": { id: "flights", name: "Live Flights", status: "LIVE", source: "ADSB.lol", reliabilityScore: 95 },
+        "flights": { id: "flights", name: "Live Flights", status: "LIVE", source: "airplanes.live", reliabilityScore: 90 },
         "iss": { id: "iss", name: "ISS Track", status: "STATIC", source: "WhereTheISS API", reliabilityScore: 99 },
         "fires": { id: "fires", name: "NASA Wildfires", status: "STATIC", source: "NASA FIRMS", reliabilityScore: 100 },
         "earthquakes": { id: "earthquakes", name: "Seismic Activity", status: "STATIC", source: "USGS Feed", reliabilityScore: 99 },

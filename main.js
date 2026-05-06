@@ -723,22 +723,34 @@ document.addEventListener("DOMContentLoaded", () => {
             const fetchFlights = async () => {
                 if (!toggles.flights) return;
                 try {
-                    // airplanes.live: fetch from 6 global regions for worldwide coverage
+                    // airplanes.live rate limit: 1 request per second
+                    // Use wider coverage points (500 NM radius) with staggered requests
                     const points = [
-                        { lat: 50, lon: 10 },    // Europe
-                        { lat: 40, lon: -90 },   // North America
-                        { lat: 35, lon: 120 },   // East Asia
-                        { lat: 25, lon: 55 },    // Middle East
-                        { lat: -23, lon: -46 },  // South America
-                        { lat: -33, lon: 151 }   // Oceania
+                        { lat: 50, lon: 10, label: 'Europe' },
+                        { lat: 40, lon: -95, label: 'N. America' },
+                        { lat: 35, lon: 120, label: 'E. Asia' },
+                        { lat: 25, lon: 55, label: 'Middle East' },
+                        { lat: -20, lon: -50, label: 'S. America' },
+                        { lat: -30, lon: 145, label: 'Oceania' },
+                        { lat: 55, lon: -5, label: 'UK/Atlantic' },
+                        { lat: 15, lon: 80, label: 'S. Asia' },
+                        { lat: 5, lon: 25, label: 'Africa' }
                     ];
                     const allFeatures = [];
                     const seen = new Set();
-                    for (const pt of points) {
+                    const delay = (ms) => new Promise(r => setTimeout(r, ms));
+
+                    for (let i = 0; i < points.length; i++) {
+                        if (!toggles.flights) return; // bail if toggled off mid-fetch
+                        const pt = points[i];
                         try {
+                            // Respect 1 req/sec rate limit — wait 1.3s between requests
+                            if (i > 0) await delay(1300);
                             const url = `https://api.airplanes.live/v2/point/${pt.lat}/${pt.lon}/250`;
-                            const result = await window.reliableFetch(url, 'flights', { timeout: 12000, mode: 'cors' });
+                            const cacheKey = `flights_${pt.label.toLowerCase().replace(/[^a-z]/g, '_')}`;
+                            const result = await window.reliableFetch(url, cacheKey, { timeout: 12000, retries: 0 });
                             const aircraft = result.data?.ac || [];
+                            let added = 0;
                             for (const a of aircraft) {
                                 if (!a.lat || !a.lon || a.alt_baro === 'ground') continue;
                                 const key = a.hex || `${a.lat},${a.lon}`;
@@ -755,8 +767,17 @@ document.addEventListener("DOMContentLoaded", () => {
                                         gs: a.gs || 0
                                     }
                                 });
+                                added++;
                             }
-                        } catch(e) { /* skip failed region */ }
+                            // Progressive update — show aircraft on map as each region loads
+                            if (allFeatures.length > 0 && !_tourActive) {
+                                map.getSource('flights-src')?.setData({ type: 'FeatureCollection', features: [...allFeatures] });
+                                updateLayerStatus('flights', 'LIVE', `${allFeatures.length} aircraft (${i + 1}/${points.length} regions)`);
+                            }
+                            console.log(`[FLIGHTS] ${pt.label}: +${added} aircraft (total: ${allFeatures.length})`);
+                        } catch(e) {
+                            console.warn(`[FLIGHTS] ${pt.label} failed: ${e.message}`);
+                        }
                     }
                     if (allFeatures.length > 0) {
                         if (_tourActive) return;
@@ -771,7 +792,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             };
             window._fetchFlights = fetchFlights;
-            setInterval(fetchFlights, 30000);
+            setInterval(fetchFlights, 60000); // 60s interval (full cycle takes ~12s due to rate limiting)
         } catch(e) { console.warn('[FLIGHTS] Init failed:', e.message); }
 
         // ── STARLINK (Simulated LEO Constellation — 500 sats) ──
