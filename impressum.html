@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impressum — GEOPULSE</title>
+    <meta name="description" content="Impressum / Legal Notice for GEOPULSE — Live World Intelligence Map by RB Design.">
+    <meta name="robots" content="noindex">
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob:; connect-src 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="no-referrer">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="./config.js"></script>
+    <style>
+        :root {
+            --bg: #010408;
+            --surface: rgba(255,255,255,0.03);
+            --surface2: rgba(255,255,255,0.06);
+            --border: rgba(255,255,255,0.08);
+            --amber: #ffb000;
+            --cyan: #00d4ff;
+            --green: #00ff88;
+            --red: #ff3355;
+            --text: #e0e0e0;
+            --text-muted: rgba(255,255,255,0.45);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 48px;
+            background: rgba(1,4,8,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-logo {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--amber);
+            letter-spacing: 3px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-logo .dot {
+            width: 8px; height: 8px; background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        .nav-cta {
+            text-decoration: none;
+            background: linear-gradient(135deg, var(--amber), #ff8800);
+            color: #000;
+            font-weight: 700;
+            font-size: .85rem;
+            padding: 10px 24px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            transition: all .2s;
+        }
+        .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(255,176,0,0.4); }
+
+        /* ── MAIN CONTENT ── */
+        main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 120px 48px 80px;
+        }
+
+        .page-header {
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+        .page-tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: .7rem;
+            letter-spacing: 3px;
+            color: var(--amber);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+        .page-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* ── SECTIONS ── */
+        .legal-section {
+            margin-bottom: 40px;
+            padding: 28px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: border-color .2s;
+        }
+        .legal-section:hover {
+            border-color: rgba(255,255,255,0.12);
+        }
+        .legal-section h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .legal-section h2 i {
+            font-size: .9rem;
+            opacity: .7;
+        }
+        .legal-section p,
+        .legal-section li {
+            color: var(--text-muted);
+            font-size: .92rem;
+            line-height: 1.75;
+        }
+        .legal-section p + p {
+            margin-top: 10px;
+        }
+        .legal-section ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+        .legal-section ul li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .legal-section ul li::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            color: var(--amber);
+            font-weight: 700;
+        }
+        .legal-section a {
+            color: var(--cyan);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0,212,255,0.2);
+            transition: border-color .2s;
+        }
+        .legal-section a:hover {
+            border-color: var(--cyan);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 6px 20px;
+            margin-top: 12px;
+        }
+        .contact-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: .75rem;
+            color: var(--amber);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            opacity: .8;
+        }
+        .contact-value {
+            color: var(--text);
+            font-size: .92rem;
+        }
+
+        .placeholder-note {
+            background: rgba(255,176,0,0.08);
+            border: 1px solid rgba(255,176,0,0.25);
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: .8rem;
+            color: var(--amber);
+            margin-top: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.6;
+        }
+        .placeholder-note i {
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 32px 48px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer-logo {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: .9rem;
+            color: var(--amber);
+            letter-spacing: 2px;
+        }
+        .footer-links {
+            display: flex;
+            gap: 16px;
+        }
+        .footer-links a {
+            font-size: .78rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color .2s;
+        }
+        .footer-links a:hover { color: var(--text); }
+
+        /* ── ANIMATIONS ── */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+            nav { padding: 14px 20px; }
+            main { padding: 100px 20px 60px; }
+            h1 { font-size: 1.8rem; }
+            .legal-section { padding: 20px; }
+            .contact-grid { grid-template-columns: 1fr; gap: 4px; }
+            footer { padding: 24px 20px; }
+        }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,176,0,0.3); border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="./index.html" class="nav-logo">
+            <span class="dot"></span>
+            GEOPULSE
+        </a>
+        <a href="./index.html" class="nav-cta">
+            <i class="fa-solid fa-satellite"></i> Back to Map
+        </a>
+    </nav>
+
+    <main>
+        <!-- HEADER -->
+        <div class="page-header">
+            <div class="page-tag">// LEGAL NOTICE</div>
+            <h1>Impressum</h1>
+            <p class="page-subtitle">
+                Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz) — Legal Notice pursuant to German Digital Services Act.
+            </p>
+        </div>
+
+        <!-- RESPONSIBLE PERSON -->
+        <div class="legal-section">
+            <h2><i class="fa-solid fa-user"></i> Verantwortlich / Responsible</h2>
+            <div class="contact-grid">
+                <span class="contact-label">Name</span>
+                <span class="contact-value">Ralph Blaschke</span>
+
+                <span class="contact-label">Adresse</span>
+                <span class="contact-value"><!-- TODO: Add full postal address -->[Straße und Hausnummer]<br>[PLZ Ort]<br>Deutschland / Germany</span>
+
+                <span class="contact-label">E-Mail</span>
+                <span class="contact-value"><!-- TODO: Add contact email -->[E-Mail-Adresse einfügen]</span>
+
+                <span class="contact-label">Telefon</span>
+                <span class="contact-value"><!-- TODO: Add phone number -->[Telefonnummer einfügen]</span>
+            </div>
+            <div class="placeholder-note">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span><strong>Hinweis:</strong> Die Kontaktdaten (Anschrift, E-Mail, Telefon) müssen vor Veröffentlichung mit echten Daten ergänzt werden. Das DDG verlangt eine ladungsfähige Anschrift — kein Postfach.</span>
+            </div>
+        </div>
+
+        <!-- PROJECT INFO -->
+        <div class="legal-section">
+            <h2><i class="fa-solid fa-circle-info"></i> Projektinformation / Project Information</h2>
+            <p>GEOPULSE ist ein nicht-kommerzielles, quelloffenes Bildungsprojekt. Es wird auf GitHub Pages gehostet und dient ausschließlich schulischen und Bildungszwecken. Es werden keine Einnahmen erzielt, keine Werbung geschaltet und keine personenbezogenen Daten erhoben.</p>
+            <p>GEOPULSE is a non-commercial, open-source educational project. It is hosted on GitHub Pages and serves exclusively educational purposes. No revenue is generated, no advertisements are displayed, and no personal data is collected.</p>
+        </div>
+
+        <!-- HOSTING -->
+        <div class="legal-section">
+            <h2><i class="fa-solid fa-server"></i> Hosting</h2>
+            <p>Diese Website wird gehostet von / This website is hosted by:</p>
+            <div class="contact-grid" style="margin-top:12px;">
+                <span class="contact-label">Anbieter</span>
+                <span class="contact-value">GitHub, Inc.</span>
+
+                <span class="contact-label">Dienst</span>
+                <span class="contact-value">GitHub Pages</span>
+
+                <span class="contact-label">Adresse</span>
+                <span class="contact-value">88 Colin P Kelly Jr St, San Francisco, CA 94107, USA</span>
+
+                <span class="contact-label">Info</span>
+                <span class="contact-value"><a href="https://docs.github.com/en/pages" target="_blank" rel="noopener">GitHub Pages Documentation</a></span>
+            </div>
+        </div>
+
+        <!-- DATA SOURCES -->
+        <div class="legal-section">
+            <h2><i class="fa-solid fa-database"></i> Datenquellen / Data Sources</h2>
+            <p>GEOPULSE nutzt ausschließlich öffentlich zugängliche, kostenlose APIs und Datensätze. Es werden keine proprietären oder kostenpflichtigen Daten verwendet.</p>
+            <ul>
+                <li><strong>USGS Earthquake Hazards Program</strong> — earthquake.usgs.gov (Public Domain)</li>
+                <li><strong>NASA FIRMS</strong> — Active fire data via MODIS/VIIRS (Public Domain)</li>
+                <li><strong>NOAA SWPC</strong> — Space weather and sea surface temperature (Public Domain)</li>
+                <li><strong>airplanes.live</strong> — ADS-B aircraft tracking (Open Data)</li>
+                <li><strong>Where The ISS At?</strong> — International Space Station tracking (Public API)</li>
+                <li><strong>Smithsonian GVP</strong> — Global Volcanism Program (Public Data)</li>
+                <li><strong>TeleGeography</strong> — Submarine cable reference data</li>
+                <li><strong>Freedom House / SIPRI</strong> — Regime type and geopolitical reference data</li>
+                <li><strong>Wikipedia</strong> — Tour image thumbnails (CC BY-SA)</li>
+                <li><strong>foto-webcam.eu</strong> — Alpine and city webcam snapshots</li>
+                <li><strong>Esri / ArcGIS</strong> — Satellite imagery basemap tiles</li>
+            </ul>
+        </div>
+
+        <!-- NO PERSONAL DATA -->
+        <div class="legal-section">
+            <h2><i class="fa-solid fa-shield-halved"></i> Datenschutz / Privacy</h2>
+            <p>GEOPULSE erhebt, speichert oder verarbeitet <strong>keine personenbezogenen Daten</strong>. Es gibt:</p>
+            <ul>
+                <li>Keine Cookies (außer technisch notwendiger localStorage-Einträge für die Spracheinstellung)</li>
+                <li>Kein Tracking, keine Analysetools (kein Google Analytics, kein Meta Pixel)</li>
+                <li>Kein Login, keine Benutzerregistrierung</li>
+                <li>Keine Datenübermittlung an Dritte</li>
+                <li>Kein Profiling, keine personalisierte Werbung</li>
+            </ul>
+            <p style="margin-top:12px;">Ein anonymer Besucherzähler (CounterAPI.dev) zählt lediglich Seitenaufrufe — ohne IP-Adressen, Browserdaten oder sonstige identifizierende Informationen zu speichern.</p>
+            <p>GEOPULSE collects, stores, and processes <strong>no personal data</strong>. There are no cookies (except a local language preference), no tracking, no analytics, no login, and no data sharing with third parties.</p>
+        </div>
+
+        <!-- COPYRIGHT -->
+        <div class="legal-section">
+            <h2><i class="fa-solid fa-copyright"></i> Urheberrecht / Copyright</h2>
+            <p>Der Quellcode von GEOPULSE ist als Open-Source-Projekt auf <a href="https://github.com/rblaschke-lab/geopulse" target="_blank" rel="noopener">GitHub</a> verfügbar. Die Rechte an den eingebundenen Kartendaten und Satellitenbildern liegen bei den jeweiligen Anbietern (Esri, NASA, USGS, etc.).</p>
+            <p>The GEOPULSE source code is available as an open-source project on GitHub. Rights to embedded map data and satellite imagery belong to the respective providers.</p>
+        </div>
+
+        <!-- DISCLAIMER -->
+        <div class="legal-section">
+            <h2><i class="fa-solid fa-triangle-exclamation"></i> Haftungsausschluss / Disclaimer</h2>
+            <p>Die auf dieser Website bereitgestellten Informationen und Karten dienen ausschließlich Bildungszwecken. Es wird keine Gewähr für die Richtigkeit, Vollständigkeit oder Aktualität der dargestellten Daten übernommen. Grenzen und politische Darstellungen sind vereinfacht und stellen keine politische Stellungnahme dar.</p>
+            <p>All information and maps provided on this website are for educational purposes only. No warranty is given regarding the accuracy, completeness, or timeliness of the data displayed. Borders and political representations are simplified and do not constitute a political statement.</p>
+        </div>
+
+        <!-- EU DISPUTE RESOLUTION -->
+        <div class="legal-section">
+            <h2><i class="fa-solid fa-gavel"></i> Streitbeilegung / Dispute Resolution</h2>
+            <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr/</a>. Wir sind weder verpflichtet noch bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen, da dieses Projekt nicht-kommerziell ist.</p>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <span class="footer-logo">GEOPULSE</span>
+        <div class="footer-links">
+            <a href="./index.html">Map</a>
+            <a href="./about.html">About</a>
+            <a href="./manual.html">Manual</a>
+            <a href="./changelog.html">Changelog</a>
+        </div>
+    </footer>
+
+    <script>
+        // Dynamic version
+        document.querySelectorAll('.dyn-version').forEach(el => el.innerText = `V${window.GeopulseConfig?.VERSION || '1.5'}`);
+    </script>
+</body>
+</html>
