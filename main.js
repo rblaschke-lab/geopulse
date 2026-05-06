@@ -693,12 +693,79 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // ── SHIPS layer removed — no free keyless AIS API available ──
 
-        // ── FLIGHTS (airplanes.live — free, keyless, CORS-enabled ADS-B) ──────
+        // ── FLIGHTS (airplanes.live — viewport-aware, clustered) ──────
         try {
-            map.addSource('flights-src', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-            map.addLayer({ id: 'flights-layer', type: 'circle', source: 'flights-src', layout: { visibility: 'none' }, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 1.5, 3, 2.5, 5, 4, 8, 6, 12, 10], 'circle-color': '#00d4ff', 'circle-opacity': 0.75, 'circle-stroke-width': 0.8, 'circle-stroke-color': '#ffffff', 'circle-stroke-opacity': 0.3 } });
+            // Clustered GeoJSON source — at low zoom, nearby aircraft merge into count bubbles
+            map.addSource('flights-src', {
+                type: 'geojson',
+                data: { type: 'FeatureCollection', features: [] },
+                cluster: true,
+                clusterMaxZoom: 7,    // clusters break apart at zoom 8+
+                clusterRadius: 45     // merge radius in pixels
+            });
 
-            // Click handler for flights
+            // Cluster bubbles — shows count of aircraft in each cluster
+            map.addLayer({
+                id: 'flights-clusters', type: 'circle', source: 'flights-src',
+                filter: ['has', 'point_count'],
+                layout: { visibility: 'none' },
+                paint: {
+                    'circle-color': ['step', ['get', 'point_count'],
+                        '#00b4d8',   // < 50 aircraft
+                        50, '#0096c7',  // 50–199
+                        200, '#0077b6'  // 200+
+                    ],
+                    'circle-radius': ['step', ['get', 'point_count'],
+                        14,   // < 50
+                        50, 18,  // 50–199
+                        200, 24  // 200+
+                    ],
+                    'circle-opacity': 0.7,
+                    'circle-stroke-width': 1.5,
+                    'circle-stroke-color': '#ffffff',
+                    'circle-stroke-opacity': 0.3
+                }
+            });
+
+            // Cluster count labels
+            map.addLayer({
+                id: 'flights-cluster-count', type: 'symbol', source: 'flights-src',
+                filter: ['has', 'point_count'],
+                layout: {
+                    visibility: 'none',
+                    'text-field': '{point_count_abbreviated}',
+                    'text-size': 11,
+                    'text-font': ['Open Sans Bold']
+                },
+                paint: { 'text-color': '#ffffff' }
+            });
+
+            // Individual aircraft dots — only visible when unclustered (zoom 8+)
+            map.addLayer({
+                id: 'flights-layer', type: 'circle', source: 'flights-src',
+                filter: ['!', ['has', 'point_count']],
+                layout: { visibility: 'none' },
+                paint: {
+                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 3, 8, 5, 12, 8],
+                    'circle-color': '#00d4ff',
+                    'circle-opacity': 0.8,
+                    'circle-stroke-width': 0.8,
+                    'circle-stroke-color': '#ffffff',
+                    'circle-stroke-opacity': 0.4
+                }
+            });
+
+            // Click handler for clusters — zoom in to expand
+            map.on('click', 'flights-clusters', (e) => {
+                const features = map.queryRenderedFeatures(e.point, { layers: ['flights-clusters'] });
+                const clusterId = features[0].properties.cluster_id;
+                map.getSource('flights-src').getClusterExpansionZoom(clusterId, (err, zoom) => {
+                    if (err) return;
+                    map.easeTo({ center: features[0].geometry.coordinates, zoom: zoom + 1 });
+                });
+            });
+
+            // Click handler for individual flights
             map.on('click', 'flights-layer', (e) => {
                 const p = e.features[0].properties;
                 const coords = e.features[0].geometry.coordinates;
@@ -718,81 +785,74 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>`)
                     .addTo(map);
             });
+
+            map.on('mouseenter', 'flights-clusters', () => { map.getCanvas().style.cursor = 'pointer'; });
+            map.on('mouseleave', 'flights-clusters', () => { map.getCanvas().style.cursor = ''; });
             map.on('mouseenter', 'flights-layer', () => { map.getCanvas().style.cursor = 'pointer'; });
             map.on('mouseleave', 'flights-layer', () => { map.getCanvas().style.cursor = ''; });
+
+            // ── Viewport-aware flight fetching ──
+            // Single API call centered on the current map view.
+            // Re-fetches on map idle (debounced) so aircraft update as user pans.
+            let _flightsFetchTimer = null;
+            let _flightsLastCenter = null;
             const fetchFlights = async () => {
                 if (!toggles.flights) return;
                 try {
-                    // airplanes.live rate limit: 1 request per second
-                    // Use wider coverage points (500 NM radius) with staggered requests
-                    const points = [
-                        { lat: 50, lon: 10, label: 'Europe' },
-                        { lat: 40, lon: -95, label: 'N. America' },
-                        { lat: 35, lon: 120, label: 'E. Asia' },
-                        { lat: 25, lon: 55, label: 'Middle East' },
-                        { lat: -20, lon: -50, label: 'S. America' },
-                        { lat: -30, lon: 145, label: 'Oceania' },
-                        { lat: 55, lon: -5, label: 'UK/Atlantic' },
-                        { lat: 15, lon: 80, label: 'S. Asia' },
-                        { lat: 5, lon: 25, label: 'Africa' }
-                    ];
-                    const allFeatures = [];
-                    const seen = new Set();
-                    const delay = (ms) => new Promise(r => setTimeout(r, ms));
-
-                    for (let i = 0; i < points.length; i++) {
-                        if (!toggles.flights) return; // bail if toggled off mid-fetch
-                        const pt = points[i];
-                        try {
-                            // Respect 1 req/sec rate limit — wait 1.3s between requests
-                            if (i > 0) await delay(1300);
-                            const url = `https://api.airplanes.live/v2/point/${pt.lat}/${pt.lon}/250`;
-                            const cacheKey = `flights_${pt.label.toLowerCase().replace(/[^a-z]/g, '_')}`;
-                            const result = await window.reliableFetch(url, cacheKey, { timeout: 12000, retries: 0 });
-                            const aircraft = result.data?.ac || [];
-                            let added = 0;
-                            for (const a of aircraft) {
-                                if (!a.lat || !a.lon || a.alt_baro === 'ground') continue;
-                                const key = a.hex || `${a.lat},${a.lon}`;
-                                if (seen.has(key)) continue;
-                                seen.add(key);
-                                allFeatures.push({
-                                    type: 'Feature',
-                                    geometry: { type: 'Point', coordinates: [a.lon, a.lat] },
-                                    properties: {
-                                        callsign: (a.flight || '').trim(),
-                                        type: a.t || '',
-                                        reg: a.r || '',
-                                        alt: a.alt_baro || 0,
-                                        gs: a.gs || 0
-                                    }
-                                });
-                                added++;
+                    const center = map.getCenter();
+                    const url = `https://api.airplanes.live/v2/point/${center.lat.toFixed(2)}/${center.lng.toFixed(2)}/250`;
+                    const result = await window.reliableFetch(url, 'flights_viewport', { timeout: 12000, retries: 1 });
+                    const aircraft = result.data?.ac || [];
+                    const features = [];
+                    for (const a of aircraft) {
+                        if (!a.lat || !a.lon || a.alt_baro === 'ground') continue;
+                        features.push({
+                            type: 'Feature',
+                            geometry: { type: 'Point', coordinates: [a.lon, a.lat] },
+                            properties: {
+                                callsign: (a.flight || '').trim(),
+                                type: a.t || '',
+                                reg: a.r || '',
+                                alt: a.alt_baro || 0,
+                                gs: a.gs || 0
                             }
-                            // Progressive update — show aircraft on map as each region loads
-                            if (allFeatures.length > 0 && !_tourActive) {
-                                map.getSource('flights-src')?.setData({ type: 'FeatureCollection', features: [...allFeatures] });
-                                updateLayerStatus('flights', 'LIVE', `${allFeatures.length} aircraft (${i + 1}/${points.length} regions)`);
-                            }
-                            console.log(`[FLIGHTS] ${pt.label}: +${added} aircraft (total: ${allFeatures.length})`);
-                        } catch(e) {
-                            console.warn(`[FLIGHTS] ${pt.label} failed: ${e.message}`);
-                        }
+                        });
                     }
-                    if (allFeatures.length > 0) {
-                        if (_tourActive) return;
-                        map.getSource('flights-src')?.setData({ type: 'FeatureCollection', features: allFeatures });
-                        updateLayerStatus('flights', 'LIVE', `${allFeatures.length} aircraft`);
+                    if (_tourActive) return;
+                    map.getSource('flights-src')?.setData({ type: 'FeatureCollection', features });
+                    if (features.length > 0) {
+                        updateLayerStatus('flights', 'LIVE', `${features.length} aircraft`);
                     } else {
-                        updateLayerStatus('flights', 'STATIC', 'No aircraft data');
+                        updateLayerStatus('flights', 'STATIC', 'No aircraft in view');
                     }
+                    _flightsLastCenter = { lat: center.lat, lng: center.lng };
+                    console.log(`[FLIGHTS] ${features.length} aircraft near ${center.lat.toFixed(1)},${center.lng.toFixed(1)}`);
                 } catch(err) {
-                    console.warn('[FLIGHTS] airplanes.live fetch failed:', err.message);
+                    console.warn('[FLIGHTS] fetch failed:', err.message);
                     updateLayerStatus('flights', 'OFFLINE', 'API unavailable');
                 }
             };
+
+            // Debounced re-fetch on map movement — only if center moved significantly
+            const scheduleFlightRefetch = () => {
+                if (!toggles.flights) return;
+                clearTimeout(_flightsFetchTimer);
+                _flightsFetchTimer = setTimeout(() => {
+                    if (!toggles.flights) return;
+                    const center = map.getCenter();
+                    // Only re-fetch if center moved > ~100km (~1 degree)
+                    if (_flightsLastCenter) {
+                        const dLat = Math.abs(center.lat - _flightsLastCenter.lat);
+                        const dLng = Math.abs(center.lng - _flightsLastCenter.lng);
+                        if (dLat < 1 && dLng < 1) return; // hasn't moved enough
+                    }
+                    fetchFlights();
+                }, 1500); // 1.5s after map stops moving
+            };
+            map.on('moveend', scheduleFlightRefetch);
+
             window._fetchFlights = fetchFlights;
-            setInterval(fetchFlights, 60000); // 60s interval (full cycle takes ~12s due to rate limiting)
+            setInterval(fetchFlights, 30000); // refresh every 30s
         } catch(e) { console.warn('[FLIGHTS] Init failed:', e.message); }
 
         // ── STARLINK (Simulated LEO Constellation — 500 sats) ──
@@ -2134,7 +2194,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('toggle-flights')?.addEventListener('change', (e) => {
         toggles.flights = e.target.checked;
-        if (map.getLayer('flights-layer')) map.setLayoutProperty('flights-layer', 'visibility', toggles.flights ? 'visible' : 'none');
+        const vis = toggles.flights ? 'visible' : 'none';
+        ['flights-layer', 'flights-clusters', 'flights-cluster-count'].forEach(id => {
+            if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', vis);
+        });
         if (toggles.flights && window._fetchFlights) window._fetchFlights();
     });
     
@@ -4048,7 +4111,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 2. Hide ALL MapLibre native layers (comprehensive — matches actual layer IDs)
         const mlLayersToHide = [
             // Data layers
-            'cables-layer', 'flights-layer',
+            'cables-layer', 'flights-layer', 'flights-clusters', 'flights-cluster-count',
             'earthquakes-core', 'earthquakes-ring',
             'starlink-layer',
             'terminator-layer',
