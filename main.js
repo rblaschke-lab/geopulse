@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
             welcome_feat_3: 'Built for students — Geography, History, Science & Politics',
             welcome_start_tour: 'START DEMO TOUR', welcome_explore: 'EXPLORE FREELY',
             welcome_dont_show: "Don't show again",
-            welcome_footer: 'No login · No ads · 100% free & open source · For students & educators',
+            welcome_footer: 'No login · No ads · 100% free & open source · For students, educators & the curious',
             // Feedback widget
             fb_title: 'FEEDBACK', fb_rate: 'How do you rate GEOPULSE?',
             fb_enjoy: 'What do you enjoy most?', fb_wish: 'Feature wish (optional)',
@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
             welcome_feat_3: 'Für Schüler — Erdkunde, Geschichte, Naturwissenschaft & Politik',
             welcome_start_tour: 'DEMO-TOUR STARTEN', welcome_explore: 'FREI ERKUNDEN',
             welcome_dont_show: 'Nicht mehr anzeigen',
-            welcome_footer: 'Kein Login · Keine Werbung · 100% kostenlos & Open Source · Für Schüler & Lehrer',
+            welcome_footer: 'Kein Login · Keine Werbung · 100% kostenlos & Open Source · Für Schüler, Studenten, Lehrer & Interessierte',
             // Feedback widget
             fb_title: 'FEEDBACK', fb_rate: 'Wie bewerten Sie GEOPULSE?',
             fb_enjoy: 'Was gefällt Ihnen am besten?', fb_wish: 'Feature-Wunsch (optional)',
