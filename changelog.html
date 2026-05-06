@@ -305,9 +305,29 @@
 
     <div class="timeline">
 
-        <!-- V1.5 — CURRENT -->
+        <!-- V1.5.1 — CURRENT -->
         <div class="version-entry">
             <div class="version-dot current"></div>
+            <div class="version-header">
+                <span class="version-number">V1.5.1</span>
+                <span class="version-type type-patch">PATCH</span>
+                <span class="version-name">Flight Tracker Fix &amp; Global Coverage</span>
+                <span class="version-date">MAY 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon fix">●</span> <strong>Flight Clustering Bug</strong> — All aircraft were displaying as a single cluster over Europe. Root cause: airplanes.live API enforces 1 request/second rate limit; 6 simultaneous requests caused 5 to return HTTP 429, leaving only the Europe region visible</li>
+                <li><span class="change-icon fix">●</span> <strong>Staggered API Requests</strong> — Requests now spaced 1.3 seconds apart to respect rate limits. All 9 global regions load successfully</li>
+                <li><span class="change-icon feat">✦</span> <strong>Progressive Map Update</strong> — Aircraft appear on the map as each region loads (~12s total), with live status showing "X aircraft (N/9 regions)"</li>
+                <li><span class="change-icon feat">✦</span> <strong>Expanded Coverage</strong> — Added 3 new query regions (UK/Atlantic, South Asia, Africa) for better global distribution — now 9 regions total</li>
+                <li><span class="change-icon perf">⚡</span> Per-region localStorage caching — each region caches independently for resilient fallback</li>
+                <li><span class="change-icon perf">⚡</span> Polling interval adjusted to 60s (from 30s) to account for the ~12s fetch cycle</li>
+                <li><span class="change-icon fix">●</span> Config source corrected from "ADSB.lol" to "airplanes.live" to match actual API</li>
+            </ul>
+        </div>
+
+        <!-- V1.5 -->
+        <div class="version-entry">
+            <div class="version-dot major"></div>
             <div class="version-header">
                 <span class="version-number">V1.5</span>
                 <span class="version-type type-major">MAJOR</span>
