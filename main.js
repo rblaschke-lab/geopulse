@@ -693,76 +693,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // ── SHIPS layer removed — no free keyless AIS API available ──
 
-        // ── FLIGHTS (airplanes.live — viewport-aware, clustered) ──────
+        // ── FLIGHTS (airplanes.live — viewport-aware, individual dots) ──────
         try {
-            // Clustered GeoJSON source — at low zoom, nearby aircraft merge into count bubbles
             map.addSource('flights-src', {
                 type: 'geojson',
-                data: { type: 'FeatureCollection', features: [] },
-                cluster: true,
-                clusterMaxZoom: 7,    // clusters break apart at zoom 8+
-                clusterRadius: 45     // merge radius in pixels
+                data: { type: 'FeatureCollection', features: [] }
             });
 
-            // Cluster bubbles — shows count of aircraft in each cluster
+            // Individual aircraft dots — visible at all zoom levels
             map.addLayer({
-                id: 'flights-clusters', type: 'circle', source: 'flights-src',
-                filter: ['has', 'point_count'],
+                id: 'flights-layer', type: 'circle', source: 'flights-src',
                 layout: { visibility: 'none' },
                 paint: {
-                    'circle-color': ['step', ['get', 'point_count'],
-                        '#00b4d8',   // < 50 aircraft
-                        50, '#0096c7',  // 50–199
-                        200, '#0077b6'  // 200+
-                    ],
-                    'circle-radius': ['step', ['get', 'point_count'],
-                        14,   // < 50
-                        50, 18,  // 50–199
-                        200, 24  // 200+
-                    ],
-                    'circle-opacity': 0.7,
-                    'circle-stroke-width': 1.5,
+                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 1.5, 4, 2.5, 6, 4, 9, 6, 12, 9],
+                    'circle-color': '#00d4ff',
+                    'circle-opacity': ['interpolate', ['linear'], ['zoom'], 2, 0.5, 6, 0.75, 10, 0.9],
+                    'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 2, 0, 5, 0.5, 8, 0.8],
                     'circle-stroke-color': '#ffffff',
                     'circle-stroke-opacity': 0.3
                 }
-            });
-
-            // Cluster count labels
-            map.addLayer({
-                id: 'flights-cluster-count', type: 'symbol', source: 'flights-src',
-                filter: ['has', 'point_count'],
-                layout: {
-                    visibility: 'none',
-                    'text-field': '{point_count_abbreviated}',
-                    'text-size': 11,
-                    'text-font': ['Open Sans Bold']
-                },
-                paint: { 'text-color': '#ffffff' }
-            });
-
-            // Individual aircraft dots — only visible when unclustered (zoom 8+)
-            map.addLayer({
-                id: 'flights-layer', type: 'circle', source: 'flights-src',
-                filter: ['!', ['has', 'point_count']],
-                layout: { visibility: 'none' },
-                paint: {
-                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 3, 8, 5, 12, 8],
-                    'circle-color': '#00d4ff',
-                    'circle-opacity': 0.8,
-                    'circle-stroke-width': 0.8,
-                    'circle-stroke-color': '#ffffff',
-                    'circle-stroke-opacity': 0.4
-                }
-            });
-
-            // Click handler for clusters — zoom in to expand
-            map.on('click', 'flights-clusters', (e) => {
-                const features = map.queryRenderedFeatures(e.point, { layers: ['flights-clusters'] });
-                const clusterId = features[0].properties.cluster_id;
-                map.getSource('flights-src').getClusterExpansionZoom(clusterId, (err, zoom) => {
-                    if (err) return;
-                    map.easeTo({ center: features[0].geometry.coordinates, zoom: zoom + 1 });
-                });
             });
 
             // Click handler for individual flights
@@ -786,8 +735,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     .addTo(map);
             });
 
-            map.on('mouseenter', 'flights-clusters', () => { map.getCanvas().style.cursor = 'pointer'; });
-            map.on('mouseleave', 'flights-clusters', () => { map.getCanvas().style.cursor = ''; });
             map.on('mouseenter', 'flights-layer', () => { map.getCanvas().style.cursor = 'pointer'; });
             map.on('mouseleave', 'flights-layer', () => { map.getCanvas().style.cursor = ''; });
 
@@ -2195,7 +2142,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('toggle-flights')?.addEventListener('change', (e) => {
         toggles.flights = e.target.checked;
         const vis = toggles.flights ? 'visible' : 'none';
-        ['flights-layer', 'flights-clusters', 'flights-cluster-count'].forEach(id => {
+        ['flights-layer'].forEach(id => {
             if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', vis);
         });
         if (toggles.flights && window._fetchFlights) window._fetchFlights();
@@ -4111,7 +4058,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 2. Hide ALL MapLibre native layers (comprehensive — matches actual layer IDs)
         const mlLayersToHide = [
             // Data layers
-            'cables-layer', 'flights-layer', 'flights-clusters', 'flights-cluster-count',
+            'cables-layer', 'flights-layer',
             'earthquakes-core', 'earthquakes-ring',
             'starlink-layer',
             'terminator-layer',
