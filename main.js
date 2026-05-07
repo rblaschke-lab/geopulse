@@ -82,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
             layer_conflicts: 'Active Conflicts', desc_conflicts: 'Currently active war zones and armed conflicts worldwide.',
             layer_borders: 'Country Borders', desc_borders: 'National boundaries with country name labels. Data: Natural Earth.',
             layer_cables: 'Undersea Cables', desc_cables: 'Submarine fiber optic cables — 95% of global internet traffic travels here.',
+            layer_pipelines: 'Energy Pipelines', desc_pipelines: 'Major oil & gas pipelines — the arteries of global energy supply.',
             layer_nuclear: 'Nuclear Plants', desc_nuclear: 'Operational nuclear power stations and their energy output worldwide.',
             layer_sst: 'Ocean Temperature', desc_sst: 'Sea surface temperature from NOAA. Red = warmer, blue = cooler than average.',
             layer_temperature: 'Surface Temperature', desc_temperature: 'Land surface temperature data showing global heat distribution.',
@@ -154,6 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
             layer_conflicts: 'Aktive Konflikte', desc_conflicts: 'Derzeit aktive Kriegsgebiete und bewaffnete Konflikte weltweit.',
             layer_borders: 'Ländergrenzen', desc_borders: 'Nationale Grenzen mit Ländernamen. Daten: Natural Earth.',
             layer_cables: 'Unterseekabel', desc_cables: 'Unterwasser-Glasfaserkabel — 95% des globalen Internetverkehrs fließen hier.',
+            layer_pipelines: 'Energie-Pipelines', desc_pipelines: 'Wichtige Öl- und Gas-Pipelines — die Arterien der globalen Energieversorgung.',
             layer_nuclear: 'Kernkraftwerke', desc_nuclear: 'Betriebsbereite Kernkraftwerke und ihre Energieleistung weltweit.',
             layer_sst: 'Ozeantemperatur', desc_sst: 'Meeresoberflächentemperatur von NOAA. Rot = wärmer, blau = kühler als Durchschnitt.',
             layer_temperature: 'Oberflächentemperatur', desc_temperature: 'Landoberflächentemperaturdaten zur globalen Wärmeverteilung.',
@@ -241,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
         iss: false, starlink: false, earthquakes: false, webcams: false,
         nightlights: false, population: false, satellites: false, temperature: false,
         volcanoes: false, radiation: false, internet: false, power: false,
-        cables: false, datacenters: false, nuclear: false, conflicts: false, regimes: false, blocs: false, aiAtlas: false
+        cables: false, datacenters: false, nuclear: false, conflicts: false, regimes: false, blocs: false, aiAtlas: false, pipelines: false
     };
 
     let _tourActive = false; // Guard: blocks all data refreshes during active tours
@@ -1428,6 +1430,32 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: 'Russia-Japan (RJCN)', color: '#ff8888',
               capacity: '640 Gbps', year: 2013, length: '1,520 km', owner: 'KDDI / RTComm.RU',
               coords: [[132,43],[134,43],[136,40],[138,38],[140,36],[140.5,35],[141,35]] },
+            // ── ADDITIONAL MAJOR CABLES ────────────────────────────────
+            { name: '2Africa (Meta)', color: '#ff44ff',
+              capacity: '180 Tbps', year: 2024, length: '45,000 km', owner: 'Meta / Vodafone / Orange / MTN',
+              coords: [
+                [-8,37],[-15,28],[-17,15],[-17,12],[-15,9],[-5,5],[0,4.5],[8.5,4],[12,-5],
+                [12,-15],[13,-23],[18,-34],[27,-30],[36,-20],[40,-11],[43.5,11.5],
+                [50,11],[57,22],[67,24],[72,20],[80,6],[104,1],[121,24]
+              ] },
+            { name: 'Equiano (Google Africa)', color: '#00dd88',
+              capacity: '144 Tbps', year: 2024, length: '12,000 km', owner: 'Google LLC',
+              coords: [[-8.6,39],[-15,28],[-17,15],[-15,9],[-5,5],[0,4.5],[8.5,4],[12,-5],[12,-15],[13,-23],[18,-34]] },
+            { name: 'EIG (Europe-India Gateway)', color: '#cc88ff',
+              capacity: '3.84 Tbps', year: 2011, length: '15,000 km', owner: 'EIG Consortium',
+              coords: [
+                [1,51],[-5,36],[12,37],[25,35],[31,32],[32.3,31.2],[32.5,29.9],
+                [38,16],[43.5,11.5],[50,11],[57,22],[67,24],[72,20]
+              ] },
+            { name: 'AAE-1 (Asia-Africa-Europe)', color: '#ff88aa',
+              capacity: '40 Tbps', year: 2017, length: '25,000 km', owner: 'AAE-1 Consortium',
+              coords: [
+                [-7,53],[-5,36],[12,37],[25,35],[31,32],[32.3,31.2],[32.5,29.9],
+                [38,16],[43.5,11.5],[50,11],[57,22],[67,24],[72,20],[80,7],[98,3],[104,1.3]
+              ] },
+            { name: 'Apricot (Google/Meta APAC)', color: '#44ddaa',
+              capacity: '190 Tbps', year: 2024, length: '12,000 km', owner: 'Google / Meta / NTT',
+              coords: [[140,35],[130,30],[121,25],[118,14],[110,3],[104,1.3]] },
         ];
 
         const geojson = {
@@ -1472,6 +1500,129 @@ document.addEventListener("DOMContentLoaded", () => {
         map.on('mouseenter', 'cables-layer', () => { map.getCanvas().style.cursor = 'pointer'; });
         map.on('mouseleave', 'cables-layer', () => { map.getCanvas().style.cursor = ''; });
     };
+
+    // ============================================================
+    // ENERGY PIPELINES — Major oil & gas pipelines (curated dataset)
+    // ============================================================
+    const initPipelines = () => {
+        const pipelines = [
+            // ── EUROPEAN GAS ───────────────────────────────────────────
+            { name: 'Nord Stream 1 & 2 (destroyed)', color: '#ff4444', type: 'Gas',
+              capacity: '110 bcm/yr (before sabotage)', year: '2011/2021', length: '1,224 km', status: 'Destroyed Sept 2022',
+              coords: [[30.1,59.9],[27,59],[22,57],[18,56],[14,55],[12.1,54.1]] },
+            { name: 'TurkStream', color: '#ff8800', type: 'Gas',
+              capacity: '31.5 bcm/yr', year: 2020, length: '930 km', status: 'Active',
+              coords: [[37.8,44.6],[35,43],[31,42],[29,41.5],[28.5,41.2]] },
+            { name: 'Yamal–Europe', color: '#ffaa00', type: 'Gas',
+              capacity: '33 bcm/yr', year: 1999, length: '4,107 km', status: 'Reduced flow',
+              coords: [[68,66],[60,62],[50,56],[40,53],[30,52],[23,52],[18,52],[14,52]] },
+            { name: 'Druzhba (Friendship) Oil', color: '#cc6600', type: 'Oil',
+              capacity: '1.2 mbl/day', year: 1964, length: '5,500 km', status: 'Active (southern branch)',
+              coords: [[52,54],[45,53],[38,52],[32,52],[28,51],[24,52],[20,50],[18,49],[14,49]] },
+            { name: 'TAP (Trans-Adriatic)', color: '#44aaff', type: 'Gas',
+              capacity: '10 bcm/yr', year: 2020, length: '878 km', status: 'Active',
+              coords: [[28.5,41],[25,41],[22,40.5],[20.5,40],[20,40.2],[18.5,40.8]] },
+            { name: 'TANAP (Trans-Anatolian)', color: '#44aaff', type: 'Gas',
+              capacity: '16 bcm/yr', year: 2018, length: '1,850 km', status: 'Active',
+              coords: [[43.4,40.2],[40,39.5],[37,38],[34,38],[32,39],[29,40],[28.5,41]] },
+            { name: 'BTC (Baku–Tbilisi–Ceyhan) Oil', color: '#ff6600', type: 'Oil',
+              capacity: '1.2 mbl/day', year: 2006, length: '1,768 km', status: 'Active',
+              coords: [[49.9,40.4],[48,40.5],[45,41.5],[44,41.7],[42,39],[37,37],[36,36.5]] },
+            { name: 'Blue Stream', color: '#6688ff', type: 'Gas',
+              capacity: '16 bcm/yr', year: 2005, length: '1,213 km', status: 'Active',
+              coords: [[37.8,44.6],[36,43.5],[34,42],[32,41.5],[30,41.5],[29,41.2]] },
+            { name: 'Nord Stream backup via LNG terminals', color: '#aaaaaa', type: 'LNG',
+              capacity: 'Various', year: 2022, length: 'Multiple', status: 'Active — EU diversification',
+              coords: [[-5.5,36],[0,42],[3,51],[5,53],[8,54],[10,54.5],[13,54.5]] },
+            // ── MIDDLE EAST / CENTRAL ASIA ─────────────────────────────
+            { name: 'East–West (Saudi Petroline) Oil', color: '#cc0000', type: 'Oil',
+              capacity: '5 mbl/day', year: 1981, length: '1,200 km', status: 'Active',
+              coords: [[50.1,26.3],[48,25],[46,24.5],[44,24],[42,24],[40,24],[39,21.5]] },
+            { name: 'TAPI (Turkmenistan–Afghanistan–Pakistan–India)', color: '#ffcc00', type: 'Gas',
+              capacity: '33 bcm/yr (planned)', year: 'Under construction', length: '1,814 km', status: 'Planned/Construction',
+              coords: [[62,38],[63,35],[65,33],[67,30],[68,27],[69,25]] },
+            { name: 'Iran–Turkey Gas', color: '#ff5500', type: 'Gas',
+              capacity: '10 bcm/yr', year: 2001, length: '2,577 km', status: 'Active',
+              coords: [[52,33],[48,36],[45,38],[43,39.5],[40,39.5]] },
+            // ── AFRICA ────────────────────────────────────────────────
+            { name: 'Trans-Saharan Gas (NIGAL)', color: '#ffdd00', type: 'Gas',
+              capacity: '30 bcm/yr (planned)', year: 'Planned', length: '4,128 km', status: 'Planned — Nigeria→Algeria→Europe',
+              coords: [[3,6.5],[5,10],[4,15],[3,20],[3,25],[2,30],[2,35],[1,36]] },
+            { name: 'Sumed (Egypt) Oil', color: '#cc3300', type: 'Oil',
+              capacity: '2.5 mbl/day', year: 1977, length: '320 km', status: 'Active — bypasses Suez Canal',
+              coords: [[33.8,28.7],[32.5,29.5],[31.2,30.5],[29.9,31]] },
+            // ── AMERICAS ──────────────────────────────────────────────
+            { name: 'Keystone XL (Cancelled) + Keystone', color: '#886600', type: 'Oil',
+              capacity: '0.59 mbl/day (Keystone)', year: 2010, length: '3,462 km', status: 'Keystone active; XL cancelled 2021',
+              coords: [[-110,52],[-108,49],[-104,46],[-100,43],[-98,40],[-97,37],[-97,30]] },
+            { name: 'Trans-Alaska (TAPS) Oil', color: '#995500', type: 'Oil',
+              capacity: '0.5 mbl/day', year: 1977, length: '1,288 km', status: 'Active — declining throughput',
+              coords: [[-148,70],[-147,67],[-146,64],[-146,62],[-147,61]] },
+            // ── RUSSIA / ASIA ─────────────────────────────────────────
+            { name: 'Power of Siberia (Russia→China)', color: '#ff2222', type: 'Gas',
+              capacity: '38 bcm/yr', year: 2019, length: '3,000 km', status: 'Active — ramping up',
+              coords: [[130,62],[128,55],[127,50],[126,48],[128,47],[130,46]] },
+            { name: 'ESPO (East Siberia–Pacific Ocean) Oil', color: '#cc4400', type: 'Oil',
+              capacity: '1.6 mbl/day', year: 2012, length: '4,857 km', status: 'Active — main Russia→China/Japan oil route',
+              coords: [[105,56],[110,53],[115,51],[120,50],[125,48],[130,47],[132,43]] },
+            { name: 'Central Asia–China Gas', color: '#ddaa00', type: 'Gas',
+              capacity: '55 bcm/yr', year: 2009, length: '1,833 km', status: 'Active — via Turkmenistan/Uzbekistan/Kazakhstan',
+              coords: [[62,38],[65,40],[68,41],[72,41],[75,42],[80,44]] },
+        ];
+
+        const geojson = {
+            type: 'FeatureCollection',
+            features: pipelines.map(p => ({
+                type: 'Feature',
+                properties: { name: p.name, color: p.color, type: p.type, capacity: p.capacity, year: p.year, length: p.length, status: p.status },
+                geometry: { type: 'LineString', coordinates: p.coords }
+            }))
+        };
+
+        map.addSource('pipelines-src', { type: 'geojson', data: geojson });
+        map.addLayer({
+            id: 'pipelines-layer',
+            type: 'line',
+            source: 'pipelines-src',
+            layout: { visibility: 'none', 'line-join': 'round', 'line-cap': 'round' },
+            paint: {
+                'line-color': ['get', 'color'],
+                'line-width': 2.5,
+                'line-opacity': 0.8,
+                'line-dasharray': [4, 2]
+            }
+        });
+
+        // Popup on pipeline click
+        map.on('click', 'pipelines-layer', (e) => {
+            const { name, color, type, capacity, year, length, status } = e.features[0].properties;
+            const icon = type === 'Oil' ? '🛢️' : type === 'LNG' ? '🚢' : '🔥';
+            new maplibregl.Popup({ maxWidth: '280px' })
+                .setLngLat(e.lngLat)
+                .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
+                    <h3 style="color:${color};margin:0 0 8px;border-bottom:1px solid ${color}44;padding-bottom:5px;">${icon} ${name}</h3>
+                    <table style="width:100%;border-collapse:collapse;">
+                        <tr><td style="opacity:.5;padding:2px 0;">TYPE</td><td style="color:${color};font-weight:bold;text-align:right;">${type}</td></tr>
+                        <tr><td style="opacity:.5;padding:2px 0;">CAPACITY</td><td style="color:#ccc;text-align:right;">${capacity || 'N/A'}</td></tr>
+                        <tr><td style="opacity:.5;padding:2px 0;">LENGTH</td><td style="color:#ccc;text-align:right;">${length || 'N/A'}</td></tr>
+                        <tr><td style="opacity:.5;padding:2px 0;">COMMISSIONED</td><td style="color:#ccc;text-align:right;">${year || 'N/A'}</td></tr>
+                        <tr><td style="opacity:.5;padding:2px 0;">STATUS</td><td style="color:${status?.includes('Destroyed') || status?.includes('Cancelled') ? '#ff4444' : '#88ff88'};text-align:right;font-size:.65rem;">${status || 'Active'}</td></tr>
+                    </table>
+                    <div style="font-size:.57rem;opacity:.35;margin-top:6px;">Source: IEA / GIE / US EIA 2025</div>
+                </div>`)
+                .addTo(map);
+        });
+        map.on('mouseenter', 'pipelines-layer', () => { map.getCanvas().style.cursor = 'pointer'; });
+        map.on('mouseleave', 'pipelines-layer', () => { map.getCanvas().style.cursor = ''; });
+    };
+
+    // Pipeline toggle handler
+    document.getElementById('toggle-pipelines')?.addEventListener('change', (e) => {
+        toggles.pipelines = e.target.checked;
+        if (toggles.pipelines && !map.getSource('pipelines-src')) initPipelines();
+        if (map.getLayer('pipelines-layer'))
+            map.setLayoutProperty('pipelines-layer', 'visibility', toggles.pipelines ? 'visible' : 'none');
+    });
 
     // ============================================================
     // DATA CENTERS — Hyperscale cloud regions (AWS/Google/Azure/etc)
@@ -1948,24 +2099,34 @@ document.addEventListener("DOMContentLoaded", () => {
             note: 'Split since Gaddafi fall 2011. Two rival govts. Occasional fighting despite 2020 ceasefire.'
         },
         {
-            name: 'Iran — Israel Shadow War', lat: 32.5, lon: 43.5, severity: 'CRITICAL',
+            name: 'Iran — US/Israel War 2025', lat: 32.5, lon: 51.5, severity: 'CRITICAL',
+            type: 'Interstate War / Air Campaign', since: 2025,
+            parties: [['🇺🇸 USA + 🇮🇱 Israel', 'Airstrikes on nuclear sites, IRGC targets'], ['🇮🇷 Iran (IRGC + Army)', 'Retaliation via missiles, proxies, Strait of Hormuz']],
+            support: 'US/Israel: Gulf basing rights, F-35s, B-2 bombers. Iran: Russia (S-400 delivery pending), China (diplomatic).',
+            casualties: 'Hundreds of Iranian military; multiple US base attacks across Iraq/Syria; civilian casualties from strikes',
+            displaced: 'Unknown — limited ground displacement; economic fallout massive',
+            status: 'ACTIVE — Escalating air/missile war; Strait of Hormuz partially blocked',
+            note: 'US launched strikes on Iranian nuclear facilities in 2025 after IAEA confirmed 90% enrichment. Iran retaliated with ballistic missiles on US bases in Iraq/UAE. Oil prices spiked above $120/bbl. Strait of Hormuz disrupted.'
+        },
+        {
+            name: 'Iran — Israel Shadow War', lat: 33.5, lon: 43.5, severity: 'CRITICAL',
             type: 'Regional Proxy / Direct Military Clash', since: 2019,
             parties: [['🇮🇱 Israel (IDF/Mossad)', 'Strikes, assassinations, sabotage'], ['🇮🇷 Iran (IRGC)', 'Proxies + direct strikes']],
             support: 'Israel: US backing, F-35s, Iron Dome. Iran: Hezbollah, Hamas, Houthis, PMF Iraq.',
-            casualties: 'Hundreds killed in strikes/assassinations; April 2024: first direct Iran-Israel exchange',
-            displaced: 'N/A — shadow war, no mass displacement',
-            status: 'ACTIVE — Ongoing covert war; direct missile/drone exchanges Apr+Oct 2024',
-            note: 'Iran fired 300+ drones/missiles at Israel Apr 13-14, 2024. Israel retaliated Oct 26, 2024. Proxy network: Hezbollah, Hamas, Houthis, Iraqi PMF.'
+            casualties: 'Thousands killed across multiple fronts since Oct 2023',
+            displaced: 'N/A — multi-front proxy war',
+            status: 'ACTIVE — Escalated to direct exchanges; linked to 2025 Iran war',
+            note: 'Iran fired 300+ drones/missiles at Israel Apr 13-14, 2024. Israel retaliated Oct 26, 2024. Full escalation in 2025 with US joining strikes on Iran. Proxy network: Hezbollah (weakened), Hamas (degraded), Houthis (active), Iraqi PMF.'
         },
         {
-            name: 'Iran — USA Tensions', lat: 26.0, lon: 56.0, severity: 'HIGH',
-            type: 'Geopolitical / Military Confrontation', since: 2019,
-            parties: [['🇺🇸 USA (CENTCOM)', 'Carrier groups, airbases, sanctions'], ['🇮🇷 Iran (IRGC)', 'Proxy attacks, nuclear program, tanker seizures']],
+            name: 'Iran — USA Confrontation', lat: 26.0, lon: 56.0, severity: 'CRITICAL',
+            type: 'Military Confrontation / Air-Sea War', since: 2019,
+            parties: [['🇺🇸 USA (CENTCOM)', 'Carrier groups, B-2 strikes, airbases'], ['🇮🇷 Iran (IRGC Navy)', 'Mine warfare, missile boats, Strait of Hormuz']],
             support: 'USA: Israel, Gulf states (KSA, UAE, Bahrain). Iran: Russia, China (limited).',
-            casualties: 'Jan 2024: Jordan base attack killed 3 US soldiers. 160+ US strikes on Iran proxies in Iraq/Syria.',
-            displaced: 'N/A',
-            status: 'HIGH TENSION — Naval confrontations, proxy strikes, nuclear standoff',
-            note: 'Maximum pressure campaign (Trump 2018/2025). IRGC-backed PMF targeting US forces 160+ times since Oct 2023. Strait of Hormuz flashpoint: 20% of global oil.'
+            casualties: 'Multiple US base attacks; Iranian naval/IRGC losses from US strikes',
+            displaced: 'N/A — naval/air confrontation',
+            status: 'ACTIVE — Direct military conflict since 2025; Hormuz flashpoint',
+            note: 'Escalated from maximum pressure campaign to direct strikes in 2025. Strait of Hormuz (20% of global oil) partially disrupted. Oil tanker escorts by US Navy. IRGC mine-laying operations.'
         }
     ];
 
