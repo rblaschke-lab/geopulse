@@ -1,6 +1,6 @@
 # GEOPULSE — Technical Specification
 
-> **Version:** V1.5.4 · **Updated:** May 2026  
+> **Version:** V1.5.5 · **Updated:** May 7, 2026  
 > **Repository:** [github.com/rblaschke-lab/geopulse](https://github.com/rblaschke-lab/geopulse)  
 > **Live:** [geopulse.is-a.dev](https://geopulse.is-a.dev)  
 > **License:** MIT · Free & Open Source
@@ -15,15 +15,18 @@ GEOPULSE is an interactive geospatial intelligence platform built for education.
 
 | Metric | Value |
 |---|---|
-| Total code lines | **10,363** |
+| Total code lines | **12,026** |
 | Total files | **26** (15 code + 11 assets) |
-| Repository size | **9.2 MB** |
-| Git commits | **146** |
+| Total codebase | **783 KB** (no minification, raw source) |
+| Repository size | **9.2 MB** (incl. images) |
+| Git commits | **156** |
+| AI conversations | **29** sessions |
 | Development period | Mar 27 – May 7, 2026 (~6 weeks) |
-| Data layers | **22** toggleable overlays |
+| Data layers | **24** toggleable overlays |
 | Guided tours | **25** across 7 categories |
 | External API calls | **0 API keys required** |
 | Monthly hosting cost | **$0** (GitHub Pages) |
+| Estimated AI tokens | **~8–12M** total (see Section 11) |
 
 ---
 
@@ -33,10 +36,10 @@ GEOPULSE is an interactive geospatial intelligence platform built for education.
 
 | Language | Files | Lines | Purpose |
 |---|---|---|---|
-| **JavaScript** (ES2020+) | 4 | 4,907 | Core logic, map interaction, tours, data fetching |
-| **CSS3** | 1 | 1,776 | Full design system, animations, responsive layout |
-| **HTML5** | 5 | 3,450 | Pages (index, about, manual, changelog, impressum) |
-| **Markdown** | 3 | 230 | Documentation (README, SECURITY, QA audit) |
+| **JavaScript** (ES2020+) | 4 | 5,634 | Core logic, map interaction, tours, audio, particles |
+| **CSS3** | 1 | 2,051 | Full design system, animations, responsive layout |
+| **HTML5** | 5 | 3,706 | Pages (index, about, manual, changelog, impressum) |
+| **Markdown** | 4 | 635 | Documentation (README, SECURITY, TECH_SPEC, QA) |
 
 **No build tools, no transpilers, no bundlers.** Raw browser-native code.
 
@@ -79,19 +82,20 @@ GEOPULSE is an interactive geospatial intelligence platform built for education.
 
 ```
 geopulse/
-├── index.html          678 lines    Main application (SPA)
-├── about.html        1,178 lines    Feature showcase & tech stack
-├── manual.html         426 lines    User documentation
-├── changelog.html      796 lines    Version history timeline
-├── impressum.html      372 lines    Legal compliance (§5 DDG)
-├── main.js           4,477 lines    Core application logic
-├── tours_de.js         325 lines    German tour translations
+├── index.html          769 lines    Main application (SPA)
+├── about.html        1,229 lines    Feature showcase & tech stack
+├── manual.html         467 lines    User documentation
+├── changelog.html      838 lines    Version history timeline
+├── impressum.html      403 lines    Legal compliance (§5 DDG)
+├── main.js           5,176 lines    Core application logic
+├── tours_de.js         349 lines    German tour translations
 ├── config.js            43 lines    Global configuration & layer metadata
-├── fetchWrapper.js      62 lines    Resilient HTTP fetch with retry/cache
-├── style.css         1,776 lines    Complete design system
-├── README.md            70 lines    Project overview
-├── SECURITY.md         143 lines    Security audit documentation
-├── qa-audit.md          17 lines    Quality assurance notes
+├── fetchWrapper.js      66 lines    Resilient HTTP fetch with retry/cache
+├── style.css         2,051 lines    Complete design system
+├── TECH_SPEC.md        380 lines    Technical specification (this file)
+├── README.md           102 lines    Project overview
+├── SECURITY.md         187 lines    Security audit documentation
+├── qa-audit.md          22 lines    Quality assurance notes
 ├── LICENSE              17 lines    MIT License
 ├── .gitignore           24 lines    Git ignore rules
 └── *.png             11 files       OG previews, social cards, tour banners
@@ -307,11 +311,65 @@ git push
 
 ---
 
-## 10. Revision History
+## 10. AI-Assisted Development Metrics
+
+### 10.1 Development Model
+
+GEOPULSE was built **100% via AI pair programming** — no line of code was written manually. The entire codebase (12,026 lines) was generated, debugged, and refined through conversational AI sessions.
+
+### 10.2 Token Consumption Estimate
+
+| Metric | Value | Basis |
+|---|---|---|
+| **AI Conversations** | 29 sessions | Tracked via local brain storage |
+| **Git Commits** | 156 | Each commit = 1–5 AI tool calls |
+| **Avg. tokens per conversation** | ~300K–400K | Context window + code edits + browser testing |
+| **Total estimated input tokens** | **~5–7M** | Conversation context, file reads, DOM snapshots |
+| **Total estimated output tokens** | **~3–5M** | Code generation, edits, explanations |
+| **Total estimated tokens** | **~8–12M** | Combined I/O across all 29 sessions |
+
+### 10.3 Token Breakdown by Category
+
+| Category | Est. % | Why |
+|---|---|---|
+| **Code generation** | ~35% | main.js (5,176 lines), style.css (2,051 lines) |
+| **Code editing/refactoring** | ~25% | Iterative fixes, layer debugging, text shortening |
+| **Browser testing** | ~20% | DOM snapshots, screenshot analysis, UI verification |
+| **Context/conversation** | ~15% | User requests, explanations, planning |
+| **Documentation** | ~5% | README, TECH_SPEC, changelog, about page |
+
+### 10.4 Development Economics
+
+| Metric | Value |
+|---|---|
+| Development time | ~6 weeks (part-time) |
+| Equivalent manual dev time | ~3–4 months (1 full-stack developer) |
+| Cost of human equivalent | ~€15,000–20,000 (freelance rate) |
+| Actual infrastructure cost | **€0** (GitHub Pages, free APIs, free domain) |
+| Lines of code per session | ~415 avg |
+| Features per session | ~2–3 avg |
+
+### 10.5 What AI Built (Scope)
+
+- Complete MapLibre GL JS integration with 24 data layers
+- 25 guided tours (200+ stops) with bilingual EN/DE content
+- Procedural audio engine (Web Audio API synthesis)
+- Cinematic camera system (bearing, pitch, orbital drift)
+- Particle effects, animated earthquake ripples, atmospheric fog
+- Full responsive UI with accordion sidebar, draggable panels
+- Security-hardened CSP with zero API keys
+- 5 HTML pages (index, about, manual, changelog, impressum)
+- Complete design system (2,051 lines CSS)
+- SEO optimization, OG tags, social cards
+
+---
+
+## 11. Revision History
 
 | Version | Date | Highlights |
 |---|---|---|
-| V1.5.4 | May 2026 | Cinematic camera, typewriter text, Ken Burns, progress bar |
+| V1.5.5 | May 7, 2026 | Pipelines, Gen Z effects, tour overview intro, earthquake pulse |
+| V1.5.4 | May 6, 2026 | Cinematic camera, typewriter text, Ken Burns, progress bar |
 | V1.5.3 | May 2026 | Live Flights removed, Impressum, visitor counter |
 | V1.5 | May 2026 | Tour expansion (25 tours), bilingual DE/EN |
 | V1.3 | Apr 2026 | Cinematic gateway, procedural audio, Trump tour |
@@ -321,4 +379,4 @@ git push
 ---
 
 *GEOPULSE is maintained by RB Design 2026. MIT Licensed.*  
-*Built with zero budget, zero API keys, and zero backend servers.*
+*Built with zero budget, zero API keys, zero backend servers — and ~10M AI tokens.*
