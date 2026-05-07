@@ -616,6 +616,25 @@ document.addEventListener("DOMContentLoaded", () => {
     map.on('load', async () => {
         setStatus(currentLang === 'de' ? 'KARTE GELADEN. DATENSTRÖME WERDEN INITIALISIERT...' : 'MAP LOADED. INITIALIZING DATA STREAMS...');
 
+        // ── PLACE LABELS OVERLAY (Esri — transparent city/country names) ──
+        // Adds city, country, and place names on top of satellite imagery
+        // so users can orient themselves during tours and exploration.
+        try {
+            map.addSource('esri-labels', {
+                type: 'raster',
+                tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}'],
+                tileSize: 256,
+                attribution: 'Labels © Esri'
+            });
+            map.addLayer({
+                id: 'esri-labels-layer',
+                type: 'raster',
+                source: 'esri-labels',
+                paint: { 'raster-opacity': 0.75 },
+                layout: { visibility: 'visible' }
+            });
+        } catch (err) { console.warn('[labels] Esri reference overlay failed:', err); }
+
         // ── EARTHQUAKES (USGS — Live GeoJSON) ──────────────────
         try {
             const eqResult = await window.reliableFetch(
@@ -852,6 +871,14 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch(e) { console.warn('[ROMAN EMPIRE] Init failed:', e.message); }
 
         setStatus(currentLang === 'de' ? 'ALLE DATENSTRÖME INITIALISIERT. SYSTEM BEREIT.' : 'ALL DATA STREAMS INITIALIZED. SYSTEM READY.');
+
+        // Keep labels on top of all data layers
+        const elevateLabels = () => {
+            if (map.getLayer('esri-labels-layer')) map.moveLayer('esri-labels-layer');
+            if (map.getLayer('country-labels')) map.moveLayer('country-labels');
+        };
+        elevateLabels();
+        map.on('sourcedata', () => { try { elevateLabels(); } catch(e) {} });
 
         // Kick off periodic data fetches
         fetchNewsTicker();
