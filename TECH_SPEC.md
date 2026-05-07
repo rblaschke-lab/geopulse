@@ -26,7 +26,7 @@ GEOPULSE is an interactive geospatial intelligence platform built for education.
 | Guided tours | **25** across 7 categories |
 | External API calls | **0 API keys required** |
 | Monthly hosting cost | **$0** (GitHub Pages) |
-| Estimated AI tokens | **~8–12M** total (see Section 11) |
+| Estimated AI tokens | **~4–6M** total (see Section 10) |
 
 ---
 
@@ -323,10 +323,11 @@ GEOPULSE was built **100% via AI pair programming** — no line of code was writ
 |---|---|---|
 | **AI Conversations** | 29 sessions | Tracked via local brain storage |
 | **Git Commits** | 156 | Each commit = 1–5 AI tool calls |
-| **Avg. tokens per conversation** | ~300K–400K | Context window + code edits + browser testing |
-| **Total estimated input tokens** | **~5–7M** | Conversation context, file reads, DOM snapshots |
-| **Total estimated output tokens** | **~3–5M** | Code generation, edits, explanations |
-| **Total estimated tokens** | **~8–12M** | Combined I/O across all 29 sessions |
+| **Avg. tokens per conversation** | ~150K–200K | Context window + code edits + browser testing |
+| **Total estimated input tokens** | **~3–4M** | Conversation context, file reads, DOM snapshots |
+| **Total estimated output tokens** | **~1–2M** | Code generation, edits, explanations |
+| **Total estimated tokens** | **~4–6M** | Combined I/O across all 29 sessions |
+| **Actual AI cost** | **~€500** | User-reported total since V1 |
 
 ### 10.3 Token Breakdown by Category
 
@@ -345,7 +346,9 @@ GEOPULSE was built **100% via AI pair programming** — no line of code was writ
 | Development time | ~6 weeks (part-time) |
 | Equivalent manual dev time | ~3–4 months (1 full-stack developer) |
 | Cost of human equivalent | ~€15,000–20,000 (freelance rate) |
+| **Actual AI token cost** | **~€500** |
 | Actual infrastructure cost | **€0** (GitHub Pages, free APIs, free domain) |
+| **Total project cost** | **~€500** (30–40× cheaper than manual) |
 | Lines of code per session | ~415 avg |
 | Features per session | ~2–3 avg |
 
@@ -379,4 +382,4 @@ GEOPULSE was built **100% via AI pair programming** — no line of code was writ
 ---
 
 *GEOPULSE is maintained by RB Design 2026. MIT Licensed.*  
-*Built with zero budget, zero API keys, zero backend servers — and ~10M AI tokens.*
+*Built with ~€500 in AI tokens, zero API keys, zero backend servers.*

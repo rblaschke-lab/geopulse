@@ -4231,11 +4231,10 @@ document.addEventListener("DOMContentLoaded", () => {
             type: 'circle',
             source: 'tour-active-src',
             paint: {
-                'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 10, 4, 16, 8, 24],
-                'circle-color': 'rgba(255, 176, 0, 0.0)',
-                'circle-stroke-color': 'rgba(255, 176, 0, 0.25)',
-                'circle-stroke-width': 1.5,
-                'circle-blur': 0.5
+                'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 22, 3, 30, 6, 40, 10, 50],
+                'circle-color': 'rgba(255, 176, 0, 0.12)',
+                'circle-stroke-color': 'rgba(255, 176, 0, 0.5)',
+                'circle-stroke-width': 2.5
             }
         });
 
@@ -4245,10 +4244,10 @@ document.addEventListener("DOMContentLoaded", () => {
             type: 'circle',
             source: 'tour-active-src',
             paint: {
-                'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 3, 4, 4, 8, 6],
-                'circle-color': 'rgba(255, 176, 0, 0.45)',
-                'circle-stroke-color': 'rgba(255, 176, 0, 0.2)',
-                'circle-stroke-width': 0.5
+                'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 5, 3, 7, 6, 9, 10, 12],
+                'circle-color': 'rgba(255, 176, 0, 0.7)',
+                'circle-stroke-color': 'rgba(255, 220, 100, 0.8)',
+                'circle-stroke-width': 1.5
             }
         });
     };
@@ -4660,8 +4659,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // ── CLEAN SLATE: deactivate all data layers for an uncluttered tour view ──
         deactivateAllLayersForTour();
-
-        // Hide the global tour-sites glow (only show current tour's amber stops)
         setTourSitesGlowVisible(false);
 
         activeTour = tour;
@@ -4669,51 +4666,31 @@ document.addEventListener("DOMContentLoaded", () => {
         tourStepIndex = 0;
 
         const nm = getTourName(tour).toUpperCase();
-        setStatus(currentLang === 'de' ? 'GEFÜHRTE TOUR: ' + nm + ' GESTARTET' : 'GUIDED TOUR: ' + nm + ' INITIATED');
+        setStatus(currentLang === 'de' ? 'GEFÜHRTE TOUR: ' + nm + ' — ÜBERSICHT' : 'GUIDED TOUR: ' + nm + ' — OVERVIEW');
 
         // Chime sound on tour start
         if (window._geoSfx) window._geoSfx.chime();
 
         // ── CINEMATIC OVERVIEW INTRO ──
-        // Zoom out, show all stops as glowing amber dots, then fly to first stop
+        // 1. Light up all stops as bright pulsing amber dots
+        // 2. Zoom out to frame the entire route (NO text panel)
+        // 3. Hold for 6 seconds so the user sees all stops
+        // 4. Then fly to first stop and reveal the briefing panel
+
         updateActiveTourLayer(activeTourId);
 
-        // Calculate bounding box of all stops to frame them
+        // Calculate bounding box center + zoom
         const lngs = tour.steps.map(s => s.center[0]);
         const lats = tour.steps.map(s => s.center[1]);
         const overviewCenter = [
             (Math.min(...lngs) + Math.max(...lngs)) / 2,
             (Math.min(...lats) + Math.max(...lats)) / 2
         ];
-        // Calculate zoom to show the spread
-        const lngSpread = Math.max(...lngs) - Math.min(...lngs);
-        const latSpread = Math.max(...lats) - Math.min(...lats);
-        const maxSpread = Math.max(lngSpread, latSpread);
+        const maxSpread = Math.max(Math.max(...lngs) - Math.min(...lngs), Math.max(...lats) - Math.min(...lats));
         const overviewZoom = maxSpread > 200 ? 1 : maxSpread > 100 ? 1.8 : maxSpread > 50 ? 2.5 : maxSpread > 20 ? 3.5 : 4.5;
 
-        // Show tour panel with overview info
-        if (tourPanel) {
-            tourPanel.classList.remove('hidden');
-            tourPanel.style.left = '';
-            tourPanel.style.top = '';
-            tourPanel.style.bottom = '';
-            tourPanel.style.right = '';
-        }
-        if (tourTitle) tourTitle.textContent = '🎯 ' + nm;
-        if (tourCounter) tourCounter.textContent = tour.steps.length + (currentLang === 'de' ? ' STATIONEN' : ' STOPS');
-        if (tourText) {
-            tourText.innerHTML = '';
-            const overviewMsg = currentLang === 'de'
-                ? '⏳ FLUGBAHN WIRD INITIALISIERT...\n\nAlle Stationen werden auf der Karte angezeigt.\nBitte warten — Tour startet in Kürze.'
-                : '⏳ INITIALIZING FLIGHT PATH...\n\nAll tour stops are now highlighted on the map.\nStand by — tour begins shortly.';
-            typewriterEffect(tourText, overviewMsg, 14);
-        }
-        if (tourPrev) { tourPrev.disabled = true; tourPrev.style.display = 'none'; }
-        if (tourNext) { tourNext.disabled = true; tourNext.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> LOADING...'; }
-
-        // Update progress bar to 0
-        const progressFill = document.getElementById('tour-progress-fill');
-        if (progressFill) progressFill.style.width = '0%';
+        // HIDE the tour panel — overview should be clean map + dots only
+        if (tourPanel) tourPanel.classList.add('hidden');
 
         // Fly to overview position
         const transOverlay = document.getElementById('tour-transition-overlay');
@@ -4729,41 +4706,45 @@ document.addEventListener("DOMContentLoaded", () => {
             bearing: 0
         });
 
-        // ── ANIMATED GLOW PULSE on overview dots ──
-        let glowPhase = 0;
-        const glowInterval = setInterval(() => {
-            glowPhase = (glowPhase + 1) % 40;
-            const pulseScale = 1 + 0.6 * Math.sin(glowPhase / 40 * Math.PI * 2);
-            const pulseOpacity = 0.15 + 0.2 * Math.sin(glowPhase / 40 * Math.PI * 2);
-            if (map.getLayer('tour-active-glow')) {
-                map.setPaintProperty('tour-active-glow', 'circle-stroke-opacity', pulseOpacity);
-                map.setPaintProperty('tour-active-glow', 'circle-radius',
-                    ['interpolate', ['linear'], ['zoom'], 1, 10 * pulseScale, 4, 16 * pulseScale, 8, 24 * pulseScale]
-                );
-            }
-        }, 50);
-
         // Remove transition overlay when overview flight completes
         map.once('moveend', () => {
             if (transOverlay) transOverlay.classList.remove('active');
         });
 
-        // After 4 seconds: start the actual tour
-        setTimeout(() => {
-            clearInterval(glowInterval);
-            // Reset glow to default
+        // ── ANIMATED GLOW PULSE on overview dots ──
+        let glowPhase = 0;
+        const glowInterval = setInterval(() => {
+            glowPhase = (glowPhase + 1) % 50;
+            const pulseScale = 1 + 0.5 * Math.sin(glowPhase / 50 * Math.PI * 2);
+            const pulseOpacity = 0.3 + 0.3 * Math.sin(glowPhase / 50 * Math.PI * 2);
             if (map.getLayer('tour-active-glow')) {
-                map.setPaintProperty('tour-active-glow', 'circle-stroke-opacity', 0.25);
+                map.setPaintProperty('tour-active-glow', 'circle-stroke-opacity', pulseOpacity);
                 map.setPaintProperty('tour-active-glow', 'circle-radius',
-                    ['interpolate', ['linear'], ['zoom'], 1, 10, 4, 16, 8, 24]
+                    ['interpolate', ['linear'], ['zoom'], 1, 22 * pulseScale, 3, 30 * pulseScale, 6, 40 * pulseScale]
                 );
             }
-            // Show nav buttons again
-            if (tourPrev) tourPrev.style.display = '';
-            if (tourNext) tourNext.innerHTML = 'NEXT <i class="fa-solid fa-chevron-right"></i>';
-            // Start the actual first step
+            if (map.getLayer('tour-active-core')) {
+                const corePulse = 0.5 + 0.3 * Math.sin(glowPhase / 50 * Math.PI * 2);
+                map.setPaintProperty('tour-active-core', 'circle-opacity', corePulse);
+            }
+        }, 50);
+
+        // After 6 seconds: stop pulsing, fly to first actual stop
+        setTimeout(() => {
+            clearInterval(glowInterval);
+            // Reset glow to default steady state
+            if (map.getLayer('tour-active-glow')) {
+                map.setPaintProperty('tour-active-glow', 'circle-stroke-opacity', 0.5);
+                map.setPaintProperty('tour-active-glow', 'circle-radius',
+                    ['interpolate', ['linear'], ['zoom'], 1, 22, 3, 30, 6, 40, 10, 50]
+                );
+            }
+            if (map.getLayer('tour-active-core')) {
+                map.setPaintProperty('tour-active-core', 'circle-opacity', 0.7);
+            }
+            // Now proceed to the first tour step
             showTourStep();
-        }, 4200);
+        }, 6000);
     }
 
 
