@@ -346,9 +346,20 @@
                     </div>
                 </div>
 
-                <div class="control-item override-clear" style="margin-top:4px;">
-                    <button id="clear-scenarios" class="tactical-btn exit-btn" style="width:100%; border-color:#555; color:#aaa; margin-bottom: 5px;">[ <span data-i18n="reset_layers">RESET LAYERS</span> ]</button>
-                    <button onclick="window.open('./manual.html', '_blank')" class="tactical-btn" style="width:100%; border-color:rgba(0,212,255,0.4); color:var(--cyan);">[ <span data-i18n="command_manual">COMMAND MANUAL</span> ]</button>
+                <!-- Utility Toolbar — compact icon bar -->
+                <div class="sidebar-utility-bar">
+                    <button id="clear-scenarios" class="util-btn" title="Reset all layers">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span data-i18n="reset_layers">Reset</span>
+                    </button>
+                    <button onclick="window.open('./manual.html', '_blank')" class="util-btn" title="Command Manual">
+                        <i class="fa-solid fa-book"></i>
+                        <span data-i18n="command_manual">Manual</span>
+                    </button>
+                    <button onclick="window.open('./about.html', '_blank')" class="util-btn" title="About GEOPULSE">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>About</span>
+                    </button>
                 </div>
             </div>
         </section>

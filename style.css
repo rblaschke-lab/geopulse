@@ -282,7 +282,7 @@ body, html { width: 100%; height: 100%; overflow: hidden; background: #000; colo
     transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
-#ticker-top { top: 0; border-top: none; transform: translateY(-40px); opacity: 0; }
+#ticker-top { top: 0; border-top: none; transform: translateY(0); opacity: 1; }
 #ticker-bottom { bottom: 0; border-bottom: none; display: none; }
 
 .ticker-content {
@@ -2001,4 +2001,51 @@ body.no-ticker #sidebar { top: 14px !important; }
 @keyframes blink-cursor {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
+}
+
+/* ── Sidebar Utility Bar ── */
+.sidebar-utility-bar {
+    display: flex;
+    gap: 4px;
+    padding: 8px 0 4px;
+    margin-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+.util-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 4px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    color: rgba(255,255,255,0.45);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.util-btn i {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+.util-btn:hover {
+    background: rgba(0,212,255,0.08);
+    border-color: rgba(0,212,255,0.3);
+    color: var(--cyan);
+}
+.util-btn:hover i {
+    opacity: 1;
+}
+.util-btn:first-child:hover {
+    border-color: rgba(255,180,0,0.3);
+    color: var(--amber);
+}
+.util-btn:first-child:hover i {
+    color: var(--amber);
 }
