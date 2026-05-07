@@ -3018,8 +3018,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     center: [-77.04, 38.9], zoom: 4,
                     title: '🏛️ GUIDED TOURS — LEARN BY EXPLORING',
                     title_de: '🏛️ GEFÜHRTE TOUREN — LERNEN DURCH ENTDECKEN',
-                    text: 'GEOPULSE offers 17 guided tours on geopolitics, history, and the environment. Each tour flies you to key locations with expert briefings and Wikipedia references. Try the "Trump World Tour" to trace U.S. foreign policy across 9 countries — or explore nuclear history, the Cold War, and climate change.',
-                    text_de: 'GEOPULSE bietet 17 geführte Touren zu Geopolitik, Geschichte und Umwelt. Jede Tour fliegt Sie zu Schlüsselorten mit Expertenbriefings und Wikipedia-Referenzen. Probieren Sie die "Trump Welttour" mit 9 Ländern — oder erkunden Sie Nukleargeschichte, den Kalten Krieg und Klimawandel.',
+                    text: 'GEOPULSE offers 25 guided tours on geopolitics, history, and the environment. Each tour flies you to key locations with expert briefings and Wikipedia references. Try the "Trump World Tour" to trace U.S. foreign policy across 9 countries — or explore nuclear history, the Cold War, and climate change.',
+                    text_de: 'GEOPULSE bietet 25 geführte Touren zu Geopolitik, Geschichte und Umwelt. Jede Tour fliegt Sie zu Schlüsselorten mit Expertenbriefings und Wikipedia-Referenzen. Probieren Sie die "Trump Welttour" mit 9 Ländern — oder erkunden Sie Nukleargeschichte, den Kalten Krieg und Klimawandel.',
                     layers: []
                 },
                 {
