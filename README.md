@@ -9,7 +9,9 @@
 
 ## 🚀 Live Demo
 
-**➡️ [Launch GEOPULSE](https://geopulse.is-a.dev)**
+**➡️ [Launch GEOPULSE](https://rblaschke-lab.github.io/geopulse/)**
+
+> 🔄 *Custom domain `geopulse.is-a.dev` — registration pending ([PR #37701](https://github.com/is-a-dev/register/pull/37701))*
 
 > *10,000+ lines of code · 22 data layers · 25 guided tours · Zero API keys · Zero cost*
 
