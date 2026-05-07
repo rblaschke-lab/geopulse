@@ -379,6 +379,12 @@ document.addEventListener("DOMContentLoaded", () => {
             map.flyTo({ center: [15.0, 48.0], zoom: 2.2, pitch: 0, duration: 3000 });
             if(window.setStatus) setStatus(currentLang === 'de' ? 'ALLE EBENEN ZURÜCKGESETZT' : 'ALL LAYERS RESET');
         });
+
+        // ── MAP VIEW RESET — reset pitch/bearing/zoom to default ──
+        document.getElementById('reset-map-view')?.addEventListener('click', () => {
+            map.flyTo({ center: [15.0, 48.0], zoom: 2.2, pitch: 0, bearing: 0, duration: 2000 });
+            if(window.setStatus) setStatus(currentLang === 'de' ? 'KARTENANSICHT ZURÜCKGESETZT' : 'MAP VIEW RESET');
+        });
     }, 500);
 
     const switchMode = (modeId) => {
@@ -1150,13 +1156,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 const icon = getAgencyIcon(agency);
                 const countdown = getCountdown(l.net);
                 const pad = l.pad?.location?.name || '';
-                return `<div style="padding:4px 0;border-bottom:1px solid rgba(255,100,0,.15);font-size:.65rem;">
+                return `<div style="padding:4px 0;border-bottom:1px solid rgba(255,100,0,.15);font-size:.68rem;">
                     <div style="color:#ff9955;">${icon} ${escHtml(name.length > 28 ? name.slice(0,27)+'…' : name)}</div>
                     <div style="display:flex;justify-content:space-between;margin-top:2px;">
-                        <span style="opacity:.55;">${escHtml(rocket)}</span>
+                        <span style="opacity:.8;">${escHtml(rocket)}</span>
                         ${countdown}
                     </div>
-                    ${pad ? `<div style="opacity:.35;font-size:.58rem;">${escHtml(pad)}</div>` : ''}
+                    ${pad ? `<div style="opacity:.5;font-size:.58rem;">${escHtml(pad)}</div>` : ''}
                 </div>`;
             }).join('');
         } catch(e) {
@@ -2329,7 +2335,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     source: 'ACLED / SIPRI / UN OCHA',
                     location: [c.lon, c.lat],
                     relatedLayers: [
-                        { label: 'View Power Infrastructure', layerId: 'power' },
+                        { label: 'View Power Infrastructure', layerId: 'pipelines' },
                         { label: 'View Internet Cables', layerId: 'cables' }
                     ]
                 });

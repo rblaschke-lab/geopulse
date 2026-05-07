@@ -31,7 +31,7 @@
     <meta name="twitter:image" content="./og-preview.png">
 
     <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com https://fonts.openmaptiles.org; img-src 'self' https://*.arcgisonline.com https://tile.openstreetmap.org https://tilecache.rainviewer.com https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://www.foto-webcam.eu https://upload.wikimedia.org data: blob:; connect-src 'self' https://api.rss2json.com https://earthquake.usgs.gov https://api.wheretheiss.at https://services.swpc.noaa.gov https://api.rainviewer.com https://ll.thespacedevs.com https://api.ioda.inetintel.cc.gatech.edu https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://*.arcgisonline.com https://fonts.googleapis.com https://fonts.gstatic.com https://fonts.openmaptiles.org https://unpkg.com https://cdnjs.cloudflare.com https://api.counterapi.dev https://en.wikipedia.org https://de.wikipedia.org https://cdn.jsdelivr.net; frame-src https://www.foto-webcam.eu; worker-src blob:; child-src blob:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com https://fonts.openmaptiles.org; img-src 'self' https://*.arcgisonline.com https://tile.openstreetmap.org https://tilecache.rainviewer.com https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://www.foto-webcam.eu https://upload.wikimedia.org data: blob:; connect-src 'self' https://api.rss2json.com https://earthquake.usgs.gov https://api.wheretheiss.at https://services.swpc.noaa.gov https://api.rainviewer.com https://ll.thespacedevs.com https://api.ioda.inetintel.cc.gatech.edu https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://*.arcgisonline.com https://fonts.googleapis.com https://fonts.gstatic.com https://fonts.openmaptiles.org https://unpkg.com https://cdnjs.cloudflare.com https://api.counterapi.dev https://en.wikipedia.org https://de.wikipedia.org https://cdn.jsdelivr.net; frame-src https://www.foto-webcam.eu https://www.youtube-nocookie.com; worker-src blob:; child-src blob:;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="no-referrer">
     
@@ -352,6 +352,10 @@
                         <i class="fa-solid fa-rotate-left"></i>
                         <span data-i18n="reset_layers">Reset</span>
                     </button>
+                    <button id="reset-map-view" class="util-btn" title="Reset map orientation">
+                        <i class="fa-solid fa-compass"></i>
+                        <span>View</span>
+                    </button>
                     <button onclick="window.open('./manual.html', '_blank')" class="util-btn" title="Command Manual">
                         <i class="fa-solid fa-book"></i>
                         <span data-i18n="command_manual">Manual</span>
@@ -603,7 +607,7 @@
     <!-- Launch Tracker HUD -->
     <div id="launch-hud">
         <div style="color:#ff6600;font-size:.6rem;letter-spacing:2px;margin-bottom:6px;">🚀 <span data-i18n="upcoming_launches">UPCOMING LAUNCHES</span></div>
-        <div id="launch-feed" style="opacity:.5;font-size:.65rem;" data-i18n="launch_connecting">CONNECTING TO LAUNCH LIBRARY...</div>
+        <div id="launch-feed" style="opacity:.85;font-size:.7rem;" data-i18n="launch_connecting">CONNECTING TO LAUNCH LIBRARY...</div>
     </div>
 
     <div id="briefing-panel" class="glass-panel right-sidebar hidden"></div>
@@ -759,8 +763,8 @@
         <a href="#" id="demo-tour-link" title="Quick Demo Tour" onclick="event.preventDefault(); if(window._geopulseStartTour) window._geopulseStartTour('welcome');"><i class="fa-solid fa-play-circle"></i> Demo</a>
         <a href="#" id="feedback-link" title="Send Feedback" onclick="event.preventDefault(); var p=document.getElementById('feedback-panel'); if(p) p.classList.toggle('hidden');"><i class="fa-solid fa-comment-dots"></i> Feedback</a>
         <a href="./impressum.html" target="_blank" title="Impressum / Legal Notice"><i class="fa-solid fa-scale-balanced"></i> Impressum</a>
-        <span id="session-count" title="Total visitors" style="opacity:.5;font-size:.65rem;letter-spacing:1px;">—</span>
-        <span id="live-clock" title="UTC Time"></span>
+        <span id="session-count" title="Total visitors" style="opacity:.5;font-size:.65rem;letter-spacing:1px;margin-left:4px;">—</span>
+        <span id="live-clock" title="UTC Time" style="margin-left:4px;"></span>
     </div>
 
     <script src="./main.js?v=1.53b"></script>
