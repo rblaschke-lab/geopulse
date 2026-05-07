@@ -305,23 +305,22 @@
 
     <div class="timeline">
 
-        <!-- V1.5.2 — CURRENT -->
+        <!-- V1.5.3 — CURRENT -->
         <div class="version-entry">
             <div class="version-dot current"></div>
             <div class="version-header">
-                <span class="version-number">V1.5.2</span>
+                <span class="version-number">V1.5.3</span>
                 <span class="version-type type-patch">PATCH</span>
-                <span class="version-name">Flight Display Overhaul</span>
+                <span class="version-name">Layer Cleanup & Legal Compliance</span>
                 <span class="version-date">MAY 2026</span>
             </div>
             <ul class="version-changes">
-                <li><span class="change-icon fix">●</span> <strong>Flight Swarm Fix</strong> — Aircraft were displaying as circular "blob swarms" from 9 separate API queries. Replaced multi-point approach with viewport-aware single-request system — aircraft now load naturally for the area you're viewing</li>
-                <li><span class="change-icon feat">✦</span> <strong>MapLibre Clustering</strong> — At world zoom, nearby aircraft merge into clean numbered bubbles (e.g. "214") instead of dense dot swarms. Click a cluster to zoom in and expand it</li>
-                <li><span class="change-icon feat">✦</span> <strong>Viewport-Aware Fetching</strong> — Single API call centered on the current map view. Aircraft update as you pan across the globe (debounced, re-fetches when center moves &gt; 1°)</li>
-                <li><span class="change-icon fix">●</span> <strong>Rate Limit Compliance</strong> — Down from 9 simultaneous requests to 1 per update cycle. Zero HTTP 429 errors</li>
-                <li><span class="change-icon ui">◆</span> Cluster bubbles color-coded by density: cyan (&lt;50), teal (50–199), deep blue (200+)</li>
-                <li><span class="change-icon perf">⚡</span> Polling restored to 30s (single request vs. 12s multi-region cycle)</li>
-                <li><span class="change-icon fix">●</span> Config source corrected from "ADSB.lol" to "airplanes.live"</li>
+                <li><span class="change-icon fix">●</span> <strong>Live Flights Removed</strong> — The airplanes.live API only returns aircraft within 250 NM of a single query point, causing dense blob artifacts at continental zoom. Removed to maintain visual quality. ISS tracker remains as orbital feature</li>
+                <li><span class="change-icon feat">✦</span> <strong>Impressum Page</strong> — Added legally required Impressum (§5 DDG) with full contact details, data source listing, privacy statement, and disclaimer</li>
+                <li><span class="change-icon feat">✦</span> <strong>Visitor Counter Restored</strong> — Live visitor count via CounterAPI.dev now displayed in the bottom bar with 👁 icon</li>
+                <li><span class="change-icon ui">◆</span> Welcome screen updated: broader audience wording — "Für Schüler, Studenten, Lehrer & Interessierte"</li>
+                <li><span class="change-icon ui">◆</span> Impressum link added to bottom quick-links bar and about page footer</li>
+                <li><span class="change-icon fix">●</span> Cleaned CSP headers, data source references, and documentation to remove airplanes.live</li>
             </ul>
         </div>
 

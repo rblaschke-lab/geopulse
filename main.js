@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
             reset_layers: 'RESET LAYERS', command_manual: 'COMMAND MANUAL',
             cat_realtime: 'REAL-TIME TRACKING', cat_geopolitics: 'GEOPOLITICS',
             cat_environment: 'ENVIRONMENT & SPACE',
-            layer_flights: 'Live Flights', desc_flights: 'Real-time aircraft positions worldwide via ADS-B (airplanes.live). Free, open-source data.',
+
             layer_iss: 'ISS Tracker', desc_iss: 'International Space Station — orbits Earth every 90 minutes at 28,000 km/h.',
             layer_webcams: 'Live Webcams', desc_webcams: '9 curated alpine & city webcams with real-time snapshots from foto-webcam.eu.',
             layer_earthquakes: 'Earthquakes', desc_earthquakes: 'Live seismic events from USGS. Circle size = magnitude. Updated every 5 min.',
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
             welcome_subtitle: 'EXPLORE HISTORY. UNDERSTAND THE WORLD.',
             welcome_feat_tours: '25 guided tours — fly to real locations with satellite imagery',
             welcome_feat_1: 'World Wars, Roman Empire, Forbidden Zones & Lost Wonders',
-            welcome_feat_2: 'Live earthquakes, volcanoes, flights & satellite orbits',
+            welcome_feat_2: 'Live earthquakes, volcanoes, wildfires & satellite orbits',
             welcome_feat_3: 'Built for students — Geography, History, Science & Politics',
             welcome_start_tour: 'START DEMO TOUR', welcome_explore: 'EXPLORE FREELY',
             welcome_dont_show: "Don't show again",
@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
             reset_layers: 'EBENEN ZURÜCKSETZEN', command_manual: 'KOMMANDO-HANDBUCH',
             cat_realtime: 'ECHTZEIT-TRACKING', cat_geopolitics: 'GEOPOLITIK',
             cat_environment: 'UMWELT & WELTRAUM',
-            layer_flights: 'Live-Flüge', desc_flights: 'Echtzeit-Flugzeugpositionen weltweit via ADS-B (airplanes.live). Kostenlose, offene Daten.',
+
             layer_iss: 'ISS Tracker', desc_iss: 'Internationale Raumstation — umkreist die Erde alle 90 Minuten mit 28.000 km/h.',
             layer_webcams: 'Live-Webcams', desc_webcams: '9 kuratierte Alpen- & Stadt-Webcams mit Echtzeit-Schnappschüssen von foto-webcam.eu.',
             layer_earthquakes: 'Erdbeben', desc_earthquakes: 'Live-Seismik von USGS. Kreisgröße = Magnitude. Aktualisierung alle 5 Min.',
@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
             welcome_subtitle: 'GESCHICHTE ERLEBEN. DIE WELT VERSTEHEN.',
             welcome_feat_tours: '25 geführte Touren — fliege zu echten Orten mit Satellitenbildern',
             welcome_feat_1: 'Weltkriege, Römisches Reich, Verbotene Zonen & Weltwunder',
-            welcome_feat_2: 'Echtzeit-Erdbeben, Vulkane, Flüge & Satelliten',
+            welcome_feat_2: 'Echtzeit-Erdbeben, Vulkane, Waldbrände & Satelliten',
             welcome_feat_3: 'Für Schüler — Erdkunde, Geschichte, Naturwissenschaft & Politik',
             welcome_start_tour: 'DEMO-TOUR STARTEN', welcome_explore: 'FREI ERKUNDEN',
             welcome_dont_show: 'Nicht mehr anzeigen',
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const toggles = {
         terminator: false, fires: false, weather: false, borders: false,
-        flights: false, iss: false, starlink: false, earthquakes: false, webcams: false,
+        iss: false, starlink: false, earthquakes: false, webcams: false,
         nightlights: false, population: false, satellites: false, temperature: false,
         volcanoes: false, radiation: false, internet: false, power: false,
         cables: false, datacenters: false, nuclear: false, conflicts: false, regimes: false, blocs: false, aiAtlas: false
@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
         EXPLORE: {
             autoActiveLayers: ['terminator'],
             uiState: { sidebarCollapsed: true },
-            disablePolling: ['flights', 'iss', 'earthquakes']
+            disablePolling: ['iss', 'earthquakes']
         },
         ANALYZE: {
             autoActiveLayers: ['cables', 'blocs'],
@@ -285,7 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
             severity: "HIGH"
         },
         taiwan: {
-            layers: ['flights', 'cables', 'conflicts', 'regimes', 'nukes'],
+            layers: ['cables', 'conflicts', 'regimes', 'nukes'],
             title: "Taiwan Escalation",
             what: "A sudden military mobilization in the Taiwan Strait disrupts global commercial shipping and reroutes international flights.",
             why: "Strategic undersea internet cables are flagged at high risk, and regional tension escalates to DEFCON alert levels.",
@@ -303,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
             severity: "HIGH"
         },
         nuclear: {
-            layers: ['nukes', 'radiation', 'conflicts', 'blocs', 'flights', 'satellites'],
+            layers: ['nukes', 'radiation', 'conflicts', 'blocs', 'satellites'],
             title: "Global Nuclear Risk",
             what: "Following a breakdown in strategic arms control, early warning satellite networks detect heightened readiness at silo locations.",
             why: "Airborne command posts are active, and terrestrial radiation sensors are put on high alert. Defcon level raised.",
@@ -693,114 +693,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // ── SHIPS layer removed — no free keyless AIS API available ──
 
-        // ── FLIGHTS (airplanes.live — viewport-aware, individual dots) ──────
-        try {
-            map.addSource('flights-src', {
-                type: 'geojson',
-                data: { type: 'FeatureCollection', features: [] }
-            });
-
-            // Individual aircraft dots — visible at all zoom levels
-            map.addLayer({
-                id: 'flights-layer', type: 'circle', source: 'flights-src',
-                layout: { visibility: 'none' },
-                paint: {
-                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 1.5, 4, 2.5, 6, 4, 9, 6, 12, 9],
-                    'circle-color': '#00d4ff',
-                    'circle-opacity': ['interpolate', ['linear'], ['zoom'], 2, 0.5, 6, 0.75, 10, 0.9],
-                    'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 2, 0, 5, 0.5, 8, 0.8],
-                    'circle-stroke-color': '#ffffff',
-                    'circle-stroke-opacity': 0.3
-                }
-            });
-
-            // Click handler for individual flights
-            map.on('click', 'flights-layer', (e) => {
-                const p = e.features[0].properties;
-                const coords = e.features[0].geometry.coordinates;
-                new maplibregl.Popup({ offset: 6, maxWidth: '260px' })
-                    .setLngLat(coords)
-                    .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
-                        <h3 style="color:#00d4ff;margin:0 0 5px;font-size:.75rem;border-bottom:1px solid rgba(0,212,255,0.2);padding-bottom:4px;">✈️ ${escHtml(p.callsign || (currentLang==='de'?'UNBEKANNT':'UNKNOWN'))}</h3>
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:4px;">
-                            <div style="background:rgba(0,212,255,.05);padding:3px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'TYP':'TYPE'}</div><div style="color:#00d4ff;font-size:.65rem;">${escHtml(p.type || 'N/A')}</div></div>
-                            <div style="background:rgba(0,212,255,.05);padding:3px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">REG</div><div style="font-size:.65rem;">${escHtml(p.reg || 'N/A')}</div></div>
-                        </div>
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;">
-                            <div style="background:rgba(0,212,255,.05);padding:3px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'HÖHE':'ALTITUDE'}</div><div style="color:#00d4ff;">${p.alt ? Number(p.alt).toLocaleString() + ' ft' : 'N/A'}</div></div>
-                            <div style="background:rgba(0,212,255,.05);padding:3px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'GESCHW.':'SPEED'}</div><div style="color:#00d4ff;">${p.gs ? Math.round(Number(p.gs) * 1.852) + ' km/h' : 'N/A'}</div></div>
-                        </div>
-                        <div style="opacity:.3;font-size:.45rem;margin-top:5px;letter-spacing:1px;">VIA AIRPLANES.LIVE · LIVE ADS-B</div>
-                    </div>`)
-                    .addTo(map);
-            });
-
-            map.on('mouseenter', 'flights-layer', () => { map.getCanvas().style.cursor = 'pointer'; });
-            map.on('mouseleave', 'flights-layer', () => { map.getCanvas().style.cursor = ''; });
-
-            // ── Viewport-aware flight fetching ──
-            // Single API call centered on the current map view.
-            // Re-fetches on map idle (debounced) so aircraft update as user pans.
-            let _flightsFetchTimer = null;
-            let _flightsLastCenter = null;
-            const fetchFlights = async () => {
-                if (!toggles.flights) return;
-                try {
-                    const center = map.getCenter();
-                    const url = `https://api.airplanes.live/v2/point/${center.lat.toFixed(2)}/${center.lng.toFixed(2)}/250`;
-                    const result = await window.reliableFetch(url, 'flights_viewport', { timeout: 12000, retries: 1 });
-                    const aircraft = result.data?.ac || [];
-                    const features = [];
-                    for (const a of aircraft) {
-                        if (!a.lat || !a.lon || a.alt_baro === 'ground') continue;
-                        features.push({
-                            type: 'Feature',
-                            geometry: { type: 'Point', coordinates: [a.lon, a.lat] },
-                            properties: {
-                                callsign: (a.flight || '').trim(),
-                                type: a.t || '',
-                                reg: a.r || '',
-                                alt: a.alt_baro || 0,
-                                gs: a.gs || 0
-                            }
-                        });
-                    }
-                    if (_tourActive) return;
-                    map.getSource('flights-src')?.setData({ type: 'FeatureCollection', features });
-                    if (features.length > 0) {
-                        updateLayerStatus('flights', 'LIVE', `${features.length} aircraft`);
-                    } else {
-                        updateLayerStatus('flights', 'STATIC', 'No aircraft in view');
-                    }
-                    _flightsLastCenter = { lat: center.lat, lng: center.lng };
-                    console.log(`[FLIGHTS] ${features.length} aircraft near ${center.lat.toFixed(1)},${center.lng.toFixed(1)}`);
-                } catch(err) {
-                    console.warn('[FLIGHTS] fetch failed:', err.message);
-                    updateLayerStatus('flights', 'OFFLINE', 'API unavailable');
-                }
-            };
-
-            // Debounced re-fetch on map movement — only if center moved significantly
-            const scheduleFlightRefetch = () => {
-                if (!toggles.flights) return;
-                clearTimeout(_flightsFetchTimer);
-                _flightsFetchTimer = setTimeout(() => {
-                    if (!toggles.flights) return;
-                    const center = map.getCenter();
-                    // Only re-fetch if center moved > ~100km (~1 degree)
-                    if (_flightsLastCenter) {
-                        const dLat = Math.abs(center.lat - _flightsLastCenter.lat);
-                        const dLng = Math.abs(center.lng - _flightsLastCenter.lng);
-                        if (dLat < 1 && dLng < 1) return; // hasn't moved enough
-                    }
-                    fetchFlights();
-                }, 1500); // 1.5s after map stops moving
-            };
-            map.on('moveend', scheduleFlightRefetch);
-
-            window._fetchFlights = fetchFlights;
-            setInterval(fetchFlights, 30000); // refresh every 30s
-        } catch(e) { console.warn('[FLIGHTS] Init failed:', e.message); }
+        // ── FLIGHTS layer removed ──
+        // The airplanes.live API only returns aircraft within 250 NM (~460 km) of a single
+        // query point. At continental/world zoom the viewport spans thousands of km, so all
+        // aircraft pile up in one dense blob around the query center — no amount of clustering
+        // or styling can fix this fundamental API geometry mismatch. Removed to maintain the
+        // app's visual quality. The ISS tracker remains as the primary orbital/aviation feature.
 
         // ── STARLINK (Simulated LEO Constellation — 500 sats) ──
         try {
@@ -2139,14 +2037,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Ships toggle removed — no free keyless AIS API available
 
-    document.getElementById('toggle-flights')?.addEventListener('change', (e) => {
-        toggles.flights = e.target.checked;
-        const vis = toggles.flights ? 'visible' : 'none';
-        ['flights-layer'].forEach(id => {
-            if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', vis);
-        });
-        if (toggles.flights && window._fetchFlights) window._fetchFlights();
-    });
+    // Flights toggle removed — layer removed due to API limitations
     
     document.getElementById('toggle-starlink')?.addEventListener('change', (e) => {
         toggles.starlink = e.target.checked;
@@ -4058,7 +3949,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 2. Hide ALL MapLibre native layers (comprehensive — matches actual layer IDs)
         const mlLayersToHide = [
             // Data layers
-            'cables-layer', 'flights-layer',
+            'cables-layer',
             'earthquakes-core', 'earthquakes-ring',
             'starlink-layer',
             'terminator-layer',
