@@ -618,6 +618,140 @@ document.addEventListener("DOMContentLoaded", () => {
     map.on('load', async () => {
         setStatus(currentLang === 'de' ? 'KARTE GELADEN. DATENSTRÖME WERDEN INITIALISIERT...' : 'MAP LOADED. INITIALIZING DATA STREAMS...');
 
+        // ═══════════════════════════════════════════════════════════
+        // GEN Z VISUAL EFFECTS — Atmosphere, Particles, Sounds
+        // ═══════════════════════════════════════════════════════════
+
+        // ── 1. MAP ATMOSPHERE / SKY (3D depth at horizon) ──
+        try {
+            map.setSky({
+                'sky-color': '#000a1a',
+                'sky-horizon-blend': 0.4,
+                'horizon-color': '#003366',
+                'horizon-fog-blend': 0.6,
+                'fog-color': '#001122',
+                'fog-ground-blend': 0.1
+            });
+        } catch(e) { console.warn('[atmosphere] Sky not supported:', e.message); }
+
+        // ── 2. AMBIENT PARTICLE FIELD (floating data-stream particles) ──
+        try {
+            const canvas = document.getElementById('particle-canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                let particles = [];
+                const PARTICLE_COUNT = 50;
+                const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+                resize();
+                window.addEventListener('resize', resize);
+
+                for (let i = 0; i < PARTICLE_COUNT; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        vx: (Math.random() - 0.5) * 0.3,
+                        vy: (Math.random() - 0.5) * 0.3,
+                        r: Math.random() * 1.5 + 0.5,
+                        a: Math.random() * 0.5 + 0.2,
+                        hue: Math.random() > 0.7 ? 180 : (Math.random() > 0.5 ? 50 : 200)
+                    });
+                }
+
+                function drawParticles() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    // Draw connections between nearby particles
+                    for (let i = 0; i < particles.length; i++) {
+                        for (let j = i + 1; j < particles.length; j++) {
+                            const dx = particles[i].x - particles[j].x;
+                            const dy = particles[i].y - particles[j].y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            if (dist < 120) {
+                                ctx.beginPath();
+                                ctx.strokeStyle = `rgba(0,212,255,${0.08 * (1 - dist / 120)})`;
+                                ctx.lineWidth = 0.5;
+                                ctx.moveTo(particles[i].x, particles[i].y);
+                                ctx.lineTo(particles[j].x, particles[j].y);
+                                ctx.stroke();
+                            }
+                        }
+                    }
+                    // Draw particles
+                    particles.forEach(p => {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        if (p.x < 0) p.x = canvas.width;
+                        if (p.x > canvas.width) p.x = 0;
+                        if (p.y < 0) p.y = canvas.height;
+                        if (p.y > canvas.height) p.y = 0;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                        ctx.fillStyle = `hsla(${p.hue},80%,70%,${p.a})`;
+                        ctx.fill();
+                    });
+                    requestAnimationFrame(drawParticles);
+                }
+                drawParticles();
+            }
+        } catch(e) { console.warn('[particles] Init failed:', e.message); }
+
+        // ── 3. PROCEDURAL SOUND EFFECTS ENGINE (Web Audio API) ──
+        window._geoSfx = null;
+        try {
+            const sfxCtx = window._audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+            window._geoSfx = {
+                // UI click tick
+                tick: () => {
+                    try {
+                        const o = sfxCtx.createOscillator();
+                        const g = sfxCtx.createGain();
+                        o.type = 'sine'; o.frequency.value = 1200;
+                        g.gain.setValueAtTime(0.04, sfxCtx.currentTime);
+                        g.gain.exponentialRampToValueAtTime(0.001, sfxCtx.currentTime + 0.08);
+                        o.connect(g); g.connect(sfxCtx.destination);
+                        o.start(); o.stop(sfxCtx.currentTime + 0.08);
+                    } catch(e) {}
+                },
+                // Map flyTo whoosh
+                whoosh: () => {
+                    try {
+                        const bufSize = sfxCtx.sampleRate * 0.6;
+                        const buf = sfxCtx.createBuffer(1, bufSize, sfxCtx.sampleRate);
+                        const data = buf.getChannelData(0);
+                        for (let i = 0; i < bufSize; i++) {
+                            data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufSize, 3);
+                        }
+                        const src = sfxCtx.createBufferSource();
+                        src.buffer = buf;
+                        const lp = sfxCtx.createBiquadFilter();
+                        lp.type = 'lowpass'; lp.frequency.value = 400;
+                        lp.frequency.linearRampToValueAtTime(150, sfxCtx.currentTime + 0.5);
+                        const g = sfxCtx.createGain();
+                        g.gain.setValueAtTime(0.06, sfxCtx.currentTime);
+                        g.gain.exponentialRampToValueAtTime(0.001, sfxCtx.currentTime + 0.6);
+                        src.connect(lp); lp.connect(g); g.connect(sfxCtx.destination);
+                        src.start();
+                    } catch(e) {}
+                },
+                // Tour start chime
+                chime: () => {
+                    try {
+                        const now = sfxCtx.currentTime;
+                        [440, 554, 659].forEach((f, i) => {
+                            const o = sfxCtx.createOscillator();
+                            const g = sfxCtx.createGain();
+                            o.type = 'sine'; o.frequency.value = f;
+                            g.gain.setValueAtTime(0, now + i * 0.12);
+                            g.gain.linearRampToValueAtTime(0.03, now + i * 0.12 + 0.05);
+                            g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.4);
+                            o.connect(g); g.connect(sfxCtx.destination);
+                            o.start(now + i * 0.12);
+                            o.stop(now + i * 0.12 + 0.4);
+                        });
+                    } catch(e) {}
+                }
+            };
+        } catch(e) { console.warn('[sfx] Audio context not available'); }
+
         // ── PLACE LABELS OVERLAY (Esri — transparent city/country names) ──
         // Adds city, country, and place names on top of satellite imagery
         // so users can orient themselves during tours and exploration.
@@ -672,6 +806,33 @@ document.addEventListener("DOMContentLoaded", () => {
             map.on('mouseenter', 'earthquakes-core', () => map.getCanvas().style.cursor = 'pointer');
             map.on('mouseleave', 'earthquakes-core', () => map.getCanvas().style.cursor = '');
             updateLayerStatus('earthquakes', 'LIVE', 'USGS Feed Online');
+
+            // ── EARTHQUAKE PULSE RIPPLE (animated expanding rings) ──
+            map.addLayer({
+                id: 'earthquakes-pulse', type: 'circle', source: 'earthquakes-src',
+                layout: { visibility: 'none' },
+                paint: {
+                    'circle-radius': ['interpolate', ['linear'], ['get', 'mag'], 2.5, 18, 5, 35, 7, 55],
+                    'circle-color': 'transparent',
+                    'circle-stroke-color': ['interpolate', ['linear'], ['get', 'mag'], 2.5, '#ffb000', 5, '#ff6600', 7, '#ff0000'],
+                    'circle-stroke-width': 1,
+                    'circle-stroke-opacity': 0.15
+                }
+            });
+            // Animate the pulse ring
+            let eqPulsePhase = 0;
+            setInterval(() => {
+                if (!toggles.earthquakes) return;
+                eqPulsePhase = (eqPulsePhase + 1) % 60;
+                const scale = 1 + (eqPulsePhase / 60) * 1.5;
+                const opacity = 0.3 * (1 - eqPulsePhase / 60);
+                if (map.getLayer('earthquakes-pulse')) {
+                    map.setPaintProperty('earthquakes-pulse', 'circle-stroke-opacity', opacity);
+                    map.setPaintProperty('earthquakes-pulse', 'circle-radius',
+                        ['interpolate', ['linear'], ['get', 'mag'], 2.5, 18 * scale, 5, 35 * scale, 7, 55 * scale]
+                    );
+                }
+            }, 50);
         } catch(e) { console.warn('[EARTHQUAKES] Init failed:', e.message); }
 
         // ── NASA FIRES (GIBS MODIS Thermal Anomalies) ──────────
@@ -2238,6 +2399,7 @@ document.addEventListener("DOMContentLoaded", () => {
             map.setLayoutProperty('earthquakes-core', 'visibility', toggles.earthquakes ? 'visible' : 'none');
             map.setLayoutProperty('earthquakes-ring', 'visibility', toggles.earthquakes ? 'visible' : 'none');
             if (map.getLayer('earthquakes-tsunami-ring')) map.setLayoutProperty('earthquakes-tsunami-ring', 'visibility', toggles.earthquakes ? 'visible' : 'none');
+            if (map.getLayer('earthquakes-pulse')) map.setLayoutProperty('earthquakes-pulse', 'visibility', toggles.earthquakes ? 'visible' : 'none');
         }
     });
 
@@ -2653,6 +2815,11 @@ document.addEventListener("DOMContentLoaded", () => {
         toggles.nukes = e.target.checked;
         if (toggles.nukes && nukeArsenalMarkers.length === 0 && nuclearMarkers.length === 0) initNuclearLayer();
         nukeArsenalMarkers.forEach(m => toggles.nukes ? m.addTo(map) : m.remove());
+    });
+
+    // ── GLOBAL TOGGLE CLICK SOUND ──────────────────────────
+    document.querySelectorAll('.control-item input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', () => { if (window._geoSfx) window._geoSfx.tick(); });
     });
 
     // ── SYSTEM OVERRIDE (toggle-all) ──────────────────────
@@ -4138,7 +4305,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const mlLayersToHide = [
             // Data layers
             'cables-layer',
-            'earthquakes-core', 'earthquakes-ring',
+            'earthquakes-core', 'earthquakes-ring', 'earthquakes-pulse',
+            'pipelines-layer',
             'starlink-layer',
             'terminator-layer',
             'fires-layer',
@@ -4502,6 +4670,8 @@ document.addEventListener("DOMContentLoaded", () => {
         showTourStep();
         const nm = getTourName(tour).toUpperCase();
         setStatus(currentLang === 'de' ? 'GEFÜHRTE TOUR: ' + nm + ' GESTARTET' : 'GUIDED TOUR: ' + nm + ' INITIATED');
+        // Chime sound on tour start
+        if (window._geoSfx) window._geoSfx.chime();
     }
 
 
@@ -4568,6 +4738,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (tourPrev) tourPrev.disabled = true;
         if (tourNext) tourNext.disabled = true;
 
+        // ── Tour Transition Effect (blur overlay + whoosh) ──
+        const transOverlay = document.getElementById('tour-transition-overlay');
+        if (transOverlay) { transOverlay.classList.add('active'); }
+        if (window._geoSfx) window._geoSfx.whoosh();
+
         // ── Update Story-Mode Progress Bar ──
         const progressFill = document.getElementById('tour-progress-fill');
         if (progressFill && activeTour) {
@@ -4602,6 +4777,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // Show briefing AFTER flight completes
         map.once('moveend', () => {
             tourPanel.classList.remove('flying');
+            // Clear transition overlay
+            const transOvl = document.getElementById('tour-transition-overlay');
+            if (transOvl) transOvl.classList.remove('active');
+            if (window._geoSfx) window._geoSfx.tick();
             const stepTitle = getTourTitle(step);
             const stepText = getTourText(step);
             tourTitle.textContent = stepTitle;
