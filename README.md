@@ -2,46 +2,51 @@
 
 **Free, real-time educational world map combining satellite imagery, geopolitical data, and live intelligence feeds into one interactive dashboard. By RB Design 2026.**
 
-![Version](https://img.shields.io/badge/version-1.3-blue)
+![Version](https://img.shields.io/badge/version-1.5.4-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Platform](https://img.shields.io/badge/platform-GitHub%20Pages-orange)
+![Cost](https://img.shields.io/badge/cost-%240%2Fmonth-brightgreen)
 
 ## 🚀 Live Demo
 
-**➡️ [Launch GEOPULSE](https://rblaschke-lab.github.io/geopulse/)**
+**➡️ [Launch GEOPULSE](https://geopulse.is-a.dev)**
+
+> *10,000+ lines of code · 22 data layers · 25 guided tours · Zero API keys · Zero cost*
 
 ## Features
 
 | Category | Layers |
 |----------|--------|
-| **🛰️ Real-Time Tracking** | Live Flights (ADSB.lol), ISS Tracker, Earthquakes (USGS), NASA Wildfires, Day/Night Terminator, Live Webcams |
-| **🌐 Geopolitics** | Regime Types, Alliances & Blocs, Active Conflicts, Country Borders & Labels, Undersea Cables, Nuclear Plants |
-| **🌋 Environment & Space** | Ocean Temperature, Surface Temperature, Population Density, Volcanoes, Radiation Sites, Starlink |
+| **🛰️ Real-Time Tracking** | ISS Tracker, Earthquakes (USGS), NASA Wildfires, Day/Night Terminator, Live Webcams |
+| **🌐 Geopolitics** | Regime Types, Alliances & Blocs, Active Conflicts, Undersea Cables, Nuclear Plants, Nuclear Arsenal |
+| **🌋 Environment & Space** | Ocean Temperature, Surface Temperature, Population Density, Volcanoes, Radiation Sites, Starlink, Weather Radar |
 
 ### Key Capabilities
 
-- **Guided Tours** — 17 cinematic educational tours across 4 categories: Geopolitics, History (WW1, WW2, Roman Empire), Science & Nature (Earthquakes & Eruptions), Sports & Culture (Olympic Games)
-- **2-Mode System** — EXPLORE (full satellite view) / ANALYZE (data-focused overlays)
-- **Bilingual Interface** — Switch between English and German (EN/DE) with one click
-- **Global Scenario Presets** — One-click educational presets (Taiwan, Red Sea, Europe Energy, Nuclear Risk)
-- **AI Anomaly Detection** — Spatial anomaly scanner with severity-ranked briefings
+- **25 Guided Tours** — Cinematic educational tours across 7 categories: History, Geopolitics, Nature & Science, Space & Tech, Sports, Culture, Demo
+- **Cinematic Camera** — Each tour stop approaches from a unique angle with orbital drift
+- **Typewriter Text** — Briefing text reveals character-by-character for a decoded-intel feel
+- **Ken Burns Effect** — Wikipedia thumbnails slowly pan & zoom like a documentary
+- **Story Progress Bar** — Amber gradient bar fills as you advance through tour stops
+- **Bilingual Interface** — Full English/German (EN/DE) toggle with persistent preference
+- **Audio Narration** — Text-to-speech in English and German with smart voice picker
 - **Wikipedia Integration** — Click markers for detailed context with direct Wikipedia links
-- **Mobile-First** — Full touch support with swipeable panels and 4-button bottom nav
-- **Welcome Overlay** — First-visit onboarding with tour launcher for students
-- **Tour Images** — Wikipedia thumbnails displayed at key historical/geographic stops
-- **🎬 Video Pilot** — Embedded YouTube clips at select tour stops (Earthquakes & Olympics)
-- **Bilingual Audio** — Text-to-speech narration in English and German with smart voice picker
-- **Country Borders** — Natural Earth 110m boundaries + 121 country labels (zoom-dependent)
+- **Mobile-First** — Full touch support with swipeable panels and responsive layout
+- **Scenario Presets** — One-click educational presets (Taiwan, Red Sea, Europe Energy, Nuclear Risk)
+- **Welcome Overlay** — First-visit onboarding with demo tour launcher for students
 
 ## Tech Stack
 
 | Component | Technology |
-|-----------|-----------|
+|-----------|------------|
 | Map Engine | [MapLibre GL JS](https://maplibre.org/) V4 |
 | Satellite Imagery | Esri World Imagery |
-| Architecture | Vanilla JavaScript (no frameworks, no dependencies) |
-| Hosting | GitHub Pages (static) |
-| Data Sources | USGS, NASA FIRMS, NOAA, ADSB.lol, Celestrak, Smithsonian GVP, foto-webcam.eu |
+| Architecture | Vanilla JavaScript (no frameworks, no bundlers) |
+| Hosting | GitHub Pages (static, free) |
+| Audio | Web Audio API (procedural) + Web Speech API |
+| Data Sources | USGS, NASA FIRMS/GIBS, NOAA, foto-webcam.eu, WhereTheISS, Wikipedia |
+
+> 📋 See [TECH_SPEC.md](TECH_SPEC.md) for the full technical specification, complexity analysis, and API inventory.
 
 ## Getting Started
 
@@ -61,7 +66,7 @@ npx -y http-server . -p 8080
 open http://localhost:8080
 ```
 
-> **Zero API keys required.** All data sources are free and keyless.
+> **Zero API keys required.** All data sources are free and keyless. No `npm install`, no build step.
 
 ## Deployment
 
@@ -70,7 +75,7 @@ This project is designed for **GitHub Pages** — no build step required.
 1. Push to `master` branch
 2. Go to **Settings → Pages → Source → Deploy from branch**
 3. Select `master` / `/ (root)` → Save
-4. Your site is live at `https://<username>.github.io/geopulse/`
+4. Your site is live!
 
 ## Security
 
@@ -94,4 +99,4 @@ This project is open source under the [MIT License](LICENSE).
 
 ---
 
-**GEOPULSE V1.3** — Built with 🛰️ by RB Design 2026
+**GEOPULSE V1.5.4** — Built with 🛰️ by RB Design 2026

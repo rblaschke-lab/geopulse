@@ -2,7 +2,7 @@
 
 > **Version:** V1.5.4 · **Updated:** May 2026  
 > **Repository:** [github.com/rblaschke-lab/geopulse](https://github.com/rblaschke-lab/geopulse)  
-> **Live:** [rblaschke-lab.github.io/geopulse](https://rblaschke-lab.github.io/geopulse)  
+> **Live:** [geopulse.is-a.dev](https://geopulse.is-a.dev)  
 > **License:** MIT · Free & Open Source
 
 ---
@@ -240,7 +240,7 @@ All APIs are **free, keyless, and public**. Zero cost, zero credentials.
 ```
 GitHub Repository → git push → GitHub Pages (auto-deploy)
                                  ↓
-                    https://rblaschke-lab.github.io/geopulse/
+                    https://geopulse.is-a.dev
 ```
 
 - **Cost:** $0/month
