@@ -2101,32 +2101,32 @@ document.addEventListener("DOMContentLoaded", () => {
         {
             name: 'Iran — US/Israel War 2025', lat: 32.5, lon: 51.5, severity: 'CRITICAL',
             type: 'Interstate War / Air Campaign', since: 2025,
-            parties: [['🇺🇸 USA + 🇮🇱 Israel', 'Airstrikes on nuclear sites, IRGC targets'], ['🇮🇷 Iran (IRGC + Army)', 'Retaliation via missiles, proxies, Strait of Hormuz']],
-            support: 'US/Israel: Gulf basing rights, F-35s, B-2 bombers. Iran: Russia (S-400 delivery pending), China (diplomatic).',
-            casualties: 'Hundreds of Iranian military; multiple US base attacks across Iraq/Syria; civilian casualties from strikes',
-            displaced: 'Unknown — limited ground displacement; economic fallout massive',
-            status: 'ACTIVE — Escalating air/missile war; Strait of Hormuz partially blocked',
-            note: 'US launched strikes on Iranian nuclear facilities in 2025 after IAEA confirmed 90% enrichment. Iran retaliated with ballistic missiles on US bases in Iraq/UAE. Oil prices spiked above $120/bbl. Strait of Hormuz disrupted.'
+            parties: [['🇺🇸 USA + 🇮🇱 Israel', 'Strikes on nuclear/IRGC sites'], ['🇮🇷 Iran', 'Missile retaliation, Hormuz disruption']],
+            support: 'US: Gulf bases, F-35s. Iran: Russia, China (limited).',
+            casualties: 'Hundreds military; US bases attacked in Iraq/UAE',
+            displaced: 'Limited ground displacement; oil crisis ($120+/bbl)',
+            status: 'ACTIVE — Air/missile war; Hormuz partially blocked',
+            note: 'US struck nuclear sites after 90% enrichment confirmed. Iran retaliated on US bases. Strait of Hormuz disrupted.'
         },
         {
-            name: 'Iran — Israel Shadow War', lat: 33.5, lon: 43.5, severity: 'CRITICAL',
-            type: 'Regional Proxy / Direct Military Clash', since: 2019,
-            parties: [['🇮🇱 Israel (IDF/Mossad)', 'Strikes, assassinations, sabotage'], ['🇮🇷 Iran (IRGC)', 'Proxies + direct strikes']],
-            support: 'Israel: US backing, F-35s, Iron Dome. Iran: Hezbollah, Hamas, Houthis, PMF Iraq.',
+            name: 'Iran — Israel Proxy War', lat: 33.5, lon: 43.5, severity: 'CRITICAL',
+            type: 'Regional Proxy / Direct Clash', since: 2019,
+            parties: [['🇮🇱 Israel (IDF)', 'Strikes + assassinations'], ['🇮🇷 Iran (IRGC)', 'Proxies + direct missiles']],
+            support: 'Israel: US, Iron Dome. Iran: Hezbollah, Houthis, PMF.',
             casualties: 'Thousands killed across multiple fronts since Oct 2023',
             displaced: 'N/A — multi-front proxy war',
-            status: 'ACTIVE — Escalated to direct exchanges; linked to 2025 Iran war',
-            note: 'Iran fired 300+ drones/missiles at Israel Apr 13-14, 2024. Israel retaliated Oct 26, 2024. Full escalation in 2025 with US joining strikes on Iran. Proxy network: Hezbollah (weakened), Hamas (degraded), Houthis (active), Iraqi PMF.'
+            status: 'ACTIVE — Direct exchanges since Apr 2024; linked to 2025 war',
+            note: 'Iran fired 300+ missiles at Israel (Apr 2024). Proxy network weakened but active.'
         },
         {
-            name: 'Iran — USA Confrontation', lat: 26.0, lon: 56.0, severity: 'CRITICAL',
-            type: 'Military Confrontation / Air-Sea War', since: 2019,
-            parties: [['🇺🇸 USA (CENTCOM)', 'Carrier groups, B-2 strikes, airbases'], ['🇮🇷 Iran (IRGC Navy)', 'Mine warfare, missile boats, Strait of Hormuz']],
-            support: 'USA: Israel, Gulf states (KSA, UAE, Bahrain). Iran: Russia, China (limited).',
-            casualties: 'Multiple US base attacks; Iranian naval/IRGC losses from US strikes',
-            displaced: 'N/A — naval/air confrontation',
-            status: 'ACTIVE — Direct military conflict since 2025; Hormuz flashpoint',
-            note: 'Escalated from maximum pressure campaign to direct strikes in 2025. Strait of Hormuz (20% of global oil) partially disrupted. Oil tanker escorts by US Navy. IRGC mine-laying operations.'
+            name: 'Strait of Hormuz Crisis', lat: 26.0, lon: 56.0, severity: 'CRITICAL',
+            type: 'Naval / Air-Sea Confrontation', since: 2019,
+            parties: [['🇺🇸 USA (CENTCOM)', 'Carrier groups, escorts'], ['🇮🇷 IRGC Navy', 'Mines, missile boats']],
+            support: 'USA: Gulf states. Iran: asymmetric warfare.',
+            casualties: 'Naval skirmishes; tanker seizures',
+            displaced: 'N/A — 20% of global oil transits here',
+            status: 'ACTIVE — Tanker escorts; mine-laying ops',
+            note: 'Escalated to direct conflict 2025. US Navy escorting oil tankers through strait.'
         }
     ];
 
