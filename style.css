@@ -1510,11 +1510,13 @@ body.no-ticker #sidebar { top: 14px !important; }
     box-shadow: 0 0 12px rgba(255,176,0,0.2);
 }
 
-/* Tour Image (Wikipedia Thumbnails) */
+/* Tour Image (Wikipedia Thumbnails) — Ken Burns Effect */
 .tour-image-container {
     margin: 10px 0;
     text-align: center;
     animation: tour-img-fade 0.5s ease;
+    overflow: hidden;
+    border-radius: 4px;
 }
 .tour-image-container.hidden { display: none; }
 .tour-image-container img {
@@ -1524,6 +1526,8 @@ body.no-ticker #sidebar { top: 14px !important; }
     border: 1px solid rgba(255,176,0,0.25);
     box-shadow: 0 4px 15px rgba(0,0,0,0.6);
     object-fit: cover;
+    animation: kenburns 12s ease-in-out infinite alternate;
+    transform-origin: center center;
 }
 .tour-image-caption {
     font-size: 0.5rem;
@@ -1532,6 +1536,58 @@ body.no-ticker #sidebar { top: 14px !important; }
     margin-top: 4px;
 }
 @keyframes tour-img-fade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes kenburns {
+    0% { transform: scale(1.0) translate(0, 0); }
+    100% { transform: scale(1.18) translate(-3%, -2%); }
+}
+
+/* Story-Mode Progress Bar */
+.tour-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 6px 6px 0 0;
+    overflow: hidden;
+    z-index: 1;
+}
+.tour-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--amber), #ff8800);
+    border-radius: 3px;
+    transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 0 8px rgba(255,176,0,0.5);
+    position: relative;
+}
+.tour-progress-fill::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 20px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+    animation: progress-shimmer 1.5s ease-in-out infinite;
+}
+@keyframes progress-shimmer {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+/* Typewriter Cursor */
+.tour-text .typewriter-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 0.85em;
+    background: var(--amber);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: cursor-blink 0.7s step-end infinite;
+}
+@keyframes cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
 
 /* Tour Video Pilot */
 .tour-video-container {

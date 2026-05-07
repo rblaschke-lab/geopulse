@@ -4317,6 +4317,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    // ── Typewriter effect helper ──
+    let _typewriterTimer = null;
+    function typewriterEffect(element, text, speed = 18, onComplete) {
+        clearInterval(_typewriterTimer);
+        element.innerHTML = '';
+        let i = 0;
+        const cursor = document.createElement('span');
+        cursor.className = 'typewriter-cursor';
+        element.appendChild(cursor);
+        _typewriterTimer = setInterval(() => {
+            if (i < text.length) {
+                // Insert character before cursor
+                cursor.before(document.createTextNode(text.charAt(i)));
+                i++;
+                // Auto-scroll the panel to keep cursor visible
+                element.closest('.tour-briefing-panel')?.scrollTo({ top: element.closest('.tour-briefing-panel').scrollHeight, behavior: 'smooth' });
+            } else {
+                clearInterval(_typewriterTimer);
+                // Remove cursor after a short delay
+                setTimeout(() => cursor.remove(), 2000);
+                if (onComplete) onComplete();
+            }
+        }, speed);
+    }
+
     function showTourStep() {
         if (!activeTour || !tourPanel) return;
         const step = activeTour.steps[tourStepIndex];
@@ -4339,8 +4364,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Stop any ongoing narration
+        // Stop any ongoing narration + typewriter
         stopNarration();
+        clearInterval(_typewriterTimer);
 
         // Hide briefing during flight + reset drag position to default
         tourPanel.style.left = '';
@@ -4354,19 +4380,35 @@ document.addEventListener("DOMContentLoaded", () => {
         if (tourPrev) tourPrev.disabled = true;
         if (tourNext) tourNext.disabled = true;
 
-        // Fly to location — mid speed, cinematic
-        // Zoom boost: push in closer for richer satellite detail at historic sites
-        // Overview/world steps (zoom ≤ 2.5) are untouched; others get +3, capped at 14
+        // ── Update Story-Mode Progress Bar ──
+        const progressFill = document.getElementById('tour-progress-fill');
+        if (progressFill && activeTour) {
+            const pct = ((tourStepIndex + 1) / activeTour.steps.length) * 100;
+            progressFill.style.width = pct + '%';
+        }
+
+        // ── Cinematic Camera Choreography ──
+        // Each stop gets a unique bearing offset for visual variety.
+        // Higher zoom stops get a dramatic pitch tilt.
+        // Overview/world steps (zoom ≤ 2.5) stay flat and centered.
         const baseZoom = step.zoom;
         const boostedZoom = baseZoom <= 2.5 ? baseZoom : Math.min(baseZoom + 3, 14);
+        const isCloseup = boostedZoom >= 8;
+
+        // Cinematic bearing: alternate direction per step, ±15-30° for closeups
+        const bearingOffset = isCloseup
+            ? ((tourStepIndex % 2 === 0 ? 1 : -1) * (15 + (tourStepIndex * 7) % 20))
+            : 0;
+        const cinematicPitch = isCloseup ? 40 + Math.min(tourStepIndex * 2, 15) : (boostedZoom >= 5 ? 20 : 0);
+
         map.flyTo({
             center: step.center,
             zoom: boostedZoom,
             duration: 5500,
             essential: true,
             curve: 1.5,
-            pitch: boostedZoom >= 8 ? 35 : 0,
-            bearing: 0
+            pitch: cinematicPitch,
+            bearing: bearingOffset
         });
 
         // Show briefing AFTER flight completes
@@ -4375,8 +4417,17 @@ document.addEventListener("DOMContentLoaded", () => {
             const stepTitle = getTourTitle(step);
             const stepText = getTourText(step);
             tourTitle.textContent = stepTitle;
-            tourText.textContent = stepText;
             tourCounter.textContent = (currentLang === 'de' ? 'STOPP ' : 'STOP ') + (tourStepIndex + 1) + (currentLang === 'de' ? ' VON ' : ' OF ') + activeTour.steps.length;
+
+            // ── Typewriter Text Reveal ──
+            // Text appears character-by-character for a decoded-intel feel
+            typewriterEffect(tourText, stepText, 18, () => {
+                // Auto-narrate after typewriter completes (if enabled)
+                const narrateActive = document.getElementById('tour-narrate');
+                if (narrateActive && narrateActive.classList.contains('active')) {
+                    speakText(stepText);
+                }
+            });
 
             // Load Wikipedia thumbnail image if available
             const imgContainer = document.getElementById('tour-briefing-image');
@@ -4452,12 +4503,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             tourPanel.classList.remove('hidden');
 
-            // Auto-narrate if enabled
-            const narrateActive = document.getElementById('tour-narrate');
-            if (narrateActive && narrateActive.classList.contains('active')) {
-                speakText(stepText);
-            }
-
             // Re-enable nav
             if (tourPrev) tourPrev.disabled = false;
             if (tourNext) tourNext.disabled = false;
@@ -4469,6 +4514,19 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 tourNext.innerHTML = '<i class="fa-solid fa-check"></i> FINISH TOUR';
             }
+
+            // ── Cinematic Orbital Drift ──
+            // After landing, slowly rotate the camera 8° for a living-map feel
+            if (isCloseup) {
+                setTimeout(() => {
+                    if (!activeTour) return; // Tour may have ended
+                    map.easeTo({
+                        bearing: bearingOffset + 8,
+                        duration: 4000,
+                        easing: t => t * (2 - t) // ease-out
+                    });
+                }, 800);
+            }
         });
     }
 
@@ -4478,6 +4536,12 @@ document.addEventListener("DOMContentLoaded", () => {
         tourStepIndex = 0;
         if (tourPanel) tourPanel.classList.add('hidden');
         stopNarration();
+        clearInterval(_typewriterTimer);
+        // Reset progress bar
+        const progressFill = document.getElementById('tour-progress-fill');
+        if (progressFill) progressFill.style.width = '0%';
+        // Reset camera to flat north-up
+        map.easeTo({ bearing: 0, pitch: 0, duration: 1500 });
         // Hide tour-specific overlay layers
         ['roman-empire-fill', 'roman-empire-border'].forEach(id => {
             if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
