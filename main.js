@@ -2822,8 +2822,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     center: [140, 35], zoom: 4,
                     title: '🌍 REAL-TIME DATA — LIVE FROM SPACE',
                     title_de: '🌍 ECHTZEIT-DATEN — LIVE AUS DEM ALL',
-                    text: 'Welcome to GEOPULSE! Right now, seismic sensors around the world are streaming earthquake data to this map. Toggle "Earthquakes" in the sidebar to see today\'s seismic activity — each circle is a real event detected by USGS in the last 24 hours. You can also track live flights, wildfires, and the ISS orbit.',
-                    text_de: 'Willkommen bei GEOPULSE! Gerade jetzt streamen seismische Sensoren weltweit Erdbebendaten auf diese Karte. Schalten Sie "Erdbeben" in der Seitenleiste ein, um die heutige Aktivität zu sehen — jeder Kreis ist ein reales Ereignis der letzten 24 Stunden. Sie können auch Flüge, Waldbrände und die ISS-Umlaufbahn live verfolgen.',
+                    text: 'Welcome to GEOPULSE! Right now, seismic sensors around the world are streaming earthquake data to this map. Toggle "Earthquakes" in the sidebar to see today\'s seismic activity — each circle is a real event detected by USGS in the last 24 hours. You can also track live wildfires, webcams, and the ISS orbit.',
+                    text_de: 'Willkommen bei GEOPULSE! Gerade jetzt streamen seismische Sensoren weltweit Erdbebendaten auf diese Karte. Schalten Sie "Erdbeben" in der Seitenleiste ein, um die heutige Aktivität zu sehen — jeder Kreis ist ein reales Ereignis der letzten 24 Stunden. Sie können auch Waldbrände, Webcams und die ISS-Umlaufbahn live verfolgen.',
                     layers: []
                 },
                 {
