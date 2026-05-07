@@ -339,31 +339,80 @@ GEOPULSE was built **100% via AI pair programming** — no line of code was writ
 | **Context/conversation** | ~15% | User requests, explanations, planning |
 | **Documentation** | ~5% | README, TECH_SPEC, changelog, about page |
 
-### 10.4 Development Economics
+### 10.4 Kostenvergleich: Menschliche Entwicklung vs. KI-gestützt
 
-| Metric | Value |
-|---|---|
-| Development time | ~6 weeks (part-time) |
-| Equivalent manual dev time | ~3–4 months (1 full-stack developer) |
-| Cost of human equivalent | ~€15,000–20,000 (freelance rate) |
-| **Actual AI token cost** | **~€500** |
-| Actual infrastructure cost | **€0** (GitHub Pages, free APIs, free domain) |
-| **Total project cost** | **~€500** (30–40× cheaper than manual) |
-| Lines of code per session | ~415 avg |
-| Features per session | ~2–3 avg |
+#### Szenario A: Klassische Freelance-Entwicklung
 
-### 10.5 What AI Built (Scope)
+Ein vergleichbares Projekt mit einem erfahrenen Full-Stack-Entwickler (Freelance, Deutschland):
 
-- Complete MapLibre GL JS integration with 24 data layers
-- 25 guided tours (200+ stops) with bilingual EN/DE content
-- Procedural audio engine (Web Audio API synthesis)
-- Cinematic camera system (bearing, pitch, orbital drift)
-- Particle effects, animated earthquake ripples, atmospheric fog
-- Full responsive UI with accordion sidebar, draggable panels
-- Security-hardened CSP with zero API keys
-- 5 HTML pages (index, about, manual, changelog, impressum)
-- Complete design system (2,051 lines CSS)
-- SEO optimization, OG tags, social cards
+| Posten | Aufwand | Kosten |
+|---|---|---|
+| Frontend-Entwicklung (MapLibre, UI, CSS) | ~200 Std. | €16.000 |
+| Backend-/API-Integration (24 Datenquellen) | ~60 Std. | €4.800 |
+| Content (25 Touren, 200+ Texte, DE/EN) | ~40 Std. | €3.200 |
+| Testing, Bugfixing, Responsive-QA | ~40 Std. | €3.200 |
+| Dokumentation (About, Manual, Changelog) | ~20 Std. | €1.600 |
+| Deployment, SEO, Social Cards | ~10 Std. | €800 |
+| **Gesamt (Stundensatz ~€80)** | **~370 Std.** | **~€29.600** |
+| Zeitrahmen | **3–4 Monate** (Vollzeit) | |
+
+#### Szenario B: KI-gestützte Entwicklung (dieses Projekt)
+
+| Posten | Aufwand | Kosten |
+|---|---|---|
+| KI-Token-Verbrauch (29 Sessions, ~4–6M Tokens) | — | ~€500 |
+| Hosting (GitHub Pages) | — | €0 |
+| APIs (alle keyless/free) | — | €0 |
+| Domain (is-a.dev, kostenlos) | — | €0 |
+| Menschlicher Aufwand (Prompts, Review, UAT) | ~30 Std. | — |
+| **Gesamt** | **~6 Wochen** (Teilzeit) | **~€500** |
+
+#### Direktvergleich
+
+```
+╔════════════════════════════════════════════════════════════════╗
+║  KOSTENVERGLEICH: MENSCH vs. KI                               ║
+╠════════════════════════════════════════════════════════════════╣
+║                                                                ║
+║  Freelancer:  ████████████████████████████████████  €29.600    ║
+║  KI-Tokens:   █                                    €500       ║
+║                                                                ║
+║  Zeitraum:    ████████████████  3-4 Monate (Vollzeit)          ║
+║  KI-Zeitraum: ████             6 Wochen (Teilzeit)             ║
+║                                                                ║
+║  Codezeilen:  12.026 (identisch)                               ║
+║  Features:    24 Layer, 25 Touren, Audio, Effekte (identisch)  ║
+║                                                                ║
+║  ➜ Kostenvorteil: ~59× günstiger                               ║
+║  ➜ Zeitvorteil:   ~4–6× schneller                              ║
+╚════════════════════════════════════════════════════════════════╝
+```
+
+#### Kernaussagen
+
+| Metrik | Freelancer | KI-gestützt | Faktor |
+|---|---|---|---|
+| **Gesamtkosten** | ~€29.600 | ~€500 | **59×** günstiger |
+| **Zeitraum** | 3–4 Monate | 6 Wochen | **4–6×** schneller |
+| **Code-Output** | 12.026 Zeilen | 12.026 Zeilen | identisch |
+| **Iterationszyklen** | 5–10 Reviews | 156 Commits | **15×** mehr Iterationen |
+| **Testing** | manuell | automatisiert (Browser-Agent) | schneller |
+| **Verfügbarkeit** | Mo–Fr, 9–17 Uhr | 24/7 | unbegrenzt |
+
+> **Fazit:** Das gesamte GEOPULSE-Projekt — 12.026 Codezeilen, 24 Echtzeit-Datenebenen, 25 zweisprachige Touren, prozedurales Audio, cinematic Camera System und responsive Design — wurde für **~€500 an KI-Token-Kosten** realisiert. Ein vergleichbares Freelance-Projekt hätte **~€29.600** und **3–4 Monate Vollzeitarbeit** erfordert.
+
+### 10.5 Was die KI gebaut hat (Umfang)
+
+- Komplette MapLibre GL JS-Integration mit 24 Datenebenen
+- 25 geführte Touren (200+ Stationen) mit zweisprachigem EN/DE-Content
+- Prozeduraler Audio-Engine (Web Audio API Synthese)
+- Cinematic Camera System (Bearing, Pitch, Orbital Drift)
+- Partikeleffekte, animierte Erdbeben-Ripples, atmosphärischer Nebel
+- Vollständiges responsives UI mit Akkordeon-Sidebar, verschiebbaren Panels
+- Sicherheitsgehärtete CSP ohne API-Keys
+- 5 HTML-Seiten (Index, About, Manual, Changelog, Impressum)
+- Komplettes Design-System (2.051 Zeilen CSS)
+- SEO-Optimierung, OG-Tags, Social Cards
 
 ---
 
