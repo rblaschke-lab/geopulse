@@ -267,36 +267,27 @@
             </div>
         </section>
 
-        <!-- SCENARIOS -->
-        <section class="menu-group collapsible-section" id="sec-scenarios">
-            <h2 class="category-title cat-toggle" data-target="sec-scenarios">
-                <span style="color:var(--urgent-red, #ff3333);"><i class="fa-solid fa-crosshairs"></i> <span data-i18n="cat_scenarios">GLOBAL SCENARIOS</span></span>
+        <!-- ═══ GUIDED TOURS — Primary educational feature ═══ -->
+        <section class="menu-group collapsible-section" id="sec-tours">
+            <h2 class="category-title cat-toggle" data-target="sec-tours">
+                <span style="color:var(--neon-blue);"><i class="fa-solid fa-route"></i> <span data-i18n="guided_tours">GUIDED TOURS</span> <span style="opacity:.4;font-size:.55rem;font-weight:normal;">(28)</span></span>
                 <i class="fa-solid fa-chevron-down cat-arrow"></i>
             </h2>
             <div class="cat-body">
-                <div class="scenario-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 5px 0;">
-                    <button class="preset-btn" data-scenario="europe">Europe Energy</button>
-                    <button class="preset-btn" data-scenario="taiwan">Taiwan Esc.</button>
-                    <button class="preset-btn" data-scenario="redsea">Red Sea</button>
-                    <button class="preset-btn" data-scenario="nuclear">Nuclear Risk</button>
-                </div>
-
-                <!-- GUIDED TOURS — Collapsible Categories -->
-                <div style="border-top:1px solid rgba(0,212,255,0.15);padding-top:6px;margin-top:4px;">
-                    <div style="font-size:.6rem;opacity:.5;letter-spacing:1px;margin-bottom:6px;">🎓 <span data-i18n="guided_tours">GUIDED TOURS</span> <span style="opacity:.5;font-size:.5rem;">(25)</span></div>
 
                     <!-- Geopolitics -->
                     <div class="tour-category" data-cat="geopolitics">
                         <div class="tour-cat-header" onclick="this.parentElement.classList.toggle('open')" style="color:#ff6633;">
                             <span>🔥 <span data-i18n="cat_geopolitics_tours">GEOPOLITICS</span></span>
-                            <span class="tour-cat-meta"><span class="tour-cat-count">5</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
+                            <span class="tour-cat-meta"><span class="tour-cat-count">6</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
                         </div>
                         <div class="tour-cat-body">
                             <button class="preset-btn tour-btn" data-tour="coldwar" style="border-color:rgba(180,180,180,0.4);color:#bbb;text-align:left;padding:6px 8px;">🧱 <span data-i18n="tour_coldwar">Cold War → Reunification</span></button>
-                            <button class="preset-btn tour-btn" data-tour="bri" style="border-color:rgba(255,200,0,0.4);color:#ffc800;text-align:left;padding:6px 8px;">🛤️ <span data-i18n="tour_bri">Belt &amp; Road Initiative</span></button>
                             <button class="preset-btn tour-btn" data-tour="trump" style="border-color:rgba(255,102,51,0.5);color:#ff6633;text-align:left;padding:6px 8px;">🏛️ <span data-i18n="tour_trump">Trump World Tour</span></button>
+                            <button class="preset-btn tour-btn" data-tour="bri" style="border-color:rgba(255,200,0,0.4);color:#ffc800;text-align:left;padding:6px 8px;">🛤️ <span data-i18n="tour_bri">Belt &amp; Road Initiative</span></button>
                             <button class="preset-btn tour-btn" data-tour="chokepoints" style="border-color:rgba(0,180,255,0.4);color:#00b4ff;text-align:left;padding:6px 8px;">🌊 <span data-i18n="tour_chokepoints">Chokepoints</span></button>
                             <button class="preset-btn tour-btn" data-tour="water" style="border-color:rgba(0,150,255,0.4);color:#0096ff;text-align:left;padding:6px 8px;">💧 <span data-i18n="tour_water">Water Wars</span></button>
+                            <button class="preset-btn tour-btn" data-tour="migration" style="border-color:rgba(255,140,0,0.4);color:#ff8c00;text-align:left;padding:6px 8px;">🚶 <span data-i18n="tour_migration">Migration Routes</span></button>
                         </div>
                     </div>
 
@@ -304,15 +295,27 @@
                     <div class="tour-category" data-cat="history">
                         <div class="tour-cat-header" onclick="this.parentElement.classList.toggle('open')" style="color:#c8a860;">
                             <span>📜 <span data-i18n="cat_history_tours">HISTORY</span></span>
-                            <span class="tour-cat-meta"><span class="tour-cat-count">6</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
+                            <span class="tour-cat-meta"><span class="tour-cat-count">7</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
                         </div>
                         <div class="tour-cat-body">
-                            <button class="preset-btn tour-btn" data-tour="ww1" style="border-color:rgba(200,168,96,0.4);color:#c8a860;text-align:left;padding:6px 8px;">🪖 <span data-i18n="tour_ww1">World War I (1914–1918)</span></button>
                             <button class="preset-btn tour-btn" data-tour="ww2" style="border-color:rgba(200,80,80,0.4);color:#c85050;text-align:left;padding:6px 8px;">⚔️ <span data-i18n="tour_ww2">World War II (1939–1945)</span></button>
+                            <button class="preset-btn tour-btn" data-tour="ww1" style="border-color:rgba(200,168,96,0.4);color:#c8a860;text-align:left;padding:6px 8px;">🪖 <span data-i18n="tour_ww1">World War I (1914–1918)</span></button>
                             <button class="preset-btn tour-btn" data-tour="romanempire" style="border-color:rgba(192,57,43,0.5);color:#e74c3c;text-align:left;padding:6px 8px;">🏛️ <span data-i18n="tour_romanempire">Roman Empire (753 BC–476 AD)</span></button>
                             <button class="preset-btn tour-btn" data-tour="lostwonders" style="border-color:rgba(218,165,32,0.5);color:#daa520;text-align:left;padding:6px 8px;">🔺 <span data-i18n="tour_lostwonders">Lost Wonders of the World</span></button>
                             <button class="preset-btn tour-btn" data-tour="forbiddenzones" style="border-color:rgba(255,0,60,0.5);color:#ff003c;text-align:left;padding:6px 8px;">🔒 <span data-i18n="tour_forbiddenzones">Forbidden Zones</span></button>
                             <button class="preset-btn tour-btn" data-tour="shipwrecks" style="border-color:rgba(0,150,200,0.5);color:#0096c8;text-align:left;padding:6px 8px;">⚓ <span data-i18n="tour_shipwrecks">Shipwrecks &amp; Lost Treasures</span></button>
+                            <button class="preset-btn tour-btn" data-tour="structures" style="border-color:rgba(212,160,23,0.5);color:#d4a017;text-align:left;padding:6px 8px;">🏗️ <span data-i18n="tour_structures">Greatest Structures</span></button>
+                        </div>
+                    </div>
+
+                    <!-- Society & Rights — NEW -->
+                    <div class="tour-category" data-cat="society">
+                        <div class="tour-cat-header" onclick="this.parentElement.classList.toggle('open')" style="color:#e066ff;">
+                            <span>✊ <span data-i18n="cat_society_tours">SOCIETY &amp; RIGHTS</span></span>
+                            <span class="tour-cat-meta"><span class="tour-cat-count">1</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
+                        </div>
+                        <div class="tour-cat-body">
+                            <button class="preset-btn tour-btn" data-tour="womenworld" style="border-color:rgba(224,102,255,0.5);color:#e066ff;text-align:left;padding:6px 8px;">♀️ <span data-i18n="tour_womenwworld">Women Who Changed the World</span></button>
                         </div>
                     </div>
 
@@ -348,6 +351,21 @@
                             <button class="preset-btn tour-btn" data-tour="summits14" style="border-color:rgba(180,220,255,0.5);color:#b4dcff;text-align:left;padding:6px 8px;">🏔️ <span data-i18n="tour_summits14">14 Summits (8000ers)</span></button>
                         </div>
                     </div>
+            </div>
+        </section>
+
+        <!-- ═══ SCENARIOS — Compact crisis presets ═══ -->
+        <section class="menu-group collapsible-section" id="sec-scenarios">
+            <h2 class="category-title cat-toggle" data-target="sec-scenarios">
+                <span style="color:rgba(255,51,51,0.7);font-size:.65rem;"><i class="fa-solid fa-crosshairs"></i> <span data-i18n="cat_scenarios">GLOBAL SCENARIOS</span></span>
+                <i class="fa-solid fa-chevron-down cat-arrow"></i>
+            </h2>
+            <div class="cat-body">
+                <div class="scenario-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 5px 0;">
+                    <button class="preset-btn" data-scenario="europe">Europe Energy</button>
+                    <button class="preset-btn" data-scenario="taiwan">Taiwan Esc.</button>
+                    <button class="preset-btn" data-scenario="redsea">Red Sea</button>
+                    <button class="preset-btn" data-scenario="nuclear">Nuclear Risk</button>
                 </div>
 
                 <!-- Utility Toolbar — compact icon bar -->
