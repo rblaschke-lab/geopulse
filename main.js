@@ -50,13 +50,13 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const res = await fetch('https://api.counterapi.dev/v1/geopulse-rbdesign/visits/up');
             const data = await res.json();
-            sessionEl.innerHTML = '👁 ' + ((data.count || 0) + COUNTER_OFFSET).toLocaleString();
+            sessionEl.innerHTML = '<i class="fa-solid fa-eye" style="opacity:.6;margin-right:4px;"></i>' + ((data.count || 0) + COUNTER_OFFSET).toLocaleString() + ' VISITS';
         } catch (e) {
             // Fallback: localStorage counter if API unreachable
             let count = parseInt(localStorage.getItem('geopulseSessionCount') || String(COUNTER_OFFSET), 10);
             count++;
             localStorage.setItem('geopulseSessionCount', count);
-            sessionEl.innerHTML = '👁 ' + count.toLocaleString();
+            sessionEl.innerHTML = '<i class="fa-solid fa-eye" style="opacity:.6;margin-right:4px;"></i>' + count.toLocaleString() + ' VISITS';
         }
     })();
 
