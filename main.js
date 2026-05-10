@@ -4983,20 +4983,36 @@ document.addEventListener("DOMContentLoaded", () => {
                     const badge = document.createElement('div');
                     badge.className = 'tour-video-badge';
                     badge.innerHTML = '<i class="fa-solid fa-film"></i> VIDEO PILOT';
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'tour-video-wrapper';
-                    const iframe = document.createElement('iframe');
-                    iframe.src = 'https://www.youtube-nocookie.com/embed/' + step.video + '?rel=0&modestbranding=1&playsinline=1';
-                    iframe.setAttribute('allowfullscreen', '');
-                    iframe.setAttribute('loading', 'lazy');
-                    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-                    iframe.setAttribute('frameborder', '0');
-                    iframe.setAttribute('width', '280');
-                    iframe.setAttribute('height', '158');
-                    iframe.title = stepTitle;
-                    wrapper.appendChild(iframe);
+                    // Clickable thumbnail card — opens YouTube in new tab (no embed/CSP issues)
+                    const card = document.createElement('a');
+                    card.href = 'https://www.youtube.com/watch?v=' + step.video;
+                    card.target = '_blank';
+                    card.rel = 'noopener noreferrer';
+                    card.className = 'tour-video-card';
+                    card.title = 'Watch on YouTube';
+                    card.style.cssText = 'display:block;position:relative;border-radius:8px;overflow:hidden;cursor:pointer;text-decoration:none;border:1px solid rgba(255,0,0,0.3);background:#0a0a0a;transition:all .3s;';
+                    // YouTube thumbnail
+                    const thumb = document.createElement('img');
+                    thumb.src = 'https://img.youtube.com/vi/' + step.video + '/hqdefault.jpg';
+                    thumb.alt = 'Video thumbnail';
+                    thumb.style.cssText = 'width:100%;height:auto;display:block;opacity:.85;transition:opacity .3s;';
+                    thumb.onerror = function() { this.src = 'https://img.youtube.com/vi/' + step.video + '/mqdefault.jpg'; };
+                    // Play button overlay
+                    const playBtn = document.createElement('div');
+                    playBtn.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:40px;background:rgba(255,0,0,0.85);border-radius:10px;display:flex;align-items:center;justify-content:center;transition:all .3s;';
+                    playBtn.innerHTML = '<i class="fa-solid fa-play" style="color:#fff;font-size:16px;margin-left:2px;"></i>';
+                    // Label bar
+                    const label = document.createElement('div');
+                    label.style.cssText = 'padding:8px 12px;background:rgba(0,0,0,0.9);color:rgba(255,255,255,0.7);font-family:\"Share Tech Mono\",monospace;font-size:0.6rem;letter-spacing:1px;display:flex;align-items:center;gap:6px;';
+                    label.innerHTML = '<i class="fa-brands fa-youtube" style="color:#ff0000;font-size:0.8rem;"></i> WATCH ON YOUTUBE <i class="fa-solid fa-external-link" style="opacity:.4;font-size:0.5rem;margin-left:auto;"></i>';
+                    // Hover effects
+                    card.onmouseenter = function() { this.style.borderColor='rgba(255,0,0,0.6)'; thumb.style.opacity='1'; playBtn.style.background='rgba(255,0,0,1)'; playBtn.style.transform='translate(-50%,-50%) scale(1.1)'; };
+                    card.onmouseleave = function() { this.style.borderColor='rgba(255,0,0,0.3)'; thumb.style.opacity='.85'; playBtn.style.background='rgba(255,0,0,0.85)'; playBtn.style.transform='translate(-50%,-50%) scale(1)'; };
+                    card.appendChild(thumb);
+                    card.appendChild(playBtn);
+                    card.appendChild(label);
                     vidContainer.appendChild(badge);
-                    vidContainer.appendChild(wrapper);
+                    vidContainer.appendChild(card);
                     vidContainer.classList.remove('hidden');
                 }
             }
