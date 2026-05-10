@@ -3862,47 +3862,47 @@ document.addEventListener("DOMContentLoaded", () => {
             name: 'Earthquakes & Eruptions — When the Earth Breaks',
             steps: [
                 {
-                    center: [142.37, 38.32], zoom: 5, title: '🌊 TŌHOKU EARTHQUAKE — JAPAN, 2011',
+                    center: [142.37, 38.32], zoom: 14, title: '🌊 TŌHOKU EARTHQUAKE — JAPAN, 2011',
                     text: 'On March 11, 2011, a magnitude 9.1 earthquake struck off the Pacific coast of Japan — the 4th most powerful ever recorded. The resulting tsunami reached heights of 40 meters and traveled up to 10 km inland. 19,759 people died, 6,242 were injured, and 2,553 remain missing. The tsunami triggered the Fukushima Daiichi nuclear disaster (INES Level 7). Japan\'s earthquake early warning system gave just 8–30 seconds of notice. Economic damage: $235 billion — the costliest natural disaster in history.',
                     layers: ['earthquakes', 'volcanoes'],
                     image: { wiki: '2011_Tōhoku_earthquake_and_tsunami', caption: 'Tsunami wave hitting Miyako, 2011' },
                     video: 'oWzdgBNfhQU'
                 },
                 {
-                    center: [80.2, 7.0], zoom: 4, title: '🌊 INDIAN OCEAN TSUNAMI — 2004',
+                    center: [80.2, 7.0], zoom: 14, title: '🌊 INDIAN OCEAN TSUNAMI — 2004',
                     text: 'On December 26, 2004, a magnitude 9.1 earthquake off Sumatra triggered the deadliest tsunami in recorded history. Waves up to 30 meters struck 14 countries across the Indian Ocean. Death toll: 227,898 people across Indonesia (170,000), Sri Lanka (35,000), India (16,000), and Thailand (8,000). The tsunami traveled at 800 km/h — the speed of a jet aircraft. There was no tsunami warning system in the Indian Ocean at the time. One was installed by 2006.',
                     layers: ['earthquakes'],
                     image: { wiki: '2004_Indian_Ocean_earthquake_and_tsunami', caption: 'Tsunami waves striking the coast of Thailand, 2004' },
-                    video: 'LI3lHgRq5bU'
+                    video: 'DXTK49k3fWo'
                 },
                 {
-                    center: [-72.3, 18.5], zoom: 7, title: '💔 HAITI EARTHQUAKE — 2010',
+                    center: [-72.3, 18.5], zoom: 14, title: '💔 HAITI EARTHQUAKE — 2010',
                     text: 'On January 12, 2010, a magnitude 7.0 earthquake struck just 25 km from Port-au-Prince, Haiti\'s capital. The earthquake killed an estimated 220,000–316,000 people, injured 300,000, and left 1.5 million homeless — in a country that was already the poorest in the Western Hemisphere. 250,000 homes and 30,000 commercial buildings collapsed. International aid exceeded $13 billion, but reconstruction was plagued by mismanagement. The earthquake exposed catastrophic building code failures.',
                     layers: ['earthquakes'],
                     image: { wiki: '2010_Haiti_earthquake', caption: 'Devastation in Port-au-Prince, 2010' }
                 },
                 {
-                    center: [36.2, 37.2], zoom: 5, title: '💔 TURKEY-SYRIA EARTHQUAKE — 2023',
+                    center: [36.2, 37.2], zoom: 14, title: '💔 TURKEY-SYRIA EARTHQUAKE — 2023',
                     text: 'On February 6, 2023, two massive earthquakes (M7.8 and M7.7) struck southeastern Turkey and northern Syria within 9 hours. Death toll: 59,259 (Turkey: 50,783, Syria: 8,476). Over 120,000 were injured. 14 million people were affected across both countries. The quake was felt in Egypt, 1,500 km away. In Turkey, 520,000+ buildings were damaged or destroyed — many due to corrupt construction practices that ignored building codes. It was Turkey\'s deadliest natural disaster in modern history.',
                     layers: ['earthquakes'],
                     image: { wiki: '2023_Turkey–Syria_earthquake', caption: 'Collapsed buildings in Hatay, Turkey, 2023' }
                 },
                 {
-                    center: [14.43, 40.82], zoom: 7, title: '🌋 VESUVIUS — POMPEII, 79 AD',
+                    center: [14.43, 40.82], zoom: 14, title: '🌋 VESUVIUS — POMPEII, 79 AD',
                     text: 'On August 24, 79 AD, Mount Vesuvius erupted with a force estimated at VEI-5, burying the Roman cities of Pompeii and Herculaneum under 4–6 meters of volcanic ash and pumice. An estimated 16,000 people died from pyroclastic flows reaching 700°C and moving at 100 km/h. The cities were preserved in extraordinary detail — frozen in time for 1,700 years until their rediscovery in 1748. Today, 3 million people live in the danger zone around Vesuvius. It is considered one of the most dangerous volcanoes on Earth.',
                     layers: ['volcanoes'],
                     image: { wiki: 'Eruption_of_Mount_Vesuvius_in_79_AD', caption: 'The Destruction of Pompeii and Herculaneum by John Martin' },
                     video: 'dY_3ggKg0Bc'
                 },
                 {
-                    center: [105.42, -6.10], zoom: 6, title: '🌋 KRAKATOA — INDONESIA, 1883',
+                    center: [105.42, -6.10], zoom: 14, title: '🌋 KRAKATOA — INDONESIA, 1883',
                     text: 'On August 27, 1883, Krakatoa erupted in one of the most violent volcanic events in recorded history (VEI-6). The explosion was heard 4,800 km away in Australia — the loudest sound in modern history. It produced tsunamis up to 30 meters high, killing 36,417 people. The eruption ejected 25 km³ of rock and ash, causing global temperatures to drop by 1.2°C for 5 years. Vivid red sunsets were observed worldwide for months. The child volcano, Anak Krakatau, emerged in 1927 and caused a deadly tsunami in 2018.',
                     layers: ['volcanoes', 'earthquakes'],
                     image: { wiki: '1883_eruption_of_Krakatoa', caption: 'Lithograph of the 1883 Krakatoa eruption' },
-                    video: 'fMaONzGdCYY'
+                    video: '2LsqbgtgeHY'
                 },
                 {
-                    center: [118.0, -8.4], zoom: 6, title: '🌋 TAMBORA — THE YEAR WITHOUT A SUMMER, 1815',
+                    center: [118.0, -8.4], zoom: 14, title: '🌋 TAMBORA — THE YEAR WITHOUT A SUMMER, 1815',
                     text: 'Mount Tambora\'s eruption on April 10, 1815 was the most powerful volcanic eruption in recorded human history — VEI-7. It ejected 160 km³ of material and the eruption column reached 43 km into the stratosphere. Direct deaths: ~10,000. But the global climate effects killed far more: the sulfur dioxide blocked sunlight, causing 1816 to be known as the "Year Without a Summer." Crop failures caused famine across Europe and North America. An estimated 90,000 people died from famine and disease. Global temperatures dropped 0.4–0.7°C.',
                     layers: ['volcanoes'],
                     image: { wiki: 'Mount_Tambora', caption: 'Mount Tambora caldera, Indonesia' }
@@ -3922,14 +3922,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     text: 'The first modern Olympic Games were held in Athens, Greece, April 6–15, 1896. Organized by Pierre de Coubertin, the Games revived a tradition dormant for 1,500 years. Participants: 241 athletes from 14 nations. Sports: 9 (athletics, cycling, fencing, gymnastics, shooting, swimming, tennis, weightlifting, wrestling). No women competed. The Panathenaic Stadium, originally built in 329 BC, was restored for the occasion. Spectators: ~80,000. James Connolly (USA) won the first Olympic gold in the triple jump.',
                     layers: [],
                     image: { wiki: '1896_Summer_Olympics', caption: 'Opening ceremony at the Panathenaic Stadium, Athens 1896' },
-                    video: 'X6yTWJBG_Ys'
+                    video: 'eiJfppOPItQ'
                 },
                 {
                     center: [13.38, 52.52], zoom: 7, title: '✊ BERLIN 1936 — PROPAGANDA & DEFIANCE',
                     text: 'Adolf Hitler intended the 1936 Berlin Olympics to showcase Aryan supremacy. Instead, African-American athlete Jesse Owens won 4 gold medals, defying Nazi racial ideology before 100,000 spectators. Participants: 3,963 athletes from 49 nations. Sports: 19. These were the first Games to be televised (to 162,000 viewers). The Olympic torch relay was introduced here — designed by Hitler\'s regime as propaganda. Jewish athletes were banned from the German team. Several nations debated boycotting but ultimately attended.',
                     layers: [],
                     image: { wiki: '1936_Summer_Olympics', caption: 'Jesse Owens at the Berlin Olympics, 1936' },
-                    video: 'oQIhGqCWb58'
+                    video: 'mV3QKEvLbO8'
                 },
                 {
                     center: [139.77, 35.68], zoom: 7, title: '🇯🇵 TOKYO 1964 — ASIA\'S DEBUT',
@@ -3942,7 +3942,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     text: 'The Munich Olympics were intended as the "Cheerful Games" to erase memories of Berlin 1936. On September 5, Palestinian terrorists (Black September) took 11 Israeli athletes hostage. All 11 hostages, 5 terrorists, and 1 German police officer were killed during a failed rescue attempt. Despite the tragedy, the IOC controversially continued the Games after a 34-hour pause. Participants: 7,134 athletes from 121 nations. Sports: 21. USA swimmer Mark Spitz won 7 gold medals — a record that stood for 36 years. Spectators: 4 million. TV viewers: 900 million.',
                     layers: [],
                     image: { wiki: '1972_Summer_Olympics', caption: 'Memorial ceremony, Munich 1972' },
-                    video: 'fSSMfBcEZv0'
+                    video: 'vY9_i354Kwc'
                 },
                 {
                     center: [2.17, 41.38], zoom: 7, title: '🇪🇸 BARCELONA 1992 — THE GOLDEN ERA',
@@ -3955,7 +3955,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     text: 'China invested $42 billion to create the most lavish Olympics in history. The Bird\'s Nest stadium (91,000 capacity) and Water Cube became architectural icons. The opening ceremony, directed by Zhang Yimou, is considered the greatest in Olympic history — 15,000 performers, 29,000 fireworks. Participants: 10,942 athletes from 204 nations (record). Sports: 28. Usain Bolt announced himself with 3 gold medals and 3 world records. Michael Phelps won 8 golds — the most ever in a single Games. TV viewers: 4.7 billion.',
                     layers: [],
                     image: { wiki: '2008_Summer_Olympics', caption: 'Beijing Bird\'s Nest Stadium, 2008' },
-                    video: 'JsDY1Ha83M8'
+                    video: 'tOijH0xinTE'
                 },
                 {
                     center: [-0.12, 51.51], zoom: 7, title: '🇬🇧 LONDON 2012 — LEGACY GAMES',
@@ -3968,7 +3968,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     text: 'Paris hosted its third Olympics (after 1900 and 1924) with a revolutionary open-air concept. The opening ceremony took place on the Seine River with 6,000 athletes on 85 boats — the first ceremony held outside a stadium. Participants: 10,714 athletes from 206 nations. Sports: 32 (including breaking/breakdancing for the first time). Events were held at iconic venues: beach volleyball at the Eiffel Tower, equestrian at Versailles, fencing at the Grand Palais. TV viewers: estimated 4 billion. Budget: €8.8 billion.',
                     layers: [],
                     image: { wiki: '2024_Summer_Olympics', caption: 'Seine River opening ceremony, Paris 2024' },
-                    video: 'VkfEUr0g3uw'
+                    video: 'xtlvuPxNKWI'
                 },
                 {
                     center: [10, 30], zoom: 2, title: '🏅 OLYMPIC GAMES — BY THE NUMBERS',
