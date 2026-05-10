@@ -128,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
             tour_musicworld: 'Music That Changed the World',
             tour_filmlocations: 'Filming Locations',
             tour_extremeplaces: 'Extreme Places to Live',
+            tour_revolutions: 'Revolutions',
             // Tour hint
             tour_hint: 'Read more on Wikipedia',
             // Welcome overlay
@@ -209,6 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
             tour_musicworld: 'Musik, die die Welt veränderte',
             tour_filmlocations: 'Drehorte',
             tour_extremeplaces: 'Extreme Lebensorte',
+            tour_revolutions: 'Revolutionen',
             // Tour hint
             tour_hint: 'Mehr auf Wikipedia lesen',
             // Welcome overlay
@@ -3225,28 +3227,28 @@ document.addEventListener("DOMContentLoaded", () => {
             name: 'Ring of Fire',
             steps: [
                 {
-                    center: [140, 35], zoom: 4, title: '\ud83c\udf0b MOUNT FUJI \u2014 JAPAN',
+                    center: [140, 35], zoom: 12, title: '\ud83c\udf0b MOUNT FUJI \u2014 JAPAN',
                     text: 'Japan sits on the Pacific Ring of Fire \u2014 a 40,000km horseshoe of seismic and volcanic activity. Mount Fuji (3,776m) last erupted in 1707 and is monitored 24/7. Japan experiences ~1,500 earthquakes per year.',
                     layers: ['earthquakes', 'volcanoes']
                 },
                 {
-                    center: [110, -7.5], zoom: 5, title: '\ud83c\udf0b KRAKATOA & MERAPI \u2014 INDONESIA',
+                    center: [110, -7.5], zoom: 12, title: '\ud83c\udf0b KRAKATOA & MERAPI \u2014 INDONESIA',
                     text: 'Indonesia has 130+ active volcanoes \u2014 the most of any country. Krakatoa\'s 1883 eruption was heard 5,000km away and caused a global temperature drop. The child volcano, Anak Krakatau, triggered a tsunami in 2018.',
                     layers: ['earthquakes', 'volcanoes'],
                     image: { wiki: 'Krakatoa', caption: 'Anak Krakatau erupting' }
                 },
                 {
-                    center: [-122, 46.2], zoom: 5, title: '\ud83c\udf0b CASCADES RANGE \u2014 USA',
+                    center: [-122, 46.2], zoom: 10, title: '\ud83c\udf0b CASCADES RANGE \u2014 USA',
                     text: 'The Cascade Range stretches from BC to California. Mount St. Helens\' 1980 eruption killed 57 and was the deadliest in US history. Mount Rainier is considered the most dangerous due to lahar risk threatening 3M+ residents near Tacoma and Seattle.',
                     layers: ['earthquakes', 'volcanoes']
                 },
                 {
-                    center: [-78, -1], zoom: 4, title: '\ud83c\udf0b ANDES VOLCANOES \u2014 SOUTH AMERICA',
+                    center: [-78, -1], zoom: 10, title: '\ud83c\udf0b ANDES VOLCANOES \u2014 SOUTH AMERICA',
                     text: 'The Andes chain hosts Earth\'s highest active volcanoes. Cotopaxi (5,897m) in Ecuador is one of the world\'s most dangerous. Nevado del Ruiz in Colombia killed 23,000 people in 1985 when lahars buried the town of Armero.',
                     layers: ['earthquakes', 'volcanoes']
                 },
                 {
-                    center: [-20, 64], zoom: 5, title: '\ud83c\udf0b ICELAND \u2014 MID-ATLANTIC RIDGE',
+                    center: [-20, 64], zoom: 10, title: '\ud83c\udf0b ICELAND \u2014 MID-ATLANTIC RIDGE',
                     text: 'Iceland sits directly on the Mid-Atlantic Ridge where the Eurasian and North American tectonic plates pull apart. Eyjafjallaj\u00f6kull\'s 2010 eruption shut down European airspace for 6 days, stranding 10 million travelers. The island has 30+ active volcanic systems.',
                     layers: ['earthquakes', 'volcanoes']
                 },
@@ -3905,7 +3907,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     text: 'On August 27, 1883, Krakatoa erupted in one of the most violent volcanic events in recorded history (VEI-6). The explosion was heard 4,800 km away in Australia — the loudest sound in modern history. It produced tsunamis up to 30 meters high, killing 36,417 people. The eruption ejected 25 km³ of rock and ash, causing global temperatures to drop by 1.2°C for 5 years. Vivid red sunsets were observed worldwide for months. The child volcano, Anak Krakatau, emerged in 1927 and caused a deadly tsunami in 2018.',
                     layers: ['volcanoes', 'earthquakes'],
                     image: { wiki: '1883_eruption_of_Krakatoa', caption: 'Lithograph of the 1883 Krakatoa eruption' },
-                    video: '2LsqbgtgeHY'
+                    video: 'BVyhTMz_Lfw'
                 },
                 {
                     center: [118.0, -8.4], zoom: 14, title: '🌋 TAMBORA — THE YEAR WITHOUT A SUMMER, 1815',
@@ -4278,6 +4280,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 { center: [-148.683, 60.774], zoom: 14, title: '🏢 WHITTIER, ALASKA — ONE BUILDING TOWN', title_de: '🏢 WHITTIER, ALASKA — EIN-GEBÄUDE-STADT', text: '📍 Begich Towers, Whittier, Alaska, USA.\n👥 POPULATION: ~220 — nearly all live in ONE building\n\n📊 Almost the entire population of Whittier lives in a single 14-story building: Begich Towers, a former Cold War military barracks. The building contains apartments, a post office, a police station, a general store, a laundromat, a medical clinic, and a church. The only road access is through a 4 km one-lane tunnel through a mountain — shared with trains on a schedule. In winter, winds reach 100+ km/h and snowfall exceeds 6 meters. Children walk to school through an underground tunnel. The building was built by the US Army in 1957.', text_de: '📍 Begich Towers, Whittier, Alaska, USA.\n👥 EINWOHNER: ~220 — fast alle leben in EINEM Gebäude\n\n📊 Fast die gesamte Bevölkerung lebt in einem einzigen 14-stöckigen Gebäude: Begich Towers, eine ehemalige Militärkaserne. Darin: Wohnungen, Post, Polizei, Laden, Arztpraxis und Kirche. Einziger Straßenzugang: ein 4-km-Einspurtunnel durch einen Berg.', layers: [], image: { wiki: 'Whittier,_Alaska', caption: 'Begich Towers, Whittier' } },
                 { center: [88.195, 69.347], zoom: 10, title: '☠️ NORILSK, RUSSIA — MOST POLLUTED CITY', title_de: '☠️ NORILSK, RUSSLAND — GIFTIGSTE STADT', text: '📍 Norilsk, Krasnoyarsk Krai, Russia.\n🌡️ WINTER: −50°C; 2 months of polar night (no sun at all)\n👥 POPULATION: ~175,000\n\n📊 Norilsk is the northernmost city with 100,000+ people — and one of the most polluted places on Earth. The Norilsk Nickel smelter (world\'s largest) has released so much sulfur dioxide that no trees grow within 30 km. The snow turns black. The rivers run red from nickel contamination. Life expectancy is 10 years below Russia\'s average. The city was built by Gulag prisoners (1935–1953) — an estimated 17,000 died during construction. Norilsk is a "closed city" — foreigners need special permission to visit. Despite all this, workers stay because salaries are 3× the Russian average.', text_de: '📍 Norilsk, Region Krasnojarsk, Russland.\n🌡️ WINTER: −50°C; 2 Monate Polarnacht\n👥 EINWOHNER: ~175.000\n\n📊 Nördlichste Großstadt der Welt — und einer der giftigsten Orte der Erde. Norilsk Nickel hat so viel Schwefeldioxid freigesetzt, dass im Umkreis von 30 km keine Bäume wachsen. Der Schnee ist schwarz. Die Flüsse rot. Lebenserwartung 10 Jahre unter Russlands Durchschnitt. Erbaut von Gulag-Gefangenen — 17.000 starben beim Bau.', layers: [], image: { wiki: 'Norilsk', caption: 'Norilsk industrial landscape' } },
                 { center: [20, 30], zoom: 2, title: '🌍 EXTREME LIVING — THE HUMAN SPIRIT', title_de: '🌍 EXTREMES LEBEN — DER MENSCHLICHE GEIST', text: '🌍 FROM −67°C TO +52°C — mapped.\n\n📊 KEY FACTS:\n• Coldest inhabited: Oymyakon (−67.7°C)\n• Hottest inhabited: Dallol (41.1°C average)\n• Highest city: La Rinconada (5,100m)\n• Most remote island: Tristan da Cunha (2,434 km)\n• Most polluted city: Norilsk (no trees in 30 km)\n• Smallest "town": Whittier (220 people, 1 building)\n• Deepest inhabited: Coober Pedy (underground)\n\n💡 These places prove that humans will live anywhere — from frozen tundra to toxic wastelands to underground caves. The question isn\'t where we can survive. It\'s what we\'re willing to endure for gold, warmth, isolation, or simply the stubbornness of calling a place home.', text_de: '🌍 VON −67°C BIS +52°C — kartiert.\n\n📊 FAKTEN:\n• Kältester Ort: Ojmjakon (−67,7°C)\n• Heißester Ort: Dallol (41,1°C Schnitt)\n• Höchste Stadt: La Rinconada (5.100m)\n• Entlegenste Insel: Tristan da Cunha (2.434 km)\n\n💡 Menschen leben überall — von der Tundra bis in giftige Industrieruinen. Die Frage ist nicht, wo wir überleben können, sondern was wir dafür in Kauf nehmen.', layers: [] }
+            ]
+        },
+        revolutions: {
+            name: 'Revolutions — When the People Rose Up',
+            name_de: 'Revolutionen — Als das Volk sich erhob',
+            category: 'history',
+            steps: [
+                { center: [2.3694, 48.8566], zoom: 14, title: '🇫🇷 PARIS 1789 — THE FRENCH REVOLUTION', title_de: '🇫🇷 PARIS 1789 — DIE FRANZÖSISCHE REVOLUTION', text: '📍 Place de la Bastille, Paris.\n\n📊 On July 14, 1789, a mob stormed the Bastille fortress. The revolution abolished the monarchy, declared the Rights of Man, and executed Louis XVI by guillotine. The Reign of Terror killed ~40,000. Napoleon seized power in 1799, spreading revolutionary ideals across Europe by force. July 14 remains France\'s national day.', text_de: '📍 Place de la Bastille, Paris.\n\n📊 Am 14. Juli 1789 stürmte ein Mob die Bastille. Die Revolution schaffte die Monarchie ab und guillotinierte Ludwig XVI. Die Schreckensherrschaft tötete ~40.000. Napoleon verbreitete die Ideale in ganz Europa.', layers: [], image: { wiki: 'French_Revolution', caption: 'Storming of the Bastille, 1789' } },
+                { center: [30.3351, 59.9343], zoom: 14, title: '🇷🇺 ST. PETERSBURG 1917 — THE RUSSIAN REVOLUTION', title_de: '🇷🇺 ST. PETERSBURG 1917 — DIE RUSSISCHE REVOLUTION', text: '📍 Winter Palace, Saint Petersburg.\n\n📊 On October 25, 1917, Bolsheviks stormed the Winter Palace and created the world\'s first communist state. Tsar Nicholas II was executed with his family in 1918. The Civil War (1917–22) killed 7–12 million. The USSR became a nuclear superpower controlling half of Europe until 1991.', text_de: '📍 Winterpalast, Sankt Petersburg.\n\n📊 Am 25. Oktober 1917 stürmten Bolschewiki den Winterpalast. Zar Nikolaus II. wurde 1918 hingerichtet. Der Bürgerkrieg tötete 7–12 Millionen. Die UdSSR kontrollierte die Hälfte Europas bis 1991.', layers: [], image: { wiki: 'Russian_Revolution', caption: 'Storming the Winter Palace, 1917' } },
+                { center: [-82.3666, 23.1136], zoom: 12, title: '🇨🇺 HAVANA 1959 — THE CUBAN REVOLUTION', title_de: '🇨🇺 HAVANNA 1959 — DIE KUBANISCHE REVOLUTION', text: '📍 Havana, Cuba.\n\n📊 On January 1, 1959, Castro\'s guerrillas overthrew Batista. The revolution triggered the Bay of Pigs (1961), the Cuban Missile Crisis (1962) — humanity\'s closest brush with nuclear war — and a US embargo lasting 60+ years. Castro ruled until 2008.', text_de: '📍 Havanna, Kuba.\n\n📊 Am 1. Januar 1959 stürzte Castro Batista. Die Revolution löste die Kubakrise 1962 aus — der nächste Punkt eines Atomkriegs. US-Embargo seit 60+ Jahren.', layers: [], image: { wiki: 'Cuban_Revolution', caption: 'Castro entering Havana, 1959' } },
+                { center: [51.3890, 35.6892], zoom: 12, title: '🇮🇷 TEHRAN 1979 — THE ISLAMIC REVOLUTION', title_de: '🇮🇷 TEHERAN 1979 — DIE ISLAMISCHE REVOLUTION', text: '📍 Azadi Tower, Tehran, Iran.\n\n📊 Ayatollah Khomeini overthrew the US-backed Shah, creating the world\'s first Islamic republic. The US embassy hostage crisis (444 days) shattered relations permanently. The Iran-Iraq War (1980–88) killed 1 million. Iran\'s Revolutionary Guard now controls vast military and economic power.', text_de: '📍 Azadi-Turm, Teheran, Iran.\n\n📊 Khomeini stürzte den US-gestützten Schah und schuf die erste Islamische Republik. Die US-Geiselkrise (444 Tage) zerstörte die Beziehungen. Der Iran-Irak-Krieg tötete 1 Million.', layers: [], image: { wiki: 'Iranian_Revolution', caption: 'Protests in Tehran, 1979' } },
+                { center: [13.3777, 52.5163], zoom: 14, title: '🇩🇪 BERLIN 1989 — THE FALL OF THE WALL', title_de: '🇩🇪 BERLIN 1989 — DER MAUERFALL', text: '📍 Brandenburg Gate, Berlin.\n\n📊 On November 9, 1989, the Wall opened after 28 years. 140+ people died trying to cross. The fall triggered communist collapse across Eastern Europe. Germany reunified October 3, 1990. The USSR dissolved December 26, 1991. The most consequential peaceful revolution in modern history.', text_de: '📍 Brandenburger Tor, Berlin.\n\n📊 Am 9. November 1989 fiel die Mauer nach 28 Jahren. 140+ Menschen starben bei Fluchtversuchen. Der Mauerfall löste den Zusammenbruch des Kommunismus in Osteuropa aus. Die folgenreichste friedliche Revolution der Neuzeit.', layers: [], image: { wiki: 'Fall_of_the_Berlin_Wall', caption: 'Berliners on the Wall, 1989' } },
+                { center: [10.1658, 36.8065], zoom: 12, title: '🇹🇳 TUNIS 2010 — THE ARAB SPRING', title_de: '🇹🇳 TUNIS 2010 — DER ARABISCHE FRÜHLING', text: '📍 Avenue Habib Bourguiba, Tunis.\n\n📊 Mohamed Bouazizi set himself on fire on December 17, 2010. His act — spread on social media — toppled Ben Ali in 28 days. The "Arab Spring" spread to Egypt, Libya, Syria, Yemen. Only Tunisia achieved lasting democracy. Syria descended into civil war (500,000+ dead).', text_de: '📍 Avenue Habib Bourguiba, Tunis.\n\n📊 Mohamed Bouazizi zündete sich am 17. Dezember 2010 an. Sein Akt stürzte Ben Ali in 28 Tagen. Der Arabische Frühling erreichte Ägypten, Libyen, Syrien. Nur Tunesien erreichte Demokratie. Syrien: 500.000+ Tote.', layers: [], image: { wiki: 'Arab_Spring', caption: 'Protests in Tunis, 2011' } },
+                { center: [30.5234, 50.4501], zoom: 14, title: '🇺🇦 KYIV 2014 — EUROMAIDAN', title_de: '🇺🇦 KIEW 2014 — EUROMAIDAN', text: '📍 Maidan Nezalezhnosti, Kyiv, Ukraine.\n\n📊 President Yanukovych rejected the EU under Russian pressure. Hundreds of thousands occupied Maidan for 3 months. Snipers killed 108 protesters. Yanukovych fled. Russia annexed Crimea and launched the 2022 full-scale invasion — the largest war in Europe since 1945.', text_de: '📍 Maidan Nesaleschnosti, Kiew, Ukraine.\n\n📊 Janukowytsch lehnte die EU unter russischem Druck ab. Scharfschützen töteten 108 Demonstranten. Russland annektierte die Krim und begann 2022 den größten Krieg in Europa seit 1945.', layers: [], image: { wiki: 'Euromaidan', caption: 'Euromaidan protests, 2014' } },
+                { center: [20, 30], zoom: 2, title: '✊ REVOLUTIONS — THE PATTERN', title_de: '✊ REVOLUTIONEN — DAS MUSTER', text: '🌍 FROM THE BASTILLE TO THE MAIDAN — mapped.\n\n📊 DEATH TOLLS:\n• French Revolution: ~40,000\n• Russian Revolution: 7–12 million\n• Cuban → Missile Crisis: near nuclear war\n• Berlin Wall: 28 years, 140+ deaths\n• Arab Spring: 4 dictators toppled, 1 democracy\n• Euromaidan → full-scale war (2022–)\n\n💡 Every revolution follows a pattern: injustice → spark → mass mobilization → regime falls → power vacuum. The question is always what comes after. France got Napoleon. Russia got Stalin. Tunisia got democracy. Syria got war. Toppling a regime is the easy part.', text_de: '🌍 VON DER BASTILLE BIS ZUM MAIDAN — kartiert.\n\n📊 OPFERZAHLEN:\n• Französische Revolution: ~40.000\n• Russische Revolution: 7–12 Millionen\n• Berliner Mauer: 28 Jahre, 140+ Tote\n• Arabischer Frühling: 4 Diktatoren, 1 Demokratie\n\n💡 Jede Revolution folgt einem Muster. Ein Regime zu stürzen ist der einfache Teil. Was danach kommt, ist die wahre Revolution.', layers: [] }
             ]
         }
     };
