@@ -13,7 +13,7 @@
 
 > 🔄 *Custom domain `geopulse.is-a.dev` — registration pending ([PR #37701](https://github.com/is-a-dev/register/pull/37701))*
 
-> *10,000+ lines of code · 22 data layers · Over 34 guided tours · Zero API keys · Zero cost*
+> *10,000+ lines of code · 22 data layers · Over 35 guided tours · Zero API keys · Zero cost*
 
 ## Features
 
@@ -25,7 +25,7 @@
 
 ### Key Capabilities
 
-- **Over 34 Guided Tours** — Cinematic educational tours across 5 categories: Geopolitics, History, Society & Rights, Science & Nature, Sports & Culture
+- **Over 35 Guided Tours** — Cinematic educational tours across 5 categories: Geopolitics, History, Society & Rights, Science & Nature, Sports & Culture
 - **Cinematic Camera** — Each tour stop approaches from a unique angle with orbital drift
 - **Typewriter Text** — Briefing text reveals character-by-character for a decoded-intel feel
 - **Ken Burns Effect** — Wikipedia thumbnails slowly pan & zoom like a documentary
