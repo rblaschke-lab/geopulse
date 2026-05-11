@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
             tour_hint: 'Read more on Wikipedia',
             // Welcome overlay
             welcome_subtitle: 'EXPLORE HISTORY. UNDERSTAND THE WORLD.',
-            welcome_feat_tours: 'Over 28 guided tours — fly to real locations with satellite imagery',
+            welcome_feat_tours: 'Over 34 guided tours — fly to real locations with satellite imagery',
             welcome_feat_1: 'World Wars, Roman Empire, Forbidden Zones & Lost Wonders',
             welcome_feat_2: 'Live earthquakes, volcanoes, wildfires & satellite orbits',
             welcome_feat_3: 'Built for students — Geography, History, Science & Politics',
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
             tour_hint: 'Mehr auf Wikipedia lesen',
             // Welcome overlay
             welcome_subtitle: 'GESCHICHTE ERLEBEN. DIE WELT VERSTEHEN.',
-            welcome_feat_tours: 'Über 28 geführte Touren — fliege zu echten Orten mit Satellitenbildern',
+            welcome_feat_tours: 'Über 34 geführte Touren — fliege zu echten Orten mit Satellitenbildern',
             welcome_feat_1: 'Weltkriege, Römisches Reich, Verbotene Zonen & Weltwunder',
             welcome_feat_2: 'Echtzeit-Erdbeben, Vulkane, Waldbrände & Satelliten',
             welcome_feat_3: 'Für Schüler — Erdkunde, Geschichte, Naturwissenschaft & Politik',
@@ -3211,8 +3211,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     center: [-77.04, 38.9], zoom: 4,
                     title: '🏛️ GUIDED TOURS — LEARN BY EXPLORING',
                     title_de: '🏛️ GEFÜHRTE TOUREN — LERNEN DURCH ENTDECKEN',
-                    text: 'GEOPULSE offers 25 guided tours on geopolitics, history, and the environment. Each tour flies you to key locations with expert briefings and Wikipedia references. Try the "Trump World Tour" to trace U.S. foreign policy across 9 countries — or explore nuclear history, the Cold War, and climate change.',
-                    text_de: 'GEOPULSE bietet 25 geführte Touren zu Geopolitik, Geschichte und Umwelt. Jede Tour fliegt Sie zu Schlüsselorten mit Expertenbriefings und Wikipedia-Referenzen. Probieren Sie die "Trump Welttour" mit 9 Ländern — oder erkunden Sie Nukleargeschichte, den Kalten Krieg und Klimawandel.',
+                    text: 'GEOPULSE offers 34 guided tours on geopolitics, history, and the environment. Each tour flies you to key locations with expert briefings and Wikipedia references. Try the "Trump World Tour" to trace U.S. foreign policy across 9 countries — or explore nuclear history, the Cold War, and climate change.',
+                    text_de: 'GEOPULSE bietet 34 geführte Touren zu Geopolitik, Geschichte und Umwelt. Jede Tour fliegt Sie zu Schlüsselorten mit Expertenbriefings und Wikipedia-Referenzen. Probieren Sie die "Trump Welttour" mit 9 Ländern — oder erkunden Sie Nukleargeschichte, den Kalten Krieg und Klimawandel.',
                     layers: []
                 },
                 {
