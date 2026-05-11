@@ -457,9 +457,9 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <div class="briefing-body">
                 <h3>SITUATION</h3>
-                <p>${eventData.what || ''}</p>
+                <p>${escHtml(eventData.what || '')}</p>
                 <h3>ASSESSMENT</h3>
-                <p>${eventData.why || ''}</p>
+                <p>${escHtml(eventData.why || '')}</p>
                 
                 <div class="briefing-meta-grid">
                     <div><span>TIME DETECTED</span>${escHtml(eventData.time)}</div>
