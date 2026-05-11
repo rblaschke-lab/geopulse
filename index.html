@@ -275,6 +275,12 @@
             </h2>
             <div class="cat-body">
 
+                    <!-- ★ FEATURED TOUR — Hantavirus 2026 ★ -->
+                    <button class="preset-btn tour-btn" data-tour="hondius" style="border:1px solid rgba(255,60,60,0.6);color:#ff3c3c;text-align:left;padding:8px 10px;margin-bottom:8px;background:rgba(255,60,60,0.08);width:100%;position:relative;overflow:hidden;">
+                        <span style="position:absolute;top:3px;right:6px;background:rgba(255,60,60,0.25);color:#ff3c3c;padding:1px 6px;font-size:.5rem;border-radius:2px;letter-spacing:1px;font-family:'Share Tech Mono',monospace;animation:pulse 2s infinite;">NEW</span>
+                        🦠 <span data-i18n="tour_hondius">MV Hondius — Hantavirus 2026</span>
+                    </button>
+
                     <!-- Geopolitics -->
                     <div class="tour-category" data-cat="geopolitics">
                         <div class="tour-cat-header" onclick="this.parentElement.classList.toggle('open')" style="color:#ff6633;">
@@ -325,7 +331,7 @@
                     <div class="tour-category" data-cat="science">
                         <div class="tour-cat-header" onclick="this.parentElement.classList.toggle('open')" style="color:#00ff88;">
                             <span>🔬 <span data-i18n="cat_science_tours">SCIENCE &amp; NATURE</span></span>
-                            <span class="tour-cat-meta"><span class="tour-cat-count">12</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
+                            <span class="tour-cat-meta"><span class="tour-cat-count">11</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
                         </div>
                         <div class="tour-cat-body">
                             <button class="preset-btn tour-btn" data-tour="ringoffire" style="border-color:rgba(255,100,0,0.5);color:#ff8844;text-align:left;padding:6px 8px;">🌋 <span data-i18n="tour_ringoffire">Ring of Fire</span></button>
@@ -339,7 +345,6 @@
                             <button class="preset-btn tour-btn" data-tour="techcapitals" style="border-color:rgba(0,255,200,0.5);color:#00ffc8;text-align:left;padding:6px 8px;">💻 <span data-i18n="tour_techcapitals">Tech Capitals</span></button>
                             <button class="preset-btn tour-btn" data-tour="extremeplaces" style="border-color:rgba(100,200,255,0.5);color:#64c8ff;text-align:left;padding:6px 8px;">🌍 <span data-i18n="tour_extremeplaces">Extreme Places to Live</span></button>
                             <button class="preset-btn tour-btn" data-tour="pandemics" style="border-color:rgba(180,80,180,0.5);color:#b450b4;text-align:left;padding:6px 8px;">💀 <span data-i18n="tour_pandemics">Pandemics</span></button>
-                            <button class="preset-btn tour-btn" data-tour="hondius" style="border-color:rgba(255,60,60,0.5);color:#ff3c3c;text-align:left;padding:6px 8px;">🦠 <span data-i18n="tour_hondius">MV Hondius — Hantavirus 2026</span></button>
                         </div>
                     </div>
 
@@ -361,41 +366,6 @@
             </div>
         </section>
 
-        <!-- ═══ SCENARIOS — Compact crisis presets ═══ -->
-        <section class="menu-group collapsible-section" id="sec-scenarios">
-            <h2 class="category-title cat-toggle" data-target="sec-scenarios">
-                <span style="color:rgba(255,51,51,0.7);font-size:.65rem;"><i class="fa-solid fa-crosshairs"></i> <span data-i18n="cat_scenarios">GLOBAL SCENARIOS</span></span>
-                <i class="fa-solid fa-chevron-down cat-arrow"></i>
-            </h2>
-            <div class="cat-body">
-                <div class="scenario-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 5px 0;">
-                    <button class="preset-btn" data-scenario="europe">Europe Energy</button>
-                    <button class="preset-btn" data-scenario="taiwan">Taiwan Esc.</button>
-                    <button class="preset-btn" data-scenario="redsea">Red Sea</button>
-                    <button class="preset-btn" data-scenario="nuclear">Nuclear Risk</button>
-                </div>
-
-                <!-- Utility Toolbar — compact icon bar -->
-                <div class="sidebar-utility-bar">
-                    <button id="clear-scenarios" class="util-btn" title="Reset all layers">
-                        <i class="fa-solid fa-rotate-left"></i>
-                        <span data-i18n="reset_layers">Reset</span>
-                    </button>
-                    <button id="reset-map-view" class="util-btn" title="Reset map orientation">
-                        <i class="fa-solid fa-compass"></i>
-                        <span>View</span>
-                    </button>
-                    <button onclick="window.open('./manual.html', '_blank')" class="util-btn" title="Command Manual">
-                        <i class="fa-solid fa-book"></i>
-                        <span data-i18n="command_manual">Manual</span>
-                    </button>
-                    <button onclick="window.open('./about.html', '_blank')" class="util-btn" title="About GEOPULSE">
-                        <i class="fa-solid fa-circle-info"></i>
-                        <span>About</span>
-                    </button>
-                </div>
-            </div>
-        </section>
 
         <!-- ═══ TIER 1: REAL-TIME TRACKING ═══ -->
         <section class="menu-group collapsible-section" id="sec-realtime">
