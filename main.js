@@ -131,11 +131,20 @@ document.addEventListener("DOMContentLoaded", () => {
             tour_revolutions: 'Revolutions',
             tour_pandemics: 'Pandemics',
             tour_hondius: 'MV Hondius — Hantavirus 2026',
+            tour_aurorahunters: 'Aurora Hunters',
+            tour_cosmicimpacts: 'Cosmic Impacts',
+            tour_climatecrisis: 'Climate Crisis',
+            tour_greatmigrations: 'Great Migrations',
+            tour_spycraft: 'Espionage World',
+            layer_aurora: 'Aurora Forecast',
+            desc_aurora: 'Real-time aurora borealis/australis probability from NOAA OVATION model.',
+            layer_fireballs: 'Fireballs',
+            desc_fireballs: 'NASA-confirmed meteor impacts — circle size = energy release (kT).',
             // Tour hint
             tour_hint: 'Read more on Wikipedia',
             // Welcome overlay
             welcome_subtitle: 'EXPLORE HISTORY. UNDERSTAND THE WORLD.',
-            welcome_feat_tours: 'Over 35 guided tours — fly to real locations with satellite imagery',
+            welcome_feat_tours: 'Now 40 guided tours! Fly to real locations with satellite imagery',
             welcome_feat_1: 'World Wars, Roman Empire, Forbidden Zones & Lost Wonders',
             welcome_feat_2: 'Live earthquakes, volcanoes, wildfires & satellite orbits',
             welcome_feat_3: 'Built for students — Geography, History, Science & Politics',
@@ -215,11 +224,20 @@ document.addEventListener("DOMContentLoaded", () => {
             tour_revolutions: 'Revolutionen',
             tour_pandemics: 'Pandemien',
             tour_hondius: 'MV Hondius — Hantavirus 2026',
+            tour_aurorahunters: 'Polarlichtjäger',
+            tour_cosmicimpacts: 'Kosmische Einschläge',
+            tour_climatecrisis: 'Klimakrise',
+            tour_greatmigrations: 'Große Wanderungen',
+            tour_spycraft: 'Spionage-Welt',
+            layer_aurora: 'Polarlicht-Vorhersage',
+            desc_aurora: 'Echtzeit-Polarlicht-Wahrscheinlichkeit vom NOAA OVATION-Modell.',
+            layer_fireballs: 'Feuerbälle',
+            desc_fireballs: 'NASA-bestätigte Meteoreinschläge — Kreisgröße = Energiefreisetzung (kT).',
             // Tour hint
             tour_hint: 'Mehr auf Wikipedia lesen',
             // Welcome overlay
             welcome_subtitle: 'GESCHICHTE ERLEBEN. DIE WELT VERSTEHEN.',
-            welcome_feat_tours: 'Über 35 geführte Touren — fliege zu echten Orten mit Satellitenbildern',
+            welcome_feat_tours: 'Jetzt 40 geführte Touren! Fliege zu echten Orten mit Satellitenbildern',
             welcome_feat_1: 'Weltkriege, Römisches Reich, Verbotene Zonen & Weltwunder',
             welcome_feat_2: 'Echtzeit-Erdbeben, Vulkane, Waldbrände & Satelliten',
             welcome_feat_3: 'Für Schüler — Erdkunde, Geschichte, Naturwissenschaft & Politik',
@@ -265,7 +283,8 @@ document.addEventListener("DOMContentLoaded", () => {
         iss: false, starlink: false, earthquakes: false, webcams: false,
         nightlights: false, population: false, satellites: false, temperature: false,
         volcanoes: false, radiation: false, internet: false, power: false,
-        cables: false, datacenters: false, nuclear: false, conflicts: false, regimes: false, blocs: false, aiAtlas: false, pipelines: false
+        cables: false, datacenters: false, nuclear: false, conflicts: false, regimes: false, blocs: false, aiAtlas: false, pipelines: false,
+        aurora: false, fireballs: false
     };
 
     let _tourActive = false; // Guard: blocks all data refreshes during active tours
@@ -942,6 +961,98 @@ document.addEventListener("DOMContentLoaded", () => {
             map.on('mouseenter', 'starlink-layer', () => { map.getCanvas().style.cursor = 'pointer'; });
             map.on('mouseleave', 'starlink-layer', () => { map.getCanvas().style.cursor = ''; });
         } catch(e) { console.warn('[STARLINK] Init failed:', e.message); }
+
+        // ── AURORA BOREALIS FORECAST (NOAA SWPC OVATION Model) ──────────
+        try {
+            map.addSource('aurora-src', {
+                type: 'image',
+                url: 'https://services.swpc.noaa.gov/images/aurora-forecast-northern-hemisphere.jpg',
+                coordinates: [[-180, 90], [180, 90], [180, 0], [-180, 0]]
+            });
+            map.addLayer({
+                id: 'aurora-layer', type: 'raster', source: 'aurora-src',
+                layout: { visibility: 'none' },
+                paint: { 'raster-opacity': 0.55, 'raster-fade-duration': 500 }
+            });
+            // Also add southern hemisphere
+            map.addSource('aurora-south-src', {
+                type: 'image',
+                url: 'https://services.swpc.noaa.gov/images/aurora-forecast-southern-hemisphere.jpg',
+                coordinates: [[-180, 0], [180, 0], [180, -90], [-180, -90]]
+            });
+            map.addLayer({
+                id: 'aurora-south-layer', type: 'raster', source: 'aurora-south-src',
+                layout: { visibility: 'none' },
+                paint: { 'raster-opacity': 0.55, 'raster-fade-duration': 500 }
+            });
+            updateLayerStatus('aurora', 'LIVE', 'NOAA OVATION Model');
+        } catch(e) { console.warn('[AURORA] Init failed:', e.message); }
+
+        // ── METEOR / FIREBALL TRACKER (NASA CNEOS) ──────────────────────
+        try {
+            const fbResult = await window.reliableFetch(
+                'https://ssd-api.jpl.nasa.gov/fireball.api?limit=150', 'fireballs'
+            );
+            const fbFields = fbResult.data?.fields || [];
+            const fbData = fbResult.data?.data || [];
+            const iDate = fbFields.indexOf('date');
+            const iLat = fbFields.indexOf('lat');
+            const iLatDir = fbFields.indexOf('lat-dir');
+            const iLon = fbFields.indexOf('lon');
+            const iLonDir = fbFields.indexOf('lon-dir');
+            const iEnergy = fbFields.indexOf('energy');
+            const iVel = fbFields.indexOf('vel');
+            const iAlt = fbFields.indexOf('alt');
+            const fbFeatures = fbData.filter(r => r[iLat] && r[iLon]).map(r => {
+                const lat = parseFloat(r[iLat]) * (r[iLatDir] === 'S' ? -1 : 1);
+                const lon = parseFloat(r[iLon]) * (r[iLonDir] === 'W' ? -1 : 1);
+                const energy = parseFloat(r[iEnergy]) || 0.1;
+                return {
+                    type: 'Feature',
+                    geometry: { type: 'Point', coordinates: [lon, lat] },
+                    properties: {
+                        date: r[iDate] || 'Unknown',
+                        energy: energy,
+                        vel: r[iVel] || '—',
+                        alt: r[iAlt] || '—'
+                    }
+                };
+            });
+            map.addSource('fireballs-src', { type: 'geojson', data: { type: 'FeatureCollection', features: fbFeatures } });
+            // Glow ring
+            map.addLayer({
+                id: 'fireballs-glow', type: 'circle', source: 'fireballs-src',
+                layout: { visibility: 'none' },
+                paint: {
+                    'circle-radius': ['interpolate', ['linear'], ['get', 'energy'], 0.1, 12, 1, 20, 10, 35, 100, 55],
+                    'circle-color': 'transparent',
+                    'circle-stroke-color': '#ffaa33',
+                    'circle-stroke-width': 1.5, 'circle-stroke-opacity': 0.3
+                }
+            });
+            // Core dot
+            map.addLayer({
+                id: 'fireballs-core', type: 'circle', source: 'fireballs-src',
+                layout: { visibility: 'none' },
+                paint: {
+                    'circle-radius': ['interpolate', ['linear'], ['get', 'energy'], 0.1, 3, 1, 5, 10, 9, 100, 16],
+                    'circle-color': ['interpolate', ['linear'], ['get', 'energy'], 0.1, '#ffcc66', 1, '#ff8800', 10, '#ff4400', 100, '#ff0000'],
+                    'circle-opacity': 0.9,
+                    'circle-blur': 0.3
+                }
+            });
+            // Click popup
+            map.on('click', 'fireballs-core', (e) => {
+                const p = e.features[0].properties;
+                const hiroshima = (p.energy / 15).toFixed(1);
+                new maplibregl.Popup({ maxWidth: '280px' }).setLngLat(e.lngLat).setHTML(
+                    `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;"><h3 style="color:#ff8800;margin:0 0 5px;border-bottom:1px solid #ff880044;padding-bottom:4px;">☄️ ${currentLang==='de'?'FEUERBALL / BOLIDE':'FIREBALL / BOLIDE'}</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:5px;"><div style="background:rgba(255,136,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'ENERGIE':'ENERGY'}</div><div style="color:#ff8800;font-size:1rem;font-weight:bold;">${escHtml(p.energy)} kT</div></div><div style="background:rgba(255,136,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'GESCHW.':'VELOCITY'}</div><div>${escHtml(p.vel)} km/s</div></div></div><div style="background:rgba(255,136,0,.08);padding:3px 6px;margin-bottom:4px;"><div style="opacity:.5;font-size:.6rem;">≈ HIROSHIMA</div><div style="color:#ff4400;">${hiroshima}× ${currentLang==='de'?'Hiroshima-Äquivalent':'Hiroshima equivalent'}</div></div><div style="font-size:.6rem;opacity:.5;">${escHtml(p.date)}</div><div style="font-size:.5rem;opacity:.3;margin-top:4px;">Source: NASA CNEOS</div></div>`
+                ).addTo(map);
+            });
+            map.on('mouseenter', 'fireballs-core', () => map.getCanvas().style.cursor = 'pointer');
+            map.on('mouseleave', 'fireballs-core', () => map.getCanvas().style.cursor = '');
+            updateLayerStatus('fireballs', 'LIVE', `${fbFeatures.length} events`);
+        } catch(e) { console.warn('[FIREBALLS] Init failed:', e.message); }
 
         // ── POPULATION DENSITY (NASA GIBS — GPW v4.11, 2020) ──────────────
         try {
@@ -2838,6 +2949,20 @@ document.addEventListener("DOMContentLoaded", () => {
         radiationMarkers.forEach(m => toggles.radiation ? m.addTo(map) : m.remove());
     });
 
+    // ── AURORA FORECAST TOGGLE ────────────────────────────
+    document.getElementById('toggle-aurora')?.addEventListener('change', (e) => {
+        toggles.aurora = e.target.checked;
+        if (map.getLayer('aurora-layer')) map.setLayoutProperty('aurora-layer', 'visibility', toggles.aurora ? 'visible' : 'none');
+        if (map.getLayer('aurora-south-layer')) map.setLayoutProperty('aurora-south-layer', 'visibility', toggles.aurora ? 'visible' : 'none');
+    });
+
+    // ── FIREBALL TRACKER TOGGLE ───────────────────────────
+    document.getElementById('toggle-fireballs')?.addEventListener('change', (e) => {
+        toggles.fireballs = e.target.checked;
+        if (map.getLayer('fireballs-core')) map.setLayoutProperty('fireballs-core', 'visibility', toggles.fireballs ? 'visible' : 'none');
+        if (map.getLayer('fireballs-glow')) map.setLayoutProperty('fireballs-glow', 'visibility', toggles.fireballs ? 'visible' : 'none');
+    });
+
     // ── NUCLEAR ARSENAL TOGGLE (nukes) ────────────────────
     document.getElementById('toggle-nukes')?.addEventListener('change', (e) => {
         toggles.nukes = e.target.checked;
@@ -3213,16 +3338,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     center: [-77.04, 38.9], zoom: 4,
                     title: '🏛️ GUIDED TOURS — LEARN BY EXPLORING',
                     title_de: '🏛️ GEFÜHRTE TOUREN — LERNEN DURCH ENTDECKEN',
-                    text: 'GEOPULSE offers 34 guided tours on geopolitics, history, and the environment. Each tour flies you to key locations with expert briefings and Wikipedia references. Try the "Trump World Tour" to trace U.S. foreign policy across 9 countries — or explore nuclear history, the Cold War, and climate change.',
-                    text_de: 'GEOPULSE bietet 34 geführte Touren zu Geopolitik, Geschichte und Umwelt. Jede Tour fliegt Sie zu Schlüsselorten mit Expertenbriefings und Wikipedia-Referenzen. Probieren Sie die "Trump Welttour" mit 9 Ländern — oder erkunden Sie Nukleargeschichte, den Kalten Krieg und Klimawandel.',
+                    text: 'GEOPULSE offers now 40 guided tours on geopolitics, history, science, and the environment. Each tour flies you to key locations with expert briefings and Wikipedia references. Try the "Trump World Tour" to trace U.S. foreign policy across 9 countries — or explore cosmic impacts, aurora hunting, espionage, and climate change.',
+                    text_de: 'GEOPULSE bietet jetzt 40 geführte Touren zu Geopolitik, Geschichte, Wissenschaft und Umwelt. Jede Tour fliegt Sie zu Schlüsselorten mit Expertenbriefings und Wikipedia-Referenzen. Probieren Sie die "Trump Welttour" mit 9 Ländern — oder erkunden Sie kosmische Einschläge, Polarlichtjagd, Spionage und Klimawandel.',
                     layers: []
                 },
                 {
                     center: [20, 20], zoom: 2,
                     title: '🗺️ YOUR COMMAND CENTER — 20+ LAYERS',
                     title_de: '🗺️ IHRE KOMMANDOZENTRALE — 20+ EBENEN',
-                    text: 'Open the sidebar (top-right) to access 20+ data layers: political regimes, military alliances, conflict zones, submarine cables, nuclear sites, and more. Combine layers to discover patterns — like how conflict zones overlap with resource routes. This is your global intelligence dashboard. Start exploring!',
-                    text_de: 'Öffnen Sie die Seitenleiste (oben rechts) für 20+ Datenebenen: Regierungsformen, Militärbündnisse, Konfliktzonen, Seekabel, Atomstandorte und mehr. Kombinieren Sie Ebenen, um Muster zu entdecken — etwa wie Konfliktzonen sich mit Ressourcenrouten überschneiden. Dies ist Ihr globales Nachrichtenzentrum. Viel Spaß beim Erkunden!',
+                    text: 'Open the sidebar (top-right) to access 22+ data layers: political regimes, military alliances, conflict zones, submarine cables, nuclear sites, aurora forecasts, meteor fireballs, and more. Combine layers to discover patterns — like how conflict zones overlap with resource routes. This is your global intelligence dashboard. Start exploring!',
+                    text_de: 'Öffnen Sie die Seitenleiste (oben rechts) für 22+ Datenebenen: Regierungsformen, Militärbündnisse, Konfliktzonen, Seekabel, Atomstandorte, Polarlichtvorhersagen, Meteoreinschläge und mehr. Kombinieren Sie Ebenen, um Muster zu entdecken — etwa wie Konfliktzonen sich mit Ressourcenrouten überschneiden. Dies ist Ihr globales Nachrichtenzentrum. Viel Spaß beim Erkunden!',
                     layers: []
                 }
             ]

@@ -1,11 +1,11 @@
 // Global GEOPULSE Configuration
 window.GeopulseConfig = {
-    VERSION: "1.5",
+    VERSION: "2.0",
     // Zero API keys — all data sources are free and keyless
     METRICS: {
-        FEEDS: 18,
+        FEEDS: 20,
         COUNTRIES: 102,
-        LAYERS: 20
+        LAYERS: 22
     },
     LAYER_METADATA: {
         "weather": { id: "weather", name: "Weather Radar", status: "STATIC", source: "RainViewer API", reliabilityScore: 99 },
@@ -30,7 +30,9 @@ window.GeopulseConfig = {
         "starlink": { id: "starlink", name: "Starlink Net", status: "STATIC", source: "Orbital Sim", reliabilityScore: 100 },
         "satellites": { id: "satellites", name: "Sat & Debris", status: "STATIC", source: "SpaceTrack", reliabilityScore: 92 },
         "volcanoes": { id: "volcanoes", name: "Volcanoes", status: "STATIC", source: "Smithsonian", reliabilityScore: 95 },
-        "radiation": { id: "radiation", name: "Radiation Sites", status: "STATIC", source: "Safecast", reliabilityScore: 85 }
+        "radiation": { id: "radiation", name: "Radiation Sites", status: "STATIC", source: "Safecast", reliabilityScore: 85 },
+        "aurora": { id: "aurora", name: "Aurora Forecast", status: "LIVE", source: "NOAA OVATION", reliabilityScore: 95 },
+        "fireballs": { id: "fireballs", name: "Fireballs", status: "LIVE", source: "NASA CNEOS", reliabilityScore: 98 }
     },
     FEEDBACK: {
         GOOGLE_FORM_URL: "https://docs.google.com/forms/d/e/1FAIpQLSd6IWB0Y9rRQvGkzIPT4I7M3qwNapSzd-LiujURIDGST_5qNg/viewform",
