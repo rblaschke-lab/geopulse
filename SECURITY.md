@@ -1,7 +1,7 @@
 # 🔒 GEOPULSE — Security Policy
 
-> **Version:** 1.3  
-> **Last Audit:** 2026-05-04  
+> **Version:** 2.0  
+> **Last Audit:** 2026-05-15  
 > **Status:** ✅ All clear — no active vulnerabilities
 
 ---
@@ -52,8 +52,9 @@ GEOPULSE is a **static client-side application** hosted on GitHub Pages:
 
 | Version | Status |
 |---------|--------|
-| 1.3     | ✅ Current — fully supported |
-| 1.2     | ⚠️ Superseded — API_KEYS block removed |
+| 2.0     | ✅ Current — fully supported |
+| 1.5.x   | ⚠️ Superseded — CSP missing rss2json |
+| 1.2–1.4 | ⚠️ Superseded — API_KEYS block removed |
 | 1.0–1.1 | ❌ Legacy — contained empty API_KEYS field |
 | < 1.0   | ❌ Retired (formerly "Worldview") — contained committed API key |
 
@@ -181,6 +182,8 @@ All data consumed by GEOPULSE comes from **public, free, keyless APIs**:
 | Wikipedia/Wikimedia | Tour Images | HTTPS/JSON | None | ⭐⭐⭐⭐⭐ Wikimedia Foundation |
 | Smithsonian GVP | Volcanoes | Static/GeoJSON | None | ⭐⭐⭐⭐⭐ Smithsonian Institution |
 | RSS2JSON | News Ticker | HTTPS/JSON | None | ⭐⭐⭐ Free proxy service |
+| NASA CNEOS | Fireballs | HTTPS/JSON | None | ⭐⭐⭐⭐⭐ US Government |
+| NOAA OVATION | Aurora Forecast | HTTPS/Image | None | ⭐⭐⭐⭐⭐ US Government |
 
 ---
 
