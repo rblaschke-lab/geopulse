@@ -305,9 +305,32 @@
 
     <div class="timeline">
 
-        <!-- V1.5.3 — CURRENT -->
+        <!-- V2.0 — CURRENT -->
         <div class="version-entry">
             <div class="version-dot current"></div>
+            <div class="version-header">
+                <span class="version-number">V2.0</span>
+                <span class="version-type type-major">MAJOR</span>
+                <span class="version-name">Aurora, Fireballs &amp; 40 Tours</span>
+                <span class="version-date">MAY 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon feat">✦</span> <strong>Aurora Borealis/Australis Forecast</strong> — Real-time aurora probability overlay from NOAA OVATION model. Both hemispheres covered</li>
+                <li><span class="change-icon feat">✦</span> <strong>Meteor Fireball Tracker</strong> — NASA CNEOS data showing 150 recent fireball events with energy (kT), velocity, and Hiroshima-equivalent calculations</li>
+                <li><span class="change-icon feat">✦</span> <strong>5 New Guided Tours</strong> — Aurora Hunters (8 stops), Cosmic Impacts (8 stops), Climate Crisis (8 stops), Great Migrations (8 stops), Espionage World (8 stops)</li>
+                <li><span class="change-icon feat">✦</span> Total tours: <strong>40</strong> across 5 categories</li>
+                <li><span class="change-icon fix">●</span> <strong>News Ticker Fix</strong> — CSP connect-src updated with api.rss2json.com. BBC headlines now load on all platforms including mobile</li>
+                <li><span class="change-icon fix">●</span> CSP pre-added: ssd-api.jpl.nasa.gov (fireballs), services.swpc.noaa.gov (aurora)</li>
+                <li><span class="change-icon ui">◆</span> Welcome overlay updated: "Now 40 guided tours!" with bilingual DE translation</li>
+                <li><span class="change-icon ui">◆</span> New toggle controls for Aurora Forecast and Fireballs in sidebar</li>
+                <li><span class="change-icon perf">⚡</span> Modular tours architecture: tours_new.js loaded separately, merged via window._TOURS_REF</li>
+                <li><span class="change-icon perf">⚡</span> Config updated: 22 layers, 20 feeds. Full bilingual i18n for all new content</li>
+            </ul>
+        </div>
+
+        <!-- V1.5.3 -->
+        <div class="version-entry">
+            <div class="version-dot"></div>
             <div class="version-header">
                 <span class="version-number">V1.5.3</span>
                 <span class="version-type type-patch">PATCH</span>
