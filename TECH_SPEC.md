@@ -1,8 +1,8 @@
 # GEOPULSE — Technical Specification
 
-> **Version:** V1.5.5 · **Updated:** May 7, 2026  
+> **Version:** V2.0 · **Updated:** May 15, 2026  
 > **Repository:** [github.com/rblaschke-lab/geopulse](https://github.com/rblaschke-lab/geopulse)  
-> **Live:** [geopulse.is-a.dev](https://geopulse.is-a.dev)  
+> **Live:** [geopulseworld.com](https://geopulseworld.com)  
 > **License:** MIT · Free & Open Source
 
 ---
@@ -244,7 +244,7 @@ All APIs are **free, keyless, and public**. Zero cost, zero credentials.
 ```
 GitHub Repository → git push → GitHub Pages (auto-deploy)
                                  ↓
-                    https://geopulse.is-a.dev
+                    https://geopulseworld.com
 ```
 
 - **Cost:** $0/month
@@ -257,12 +257,13 @@ GitHub Repository → git push → GitHub Pages (auto-deploy)
 
 | Option | Domain Example | Provider | Process |
 |---|---|---|---|
-| **.is-a.dev** | `geopulse.is-a.dev` | GitHub PR | Submit PR to is-a-dev/register repo |
+| **geopulseworld.com** | `geopulseworld.com` | IONOS | ✅ Active — A records + CNAME configured |
+| **.is-a.dev** | `geopulse.is-a.dev` | GitHub PR | Superseded by geopulseworld.com |
 | **.eu.org** | `geopulse.eu.org` | nic.eu.org | Register account, wait for manual approval (1-3 weeks) |
 | **.js.org** | `geopulse.js.org` | GitHub PR | Submit PR to js-org/js.org repo (JS projects only) |
 | **thedev.id** | `geopulse.thedev.id` | GitHub PR | Submit PR to thedev-id/thedev.id repo |
 
-**Recommended:** `geopulse.is-a.dev` — best fit for an educational dev project. Professional-looking, fast approval via GitHub PR, and commonly used by open-source projects.
+**Active:** `geopulseworld.com` — registered via IONOS, DNS A records pointing to GitHub Pages IPs, CNAME for www.
 
 **Paid alternatives (if budget allows later):**
 
