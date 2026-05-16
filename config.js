@@ -1,6 +1,6 @@
 // Global GEOPULSE Configuration
 window.GeopulseConfig = {
-    VERSION: "2.0",
+    VERSION: "2.2",
     // Zero API keys — all data sources are free and keyless
     METRICS: {
         FEEDS: 20,

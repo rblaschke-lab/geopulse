@@ -2,7 +2,7 @@
 
 **Free, real-time educational world map combining satellite imagery, geopolitical data, and live intelligence feeds into one interactive dashboard. By RB Design 2026.**
 
-![Version](https://img.shields.io/badge/version-1.5.4-blue)
+![Version](https://img.shields.io/badge/version-2.2-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Platform](https://img.shields.io/badge/platform-GitHub%20Pages-orange)
 ![Cost](https://img.shields.io/badge/cost-%240%2Fmonth-brightgreen)
@@ -13,7 +13,7 @@
 
 > 🌐 *Now live at **geopulseworld.com***
 
-> *10,000+ lines of code · 22+ data layers · Now 40 guided tours · Zero API keys · Zero cost*
+> *10,000+ lines of code · 22+ data layers · 40 guided tours · GeoQuiz · Zero API keys · Zero cost*
 
 ## Features
 
@@ -25,6 +25,8 @@
 
 ### Key Capabilities
 
+- **🧠 GeoQuiz** — 26 bilingual map-integrated questions across 4 categories with 3 difficulty tiers (Explorer/Analyst/Commander)
+- **🔍 Smart Search** — Fuzzy search across all tours and layers (EN + DE), Ctrl+K shortcut
 - **Now 40 Guided Tours!** — Cinematic educational tours across 5 categories: Geopolitics, History, Society & Rights, Science & Nature, Sports & Culture
 - **Cinematic Camera** — Each tour stop approaches from a unique angle with orbital drift
 - **Typewriter Text** — Briefing text reveals character-by-character for a decoded-intel feel
