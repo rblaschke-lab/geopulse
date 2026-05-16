@@ -5802,8 +5802,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const CAT_STATE_KEY = 'geopulse_cat_state';
     const FIRST_VISIT_KEY = 'geopulse_first_visit_done';
 
-    // Default categories to open on first visit
-    const FIRST_VISIT_DEFAULTS = ['geopolitics', 'science'];
+    // Default categories to open on first visit — empty = all collapsed for cleaner overview
+    const FIRST_VISIT_DEFAULTS = [];
 
     // All tour categories
     const tourCats = document.querySelectorAll('.tour-category[data-cat]');

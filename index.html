@@ -217,6 +217,52 @@
 
     <div id="map"></div>
     
+    <!-- FLOATING SEARCH BAR (bottom-left on map) -->
+    <div id="map-search" class="map-search-float">
+        <div class="search-bar-wrap" id="sec-search">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="sidebar-search" class="search-input"
+                   placeholder="Search tours &amp; layers..."
+                   autocomplete="off" spellcheck="false">
+            <kbd class="search-kbd" title="Ctrl+K">⌘K</kbd>
+            <button id="search-clear" class="search-clear" style="display:none;" title="Clear">×</button>
+        </div>
+        <div id="search-results" class="search-results" style="display:none;"></div>
+    </div>
+
+    <!-- GEOQUIZ HOVER PANEL (below info-panel, expands on hover) -->
+    <div id="quiz-hud" class="quiz-hud">
+        <header>
+            <div class="quiz-hud-header">
+                <span style="color:#ff9900;"><i class="fa-solid fa-brain"></i> <span data-i18n="quiz_title">GEOQUIZ</span></span>
+                <span class="quiz-hud-subtitle" data-i18n="quiz_hud_sub">MAP QUIZ</span>
+            </div>
+        </header>
+        <div class="quiz-hud-body">
+            <div id="quiz-setup" class="quiz-setup">
+                <p style="font-size:.6rem;opacity:.5;margin:0 0 8px;line-height:1.4;" data-i18n="quiz_desc">Test your world knowledge! 26 bilingual questions with map integration.</p>
+                <div style="margin-bottom:6px;">
+                    <label style="font-size:.55rem;opacity:.5;letter-spacing:1px;" data-i18n="quiz_category">CATEGORY</label>
+                    <div class="quiz-btn-row">
+                        <button class="quiz-cat-btn active" data-cat="all">All</button>
+                        <button class="quiz-cat-btn" data-cat="geopolitics">🔥</button>
+                        <button class="quiz-cat-btn" data-cat="history">📜</button>
+                        <button class="quiz-cat-btn" data-cat="science">🔬</button>
+                        <button class="quiz-cat-btn" data-cat="sports">🏆</button>
+                    </div>
+                </div>
+                <div style="margin-bottom:8px;">
+                    <label style="font-size:.55rem;opacity:.5;letter-spacing:1px;" data-i18n="quiz_difficulty">DIFFICULTY</label>
+                    <div class="quiz-btn-row">
+                        <button class="quiz-diff-btn active" data-diff="explorer">🟢 Explorer</button>
+                        <button class="quiz-diff-btn" data-diff="analyst">🟡 Analyst</button>
+                        <button class="quiz-diff-btn" data-diff="commander">🔴 Commander</button>
+                    </div>
+                </div>
+                <button class="quiz-start-btn" id="quiz-start-btn">▶ START QUIZ</button>
+            </div>
+        </div>
+    </div>
 
     
     <!-- TOP NEWS TICKER (Mobile Focus) -->
@@ -262,19 +308,6 @@
                     <span class="slider"></span>
                 </label>
             </div>
-        </section>
-
-        <!-- ═══ SEARCH BAR — Always visible ═══ -->
-        <section class="menu-group search-section" id="sec-search">
-            <div class="search-bar-wrap">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="sidebar-search" class="search-input"
-                       placeholder="Search tours &amp; layers..."
-                       autocomplete="off" spellcheck="false">
-                <kbd class="search-kbd" title="Ctrl+K">⌘K</kbd>
-                <button id="search-clear" class="search-clear" style="display:none;" title="Clear">×</button>
-            </div>
-            <div id="search-results" class="search-results" style="display:none;"></div>
         </section>
 
         <!-- ═══ GUIDED TOURS — Primary educational feature ═══ -->
@@ -381,38 +414,6 @@
             </div>
         </section>
 
-
-        <!-- ═══ GEOQUIZ — Interactive map quiz ═══ -->
-        <section class="menu-group collapsible-section" id="sec-quiz">
-            <h2 class="category-title cat-toggle" data-target="sec-quiz">
-                <span style="color:#ff9900;"><i class="fa-solid fa-brain"></i> <span data-i18n="quiz_title">GEOQUIZ</span> <span style="opacity:.4;font-size:.55rem;font-weight:normal;">🆕</span></span>
-                <i class="fa-solid fa-chevron-down cat-arrow"></i>
-            </h2>
-            <div class="cat-body">
-                <div id="quiz-setup" class="quiz-setup">
-                    <p style="font-size:.6rem;opacity:.5;margin:0 0 8px;line-height:1.4;" data-i18n="quiz_desc">Test your world knowledge! 26 bilingual questions with map integration.</p>
-                    <div style="margin-bottom:6px;">
-                        <label style="font-size:.55rem;opacity:.5;letter-spacing:1px;" data-i18n="quiz_category">CATEGORY</label>
-                        <div class="quiz-btn-row">
-                            <button class="quiz-cat-btn active" data-cat="all">All</button>
-                            <button class="quiz-cat-btn" data-cat="geopolitics">🔥</button>
-                            <button class="quiz-cat-btn" data-cat="history">📜</button>
-                            <button class="quiz-cat-btn" data-cat="science">🔬</button>
-                            <button class="quiz-cat-btn" data-cat="sports">🏆</button>
-                        </div>
-                    </div>
-                    <div style="margin-bottom:8px;">
-                        <label style="font-size:.55rem;opacity:.5;letter-spacing:1px;" data-i18n="quiz_difficulty">DIFFICULTY</label>
-                        <div class="quiz-btn-row">
-                            <button class="quiz-diff-btn active" data-diff="explorer">🟢 Explorer</button>
-                            <button class="quiz-diff-btn" data-diff="analyst">🟡 Analyst</button>
-                            <button class="quiz-diff-btn" data-diff="commander">🔴 Commander</button>
-                        </div>
-                    </div>
-                    <button class="quiz-start-btn" id="quiz-start-btn">▶ START QUIZ</button>
-                </div>
-            </div>
-        </section>
 
         <!-- ═══ TIER 1: REAL-TIME TRACKING ═══ -->
         <section class="menu-group collapsible-section" id="sec-realtime">
