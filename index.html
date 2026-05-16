@@ -382,6 +382,38 @@
         </section>
 
 
+        <!-- ═══ GEOQUIZ — Interactive map quiz ═══ -->
+        <section class="menu-group collapsible-section" id="sec-quiz">
+            <h2 class="category-title cat-toggle" data-target="sec-quiz">
+                <span style="color:#ff9900;"><i class="fa-solid fa-brain"></i> <span data-i18n="quiz_title">GEOQUIZ</span> <span style="opacity:.4;font-size:.55rem;font-weight:normal;">🆕</span></span>
+                <i class="fa-solid fa-chevron-down cat-arrow"></i>
+            </h2>
+            <div class="cat-body">
+                <div id="quiz-setup" class="quiz-setup">
+                    <p style="font-size:.6rem;opacity:.5;margin:0 0 8px;line-height:1.4;" data-i18n="quiz_desc">Test your world knowledge! 26 bilingual questions with map integration.</p>
+                    <div style="margin-bottom:6px;">
+                        <label style="font-size:.55rem;opacity:.5;letter-spacing:1px;" data-i18n="quiz_category">CATEGORY</label>
+                        <div class="quiz-btn-row">
+                            <button class="quiz-cat-btn active" data-cat="all">All</button>
+                            <button class="quiz-cat-btn" data-cat="geopolitics">🔥</button>
+                            <button class="quiz-cat-btn" data-cat="history">📜</button>
+                            <button class="quiz-cat-btn" data-cat="science">🔬</button>
+                            <button class="quiz-cat-btn" data-cat="sports">🏆</button>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <label style="font-size:.55rem;opacity:.5;letter-spacing:1px;" data-i18n="quiz_difficulty">DIFFICULTY</label>
+                        <div class="quiz-btn-row">
+                            <button class="quiz-diff-btn active" data-diff="explorer">🟢 Explorer</button>
+                            <button class="quiz-diff-btn" data-diff="analyst">🟡 Analyst</button>
+                            <button class="quiz-diff-btn" data-diff="commander">🔴 Commander</button>
+                        </div>
+                    </div>
+                    <button class="quiz-start-btn" id="quiz-start-btn">▶ START QUIZ</button>
+                </div>
+            </div>
+        </section>
+
         <!-- ═══ TIER 1: REAL-TIME TRACKING ═══ -->
         <section class="menu-group collapsible-section" id="sec-realtime">
             <h2 class="category-title cat-toggle" data-target="sec-realtime">
@@ -528,8 +560,12 @@
         <button class="nav-btn active" data-target="map"><i class="fa-solid fa-earth-americas"></i><span data-i18n="nav_scope">SCOPE</span></button>
         <button class="nav-btn" data-target="tours"><i class="fa-solid fa-route"></i><span>TOURS</span></button>
         <button class="nav-btn" id="mobile-layers-btn" data-target="layers"><i class="fa-solid fa-layer-group"></i><span data-i18n="nav_layers">LAYERS</span></button>
+        <button class="nav-btn" data-target="quiz"><i class="fa-solid fa-brain"></i><span>QUIZ</span></button>
         <button class="nav-btn" data-target="info"><i class="fa-solid fa-info-circle"></i><span data-i18n="nav_info">INFO</span></button>
     </nav>
+
+    <!-- QUIZ SESSION PANEL (overlays map like tour briefings) -->
+    <div id="quiz-panel" class="quiz-panel" style="display:none;"></div>
 
 
 
@@ -789,7 +825,9 @@
         <span id="live-clock" title="Local Time" style="display:flex;align-items:center;height:28px;padding:0 12px;"></span>
     </div>
 
-    <script src="./main.js?v=2.0"></script>
+    <script src="./quiz_bank.js?v=2.2"></script>
+    <script src="./quiz.js?v=2.2"></script>
+    <script src="./main.js?v=2.2"></script>
     <script src="./tours_de.js?v=2.0"></script>
     <script src="./tours_new.js?v=2.0"></script>
 </body>

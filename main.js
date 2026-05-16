@@ -5479,6 +5479,51 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ═══════════════════════════════════════════════════════════════
+    // ── GEOQUIZ INITIALIZATION (Phase 2, V2.2) ───────────────────
+    // ═══════════════════════════════════════════════════════════════
+
+    (function initQuiz() {
+        let quizCategory = 'all';
+        let quizDifficulty = 'explorer';
+
+        // Category buttons
+        document.querySelectorAll('.quiz-cat-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.quiz-cat-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                quizCategory = btn.getAttribute('data-cat');
+            });
+        });
+
+        // Difficulty buttons
+        document.querySelectorAll('.quiz-diff-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.quiz-diff-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                quizDifficulty = btn.getAttribute('data-diff');
+            });
+        });
+
+        // Start button
+        const startBtn = document.getElementById('quiz-start-btn');
+        if (startBtn) {
+            startBtn.addEventListener('click', () => {
+                if (typeof GeoQuiz === 'undefined' || typeof QUIZ_BANK === 'undefined') {
+                    console.warn('[GEOPULSE] Quiz engine or bank not loaded');
+                    return;
+                }
+                const quiz = new GeoQuiz(map);
+                quiz.start(quizCategory, quizDifficulty, 10);
+                // Close sidebar on mobile
+                const sidebar = document.getElementById('sidebar');
+                if (window.innerWidth < 900 && sidebar) sidebar.classList.remove('open');
+            });
+        }
+
+        console.log('[GEOPULSE] GeoQuiz initialized');
+    })();
+
+    // ═══════════════════════════════════════════════════════════════
     // ── SMART SIDEBAR SEARCH (Phase 1, V2.2) ─────────────────────
     // ═══════════════════════════════════════════════════════════════
 
