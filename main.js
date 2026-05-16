@@ -5475,4 +5475,123 @@ document.addEventListener("DOMContentLoaded", () => {
         setInterval(tickClock, 1000);
     }
 
+    // ═══════════════════════════════════════════════════════════════
+    // ── OPTION D: Category Collapse Memory + Smart Defaults + 🆕 ──
+    // ═══════════════════════════════════════════════════════════════
+
+    // --- 1. Collapse Memory ---
+    // Save and restore which tour categories are open/closed
+    const CAT_STATE_KEY = 'geopulse_cat_state';
+    const FIRST_VISIT_KEY = 'geopulse_first_visit_done';
+
+    // Default categories to open on first visit
+    const FIRST_VISIT_DEFAULTS = ['geopolitics', 'science'];
+
+    // All tour categories
+    const tourCats = document.querySelectorAll('.tour-category[data-cat]');
+
+    // Override the inline onclick to add persistence
+    tourCats.forEach(cat => {
+        const header = cat.querySelector('.tour-cat-header');
+        if (!header) return;
+
+        // Remove inline onclick (we manage it now)
+        header.removeAttribute('onclick');
+
+        header.addEventListener('click', () => {
+            cat.classList.toggle('open');
+            saveCatState();
+        });
+    });
+
+    function saveCatState() {
+        const state = {};
+        tourCats.forEach(cat => {
+            const key = cat.getAttribute('data-cat');
+            if (key) state[key] = cat.classList.contains('open');
+        });
+        try { localStorage.setItem(CAT_STATE_KEY, JSON.stringify(state)); } catch(e) {}
+    }
+
+    function restoreCatState() {
+        const isFirstVisit = !localStorage.getItem(FIRST_VISIT_KEY);
+        let state = null;
+
+        try {
+            const raw = localStorage.getItem(CAT_STATE_KEY);
+            if (raw) state = JSON.parse(raw);
+        } catch(e) {}
+
+        tourCats.forEach(cat => {
+            const key = cat.getAttribute('data-cat');
+            if (!key) return;
+
+            if (state && typeof state[key] === 'boolean') {
+                // Returning user: restore saved state
+                if (state[key]) cat.classList.add('open');
+                else cat.classList.remove('open');
+            } else if (isFirstVisit && FIRST_VISIT_DEFAULTS.includes(key)) {
+                // First visit: auto-open popular categories
+                cat.classList.add('open');
+            }
+        });
+
+        if (isFirstVisit) {
+            try { localStorage.setItem(FIRST_VISIT_KEY, '1'); } catch(e) {}
+            saveCatState();
+        }
+    }
+
+    restoreCatState();
+
+    // --- 2. 🆕 Badges for V2.0 tours ---
+    // Tours added in V2.0 (released May 15, 2026)
+    const V2_NEW_TOURS = [
+        'aurorahunters', 'cosmicimpacts', 'climatecrisis',
+        'greatmigrations', 'spycraft'
+    ];
+    const V2_RELEASE_DATE = new Date('2026-05-15');
+    const BADGE_DURATION_DAYS = 30;
+    const now = new Date();
+    const daysSinceV2 = (now - V2_RELEASE_DATE) / (1000 * 60 * 60 * 24);
+
+    if (daysSinceV2 <= BADGE_DURATION_DAYS) {
+        V2_NEW_TOURS.forEach(tourId => {
+            const btn = document.querySelector(`.tour-btn[data-tour="${tourId}"]`);
+            if (btn) {
+                const badge = document.createElement('span');
+                badge.className = 'tour-new-badge';
+                badge.textContent = '🆕';
+                badge.title = 'New in V2.0';
+                btn.style.position = 'relative';
+                btn.appendChild(badge);
+            }
+        });
+
+        // Update category headers with "new" count
+        const catNewCounts = {};
+        V2_NEW_TOURS.forEach(tourId => {
+            const btn = document.querySelector(`.tour-btn[data-tour="${tourId}"]`);
+            if (btn) {
+                const cat = btn.closest('.tour-category[data-cat]');
+                if (cat) {
+                    const key = cat.getAttribute('data-cat');
+                    catNewCounts[key] = (catNewCounts[key] || 0) + 1;
+                }
+            }
+        });
+
+        Object.entries(catNewCounts).forEach(([catKey, count]) => {
+            const cat = document.querySelector(`.tour-category[data-cat="${catKey}"]`);
+            if (!cat) return;
+            const countEl = cat.querySelector('.tour-cat-count');
+            if (countEl) {
+                const total = countEl.textContent.trim();
+                countEl.innerHTML = `${total} <span class="cat-new-indicator">• ${count} new</span>`;
+            }
+        });
+    }
+
+    console.log('[GEOPULSE] Option D: Collapse memory + NEW badges initialized');
+
 }); // end DOMContentLoaded

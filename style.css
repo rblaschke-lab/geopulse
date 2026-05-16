@@ -1217,6 +1217,25 @@ body.no-ticker #sidebar { top: 14px !important; }
     padding: 4px 0 2px;
 }
 
+/* ── OPTION D: NEW badges for recent tours ── */
+.tour-new-badge {
+    margin-left: 4px;
+    font-size: .55rem;
+    vertical-align: middle;
+    animation: badgePulse 2s ease-in-out infinite;
+}
+@keyframes badgePulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .5; }
+}
+.cat-new-indicator {
+    color: #00ff88;
+    font-size: .42rem;
+    font-weight: normal;
+    letter-spacing: .5px;
+    margin-left: 2px;
+}
+
 /* -------------------------------------------------------
    LAYER DESCRIPTIONS
 ------------------------------------------------------- */
