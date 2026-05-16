@@ -264,6 +264,19 @@
             </div>
         </section>
 
+        <!-- ═══ SEARCH BAR — Always visible ═══ -->
+        <section class="menu-group search-section" id="sec-search">
+            <div class="search-bar-wrap">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="sidebar-search" class="search-input"
+                       placeholder="Search tours &amp; layers..."
+                       autocomplete="off" spellcheck="false">
+                <kbd class="search-kbd" title="Ctrl+K">⌘K</kbd>
+                <button id="search-clear" class="search-clear" style="display:none;" title="Clear">×</button>
+            </div>
+            <div id="search-results" class="search-results" style="display:none;"></div>
+        </section>
+
         <!-- ═══ GUIDED TOURS — Primary educational feature ═══ -->
         <section class="menu-group collapsible-section" id="sec-tours">
             <h2 class="category-title cat-toggle" data-target="sec-tours">

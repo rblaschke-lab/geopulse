@@ -1153,6 +1153,137 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 
 /* -------------------------------------------------------
+   SIDEBAR SEARCH BAR
+------------------------------------------------------- */
+.search-section {
+    padding: 0 !important;
+    margin-bottom: 8px !important;
+    border: none !important;
+    background: none !important;
+}
+.search-bar-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    padding: 0 8px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-bar-wrap:focus-within {
+    border-color: var(--neon-blue, #00d4ff);
+    box-shadow: 0 0 8px rgba(0,212,255,0.15);
+}
+.search-icon {
+    color: rgba(255,255,255,0.35);
+    font-size: .65rem;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+.search-input {
+    background: none;
+    border: none;
+    color: #e0e0e0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .72rem;
+    padding: 8px 0;
+    width: 100%;
+    outline: none;
+    letter-spacing: .5px;
+}
+.search-input::placeholder {
+    color: rgba(255,255,255,0.3);
+    font-size: .65rem;
+}
+.search-kbd {
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 3px;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .5rem;
+    padding: 1px 5px;
+    margin-left: 4px;
+    pointer-events: none;
+    line-height: 1.4;
+}
+.search-clear {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: .85rem;
+    cursor: pointer;
+    padding: 2px 4px;
+    margin-left: 2px;
+    line-height: 1;
+}
+.search-clear:hover { color: #ff3355; }
+
+/* Search results dropdown */
+.search-results {
+    background: rgba(8,12,20,0.97);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: -2px;
+}
+.search-results::-webkit-scrollbar { width: 4px; }
+.search-results::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+
+.search-group-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .5rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 1.5px;
+    padding: 8px 10px 3px;
+    text-transform: uppercase;
+}
+.search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    cursor: pointer;
+    font-size: .68rem;
+    color: rgba(255,255,255,0.8);
+    border-left: 2px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
+}
+.search-result-item:hover,
+.search-result-item.active {
+    background: rgba(0,212,255,0.08);
+    border-left-color: var(--neon-blue, #00d4ff);
+}
+.search-result-item .sr-icon { font-size: .75rem; flex-shrink: 0; width: 18px; text-align: center; }
+.search-result-item .sr-name { flex: 1; }
+.search-result-item .sr-type {
+    font-size: .45rem;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+.search-result-item .sr-highlight {
+    background: rgba(0,212,255,0.2);
+    color: #00d4ff;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+.search-no-results {
+    padding: 15px 10px;
+    text-align: center;
+    color: rgba(255,255,255,0.35);
+    font-size: .65rem;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+/* -------------------------------------------------------
    TOUR CATEGORY ACCORDION
 ------------------------------------------------------- */
 .tour-category {
