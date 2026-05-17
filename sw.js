@@ -7,6 +7,8 @@ const STATIC_ASSETS = [
   '/style.css',
   '/i18n.js',
   '/main.js',
+  '/search.js',
+  '/widgets.js',
   '/quiz.js',
   '/quiz_bank.js',
   '/config.js',
