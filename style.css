@@ -2357,12 +2357,11 @@ body.no-ticker #sidebar { top: 14px !important; }
 ------------------------------------------------------- */
 .quiz-hud {
     position: fixed; z-index: 100;
-    top: 100px; left: 14px; width: 240px;
-    border-left: 3px solid #ff9900;
+    top: 110px; left: 14px; width: 240px;
     max-height: 38px;
     background: var(--panel-bg);
-    border: 1px solid rgba(255,153,0,0.25);
-    border-left: 3px solid #ff9900;
+    border: 1px solid rgba(51,153,255,0.25);
+    border-left: 3px solid #3399ff;
     border-radius: 4px;
     backdrop-filter: blur(18px);
     overflow: hidden;
@@ -2370,11 +2369,11 @@ body.no-ticker #sidebar { top: 14px !important; }
     transition: all 0.45s cubic-bezier(0.19, 1, 0.22, 1);
     font-family: 'Share Tech Mono', monospace;
 }
-.quiz-hud:hover { max-height: 400px; width: 300px; box-shadow: 0 0 30px rgba(255,153,0,0.12); overflow-y: auto; }
+.quiz-hud:hover { max-height: 400px; width: 300px; box-shadow: 0 0 30px rgba(51,153,255,0.12); overflow-y: auto; }
 .quiz-hud-header {
     display: flex; justify-content: space-between; align-items: center;
     padding: 8px 12px; cursor: pointer;
-    font-size: .75rem; font-weight: 700;
+    font-size: .8rem; font-weight: 700;
 }
 .quiz-hud-subtitle {
     font-size: .45rem; color: rgba(255,255,255,0.3);
