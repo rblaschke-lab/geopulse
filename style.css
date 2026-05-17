@@ -1471,16 +1471,20 @@ body.no-ticker #sidebar { top: 14px !important; }
     background: linear-gradient(135deg, rgba(10,15,25,0.95), rgba(15,20,35,0.95));
     border: 1px solid rgba(255,176,0,0.3);
     border-radius: 8px;
-    padding: 40px 36px 30px;
+    padding: 28px 32px 22px;
     max-width: 420px; min-width: 380px;
     width: 100%;
     flex-shrink: 0;
     text-align: center;
     box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 80px rgba(255,176,0,0.08);
-    overflow: visible;
+    overflow-x: hidden;
     max-height: calc(100vh - 40px);
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,176,0,0.3) transparent;
 }
+#welcome-card::-webkit-scrollbar { width: 4px; }
+#welcome-card::-webkit-scrollbar-thumb { background: rgba(255,176,0,0.3); border-radius: 2px; }
 
 .welcome-glow {
     position: absolute; top: -50%; left: -50%;
@@ -1492,8 +1496,8 @@ body.no-ticker #sidebar { top: 14px !important; }
 @keyframes welcome-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 .welcome-icon {
-    font-size: 3.5rem;
-    margin-bottom: 8px;
+    font-size: 2.8rem;
+    margin-bottom: 4px;
     animation: welcome-float 3s ease-in-out infinite;
 }
 @keyframes welcome-float {
@@ -1507,7 +1511,7 @@ body.no-ticker #sidebar { top: 14px !important; }
     letter-spacing: 6px;
     color: var(--amber);
     text-shadow: 0 0 20px rgba(255,176,0,0.4);
-    margin: 0 0 4px;
+    margin: 0 0 2px;
 }
 
 .welcome-subtitle {
@@ -1515,14 +1519,14 @@ body.no-ticker #sidebar { top: 14px !important; }
     letter-spacing: 2.5px;
     color: var(--neon-blue);
     opacity: 1;
-    margin: 0 0 2px;
+    margin: 0 0 1px;
 }
 
 .welcome-credit {
     font-size: 0.55rem;
     letter-spacing: 1.5px;
     color: rgba(255,176,0,0.5);
-    margin: 0 0 18px;
+    margin: 0 0 12px;
 }
 
 .welcome-lang-btn {
@@ -1549,16 +1553,16 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 
 .welcome-features {
-    display: flex; flex-direction: column; gap: 6px;
-    margin-bottom: 24px;
+    display: flex; flex-direction: column; gap: 5px;
+    margin-bottom: 14px;
     text-align: left;
 }
 
 .welcome-feat {
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     color: rgba(255,255,255,0.88);
     display: flex; align-items: center; gap: 10px;
-    padding: 7px 12px;
+    padding: 6px 10px;
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 4px;
@@ -1578,7 +1582,7 @@ body.no-ticker #sidebar { top: 14px !important; }
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.8rem;
     letter-spacing: 2px;
-    padding: 12px 20px;
+    padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
     border: 1px solid;
