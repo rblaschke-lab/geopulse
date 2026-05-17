@@ -305,9 +305,65 @@
 
     <div class="timeline">
 
-        <!-- V2.0 — CURRENT -->
+        <!-- V2.3 — CURRENT -->
         <div class="version-entry">
             <div class="version-dot current"></div>
+            <div class="version-header">
+                <span class="version-number">V2.3</span>
+                <span class="version-type type-minor">MINOR</span>
+                <span class="version-name">Quiz Rebalance &amp; Stability Fixes</span>
+                <span class="version-date">17 MAY 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon feat">✦</span> <strong>GeoQuiz Rebalance</strong> — Converted 7 locate-type questions to knowledge/identify for better diversity (8 locate / 24 knowledge / 18 identify)</li>
+                <li><span class="change-icon feat">✦</span> <strong>Chelyabinsk Video</strong> — Added YouTube dashcam shockwave video to the Cosmic Impacts tour</li>
+                <li><span class="change-icon fix">●</span> <strong>Tour Markers Fix</strong> — Late-loaded tours (tours_new.js) now correctly show amber dots via reusable buildTourSitesIndex() + auto-rebuild on demand</li>
+                <li><span class="change-icon fix">●</span> <strong>Briefing Panel HTML Fix</strong> — Conflict briefings no longer show raw &lt;strong&gt;/&lt;br&gt; tags. New safeHtml() whitelist sanitizer preserves formatting while blocking XSS</li>
+                <li><span class="change-icon fix">●</span> <strong>Panel Scroll Reset</strong> — Info panel and Quiz HUD now reset scroll to top on mouse leave, so headers are always visible in collapsed state</li>
+                <li><span class="change-icon ui">◆</span> <strong>Quiz HUD Restyle</strong> — Changed from orange to blue (#3399ff) scheme, matched info-panel font, repositioned with proper spacing below About This Map</li>
+            </ul>
+        </div>
+
+        <!-- V2.2 -->
+        <div class="version-entry">
+            <div class="version-dot"></div>
+            <div class="version-header">
+                <span class="version-number">V2.2</span>
+                <span class="version-type type-minor">MINOR</span>
+                <span class="version-name">Modularization Phase 3</span>
+                <span class="version-date">MAY 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon perf">⚡</span> <strong>i18n.js Extracted</strong> — Translation system (225 lines) moved to dedicated module with setLanguage/getLanguage API</li>
+                <li><span class="change-icon perf">⚡</span> <strong>search.js Extracted</strong> — Search engine (240 lines) separated from main.js with full tour/layer search</li>
+                <li><span class="change-icon perf">⚡</span> <strong>widgets.js Extracted</strong> — Clock, visitor counter, and reset-view button (108 lines) modularized</li>
+                <li><span class="change-icon feat">✦</span> <strong>Interest-Based Intro</strong> — Welcome overlay now lets users pick an interest (Geopolitics, History, Science, Sports) to auto-open the relevant tour category</li>
+                <li><span class="change-icon fix">●</span> CSP fix for service worker registration scope</li>
+            </ul>
+        </div>
+
+        <!-- V2.1 -->
+        <div class="version-entry">
+            <div class="version-dot"></div>
+            <div class="version-header">
+                <span class="version-number">V2.1</span>
+                <span class="version-type type-minor">MINOR</span>
+                <span class="version-name">Hantavirus Tour &amp; Security</span>
+                <span class="version-date">MAY 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon feat">✦</span> <strong>MV Hondius Tour</strong> — 9-stop featured tour tracking the 2026 Andes hantavirus outbreak from Ushuaia to Tenerife</li>
+                <li><span class="change-icon feat">✦</span> <strong>GeoQuiz Engine</strong> — 50 bilingual questions (locate, knowledge, identify) with map integration, timer, and difficulty modes</li>
+                <li><span class="change-icon feat">✦</span> <strong>Pandemics Tour</strong> — 8-stop tour from Plague of Justinian to COVID-19</li>
+                <li><span class="change-icon fix">●</span> <strong>Security Audit</strong> — XSS sanitization via escHtml(), rel="noopener noreferrer" on all external links, reverse tabnapping prevention</li>
+                <li><span class="change-icon ui">◆</span> Hantavirus featured banner with pulsing NEW badge at top of Guided Tours</li>
+                <li><span class="change-icon ui">◆</span> Removed non-functional Global Scenarios section from sidebar</li>
+            </ul>
+        </div>
+
+        <!-- V2.0 -->
+        <div class="version-entry">
+            <div class="version-dot major"></div>
             <div class="version-header">
                 <span class="version-number">V2.0</span>
                 <span class="version-type type-major">MAJOR</span>
@@ -377,7 +433,7 @@
 
         <!-- V1.4 -->
         <div class="version-entry">
-            <div class="version-dot current"></div>
+            <div class="version-dot"></div>
             <div class="version-header">
                 <span class="version-number">V1.4</span>
                 <span class="version-type type-major">MAJOR</span>
