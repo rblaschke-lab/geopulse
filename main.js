@@ -5309,37 +5309,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function restoreCatState() {
-        const isFirstVisit = !localStorage.getItem(FIRST_VISIT_KEY);
-        let state = null;
-
-        try {
-            const raw = localStorage.getItem(CAT_STATE_KEY);
-            if (raw) state = JSON.parse(raw);
-        } catch(e) {}
-
+        // Always start with all categories collapsed for a clean overview
         tourCats.forEach(cat => {
-            const key = cat.getAttribute('data-cat');
-            if (!key) return;
-
-            if (state && typeof state[key] === 'boolean') {
-                // Returning user: restore saved state
-                if (state[key]) cat.classList.add('open');
-                else cat.classList.remove('open');
-            } else if (isFirstVisit && FIRST_VISIT_DEFAULTS.includes(key)) {
-                // First visit: auto-open popular categories
-                cat.classList.add('open');
-            }
+            cat.classList.remove('open');
         });
-
-        if (isFirstVisit) {
-            try { localStorage.setItem(FIRST_VISIT_KEY, '1'); } catch(e) {}
-            saveCatState();
-        }
     }
 
     restoreCatState();
 
-    // --- 2. ðŸ†• Badges for V2.0 tours ---
+    // --- 2. 🆕 Badges for V2.0 tours ---
     // Tours added in V2.0 (released May 15, 2026)
     const V2_NEW_TOURS = [
         'aurorahunters', 'cosmicimpacts', 'climatecrisis',
@@ -5356,7 +5334,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (btn) {
                 const badge = document.createElement('span');
                 badge.className = 'tour-new-badge';
-                badge.textContent = 'ðŸ†•';
+                badge.textContent = 'NEW';
                 badge.title = 'New in V2.0';
                 btn.style.position = 'relative';
                 btn.appendChild(badge);
@@ -5382,7 +5360,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const countEl = cat.querySelector('.tour-cat-count');
             if (countEl) {
                 const total = countEl.textContent.trim();
-                countEl.innerHTML = `${total} <span class="cat-new-indicator">â• ${count} new</span>`;
+                countEl.innerHTML = `${total} <span class="cat-new-indicator">• ${count} new</span>`;
             }
         });
     }

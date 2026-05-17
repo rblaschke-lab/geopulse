@@ -449,17 +449,17 @@ body, html { width: 100%; height: 100%; overflow: hidden; background: #000; colo
 }
 
 #sidebar {
-    top: 52px; right: 14px; width: 300px;
+    top: 52px; right: 14px; width: 340px;
     border-right: 3px solid var(--amber);
     max-height: 42px;
 }
-#sidebar:hover { max-height: 90vh; overflow-y: auto; width: 320px; box-shadow: 0 0 30px var(--amber-dim); }
+#sidebar:hover { max-height: 90vh; overflow-y: auto; width: 360px; box-shadow: 0 0 30px var(--amber-dim); }
 
 /* iPad/touch: prevent sticky :hover — collapse when tapping outside */
 @media (hover: none) and (pointer: coarse) {
     #sidebar { transition: max-height 0.35s ease, width 0.35s ease; }
-    #sidebar:hover { max-height: 42px; width: 300px; overflow: hidden; box-shadow: none; }
-    #sidebar.touch-open { max-height: 90vh !important; overflow-y: auto !important; width: 320px !important; box-shadow: 0 0 30px var(--amber-dim) !important; }
+    #sidebar:hover { max-height: 42px; width: 340px; overflow: hidden; box-shadow: none; }
+    #sidebar.touch-open { max-height: 90vh !important; overflow-y: auto !important; width: 360px !important; box-shadow: 0 0 30px var(--amber-dim) !important; }
     #info-panel:hover { max-height: 42px; width: 240px; overflow: hidden; box-shadow: none; }
     #info-panel.touch-open { max-height: 85vh !important; overflow-y: auto !important; width: 340px !important; box-shadow: 0 0 30px rgba(0,212,255,0.15) !important; }
 }
@@ -2441,4 +2441,22 @@ body.no-ticker #sidebar { top: 14px !important; }
 @media (max-width: 768px) {
     .quiz-hud { top: auto; bottom: 70px; left: auto; right: 8px; width: 200px; max-height: 34px; }
     .quiz-hud:hover { width: 280px; }
+}
+
+/* Tour NEW badges */
+.tour-new-badge {
+    position: absolute; top: 3px; right: 6px;
+    background: rgba(0,212,255,0.2);
+    color: var(--neon-blue);
+    padding: 1px 5px;
+    font-size: .45rem;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    font-family: 'Share Tech Mono', monospace;
+    font-weight: 700;
+}
+.cat-new-indicator {
+    color: var(--neon-blue);
+    font-size: .55rem;
+    opacity: .8;
 }
