@@ -756,6 +756,7 @@ body.no-ticker #sidebar { top: 14px !important; }
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 3px;
     padding: 1px;
+    margin-right: 6px;
 }
 
 .lang-btn {
@@ -2416,8 +2417,8 @@ body.no-ticker #sidebar { top: 14px !important; }
     top: 110px; left: 14px; width: 240px;
     max-height: 38px;
     background: var(--panel-bg);
-    border: 1px solid rgba(51,153,255,0.25);
-    border-left: 3px solid #3399ff;
+    border: 1px solid rgba(0,212,255,0.25);
+    border-left: 3px solid var(--neon-blue);
     border-radius: 4px;
     backdrop-filter: blur(18px);
     overflow: hidden;
@@ -2425,7 +2426,7 @@ body.no-ticker #sidebar { top: 14px !important; }
     transition: all 0.45s cubic-bezier(0.19, 1, 0.22, 1);
     font-family: 'Share Tech Mono', monospace;
 }
-.quiz-hud:hover { max-height: 400px; width: 300px; box-shadow: 0 0 30px rgba(51,153,255,0.12); overflow-y: auto; }
+.quiz-hud:hover { max-height: 400px; width: 300px; box-shadow: 0 0 30px rgba(0,212,255,0.12); overflow-y: auto; }
 .quiz-hud-header {
     display: flex; justify-content: space-between; align-items: center;
     padding: 8px 12px; cursor: pointer;

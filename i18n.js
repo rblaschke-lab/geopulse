@@ -104,8 +104,14 @@ const i18n = {
         fb_comment: 'Anything else? (optional)', fb_submit: 'SUBMIT FEEDBACK',
         fb_bug: 'Report a Bug (GitHub)', fb_footer: 'Feedback goes to a Google Form — no login required.',
         // Quiz
+        quiz_title: 'QUIZ-SECTION', quiz_hud_sub: 'MAP QUIZ',
         quiz_tab: 'QUIZ', quiz_desc: 'Test your world knowledge! 50 bilingual questions with map integration.',
-        quiz_category: 'CATEGORY', quiz_difficulty: 'DIFFICULTY', quiz_start: 'START QUIZ'
+        quiz_category: 'CATEGORY', quiz_difficulty: 'DIFFICULTY', quiz_start: 'START QUIZ',
+        // Showcase labels
+        showcase_ringoffire: '🌋 RING OF FIRE', showcase_aurora: '🌌 AURORA FORECAST',
+        showcase_wonders: '🏛️ LOST WONDERS', showcase_cables: '🌐 DIGITAL SILK ROAD',
+        // Sidebar
+        sidebar_expand: '▼ MAIN MENU', welcome_manual: 'OPEN MANUAL'
     },
     de: {
         mode_explore: 'ERKUNDEN', mode_analyze: 'ANALYSIEREN',
@@ -204,8 +210,14 @@ const i18n = {
         fb_comment: 'Noch etwas? (optional)', fb_submit: 'FEEDBACK SENDEN',
         fb_bug: 'Fehler melden (GitHub)', fb_footer: 'Feedback geht an ein Google-Formular — kein Login nötig.',
         // Quiz
+        quiz_title: 'QUIZ-BEREICH', quiz_hud_sub: 'KARTEN-QUIZ',
         quiz_tab: 'QUIZ', quiz_desc: 'Teste dein Weltwissen! 50 zweisprachige Fragen mit Kartenintegration.',
-        quiz_category: 'KATEGORIE', quiz_difficulty: 'SCHWIERIGKEIT', quiz_start: 'QUIZ STARTEN'
+        quiz_category: 'KATEGORIE', quiz_difficulty: 'SCHWIERIGKEIT', quiz_start: 'QUIZ STARTEN',
+        // Showcase labels
+        showcase_ringoffire: '🌋 FEUERRING', showcase_aurora: '🌌 POLARLICHT-VORHERSAGE',
+        showcase_wonders: '🏛️ VERLORENE WUNDER', showcase_cables: '🌐 DIGITALE SEIDENSTRASSE',
+        // Sidebar
+        sidebar_expand: '▼ HAUPTMENÜ', welcome_manual: 'HANDBUCH ÖFFNEN'
     }
 };
 
