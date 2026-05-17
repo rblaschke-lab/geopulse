@@ -1,0 +1,26 @@
+{
+  "name": "GeoPulse — Live World Intelligence Map",
+  "short_name": "GeoPulse",
+  "description": "Free educational world map with 50 quiz questions, 40 guided tours, 22 live data layers. Bilingual EN/DE.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0a0c14",
+  "theme_color": "#ff9900",
+  "categories": ["education", "reference", "maps"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

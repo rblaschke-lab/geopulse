@@ -7,12 +7,18 @@
     <title id="page-title">GEOPULSE | Live World Intelligence Map</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>" type="image/svg+xml">
 
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <!-- SEO & Social Sharing -->
     <meta name="description" content="GEOPULSE — explore earthquakes, volcanoes, wildfires, satellites, conflicts and nuclear sites in real-time. 25 guided tours. Free interactive world map for students — no login, no ads.">
     <meta name="keywords" content="geopulse, interactive map, geography education, earthquakes, volcanoes, satellite tracking, free educational tool, STEM, global intelligence, geopolitics, real-time map, student tool, belt and road, cold war history">
     <meta name="author" content="RB_DESIGN">
     <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#07080a">
+    <meta name="theme-color" content="#ff9900">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://geopulseworld.com/">
@@ -51,7 +57,16 @@
 
     <script src="./fetchWrapper.js"></script>
     <script src="./config.js"></script>
-    <link rel="stylesheet" href="./style.css?v=1.53b">
+    <link rel="stylesheet" href="./style.css?v=2.3">
+
+    <!-- Service Worker registration -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+    }
+    </script>
 </head>
 <body class="theme-clean">
     <!-- ═══ ENTER GATEWAY — enables audio via user gesture ═══ -->

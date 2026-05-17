@@ -311,15 +311,16 @@ body, html { width: 100%; height: 100%; overflow: hidden; background: #000; colo
     display: none;
     position: fixed; bottom: 0; left: 0; width: 100%;
     height: var(--mobile-nav-h);
-    background: rgba(10,12,20,0.95);
-    border-top: 2px solid var(--amber-dim);
+    background: rgba(18,24,42,0.94);
+    border-top: 1px solid rgba(255,176,0,0.35);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
     z-index: 1000;
     display: none; justify-content: space-around; align-items: center;
     padding-bottom: env(safe-area-inset-bottom);
 }
 
 .nav-btn {
-    background: none; border: none; color: rgba(255,176,0,0.4);
+    background: none; border: none; color: rgba(255,200,60,0.65);
     display: flex; flex-direction: column; align-items: center; gap: 4px;
     cursor: pointer; transition: all 0.3s; width: 20%;
     -webkit-tap-highlight-color: transparent;
@@ -328,7 +329,7 @@ body, html { width: 100%; height: 100%; overflow: hidden; background: #000; colo
 }
 .nav-btn i { font-size: 1.2rem; }
 .nav-btn span { font-size: 0.6rem; letter-spacing: 1px; }
-.nav-btn.active { color: var(--amber); text-shadow: 0 0 8px var(--amber); }
+.nav-btn.active { color: #ffcc33; text-shadow: 0 0 10px rgba(255,200,50,0.6); }
 
 /* Unified Command Sheets (Mobile) */
 @media (max-width: 768px) {
@@ -2242,6 +2243,18 @@ body.no-ticker #sidebar { top: 14px !important; }
     border-radius:10px; padding:20px; z-index:9999;
     box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 20px rgba(255,153,0,0.1);
     font-family:'Share Tech Mono',monospace; color:#e0e0e0;
+    transition: all 0.35s ease;
+}
+/* Locate mode: move panel to left side so map is fully clickable */
+.quiz-panel.locate-mode {
+    top: 100px; left: 14px; transform: none;
+    width: min(320px, 45vw); max-height: 60vh;
+}
+@media (max-width: 768px) {
+    .quiz-panel.locate-mode {
+        top: auto; bottom: 70px; left: 8px; right: 8px;
+        width: auto; max-height: 35vh;
+    }
 }
 .quiz-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
 .quiz-label { color:#ff9900; font-size:.8rem; font-weight:700; letter-spacing:2px; }

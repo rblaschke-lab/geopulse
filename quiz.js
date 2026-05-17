@@ -37,13 +37,43 @@ window.GeoQuiz = class GeoQuiz {
     this.current = 0; this.score = 0; this.total = this.questions.length;
     this.answers = []; this.streak = 0; this.bestStreak = 0;
     this.startTime = Date.now(); this.active = true;
+    this._hideMapLabels();
     this._showPanel(); this._showQuestion();
   }
 
   stop() {
     this.active = false; this._clearTimer();
     if (this.mapClickHandler) { this.map.off('click', this.mapClickHandler); this.mapClickHandler = null; }
-    if (this.panel) this.panel.style.display = 'none';
+    if (this.panel) { this.panel.style.display = 'none'; this.panel.classList.remove('locate-mode'); }
+    this._restoreMapLabels();
+  }
+
+  // Hide city/country labels so they don't spoil answers
+  _hideMapLabels() {
+    this._labelLayers = [];
+    try {
+      const style = this.map.getStyle();
+      if (style && style.layers) {
+        style.layers.forEach(l => {
+          if (l.type === 'symbol' && l.id && /label|place|country-name|city|town|village|state/i.test(l.id)) {
+            const vis = this.map.getLayoutProperty(l.id, 'visibility');
+            if (vis !== 'none') {
+              this._labelLayers.push(l.id);
+              this.map.setLayoutProperty(l.id, 'visibility', 'none');
+            }
+          }
+        });
+      }
+    } catch(e) { /* style may not be loaded yet */ }
+  }
+
+  _restoreMapLabels() {
+    if (this._labelLayers) {
+      this._labelLayers.forEach(id => {
+        try { this.map.setLayoutProperty(id, 'visibility', 'visible'); } catch(e) {}
+      });
+      this._labelLayers = [];
+    }
   }
 
   _shuffle(arr) { const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
@@ -69,6 +99,12 @@ window.GeoQuiz = class GeoQuiz {
     }
     const pct = Math.round((this.current / this.total) * 100);
     const isLocate = q.type === 'locate';
+    // Reposition panel for locate questions — move to left so map is clickable
+    if (isLocate) {
+      this.panel.classList.add('locate-mode');
+    } else {
+      this.panel.classList.remove('locate-mode');
+    }
     let html = `<div class="quiz-header">
       <span class="quiz-label">🧠 GEOQUIZ</span>
       <span class="quiz-progress">Q ${this.current+1}/${this.total}</span>
