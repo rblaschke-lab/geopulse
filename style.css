@@ -1568,6 +1568,57 @@ body.no-ticker #sidebar { top: 14px !important; }
     letter-spacing: 1px;
 }
 
+/* ── Interest Selector ── */
+.welcome-interest {
+    margin: 4px 0 18px;
+}
+.welcome-interest-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 2.5px;
+    color: var(--neon-blue);
+    margin-bottom: 10px;
+    opacity: 0.7;
+}
+.welcome-interest-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+.interest-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: left;
+}
+.interest-btn:hover {
+    background: rgba(255,176,0,0.08);
+    border-color: rgba(255,176,0,0.4);
+    transform: translateY(-1px);
+}
+.interest-btn.selected {
+    background: rgba(255,176,0,0.15);
+    border-color: var(--amber);
+    box-shadow: 0 0 12px rgba(255,176,0,0.15);
+}
+.interest-btn-all {
+    grid-column: 1 / -1;
+}
+.interest-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+.interest-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.8);
+}
+
 /* -------------------------------------------------------
    TOUR BRIEFING PANEL
 ------------------------------------------------------- */

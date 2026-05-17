@@ -151,6 +151,11 @@ document.addEventListener("DOMContentLoaded", () => {
             welcome_start_tour: 'START DEMO TOUR', welcome_explore: 'EXPLORE FREELY',
             welcome_dont_show: "Don't show again",
             welcome_footer: 'No login · No ads · 100% free & open source · For students, educators & the curious',
+            // Interest selector
+            welcome_interest_label: 'WHAT INTERESTS YOU?',
+            interest_geopolitics: 'Geopolitics & Conflicts', interest_history: 'History & Civilizations',
+            interest_science: 'Science & Nature', interest_sports: 'Sports & Culture',
+            interest_all: 'Show Me Everything',
             // Feedback widget
             fb_title: 'FEEDBACK', fb_rate: 'How do you rate GEOPULSE?',
             fb_enjoy: 'What do you enjoy most?', fb_wish: 'Feature wish (optional)',
@@ -244,6 +249,10 @@ document.addEventListener("DOMContentLoaded", () => {
             welcome_start_tour: 'DEMO-TOUR STARTEN', welcome_explore: 'FREI ERKUNDEN',
             welcome_dont_show: 'Nicht mehr anzeigen',
             welcome_footer: 'Kein Login · Keine Werbung · 100% kostenlos & Open Source · Für Schüler, Studenten, Lehrer & Interessierte',
+            welcome_interest_label: 'WAS INTERESSIERT DICH?',
+            interest_geopolitics: 'Geopolitik & Konflikte', interest_history: 'Geschichte & Zivilisationen',
+            interest_science: 'Wissenschaft & Natur', interest_sports: 'Sport & Kultur',
+            interest_all: 'Zeig mir alles',
             // Feedback widget
             fb_title: 'FEEDBACK', fb_rate: 'Wie bewerten Sie GEOPULSE?',
             fb_enjoy: 'Was gefällt Ihnen am besten?', fb_wish: 'Feature-Wunsch (optional)',
@@ -3296,14 +3305,84 @@ document.addEventListener("DOMContentLoaded", () => {
     const dismissWelcome = (startTourId) => {
         if (!welcomeOverlay) return;
         welcomeOverlay.classList.add('hidden');
+        // Apply user interest
+        const interest = localStorage.getItem('geopulse_interest') || 'all';
+        applyInterest(interest);
         if (startTourId) {
             setTimeout(() => startTour(startTourId), 600);
         }
     };
 
+    // Interest application: opens matching tour category, pre-selects quiz, toggles layers
+    function applyInterest(interest) {
+        if (!interest || interest === 'all') return;
+
+        // 1. Open the matching tour category in sidebar
+        const catMap = {
+            geopolitics: 'geopolitics',
+            history: 'history',
+            science: 'science',
+            sports: 'sports'
+        };
+        const targetCat = catMap[interest];
+        if (targetCat) {
+            document.querySelectorAll('.tour-category[data-cat]').forEach(cat => {
+                const isMatch = cat.getAttribute('data-cat') === targetCat;
+                cat.classList.toggle('open', isMatch);
+            });
+            // Save to collapse state
+            try {
+                const state = {};
+                document.querySelectorAll('.tour-category[data-cat]').forEach(c => {
+                    state[c.getAttribute('data-cat')] = c.classList.contains('open');
+                });
+                localStorage.setItem('geopulse_cat_state', JSON.stringify(state));
+            } catch(e) {}
+        }
+
+        // 2. Pre-select quiz category
+        const quizCatBtns = document.querySelectorAll('.quiz-cat-btn');
+        quizCatBtns.forEach(btn => {
+            const btnCat = btn.getAttribute('data-cat');
+            btn.classList.toggle('active', btnCat === interest);
+        });
+
+        // 3. Toggle relevant layers (gently — 1-2 key layers per interest)
+        const layerMap = {
+            geopolitics: ['toggleConflicts'],
+            history: [],
+            science: ['toggleEarthquakes'],
+            sports: []
+        };
+        const layersToActivate = layerMap[interest] || [];
+        layersToActivate.forEach(fnName => {
+            const btn = document.querySelector(`[onclick*="${fnName}"]`);
+            if (btn && !btn.classList.contains('active')) {
+                try { btn.click(); } catch(e) {}
+            }
+        });
+    }
+
     if (welcomeOverlay) {
         // Always show the welcome overlay as an impressive gateway
         welcomeOverlay.classList.remove('hidden');
+
+        // Interest buttons — toggle selection
+        document.querySelectorAll('.interest-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.interest-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                localStorage.setItem('geopulse_interest', btn.getAttribute('data-interest'));
+            });
+        });
+
+        // Pre-select if returning user
+        const savedInterest = localStorage.getItem('geopulse_interest');
+        if (savedInterest) {
+            const match = document.querySelector(`.interest-btn[data-interest="${savedInterest}"]`);
+            if (match) match.classList.add('selected');
+        }
+
         // "START GUIDED TOUR" → launches the welcome mini-tour
         document.getElementById('welcome-tour')?.addEventListener('click', () => {
             dismissWelcome('welcome');
