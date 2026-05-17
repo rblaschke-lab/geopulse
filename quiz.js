@@ -55,7 +55,7 @@ window.GeoQuiz = class GeoQuiz {
       const style = this.map.getStyle();
       if (style && style.layers) {
         style.layers.forEach(l => {
-          if (l.type === 'symbol' && l.id && /label|place|country-name|city|town|village|state/i.test(l.id)) {
+          if (l.type === 'symbol' && l.id && /label|place|country|city|town|village|state|poi|point|name|capital/i.test(l.id)) {
             const vis = this.map.getLayoutProperty(l.id, 'visibility');
             if (vis !== 'none') {
               this._labelLayers.push(l.id);
