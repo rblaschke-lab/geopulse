@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // ----------------------------------------------------
     // Security: HTML escape helper to prevent XSS from external API data
     const escHtml = (s) => { const d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML; };
+    // Allow only safe formatting tags for briefing content (strong, br, em, b, i)
+    const safeHtml = (s) => { const str = String(s || ''); return str.replace(/<(?!\/?(strong|br|em|b|i)\s*\/?>)[^>]*>/gi, (m) => escHtml(m)); };
     const VERSION = window.GeopulseConfig?.VERSION || '1.4';
 
     // â”€â”€ RELIABLE FETCH â€” timeout-safe wrapper for all external API calls â”€â”€
@@ -263,9 +265,9 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <div class="briefing-body">
                 <h3>SITUATION</h3>
-                <p>${escHtml(eventData.what || '')}</p>
+                <p>${safeHtml(eventData.what || '')}</p>
                 <h3>ASSESSMENT</h3>
-                <p>${escHtml(eventData.why || '')}</p>
+                <p>${safeHtml(eventData.why || '')}</p>
                 
                 <div class="briefing-meta-grid">
                     <div><span>TIME DETECTED</span>${escHtml(eventData.time)}</div>
@@ -305,6 +307,10 @@ document.addEventListener("DOMContentLoaded", () => {
     window.setStatus = setStatus;
     const sidebar = document.getElementById('sidebar');
     const infoPanel = document.getElementById('info-panel');
+    // Reset scroll on collapse so header is always visible in collapsed state
+    [infoPanel, document.getElementById('quiz-hud')].forEach(el => {
+        if (el) el.addEventListener('mouseleave', () => { setTimeout(() => { el.scrollTop = 0; }, 450); });
+    });
     let activeMobilePanel = null;
     const switchSection = (target) => {
         if(window.innerWidth > 768) return;
