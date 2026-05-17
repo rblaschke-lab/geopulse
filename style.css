@@ -1403,6 +1403,7 @@ body.no-ticker #sidebar { top: 14px !important; }
     position: fixed; inset: 0; z-index: 10000;
     background: rgba(0, 0, 0, 0.85);
     display: flex; align-items: center; justify-content: center;
+    gap: 24px;
     backdrop-filter: blur(8px);
     animation: fadeIn 0.6s ease;
     padding: 20px;
@@ -1415,6 +1416,55 @@ body.no-ticker #sidebar { top: 14px !important; }
 
 #welcome-overlay.hidden { display: none; }
 
+/* Showcase image columns (desktop only) */
+.welcome-showcase {
+    display: flex; flex-direction: column; gap: 14px;
+    width: 200px; flex-shrink: 0;
+    animation: showcase-fade 1.2s ease 0.3s both;
+}
+@keyframes showcase-fade {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.welcome-showcase-left { animation-delay: 0.4s; }
+.welcome-showcase-right { animation-delay: 0.6s; }
+.showcase-card {
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(255,176,0,0.2);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 20px rgba(255,176,0,0.05);
+    transition: all 0.4s ease;
+}
+.showcase-card:hover {
+    border-color: rgba(255,176,0,0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.7), 0 0 30px rgba(255,176,0,0.1);
+}
+.showcase-card img {
+    width: 100%; height: auto; display: block;
+    filter: brightness(0.8) saturate(1.1);
+    transition: filter 0.4s ease;
+}
+.showcase-card:hover img {
+    filter: brightness(0.95) saturate(1.2);
+}
+.showcase-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 6px 8px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.85));
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+}
+
+@media (max-width: 1100px) {
+    .welcome-showcase { display: none; }
+}
+
 #welcome-card {
     position: relative;
     background: linear-gradient(135deg, rgba(10,15,25,0.95), rgba(15,20,35,0.95));
@@ -1425,7 +1475,9 @@ body.no-ticker #sidebar { top: 14px !important; }
     width: 100%;
     text-align: center;
     box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 80px rgba(255,176,0,0.08);
-    overflow: hidden;
+    overflow: visible;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
 }
 
 .welcome-glow {

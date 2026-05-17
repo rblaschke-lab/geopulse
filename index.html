@@ -697,6 +697,18 @@
 
     <!-- WELCOME OVERLAY (First Visit) -->
     <div id="welcome-overlay">
+        <!-- Left showcase column (desktop only) -->
+        <div class="welcome-showcase welcome-showcase-left">
+            <div class="showcase-card">
+                <img src="./assets/showcase/earthquakes.png" alt="Ring of Fire">
+                <span class="showcase-label">🌋 RING OF FIRE</span>
+            </div>
+            <div class="showcase-card">
+                <img src="./assets/showcase/aurora.png" alt="Aurora Forecast">
+                <span class="showcase-label">🌌 AURORA FORECAST</span>
+            </div>
+        </div>
+
         <div id="welcome-card">
             <div class="welcome-glow"></div>
             <button id="welcome-lang-toggle" class="welcome-lang-btn" onclick="var l=document.documentElement.lang==='de'?'en':'de'; if(window.setLanguage){setLanguage(l)}else{var e=new CustomEvent('setLang',{detail:l});document.dispatchEvent(e)}" title="Switch language">
@@ -752,6 +764,18 @@
                 </button>
             </div>
             <div class="welcome-footer" data-i18n="welcome_footer">No login · No ads · 100% free &amp; open source · For students, educators &amp; the curious</div>
+        </div>
+
+        <!-- Right showcase column (desktop only) -->
+        <div class="welcome-showcase welcome-showcase-right">
+            <div class="showcase-card">
+                <img src="./assets/showcase/pyramids.png" alt="Pyramids Tour">
+                <span class="showcase-label">🏛️ LOST WONDERS</span>
+            </div>
+            <div class="showcase-card">
+                <img src="./assets/showcase/cables.png" alt="Undersea Cables">
+                <span class="showcase-label">🌐 DIGITAL SILK ROAD</span>
+            </div>
         </div>
     </div>
 
