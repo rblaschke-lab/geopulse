@@ -86,6 +86,8 @@
         if (window._TOURS_REF) {
             Object.assign(window._TOURS_REF, NEW_TOURS);
             console.log('[tours_new] Merged 5 new tours into TOURS');
+            // Rebuild tour sites GeoJSON so new tours get map dots
+            if (typeof window._refreshTourSites === 'function') window._refreshTourSites();
         } else {
             setTimeout(mergeNewTours, 500);
         }
