@@ -4427,6 +4427,41 @@ document.addEventListener("DOMContentLoaded", () => {
         map.on('load', initTourSitesLayer);
     }
 
+    // ── REFRESH TOUR SITES — called by tours_new.js after merging new tours ──
+    // Rebuilds the GeoJSON features array and updates the map source so that
+    // late-loaded tours (Aurora Hunters, Cosmic Impacts, etc.) get map dots
+    window._refreshTourSites = function() {
+        // Clear and rebuild the features array from the current TOURS object
+        allTourSitesFeatures.length = 0;
+        Object.keys(tourSitesMap).forEach(k => delete tourSitesMap[k]);
+        let idx = 0;
+        Object.entries(TOURS).forEach(([tourId, tour]) => {
+            if (tourId === 'welcome') return;
+            tourSitesMap[tourId] = [];
+            tour.steps.forEach((step, stepIdx) => {
+                allTourSitesFeatures.push({
+                    type: 'Feature',
+                    geometry: { type: 'Point', coordinates: step.center },
+                    properties: {
+                        tourId: tourId,
+                        stepIdx: stepIdx,
+                        title: step.title || '',
+                        tourName: tour.name || ''
+                    }
+                });
+                tourSitesMap[tourId].push(idx);
+                idx++;
+            });
+        });
+
+        // Update the map source if it already exists
+        const src = map.getSource('tour-sites-src');
+        if (src) {
+            src.setData({ type: 'FeatureCollection', features: allTourSitesFeatures });
+        }
+        console.log('[_refreshTourSites] Rebuilt tour sites GeoJSON:', allTourSitesFeatures.length, 'features');
+    };
+
     // Helper: show/hide the global tour sites ambient glow
     function setTourSitesGlowVisible(visible) {
         const vis = visible ? 'visible' : 'none';
