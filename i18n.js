@@ -1,4 +1,4 @@
-// GEOPULSE i18n MODULE — V2.3
+// GEOPULSE i18n MODULE — V2.4
 // Bilingual translation system (EN / DE)
 // Extracted from main.js for modularization
 (function() {
@@ -77,16 +77,19 @@ const i18n = {
         tour_cosmicimpacts: 'Cosmic Impacts',
         tour_climatecrisis: 'Climate Crisis',
         tour_greatmigrations: 'Great Migrations',
+        tour_windsworld: 'Winds of the World',
         tour_spycraft: 'Espionage World',
         layer_aurora: 'Aurora Forecast',
         desc_aurora: 'Real-time aurora borealis/australis probability from NOAA OVATION model.',
         layer_fireballs: 'Fireballs',
         desc_fireballs: 'NASA-confirmed meteor impacts — circle size = energy release (kT).',
+        layer_wind: 'Global Winds',
+        desc_wind: 'Animated wind particle visualization from Open-Meteo forecast data.',
         // Tour hint
         tour_hint: 'Read more on Wikipedia',
         // Welcome overlay
         welcome_subtitle: 'EXPLORE HISTORY. UNDERSTAND THE WORLD.',
-        welcome_feat_tours: 'Now 40 guided tours! Fly to real locations with satellite imagery',
+        welcome_feat_tours: 'Now 41 guided tours! Fly to real locations with satellite imagery',
         welcome_feat_1: 'World Wars, Roman Empire, Forbidden Zones & Lost Wonders',
         welcome_feat_2: 'Live earthquakes, volcanoes, wildfires & satellite orbits',
         welcome_feat_3: 'Built for students — Geography, History, Science & Politics',
@@ -184,16 +187,19 @@ const i18n = {
         tour_cosmicimpacts: 'Kosmische Einschläge',
         tour_climatecrisis: 'Klimakrise',
         tour_greatmigrations: 'Große Wanderungen',
+        tour_windsworld: 'Winde der Welt',
         tour_spycraft: 'Spionage-Welt',
         layer_aurora: 'Polarlicht-Vorhersage',
         desc_aurora: 'Echtzeit-Polarlicht-Wahrscheinlichkeit vom NOAA OVATION-Modell.',
         layer_fireballs: 'Feuerbälle',
         desc_fireballs: 'NASA-bestätigte Meteoreinschläge — Kreisgröße = Energiefreisetzung (kT).',
+        layer_wind: 'Globale Winde',
+        desc_wind: 'Animierte Wind-Partikelvisualisierung aus Open-Meteo Vorhersagedaten.',
         // Tour hint
         tour_hint: 'Mehr auf Wikipedia lesen',
         // Welcome overlay
         welcome_subtitle: 'GESCHICHTE ERLEBEN. DIE WELT VERSTEHEN.',
-        welcome_feat_tours: 'Jetzt 40 geführte Touren! Fliege zu echten Orten mit Satellitenbildern',
+        welcome_feat_tours: 'Jetzt 41 geführte Touren! Fliege zu echten Orten mit Satellitenbildern',
         welcome_feat_1: 'Weltkriege, Römisches Reich, Verbotene Zonen & Weltwunder',
         welcome_feat_2: 'Echtzeit-Erdbeben, Vulkane, Waldbrände & Satelliten',
         welcome_feat_3: 'Für Schüler — Erdkunde, Geschichte, Naturwissenschaft & Politik',

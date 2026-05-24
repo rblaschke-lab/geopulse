@@ -5303,6 +5303,13 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('[GEOPULSE] GeoQuiz initialized');
     })();
 
+    // ── WIND LAYER INIT (wind.js module) ─────────────────────
+    window._GEOPULSE_MAP = map;
+    if (typeof window.initWindLayer === 'function') {
+        window.initWindLayer(map);
+        console.log('[GEOPULSE] Wind layer initialized');
+    }
+
     // â”€â”€ SMART SIDEBAR SEARCH: loaded from search.js module â”€â”€
 
     // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•

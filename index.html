@@ -38,7 +38,7 @@
     <meta name="twitter:image" content="./og-preview.png">
 
     <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com https://fonts.openmaptiles.org; img-src 'self' https://*.arcgisonline.com https://tile.openstreetmap.org https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://www.foto-webcam.eu https://upload.wikimedia.org https://img.youtube.com https://services.swpc.noaa.gov data: blob:; connect-src 'self' https://earthquake.usgs.gov https://api.wheretheiss.at https://services.swpc.noaa.gov https://ll.thespacedevs.com https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://*.arcgisonline.com https://fonts.googleapis.com https://fonts.gstatic.com https://fonts.openmaptiles.org https://unpkg.com https://cdnjs.cloudflare.com https://api.counterapi.dev https://en.wikipedia.org https://de.wikipedia.org https://cdn.jsdelivr.net https://api.rss2json.com https://ssd-api.jpl.nasa.gov https://api.rainviewer.com; frame-src https://www.foto-webcam.eu; worker-src 'self' blob:; child-src blob:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com https://fonts.openmaptiles.org; img-src 'self' https://*.arcgisonline.com https://tile.openstreetmap.org https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://www.foto-webcam.eu https://upload.wikimedia.org https://img.youtube.com https://services.swpc.noaa.gov data: blob:; connect-src 'self' https://earthquake.usgs.gov https://api.wheretheiss.at https://services.swpc.noaa.gov https://ll.thespacedevs.com https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://*.arcgisonline.com https://fonts.googleapis.com https://fonts.gstatic.com https://fonts.openmaptiles.org https://unpkg.com https://cdnjs.cloudflare.com https://api.counterapi.dev https://en.wikipedia.org https://de.wikipedia.org https://cdn.jsdelivr.net https://api.rss2json.com https://ssd-api.jpl.nasa.gov https://api.rainviewer.com https://api.open-meteo.com; frame-src https://www.foto-webcam.eu; worker-src 'self' blob:; child-src blob:;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="no-referrer">
     
@@ -328,7 +328,7 @@
         <!-- ═══ GUIDED TOURS — Primary educational feature ═══ -->
         <section class="menu-group collapsible-section" id="sec-tours">
             <h2 class="category-title cat-toggle" data-target="sec-tours">
-                <span style="color:var(--neon-blue);"><i class="fa-solid fa-route"></i> <span data-i18n="guided_tours">GUIDED TOURS</span> <span style="opacity:.4;font-size:.55rem;font-weight:normal;">(40)</span></span>
+                <span style="color:var(--neon-blue);"><i class="fa-solid fa-route"></i> <span data-i18n="guided_tours">GUIDED TOURS</span> <span style="opacity:.4;font-size:.55rem;font-weight:normal;">(41)</span></span>
                 <i class="fa-solid fa-chevron-down cat-arrow"></i>
             </h2>
             <div class="cat-body">
@@ -390,7 +390,7 @@
                     <div class="tour-category" data-cat="science">
                         <div class="tour-cat-header" onclick="this.parentElement.classList.toggle('open')" style="color:#00ff88;">
                             <span>🔬 <span data-i18n="cat_science_tours">SCIENCE &amp; NATURE</span></span>
-                            <span class="tour-cat-meta"><span class="tour-cat-count">15</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
+                            <span class="tour-cat-meta"><span class="tour-cat-count">16</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
                         </div>
                         <div class="tour-cat-body">
                             <button class="preset-btn tour-btn" data-tour="ringoffire" style="border-color:rgba(255,100,0,0.5);color:#ff8844;text-align:left;padding:6px 8px;">🌋 <span data-i18n="tour_ringoffire">Ring of Fire</span></button>
@@ -408,6 +408,7 @@
                             <button class="preset-btn tour-btn" data-tour="cosmicimpacts" style="border-color:rgba(255,136,0,0.5);color:#ff8800;text-align:left;padding:6px 8px;">☄️ <span data-i18n="tour_cosmicimpacts">Cosmic Impacts</span></button>
                             <button class="preset-btn tour-btn" data-tour="climatecrisis" style="border-color:rgba(255,80,50,0.5);color:#ff5032;text-align:left;padding:6px 8px;">🌍 <span data-i18n="tour_climatecrisis">Climate Crisis</span></button>
                             <button class="preset-btn tour-btn" data-tour="greatmigrations" style="border-color:rgba(0,200,150,0.5);color:#00c896;text-align:left;padding:6px 8px;">🐋 <span data-i18n="tour_greatmigrations">Great Migrations</span></button>
+                            <button class="preset-btn tour-btn" data-tour="windsworld" style="border-color:rgba(0,180,220,0.5);color:#00b4dc;text-align:left;padding:6px 8px;">🌬️ <span data-i18n="tour_windsworld">Winds of the World</span></button>
                         </div>
                     </div>
 
@@ -534,6 +535,10 @@
                     <div class="control-item">
                         <div class="layer-info"><span>🛰️ <span data-i18n="layer_starlink">Starlink Net</span></span><p class="layer-desc" data-i18n="desc_starlink">SpaceX Starlink satellite constellation — 5,000+ internet satellites in orbit.</p></div>
                         <label class="toggle-switch"><input type="checkbox" id="toggle-starlink"><span class="slider"></span></label>
+                    </div>
+                    <div class="control-item">
+                        <div class="layer-info"><span>🌬️ <span data-i18n="layer_wind">Global Winds</span></span><p class="layer-desc" data-i18n="desc_wind">Animated wind particle visualization from Open-Meteo forecast data.</p></div>
+                        <label class="toggle-switch"><input type="checkbox" id="toggle-wind"><span class="slider"></span></label>
                     </div>
                     <div class="control-item">
                         <div class="layer-info"><span>🌌 <span data-i18n="layer_aurora">Aurora Forecast</span></span><p class="layer-desc" data-i18n="desc_aurora">Real-time aurora borealis/australis probability from NOAA OVATION model.</p></div>
@@ -893,13 +898,15 @@
         <span id="live-clock" title="Local Time" style="display:flex;align-items:center;height:28px;padding:0 12px;"></span>
     </div>
 
-    <script src="./i18n.js?v=2.3"></script>
-    <script src="./quiz_bank.js?v=2.3"></script>
-    <script src="./quiz.js?v=2.3"></script>
-    <script src="./main.js?v=2.3"></script>
-    <script src="./search.js?v=2.3"></script>
-    <script src="./widgets.js?v=2.3"></script>
-    <script src="./tours_de.js?v=2.3"></script>
-    <script src="./tours_new.js?v=2.3"></script>
+    <script src="./i18n.js?v=2.4"></script>
+    <script src="./quiz_bank.js?v=2.4"></script>
+    <script src="./quiz.js?v=2.4"></script>
+    <script src="./main.js?v=2.4"></script>
+    <script src="./wind.js?v=2.4"></script>
+    <script src="./search.js?v=2.4"></script>
+    <script src="./widgets.js?v=2.4"></script>
+    <script src="./tours_de.js?v=2.4"></script>
+    <script src="./tours_new.js?v=2.4"></script>
+    <script src="./tours_wind.js?v=2.4"></script>
 </body>
 </html>

@@ -1,11 +1,11 @@
 // Global GEOPULSE Configuration
 window.GeopulseConfig = {
-    VERSION: "2.3",
+    VERSION: "2.4",
     // Zero API keys — all data sources are free and keyless
     METRICS: {
         FEEDS: 20,
         COUNTRIES: 102,
-        LAYERS: 22
+        LAYERS: 23
     },
     LAYER_METADATA: {
         "weather": { id: "weather", name: "Weather Radar", status: "STATIC", source: "RainViewer API", reliabilityScore: 99 },
@@ -32,7 +32,8 @@ window.GeopulseConfig = {
         "volcanoes": { id: "volcanoes", name: "Volcanoes", status: "STATIC", source: "Smithsonian", reliabilityScore: 95 },
         "radiation": { id: "radiation", name: "Radiation Sites", status: "STATIC", source: "Safecast", reliabilityScore: 85 },
         "aurora": { id: "aurora", name: "Aurora Forecast", status: "LIVE", source: "NOAA OVATION", reliabilityScore: 95 },
-        "fireballs": { id: "fireballs", name: "Fireballs", status: "LIVE", source: "NASA CNEOS", reliabilityScore: 98 }
+        "fireballs": { id: "fireballs", name: "Fireballs", status: "LIVE", source: "NASA CNEOS", reliabilityScore: 98 },
+        "wind": { id: "wind", name: "Global Winds", status: "STATIC", source: "Open-Meteo", reliabilityScore: 92 }
     },
     FEEDBACK: {
         GOOGLE_FORM_URL: "https://docs.google.com/forms/d/e/1FAIpQLSd6IWB0Y9rRQvGkzIPT4I7M3qwNapSzd-LiujURIDGST_5qNg/viewform",
