@@ -88,6 +88,8 @@ window.GeoQuiz = class GeoQuiz {
 
   _showQuestion() {
     if (this.current >= this.total) { this._showResults(); return; }
+    this._answered = false;
+    this._nextShown = false;
     const q = this.questions[this.current];
     if (this.mapClickHandler) { this.map.off('click', this.mapClickHandler); this.mapClickHandler = null; }
     // Fly map
@@ -165,6 +167,8 @@ window.GeoQuiz = class GeoQuiz {
   _clearTimer() { if(this.timer){clearInterval(this.timer);this.timer=null;} }
 
   _answerMC(btn, q) {
+    if (this._answered) return;
+    this._answered = true;
     const correct = btn.getAttribute('data-correct') === 'true';
     this.panel.querySelectorAll('.quiz-choice').forEach(b => {
       b.disabled = true;
@@ -221,6 +225,8 @@ window.GeoQuiz = class GeoQuiz {
   }
 
   _afterAnswer(q, correct) {
+    if (this._nextShown) return;
+    this._nextShown = true;
     const showExplanation = this.difficulty === 'explorer' && q;
     setTimeout(() => {
       if (showExplanation) {

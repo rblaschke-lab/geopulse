@@ -1,4 +1,4 @@
-﻿// â”€â”€ SPLASH SCREEN — fallback dismiss if gateway is missing â”€â”€
+// â”€â”€ SPLASH SCREEN — fallback dismiss if gateway is missing â”€â”€
 (function dismissSplash() {
     // If Enter Gateway exists, it controls splash timing (with audio)
     if (document.getElementById('enter-gateway')) return;
@@ -3344,6 +3344,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 3. Uncheck ALL toggle checkboxes (comprehensive DOM sweep)
         document.querySelectorAll('.control-item input[type="checkbox"]').forEach(cb => {
             if (cb.id === 'toggle-all' || cb.id === 'toggle-ticker') return;
+            if (cb.id === 'toggle-wind' && activeTourId === 'windsworld') return;
             if (cb.checked) {
                 _tourPreviousToggles.push(cb.id);
                 cb.checked = false;
@@ -3642,7 +3643,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Higher zoom stops get a dramatic pitch tilt.
         // Overview/world steps (zoom â‰¤ 2.5) stay flat and centered.
         const baseZoom = step.zoom;
-        const boostedZoom = baseZoom <= 2.5 ? baseZoom : Math.min(baseZoom + 3, 14);
+        const zoomBoost = activeTourId === 'windsworld' ? 1 : 3;
+        const boostedZoom = baseZoom <= 2.5 ? baseZoom : Math.min(baseZoom + zoomBoost, 14);
         const isCloseup = boostedZoom >= 8;
 
         // Cinematic bearing: alternate direction per step, ±15-30° for closeups
