@@ -249,7 +249,9 @@
     <div id="quiz-hud" class="quiz-hud">
         <header>
             <div class="quiz-hud-header">
-                <span style="color:#00d4ff;"><i class="fa-solid fa-brain"></i> <span data-i18n="quiz_title">QUIZ-SECTION</span></span>
+                <span style="color:#00d4ff;"><i class="fa-solid fa-brain"></i></span>
+                <span style="color:#00d4ff;" data-i18n="quiz_title">QUIZ</span>
+                <span class="quiz-hud-subtitle">—</span>
                 <span class="quiz-hud-subtitle" data-i18n="quiz_hud_sub">MAP QUIZ</span>
             </div>
         </header>
@@ -283,8 +285,10 @@
     <div id="tours-hud" class="tours-hud">
         <header>
             <div class="tours-hud-header">
-                <span style="color:var(--amber);"><i class="fa-solid fa-route"></i> <span data-i18n="guided_tours">THE TOURS</span> <span style="opacity:.4;font-size:.55rem;font-weight:normal;">(41)</span></span>
-                <span class="tours-hud-subtitle" data-i18n="tours_hud_sub">GUIDED EXPLORATIONS</span>
+                <span style="color:var(--amber);"><i class="fa-solid fa-route"></i></span>
+                <span style="color:var(--amber);" data-i18n="guided_tours">TOURS</span>
+                <span class="tours-hud-subtitle">—</span>
+                <span class="tours-hud-subtitle" data-i18n="tours_hud_sub">41 EXPLORATIONS</span>
             </div>
         </header>
         <div class="tours-hud-body">
@@ -594,11 +598,11 @@
 
     <!-- INFO PANEL (In-App — replaces external about.html link) -->
     <div id="info-panel" class="terminal-panel">
-        <header>
-            <div class="header-top-row">
-                <h2 style="color: var(--neon-blue);"><i class="fa-solid fa-circle-info"></i> <span data-i18n="info_title">ABOUT THIS MAP</span></h2>
-            </div>
-            <div class="sub-header"><span class="blinking-cursor">_</span> <span data-i18n="info_subtitle">DATA_SOURCES & METHODOLOGY</span></div>
+        <header style="display:flex;align-items:center;justify-content:center;gap:6px;padding:5px 10px;height:26px;white-space:nowrap;cursor:pointer;">
+            <span style="color:var(--neon-blue);font-size:.68rem;"><i class="fa-solid fa-circle-info"></i></span>
+            <span style="color:var(--neon-blue);font-size:.68rem;font-weight:700;letter-spacing:1px;" data-i18n="info_title">ABOUT</span>
+            <span style="font-size:.42rem;color:rgba(255,255,255,0.2);letter-spacing:1.5px;">&mdash;</span>
+            <span style="font-size:.42rem;color:rgba(255,255,255,0.2);letter-spacing:1.5px;opacity:.6;" data-i18n="info_subtitle">DATA &amp; SOURCES</span>
         </header>
         <div class="info-panel-body">
             <div class="info-section">

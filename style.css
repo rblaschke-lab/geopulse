@@ -788,21 +788,46 @@ body.no-ticker #sidebar { top: 14px !important; }
 ------------------------------------------------------- */
 #info-panel {
     position: fixed; z-index: 100;
-    top: 52px; left: 14px; width: 240px;
-    border-left: 3px solid var(--neon-blue);
-    max-height: 42px;
-    background: var(--panel-bg);
-    border: 1px solid var(--glass-edge);
-    border-left: 3px solid var(--neon-blue);
-    border-radius: 4px;
-    backdrop-filter: blur(18px);
+    top: 52px; left: 14px; width: 260px;
+    max-height: 28px;
+    background: linear-gradient(135deg, rgba(2,8,18,0.92) 0%, rgba(5,15,30,0.88) 100%);
+    border: 1px solid rgba(0,212,255,0.12);
+    border-radius: 2px;
+    backdrop-filter: blur(20px) saturate(1.4);
     overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.03);
-    transition: all 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow:
+        0 2px 20px rgba(0,0,0,0.7),
+        inset 0 1px 0 rgba(0,212,255,0.06),
+        inset 0 -1px 0 rgba(0,0,0,0.3);
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    font-family: 'Share Tech Mono', monospace;
 }
-#info-panel:hover { max-height: 85vh; width: 340px; box-shadow: 0 0 30px rgba(0,212,255,0.15); overflow-y: auto; }
+#info-panel::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(0,212,255,0.5) 20%, rgba(0,212,255,0.8) 50%, rgba(0,212,255,0.5) 80%, transparent 100%);
+    z-index: 10;
+}
+#info-panel::after {
+    content: ""; position: absolute; inset: 0;
+    pointer-events: none; z-index: 5;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+}
+#info-panel:hover {
+    max-height: 85vh; width: 340px;
+    box-shadow: 0 4px 40px rgba(0,212,255,0.12), 0 0 1px rgba(0,212,255,0.4);
+    border-color: rgba(0,212,255,0.25);
+    overflow-y: auto;
+}
 
-#info-panel header h2 { color: var(--neon-blue); font-size: 0.8rem; text-shadow: 0 0 5px rgba(0,212,255,0.5); }
+#info-panel header h2 {
+    color: var(--neon-blue); font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 1.5px; text-shadow: 0 0 8px rgba(0,212,255,0.3);
+    white-space: nowrap;
+}
+#info-panel header { padding: 5px 10px; }
+#info-panel .sub-header {
+    font-size: .42rem; opacity: .4; letter-spacing: 1.5px; margin-top: 0px;
+}
 
 .info-panel-body {
     padding: 6px 10px 10px;
@@ -2414,34 +2439,54 @@ body.no-ticker #sidebar { top: 14px !important; }
 ------------------------------------------------------- */
 .quiz-hud {
     position: fixed; z-index: 100;
-    top: 110px; left: 14px; width: 240px;
-    max-height: 38px;
-    background: var(--panel-bg);
-    border: 1px solid rgba(0,212,255,0.25);
-    border-left: 3px solid var(--neon-blue);
-    border-radius: 4px;
-    backdrop-filter: blur(18px);
+    top: 90px; left: 14px; width: 260px;
+    max-height: 28px;
+    background: linear-gradient(135deg, rgba(2,8,18,0.92) 0%, rgba(5,15,30,0.88) 100%);
+    border: 1px solid rgba(0,212,255,0.12);
+    border-radius: 2px;
+    backdrop-filter: blur(20px) saturate(1.4);
     overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.03);
-    transition: all 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow:
+        0 2px 20px rgba(0,0,0,0.7),
+        inset 0 1px 0 rgba(0,212,255,0.06),
+        inset 0 -1px 0 rgba(0,0,0,0.3);
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     font-family: 'Share Tech Mono', monospace;
 }
-.quiz-hud:hover { max-height: 400px; width: 300px; box-shadow: 0 0 30px rgba(0,212,255,0.12); overflow-y: auto; }
+.quiz-hud::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(0,212,255,0.4) 20%, rgba(0,212,255,0.7) 50%, rgba(0,212,255,0.4) 80%, transparent 100%);
+    z-index: 10;
+}
+.quiz-hud::after {
+    content: ""; position: absolute; inset: 0;
+    pointer-events: none; z-index: 5;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+}
+.quiz-hud:hover {
+    max-height: 400px; width: 300px;
+    box-shadow: 0 4px 40px rgba(0,212,255,0.12), 0 0 1px rgba(0,212,255,0.4);
+    border-color: rgba(0,212,255,0.25);
+    overflow-y: auto;
+}
 .quiz-hud-header {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 8px 12px; cursor: pointer;
-    font-size: .8rem; font-weight: 700;
-    text-align: center;
-    min-height: 36px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 5px 10px; cursor: pointer;
+    font-size: .68rem; font-weight: 700;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    height: 26px;
 }
 .quiz-hud-subtitle {
-    font-size: .45rem; color: rgba(255,255,255,0.3);
+    font-size: .42rem; color: rgba(255,255,255,0.3);
     letter-spacing: 1.5px;
+    margin-left: 4px;
+    opacity: .6;
 }
-.quiz-hud-body { padding: 2px 12px 12px; }
+.quiz-hud-body { padding: 4px 10px 10px; }
 
 @media (max-width: 768px) {
-    .quiz-hud { top: auto; bottom: 70px; left: auto; right: 8px; width: 200px; max-height: 34px; }
+    .quiz-hud { top: auto; bottom: 70px; left: auto; right: 8px; width: 220px; max-height: 28px; }
     .quiz-hud:hover { width: 280px; }
 }
 
@@ -2464,44 +2509,56 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 
 /* -------------------------------------------------------
-   TOURS HUD — Standalone floating panel (left side)
+   TOURS HUD — Premium game HUD element (amber accent)
 ------------------------------------------------------- */
 .tours-hud {
     position: fixed; z-index: 100;
-    top: 160px; left: 14px; width: 260px;
-    max-height: 38px;
-    background: var(--panel-bg);
-    border: 1px solid rgba(255,176,0,0.2);
-    border-left: 3px solid var(--amber);
-    border-radius: 4px;
-    backdrop-filter: blur(18px);
+    top: 128px; left: 14px; width: 260px;
+    max-height: 28px;
+    background: linear-gradient(135deg, rgba(2,8,18,0.92) 0%, rgba(10,8,2,0.88) 100%);
+    border: 1px solid rgba(255,176,0,0.1);
+    border-radius: 2px;
+    backdrop-filter: blur(20px) saturate(1.4);
     overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.03);
-    transition: all 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow:
+        0 2px 20px rgba(0,0,0,0.7),
+        inset 0 1px 0 rgba(255,176,0,0.05),
+        inset 0 -1px 0 rgba(0,0,0,0.3);
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     font-family: 'Share Tech Mono', monospace;
 }
-.tours-hud:hover { max-height: 85vh; width: 320px; box-shadow: 0 0 30px rgba(255,176,0,0.12); overflow-y: auto; }
+.tours-hud::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,176,0,0.35) 20%, rgba(255,176,0,0.7) 50%, rgba(255,176,0,0.35) 80%, transparent 100%);
+    z-index: 10;
+}
+.tours-hud::after {
+    content: ""; position: absolute; inset: 0;
+    pointer-events: none; z-index: 5;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+}
+.tours-hud:hover {
+    max-height: 85vh; width: 320px;
+    box-shadow: 0 4px 40px rgba(255,176,0,0.1), 0 0 1px rgba(255,176,0,0.35);
+    border-color: rgba(255,176,0,0.2);
+    overflow-y: auto;
+}
 .tours-hud-header {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 8px 12px; cursor: pointer;
-    font-size: .8rem; font-weight: 700;
-    text-align: center;
-    min-height: 36px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 5px 10px; cursor: pointer;
+    font-size: .68rem; font-weight: 700;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    height: 26px;
 }
 .tours-hud-subtitle {
-    font-size: .45rem; color: rgba(255,255,255,0.3);
+    font-size: .42rem; color: rgba(255,255,255,0.3);
     letter-spacing: 1.5px;
-    margin-top: 1px;
+    margin-left: 4px;
+    opacity: .6;
 }
 .tours-hud-body {
-    padding: 2px 12px 12px;
-}
-/* CRT overlay for tours-hud */
-.tours-hud::before {
-    content: ""; display: block; position: absolute; inset: 0;
-    pointer-events: none; z-index: 100;
-    background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.08) 50%);
-    background-size: 100% 3px; opacity: 0.25;
+    padding: 4px 10px 10px;
 }
 
 @media (max-width: 768px) {
@@ -2509,6 +2566,6 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 /* iPad/touch: prevent sticky :hover */
 @media (hover: none) and (pointer: coarse) {
-    .tours-hud:hover { max-height: 38px; width: 260px; overflow: hidden; box-shadow: none; }
+    .tours-hud:hover { max-height: 28px; width: 260px; overflow: hidden; box-shadow: none; }
     .tours-hud.touch-open { max-height: 85vh !important; overflow-y: auto !important; width: 320px !important; box-shadow: 0 0 30px rgba(255,176,0,0.12) !important; }
 }
