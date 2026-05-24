@@ -51,7 +51,8 @@ const i18n = {
         info_full_about: 'Full About Page ↗', info_manual_link: 'Command Manual ↗',
         orientation_hint: 'BEST EXPERIENCED IN LANDSCAPE', launch_connecting: 'CONNECTING TO LAUNCH LIBRARY...',
         // Tour & category labels
-        guided_tours: 'GUIDED TOURS',
+        guided_tours: 'THE TOURS',
+        tours_hud_sub: 'GUIDED EXPLORATIONS',
         cat_geopolitics_tours: 'GEOPOLITICS', cat_history_tours: 'HISTORY',
         cat_science_tours: 'SCIENCE & NATURE', cat_sports_tours: 'SPORTS & CULTURE',
         cat_society_tours: 'SOCIETY & RIGHTS',
@@ -161,7 +162,8 @@ const i18n = {
         info_full_about: 'Vollständige About-Seite ↗', info_manual_link: 'Kommando-Handbuch ↗',
         orientation_hint: 'AM BESTEN IM QUERFORMAT', launch_connecting: 'VERBINDUNG ZUR LAUNCH LIBRARY...',
         // Tour & category labels
-        guided_tours: 'GEFÜHRTE TOUREN',
+        guided_tours: 'DIE TOUREN',
+        tours_hud_sub: 'GEFÜHRTE ERKUNDUNGEN',
         cat_geopolitics_tours: 'GEOPOLITIK', cat_history_tours: 'GESCHICHTE',
         cat_science_tours: 'WISSENSCHAFT & NATUR', cat_sports_tours: 'SPORT & KULTUR',
         cat_society_tours: 'GESELLSCHAFT & RECHTE',

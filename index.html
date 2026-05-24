@@ -279,59 +279,15 @@
         </div>
     </div>
 
-    
-    <!-- TOP NEWS TICKER (Mobile Focus) -->
-    <div id="ticker-top" class="global-ticker">
-        <div class="ticker-content" id="ticker-content-top">INITIALIZING GLOBAL INTELLIGENCE STREAM...</div>
-    </div>
-
-    <button id="mobile-menu-btn" title="Toggle Terminal"><i class="fa-solid fa-bars"></i></button>
-
-    <div id="sidebar" class="terminal-panel">
+    <!-- ═══ TOURS HUD — Standalone floating panel (left side) ═══ -->
+    <div id="tours-hud" class="tours-hud">
         <header>
-            <div class="header-top-row header-main">
-                <h1>GEOPULSE <span class="version dyn-version"></span></h1>
-                <div class="header-controls">
-                    <!-- Language Selector -->
-                    <div id="lang-selector" class="lang-switch">
-                        <button class="lang-btn active" data-lang="en" title="English">EN</button>
-                        <button class="lang-btn" data-lang="de" title="Deutsch">DE</button>
-                    </div>
-                    <div class="sidebar-expand-hint" data-i18n="sidebar_expand">▼ MAIN MENU</div>
-                </div>
-            </div>
-            <div class="header-top-row header-meta">
-                <span class="byline">RB Design 2026</span>
-                <div class="sub-header"><span class="blinking-cursor">_</span> <span data-i18n="status_active">GLOBAL COMMAND ACTIVE</span></div>
+            <div class="tours-hud-header">
+                <span style="color:var(--amber);"><i class="fa-solid fa-route"></i> <span data-i18n="guided_tours">THE TOURS</span> <span style="opacity:.4;font-size:.55rem;font-weight:normal;">(41)</span></span>
+                <span class="tours-hud-subtitle" data-i18n="tours_hud_sub">GUIDED EXPLORATIONS</span>
             </div>
         </header>
-        <div class="sidebar-body">
-
-        <!-- SYSTEM CONTROLS -->
-        <section class="menu-group override-group">
-            <div class="control-item">
-                <strong style="color:#0ff;font-size:.7rem;letter-spacing:1px;">⚡ <span data-i18n="system_override">SYSTEM OVERRIDE</span></strong>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="toggle-all">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div class="control-item" style="margin-top:5px;">
-                <span style="font-size:0.65rem;opacity:0.7;" data-i18n="news_band">GLOBAL NEWS BAND</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="toggle-ticker" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
-        </section>
-
-        <!-- ═══ GUIDED TOURS — Primary educational feature ═══ -->
-        <section class="menu-group collapsible-section" id="sec-tours">
-            <h2 class="category-title cat-toggle" data-target="sec-tours">
-                <span style="color:var(--neon-blue);"><i class="fa-solid fa-route"></i> <span data-i18n="guided_tours">GUIDED TOURS</span> <span style="opacity:.4;font-size:.55rem;font-weight:normal;">(41)</span></span>
-                <i class="fa-solid fa-chevron-down cat-arrow"></i>
-            </h2>
-            <div class="cat-body">
+        <div class="tours-hud-body">
 
                     <!-- ★ FEATURED TOUR — Hantavirus 2026 ★ -->
                     <button class="preset-btn tour-btn" data-tour="hondius" style="border:1px solid rgba(255,60,60,0.6);color:#ff3c3c;text-align:left;padding:8px 10px;margin-bottom:8px;background:rgba(255,60,60,0.08);width:100%;position:relative;overflow:hidden;">
@@ -427,6 +383,52 @@
                             <button class="preset-btn tour-btn" data-tour="filmlocations" style="border-color:rgba(255,180,50,0.5);color:#ffb432;text-align:left;padding:6px 8px;">🎬 <span data-i18n="tour_filmlocations">Filming Locations</span></button>
                         </div>
                     </div>
+        </div>
+    </div>
+
+    
+    <!-- TOP NEWS TICKER (Mobile Focus) -->
+    <div id="ticker-top" class="global-ticker">
+        <div class="ticker-content" id="ticker-content-top">INITIALIZING GLOBAL INTELLIGENCE STREAM...</div>
+    </div>
+
+    <button id="mobile-menu-btn" title="Toggle Terminal"><i class="fa-solid fa-bars"></i></button>
+
+    <div id="sidebar" class="terminal-panel">
+        <header>
+            <div class="header-top-row header-main">
+                <h1>GEOPULSE <span class="version dyn-version"></span></h1>
+                <div class="header-controls">
+                    <!-- Language Selector -->
+                    <div id="lang-selector" class="lang-switch">
+                        <button class="lang-btn active" data-lang="en" title="English">EN</button>
+                        <button class="lang-btn" data-lang="de" title="Deutsch">DE</button>
+                    </div>
+                    <div class="sidebar-expand-hint" data-i18n="sidebar_expand">▼ MAIN MENU</div>
+                </div>
+            </div>
+            <div class="header-top-row header-meta">
+                <span class="byline">RB Design 2026</span>
+                <div class="sub-header"><span class="blinking-cursor">_</span> <span data-i18n="status_active">GLOBAL COMMAND ACTIVE</span></div>
+            </div>
+        </header>
+        <div class="sidebar-body">
+
+        <!-- SYSTEM CONTROLS -->
+        <section class="menu-group override-group">
+            <div class="control-item">
+                <strong style="color:#0ff;font-size:.7rem;letter-spacing:1px;">⚡ <span data-i18n="system_override">SYSTEM OVERRIDE</span></strong>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-all">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="control-item" style="margin-top:5px;">
+                <span style="font-size:0.65rem;opacity:0.7;" data-i18n="news_band">GLOBAL NEWS BAND</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-ticker" checked>
+                    <span class="slider"></span>
+                </label>
             </div>
         </section>
 

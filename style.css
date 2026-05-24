@@ -526,7 +526,7 @@ header h2 { font-size: 0.85rem; letter-spacing: 2.5px; font-weight: 700; margin:
 
 /* Toggles */
 .toggle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; }
-.control-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; min-height: 28px; margin-bottom:4px; }
+.control-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; min-height: 32px; margin-bottom: 6px; }
 .control-item > span:first-child { flex: 1; }
 
 /* Status Badges */
@@ -1299,7 +1299,7 @@ body.no-ticker #sidebar { top: 14px !important; }
    TOUR CATEGORY ACCORDION
 ------------------------------------------------------- */
 .tour-category {
-    margin-bottom: 2px;
+    margin-bottom: 5px;
     border-radius: 4px;
     overflow: hidden;
 }
@@ -1307,8 +1307,8 @@ body.no-ticker #sidebar { top: 14px !important; }
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 7px 8px;
-    font-size: .62rem;
+    padding: 9px 10px;
+    font-size: .63rem;
     font-weight: 700;
     letter-spacing: 1.2px;
     cursor: pointer;
@@ -1347,7 +1347,7 @@ body.no-ticker #sidebar { top: 14px !important; }
 .tour-cat-body {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2px;
+    gap: 4px;
     max-height: 0;
     overflow: hidden;
     opacity: 0;
@@ -2459,4 +2459,51 @@ body.no-ticker #sidebar { top: 14px !important; }
     color: var(--neon-blue);
     font-size: .55rem;
     opacity: .8;
+}
+
+/* -------------------------------------------------------
+   TOURS HUD — Standalone floating panel (left side)
+------------------------------------------------------- */
+.tours-hud {
+    position: fixed; z-index: 100;
+    top: 160px; left: 14px; width: 260px;
+    max-height: 38px;
+    background: var(--panel-bg);
+    border: 1px solid rgba(255,176,0,0.2);
+    border-left: 3px solid var(--amber);
+    border-radius: 4px;
+    backdrop-filter: blur(18px);
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.03);
+    transition: all 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+    font-family: 'Share Tech Mono', monospace;
+}
+.tours-hud:hover { max-height: 85vh; width: 320px; box-shadow: 0 0 30px rgba(255,176,0,0.12); overflow-y: auto; }
+.tours-hud-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 12px; cursor: pointer;
+    font-size: .8rem; font-weight: 700;
+}
+.tours-hud-subtitle {
+    font-size: .45rem; color: rgba(255,255,255,0.3);
+    letter-spacing: 1.5px;
+}
+.tours-hud-body {
+    padding: 2px 12px 12px;
+}
+/* CRT overlay for tours-hud */
+.tours-hud::before {
+    content: ""; display: block; position: absolute; inset: 0;
+    pointer-events: none; z-index: 100;
+    background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,.08) 50%);
+    background-size: 100% 3px; opacity: 0.25;
+}
+
+@media (max-width: 768px) {
+    .tours-hud { display: none; }
+}
+/* iPad/touch: prevent sticky :hover */
+@media (hover: none) and (pointer: coarse) {
+    .tours-hud:hover { max-height: 38px; width: 260px; overflow: hidden; box-shadow: none; }
+    .tours-hud.touch-open { max-height: 85vh !important; overflow-y: auto !important; width: 320px !important; box-shadow: 0 0 30px rgba(255,176,0,0.12) !important; }
 }

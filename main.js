@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.getElementById('sidebar');
     const infoPanel = document.getElementById('info-panel');
     // Reset scroll on collapse so header is always visible in collapsed state
-    [infoPanel, document.getElementById('quiz-hud')].forEach(el => {
+    [infoPanel, document.getElementById('quiz-hud'), document.getElementById('tours-hud')].forEach(el => {
         if (el) el.addEventListener('mouseleave', () => { setTimeout(() => { el.scrollTop = 0; }, 450); });
     });
     let activeMobilePanel = null;
@@ -336,18 +336,23 @@ document.addEventListener("DOMContentLoaded", () => {
             if (fs && !sidebar.querySelector('.collapsible-section.open')) fs.classList.add('open');
         }
         if(target === 'tours') {
-            sidebar.classList.add('active');
+            // On mobile, toggle tours-hud as overlay
+            const toursHud = document.getElementById('tours-hud');
+            if (toursHud) {
+                toursHud.classList.toggle('touch-open');
+                toursHud.style.display = 'block';
+                toursHud.style.position = 'fixed';
+                toursHud.style.top = '28px';
+                toursHud.style.left = '0';
+                toursHud.style.right = '0';
+                toursHud.style.width = '100%';
+                toursHud.style.maxHeight = '85vh';
+                toursHud.style.borderRadius = '0';
+                toursHud.style.zIndex = '950';
+                toursHud.style.overflowY = 'auto';
+            }
             document.body.classList.add('mobile-panel-open');
             activeMobilePanel = 'tours';
-            // Open the tours section and scroll to it
-            const toursSection = document.getElementById('sec-tours');
-            if (toursSection) {
-                toursSection.classList.add('open');
-                setTimeout(() => {
-                    const tourHeading = sidebar.querySelector('.tour-btn');
-                    if (tourHeading) tourHeading.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 200);
-            }
         }
 
         if(target === 'info') {
@@ -3021,6 +3026,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('map')?.addEventListener('click', () => {
             sidePanel?.classList.remove('touch-open');
             infoPanel?.classList.remove('touch-open');
+            document.getElementById('tours-hud')?.classList.remove('touch-open');
         });
     }
 
@@ -3571,6 +3577,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const step = activeTour.steps[tourStepIndex];
         if (!step) return;
 
+        // Update status bar with current stop number
+        const tourNm = getTourName(activeTour).toUpperCase();
+        const stopNum = tourStepIndex + 1;
+        const totalStops = activeTour.steps.length;
+        setStatus(currentLang === 'de' ? 'GEF\u00dcHRTE TOUR: ' + tourNm + ' \u2014 STOPP ' + stopNum + '/' + totalStops : 'GUIDED TOUR: ' + tourNm + ' \u2014 STOP ' + stopNum + '/' + totalStops);
+
         // Update active tour highlight on map
         updateActiveTourLayer(activeTourId);
 
@@ -3586,6 +3598,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 // All toggle-based layers (regimes, blocs, conflicts, earthquakes, etc.)
                 // are intentionally NOT activated — tour uses its own amber highlight dots
             });
+        }
+
+        // Auto-activate wind layer for Winds of the World tour
+        if (activeTourId === 'windsworld') {
+            const windToggle = document.getElementById('toggle-wind');
+            if (windToggle && !windToggle.checked) {
+                windToggle.checked = true;
+                windToggle.dispatchEvent(new Event('change'));
+            }
         }
 
         // Stop any ongoing narration + typewriter
