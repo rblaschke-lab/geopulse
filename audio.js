@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════
-// GEOPULSE V2.4 — Procedural Sound Effects Engine (audio.js)
+// GEOPULSE V2.41 — Procedural Sound Effects Engine (audio.js)
 // Extracted from main.js for modularization
 // Web Audio API-based — tick, whoosh, chime
 // ══════════════════════════════════════════════════════════════

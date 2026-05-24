@@ -305,9 +305,29 @@
 
     <div class="timeline">
 
-        <!-- V2.3 — CURRENT -->
+        <!-- V2.41 — CURRENT -->
         <div class="version-entry">
             <div class="version-dot current"></div>
+            <div class="version-header">
+                <span class="version-number">V2.41</span>
+                <span class="version-type type-minor">MINOR</span>
+                <span class="version-name">Global Winds, Tours Panel &amp; Modularization</span>
+                <span class="version-date">24 MAY 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon feat">✦</span> <strong>Global Wind Layer</strong> — 4,000 animated particles from Open-Meteo API showing real-time wind patterns, jet streams (amber at 200+ km/h), and trade winds. Canvas overlay with auto-refresh every 30 minutes</li>
+                <li><span class="change-icon feat">✦</span> <strong>"Winds of the World" Tour (#41)</strong> — 10-stop guided tour covering jet streams, trade winds, monsoons, katabatic winds, and the Roaring Forties. Wind layer auto-activates during tour</li>
+                <li><span class="change-icon feat">✦</span> <strong>Standalone Tours Panel</strong> — Tours moved from sidebar to their own floating "THE TOURS" / "DIE TOUREN" panel on the left side. Amber accent, glassmorphism, collapses on hover. Quick access to all 41 tours</li>
+                <li><span class="change-icon feat">✦</span> <strong>Code Modularization</strong> — Extracted audio.js (SFX engine), narration.js (TTS engine), and tours_data.js (1,150 lines of tour definitions) from main.js. Total reduction: 5,412 → 4,023 lines (−26%)</li>
+                <li><span class="change-icon fix">●</span> <strong>Tour Status Bar Fix</strong> — Status bar now updates with "STOP x/y" on each tour step (was stuck on "OVERVIEW" for entire tour)</li>
+                <li><span class="change-icon ui">◆</span> <strong>Menu Spacing</strong> — Collapsed sidebar toggle items now have increased spacing (32px height, 6px gap) for better readability</li>
+                <li><span class="change-icon ui">◆</span> <strong>Tour Category Accordion</strong> — Improved spacing, larger tap targets, better visual hierarchy in tour category headers</li>
+            </ul>
+        </div>
+
+        <!-- V2.3 -->
+        <div class="version-entry">
+            <div class="version-dot"></div>
             <div class="version-header">
                 <span class="version-number">V2.3</span>
                 <span class="version-type type-minor">MINOR</span>

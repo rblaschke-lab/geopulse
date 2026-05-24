@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════
-// GEOPULSE V2.4 — Enhanced Narration Engine (narration.js)
+// GEOPULSE V2.41 — Enhanced Narration Engine (narration.js)
 // Extracted from main.js for modularization
 // Documentary-quality TTS with neural voice selection
 // ══════════════════════════════════════════════════════════════

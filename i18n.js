@@ -1,4 +1,4 @@
-// GEOPULSE i18n MODULE — V2.4
+// GEOPULSE i18n MODULE — V2.41
 // Bilingual translation system (EN / DE)
 // Extracted from main.js for modularization
 (function() {

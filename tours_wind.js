@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════
-// GEOPULSE V2.4 — "Winds of the World" Guided Tour (#41)
+// GEOPULSE V2.41 — "Winds of the World" Guided Tour (#41)
 // Loaded after main.js; merges into window._TOURS_REF
 // ══════════════════════════════════════════════════════════════
 (function() {

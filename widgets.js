@@ -1,4 +1,4 @@
-// GEOPULSE WIDGETS MODULE — V2.3
+// GEOPULSE WIDGETS MODULE — V2.41
 // Wikipedia helper, Feedback widget, Live clock
 // Extracted from main.js for modularization
 (function() {

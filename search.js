@@ -1,4 +1,4 @@
-// GEOPULSE SEARCH MODULE — V2.3
+// GEOPULSE SEARCH MODULE — V2.41
 // Smart sidebar search engine for tours and layers
 // Extracted from main.js for modularization
 (function initSidebarSearch() {
