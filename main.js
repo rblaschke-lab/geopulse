@@ -3651,15 +3651,46 @@ document.addEventListener("DOMContentLoaded", () => {
             : 0;
         const cinematicPitch = isCloseup ? 40 + Math.min(tourStepIndex * 2, 15) : (boostedZoom >= 5 ? 20 : 0);
 
-        map.flyTo({
-            center: step.center,
-            zoom: boostedZoom,
-            duration: 5500,
-            essential: true,
-            curve: 1.5,
-            pitch: cinematicPitch,
-            bearing: bearingOffset
-        });
+        // ── WIND TOUR: Global context zoom ──
+        // For the Winds of the World tour, show global wind context first
+        // then zoom into the specific stop location
+        if (activeTourId === 'windsworld' && boostedZoom > 3) {
+            // Phase 1: Fly to global view centered on the stop
+            map.flyTo({
+                center: step.center,
+                zoom: 2,
+                duration: 2500,
+                essential: true,
+                curve: 1.2,
+                pitch: 0,
+                bearing: 0
+            });
+            map.once('moveend', () => {
+                // Phase 2: Hold 2s at global view, then zoom into the stop
+                setTimeout(() => {
+                    if (window._geoSfx) window._geoSfx.whoosh();
+                    map.flyTo({
+                        center: step.center,
+                        zoom: boostedZoom,
+                        duration: 4000,
+                        essential: true,
+                        curve: 1.5,
+                        pitch: cinematicPitch,
+                        bearing: bearingOffset
+                    });
+                }, 2000);
+            });
+        } else {
+            map.flyTo({
+                center: step.center,
+                zoom: boostedZoom,
+                duration: 5500,
+                essential: true,
+                curve: 1.5,
+                pitch: cinematicPitch,
+                bearing: bearingOffset
+            });
+        }
 
         // Show briefing AFTER flight completes
         map.once('moveend', () => {
