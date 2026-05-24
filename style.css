@@ -840,7 +840,7 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 
 /* ── INFO PANEL ── */
-#info-panel { top: 52px; }
+#info-panel { top: 52px; z-index: 100; }
 #info-panel:hover {
     max-height: 85vh; width: 340px;
     box-shadow: 0 0 30px var(--amber-dim);
@@ -2472,7 +2472,7 @@ body.no-ticker #sidebar { top: 14px !important; }
 .quiz-action-btn:hover { border-color:rgba(255,153,0,0.4); color:#ff9900; }
 
 /* ── QUIZ HUD ── */
-.quiz-hud { top: 172px; }
+.quiz-hud { top: 172px; z-index: 102; }
 .quiz-hud:hover {
     max-height: 400px; width: 320px;
     box-shadow: 0 0 30px var(--amber-dim);
@@ -2504,7 +2504,7 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 
 /* ── TOURS HUD ── */
-.tours-hud { top: 112px; }
+.tours-hud { top: 112px; z-index: 101; }
 .tours-hud:hover {
     max-height: 85vh; width: 320px;
     box-shadow: 0 0 30px var(--amber-dim);
