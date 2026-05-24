@@ -69,14 +69,84 @@
             name_de: 'Spionage-Welt — Berühmte Geheimdienstorte',
             category: 'geopolitics',
             steps: [
-                { center: [-77.15, 38.95], zoom: 12, title: '🕵️ CIA HEADQUARTERS — LANGLEY', text: 'The George Bush Center for Intelligence in Langley, Virginia is the headquarters of the Central Intelligence Agency (CIA). Founded in 1947, the CIA conducts foreign intelligence gathering and covert operations. The campus includes the famous "Kryptos" sculpture — an encrypted artwork that remains partially unsolved since 1990. The CIA employs ~21,000 people. Its budget is classified but estimated at $15+ billion annually.', layers: [] },
-                { center: [-0.11, 51.49], zoom: 13, title: '🕵️ MI6 — VAUXHALL CROSS, LONDON', text: 'The SIS Building at 85 Albert Embankment houses MI6 — the UK\'s Secret Intelligence Service. Built in 1994 on the Thames, the postmodern fortress is one of the most recognizable spy buildings in the world, featured in multiple James Bond films. MI6 was officially acknowledged to exist only in 1994 — despite operating since 1909. Its current head is known internally as "C" (not "M" as in the films).', layers: [] },
-                { center: [37.52, 55.58], zoom: 11, title: '🕵️ SVR/FSB — LUBYANKA & YASENEVO', text: 'Moscow houses Russia\'s two main intelligence agencies: the FSB (domestic security, headquartered in the infamous Lubyanka Building — formerly the KGB) and the SVR (foreign intelligence, at Yasenevo in Moscow\'s outskirts). The Lubyanka was a KGB prison where thousands were interrogated and executed during Stalin\'s purges. Russia\'s intelligence apparatus employs an estimated 200,000+ personnel across all agencies.', layers: [] },
-                { center: [52.44, 42.57], zoom: 4, title: '🕵️ BAIKONUR — SPACE ESPIONAGE', text: 'The Baikonur Cosmodrome in Kazakhstan was the USSR\'s most closely guarded secret — the launch site for Sputnik (1957) and Yuri Gagarin (1961). CIA U-2 spy planes photographed the facility from 20 km altitude. When Gary Powers was shot down over the USSR in 1960, it triggered an international crisis. Space became the ultimate espionage battlefield — both superpowers used spy satellites to monitor each other\'s nuclear arsenals.', layers: [] },
-                { center: [13.39, 52.51], zoom: 12, title: '🕵️ BERLIN — COLD WAR SPY CAPITAL', text: 'Divided Berlin was the world\'s spy capital from 1945–1989. The Berlin Wall created a physical intelligence frontier. The CIA\'s Berlin Operations Base and the KGB\'s Karlshorst headquarters were just kilometers apart. The famous Glienicke Bridge ("Bridge of Spies") was used for prisoner exchanges, including U-2 pilot Gary Powers in 1962. The Stasi (East German secret police) employed 91,000 full-time agents and 189,000 informants — surveillance on an industrial scale.', layers: [] },
-                { center: [-73.97, 40.75], zoom: 11, title: '🕵️ UNITED NATIONS — DIPLOMATIC ESPIONAGE', text: 'The UN headquarters in New York is one of the world\'s most surveilled buildings. Every major power\'s diplomatic mission doubles as an intelligence station. In 2013, Edward Snowden revealed that the NSA had bugged the EU\'s UN mission, tapped Secretary-General Ban Ki-moon\'s office, and monitored 35+ world leaders\' phones. The UN complex hosts ~4,000 diplomats — many carrying diplomatic immunity that shields intelligence activities from prosecution.', layers: [] },
-                { center: [116.39, 39.91], zoom: 10, title: '🕵️ MSS — CHINA\'S INTELLIGENCE MACHINE', text: 'China\'s Ministry of State Security (MSS) is among the world\'s largest intelligence agencies. Unlike Western agencies focused on HUMINT (human spies), the MSS pioneered mass cyber-espionage — hacking government systems, defense contractors, and tech companies worldwide. The 2015 OPM hack alone stole 22 million US federal employee records. China\'s "Thousand Talents Program" recruited foreign scientists, blurring the line between academic exchange and espionage.', layers: [] },
-                { center: [-76.77, 39.11], zoom: 10, title: '🕵️ NSA — FORT MEADE', text: 'The National Security Agency (NSA) at Fort Meade, Maryland is the world\'s largest signals intelligence (SIGINT) organization. Revealed in detail by Edward Snowden in 2013, the NSA operates global surveillance programs including PRISM (tech company data access), XKeyscore (internet search tool), and Tempora (fiber-optic cable tapping with UK\'s GCHQ). The NSA campus has its own power plant, shopping center, and employs 30,000–40,000 people. It intercepts an estimated 1.7 billion communications per day.', layers: [] }
+                {
+                    center: [-77.15, 38.95], zoom: 12,
+                    title: '🕵️ CIA HEADQUARTERS — LANGLEY',
+                    title_de: '🕵️ CIA-HAUPTQUARTIER — LANGLEY',
+                    text: 'The George Bush Center for Intelligence in Langley, Virginia is the headquarters of the Central Intelligence Agency (CIA). Founded in 1947, the CIA conducts foreign intelligence gathering and covert operations. The campus includes the famous "Kryptos" sculpture — an encrypted artwork that remains partially unsolved since 1990. The CIA employs ~21,000 people. Its budget is classified but estimated at $15+ billion annually.',
+                    text_de: 'Das George Bush Center for Intelligence in Langley, Virginia ist das Hauptquartier der CIA. Gegründet 1947, führt die CIA Auslandsaufklärung und verdeckte Operationen durch. Auf dem Campus steht die berühmte „Kryptos"-Skulptur — ein verschlüsseltes Kunstwerk, das seit 1990 teilweise ungelöst ist. Die CIA beschäftigt ~21.000 Mitarbeiter bei einem geschätzten Budget von über 15 Mrd. Dollar jährlich.',
+                    layers: [],
+                    image: { wiki: 'Central_Intelligence_Agency', caption: 'CIA Headquarters, Langley' },
+                    video: '8FJJmrnnd5I'
+                },
+                {
+                    center: [-0.11, 51.49], zoom: 13,
+                    title: '🕵️ MI6 — VAUXHALL CROSS, LONDON',
+                    title_de: '🕵️ MI6 — VAUXHALL CROSS, LONDON',
+                    text: 'The SIS Building at 85 Albert Embankment houses MI6 — the UK\'s Secret Intelligence Service. Built in 1994 on the Thames, the postmodern fortress is one of the most recognizable spy buildings in the world, featured in multiple James Bond films. MI6 was officially acknowledged to exist only in 1994 — despite operating since 1909. Its current head is known internally as "C" (not "M" as in the films).',
+                    text_de: 'Das SIS-Gebäude am Albert Embankment 85 beherbergt den MI6 — den britischen Auslandsgeheimdienst. 1994 an der Themse erbaut, ist die postmoderne Festung eines der bekanntesten Spionagegebäude der Welt und in mehreren James-Bond-Filmen zu sehen. Der MI6 wurde erst 1994 offiziell anerkannt — obwohl er seit 1909 aktiv war.',
+                    layers: [],
+                    image: { wiki: 'SIS_Building', caption: 'MI6 Vauxhall Cross, London' },
+                    video: 'RZ5DgkoKbOc'
+                },
+                {
+                    center: [37.52, 55.58], zoom: 11,
+                    title: '🕵️ SVR/FSB — LUBYANKA & YASENEVO',
+                    title_de: '🕵️ SVR/FSB — LUBJANKA & JASSENJEWO',
+                    text: 'Moscow houses Russia\'s two main intelligence agencies: the FSB (domestic security, headquartered in the infamous Lubyanka Building — formerly the KGB) and the SVR (foreign intelligence, at Yasenevo in Moscow\'s outskirts). The Lubyanka was a KGB prison where thousands were interrogated and executed during Stalin\'s purges. Russia\'s intelligence apparatus employs an estimated 200,000+ personnel across all agencies.',
+                    text_de: 'Moskau beherbergt Russlands zwei wichtigste Geheimdienste: den FSB (Inlandssicherheit, im berüchtigten Lubjanka-Gebäude — ehemals KGB) und den SWR (Auslandsaufklärung, in Jassenjewo). Die Lubjanka war ein KGB-Gefängnis, in dem während Stalins Säuberungen Tausende verhört und hingerichtet wurden. Russlands Geheimdienstapparat beschäftigt geschätzt über 200.000 Mitarbeiter.',
+                    layers: [],
+                    image: { wiki: 'Lubyanka_Building', caption: 'Lubyanka Building, Moscow' },
+                    video: 'oL7PSlUuvaM'
+                },
+                {
+                    center: [52.44, 42.57], zoom: 4,
+                    title: '🕵️ BAIKONUR — SPACE ESPIONAGE',
+                    title_de: '🕵️ BAIKONUR — WELTRAUM-SPIONAGE',
+                    text: 'The Baikonur Cosmodrome in Kazakhstan was the USSR\'s most closely guarded secret — the launch site for Sputnik (1957) and Yuri Gagarin (1961). CIA U-2 spy planes photographed the facility from 20 km altitude. When Gary Powers was shot down over the USSR in 1960, it triggered an international crisis. Space became the ultimate espionage battlefield — both superpowers used spy satellites to monitor each other\'s nuclear arsenals.',
+                    text_de: 'Das Kosmodrom Baikonur in Kasachstan war das bestgehütete Geheimnis der UdSSR — Startplatz für Sputnik (1957) und Juri Gagarin (1961). CIA U-2 Spionageflugzeuge fotografierten die Anlage aus 20 km Höhe. Als Gary Powers 1960 über der UdSSR abgeschossen wurde, löste dies eine internationale Krise aus. Der Weltraum wurde zum ultimativen Spionage-Schlachtfeld.',
+                    layers: [],
+                    image: { wiki: 'Baikonur_Cosmodrome', caption: 'Baikonur Cosmodrome, Kazakhstan' },
+                    video: 'st_sap0hGmM'
+                },
+                {
+                    center: [13.39, 52.51], zoom: 12,
+                    title: '🕵️ BERLIN — COLD WAR SPY CAPITAL',
+                    title_de: '🕵️ BERLIN — SPIONAGE-HAUPTSTADT DES KALTEN KRIEGES',
+                    text: 'Divided Berlin was the world\'s spy capital from 1945–1989. The Berlin Wall created a physical intelligence frontier. The CIA\'s Berlin Operations Base and the KGB\'s Karlshorst headquarters were just kilometers apart. The famous Glienicke Bridge ("Bridge of Spies") was used for prisoner exchanges, including U-2 pilot Gary Powers in 1962. The Stasi (East German secret police) employed 91,000 full-time agents and 189,000 informants — surveillance on an industrial scale.',
+                    text_de: 'Das geteilte Berlin war von 1945–1989 die Spionage-Hauptstadt der Welt. Die Berliner Mauer schuf eine physische Geheimdienstgrenze. Die CIA-Basis und die KGB-Zentrale in Karlshorst lagen nur Kilometer auseinander. Die berühmte Glienicker Brücke („Brücke der Spione") wurde für Gefangenenaustausch genutzt. Die Stasi beschäftigte 91.000 hauptamtliche Agenten und 189.000 Informanten.',
+                    layers: [],
+                    image: { wiki: 'Glienicke_Bridge', caption: 'Glienicke Bridge — Bridge of Spies, Berlin' },
+                    video: 'nLiMJKS-bJ4'
+                },
+                {
+                    center: [-73.97, 40.75], zoom: 11,
+                    title: '🕵️ UNITED NATIONS — DIPLOMATIC ESPIONAGE',
+                    title_de: '🕵️ VEREINTE NATIONEN — DIPLOMATISCHE SPIONAGE',
+                    text: 'The UN headquarters in New York is one of the world\'s most surveilled buildings. Every major power\'s diplomatic mission doubles as an intelligence station. In 2013, Edward Snowden revealed that the NSA had bugged the EU\'s UN mission, tapped Secretary-General Ban Ki-moon\'s office, and monitored 35+ world leaders\' phones. The UN complex hosts ~4,000 diplomats — many carrying diplomatic immunity that shields intelligence activities from prosecution.',
+                    text_de: 'Das UN-Hauptquartier in New York ist eines der meistüberwachten Gebäude der Welt. Jede große Macht nutzt ihre diplomatische Vertretung als Geheimdienststation. 2013 enthüllte Edward Snowden, dass die NSA die EU-Vertretung verwanzt, das Büro des Generalsekretärs abgehört und die Telefone von über 35 Staatschefs überwacht hatte.',
+                    layers: [],
+                    image: { wiki: 'Headquarters_of_the_United_Nations', caption: 'United Nations HQ, New York' }
+                },
+                {
+                    center: [116.39, 39.91], zoom: 10,
+                    title: '🕵️ MSS — CHINA\'S INTELLIGENCE MACHINE',
+                    title_de: '🕵️ MSS — CHINAS GEHEIMDIENSTAPPARAT',
+                    text: 'China\'s Ministry of State Security (MSS) is among the world\'s largest intelligence agencies. Unlike Western agencies focused on HUMINT (human spies), the MSS pioneered mass cyber-espionage — hacking government systems, defense contractors, and tech companies worldwide. The 2015 OPM hack alone stole 22 million US federal employee records. China\'s "Thousand Talents Program" recruited foreign scientists, blurring the line between academic exchange and espionage.',
+                    text_de: 'Chinas Ministerium für Staatssicherheit (MSS) gehört zu den größten Geheimdiensten der Welt. Anders als westliche Dienste mit Fokus auf HUMINT setzte das MSS auf Massen-Cyberspionage — Hackerangriffe auf Regierungssysteme, Rüstungsunternehmen und Technologiekonzerne weltweit. Der OPM-Hack von 2015 erbeutete allein 22 Millionen Datensätze von US-Bundesangestellten.',
+                    layers: [],
+                    image: { wiki: 'Ministry_of_State_Security_(China)', caption: 'MSS operations, Beijing' }
+                },
+                {
+                    center: [-76.77, 39.11], zoom: 10,
+                    title: '🕵️ NSA — FORT MEADE',
+                    title_de: '🕵️ NSA — FORT MEADE',
+                    text: 'The National Security Agency (NSA) at Fort Meade, Maryland is the world\'s largest signals intelligence (SIGINT) organization. Revealed in detail by Edward Snowden in 2013, the NSA operates global surveillance programs including PRISM (tech company data access), XKeyscore (internet search tool), and Tempora (fiber-optic cable tapping with UK\'s GCHQ). The NSA campus has its own power plant, shopping center, and employs 30,000–40,000 people. It intercepts an estimated 1.7 billion communications per day.',
+                    text_de: 'Die National Security Agency (NSA) in Fort Meade, Maryland ist die weltweit größte Organisation für Signalaufklärung (SIGINT). 2013 durch Edward Snowden enthüllt, betreibt die NSA globale Überwachungsprogramme wie PRISM, XKeyscore und Tempora. Der NSA-Campus hat ein eigenes Kraftwerk, Einkaufszentrum und beschäftigt 30.000–40.000 Mitarbeiter. Täglich werden geschätzt 1,7 Milliarden Kommunikationsvorgänge abgefangen.',
+                    layers: [],
+                    image: { wiki: 'National_Security_Agency', caption: 'NSA Headquarters, Fort Meade' },
+                    video: 'dBbe5oM-mBI'
+                }
             ]
         }
     };
