@@ -460,7 +460,7 @@ body, html { width: 100%; height: 100%; overflow: hidden; background: #000; colo
     #sidebar { transition: max-height 0.35s ease, width 0.35s ease; }
     #sidebar:hover { max-height: 42px; width: 340px; overflow: hidden; box-shadow: none; }
     #sidebar.touch-open { max-height: 90vh !important; overflow-y: auto !important; width: 360px !important; box-shadow: 0 0 30px var(--amber-dim) !important; }
-    #info-panel:hover { max-height: 42px; width: 280px; overflow: hidden; box-shadow: none; }
+    #info-panel:hover { max-height: 50px; width: 280px; overflow: hidden; box-shadow: none; }
     #info-panel.touch-open { max-height: 85vh !important; overflow-y: auto !important; width: 340px !important; box-shadow: 0 0 30px var(--amber-dim) !important; }
 }
 
@@ -801,7 +801,7 @@ body.no-ticker #sidebar { top: 14px !important; }
 .hud-panel-base {
     position: fixed; z-index: 100;
     left: 14px; width: 280px;
-    max-height: 42px;
+    max-height: 50px;
     background: var(--panel-bg);
     border: 1px solid var(--glass-edge);
     border-left: 3px solid var(--amber);
@@ -812,7 +812,7 @@ body.no-ticker #sidebar { top: 14px !important; }
     transition: all 0.45s cubic-bezier(0.19, 1, 0.22, 1);
     font-family: 'Share Tech Mono', monospace;
 }
-/* CRT scanlines handled by .terminal-panel::before — add for non-terminal panels */
+/* CRT scanlines */
 .hud-panel-base::before {
     content: ""; display: block; position: absolute; inset: 0;
     pointer-events: none; z-index: 100;
@@ -821,19 +821,22 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 .hud-header {
     display: flex; flex-direction: column; justify-content: center;
-    padding: 6px 12px;
+    padding: 8px 12px 7px;
     cursor: pointer;
-    min-height: 40px;
+    min-height: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 .hud-title {
     color: var(--amber); font-size: .78rem; font-weight: 700;
     letter-spacing: 2px;
     text-shadow: 0 0 5px rgba(255,176,0,0.5);
+    line-height: 1.2;
 }
 .hud-sub {
-    color: rgba(255,255,255,0.55); font-size: .52rem;
+    color: rgba(255,255,255,0.5); font-size: .5rem;
     letter-spacing: 1.5px; font-weight: 400;
-    margin-top: 2px;
+    margin-top: 3px;
+    line-height: 1;
 }
 
 /* ── INFO PANEL ── */
@@ -2450,7 +2453,7 @@ body.no-ticker #sidebar { top: 14px !important; }
 .quiz-action-btn:hover { border-color:rgba(255,153,0,0.4); color:#ff9900; }
 
 /* ── QUIZ HUD ── */
-.quiz-hud { top: 104px; }
+.quiz-hud { top: 112px; }
 .quiz-hud:hover {
     max-height: 400px; width: 320px;
     box-shadow: 0 0 30px var(--amber-dim);
@@ -2482,7 +2485,7 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 
 /* ── TOURS HUD ── */
-.tours-hud { top: 156px; }
+.tours-hud { top: 172px; }
 .tours-hud:hover {
     max-height: 85vh; width: 320px;
     box-shadow: 0 0 30px var(--amber-dim);
@@ -2497,6 +2500,6 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 /* iPad/touch: prevent sticky :hover */
 @media (hover: none) and (pointer: coarse) {
-    .tours-hud:hover { max-height: 42px; width: 280px; overflow: hidden; box-shadow: none; }
+    .tours-hud:hover { max-height: 50px; width: 280px; overflow: hidden; box-shadow: none; }
     .tours-hud.touch-open { max-height: 85vh !important; overflow-y: auto !important; width: 320px !important; box-shadow: 0 0 30px var(--amber-dim) !important; }
 }
