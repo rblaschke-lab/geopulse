@@ -451,14 +451,14 @@ body, html { width: 100%; height: 100%; overflow: hidden; background: #000; colo
 #sidebar {
     top: 52px; right: 14px; width: 340px;
     border-right: 3px solid var(--amber);
-    max-height: 42px;
+    max-height: 46px;
 }
 #sidebar:hover { max-height: 90vh; overflow-y: auto; width: 360px; box-shadow: 0 0 30px var(--amber-dim); }
 
 /* iPad/touch: prevent sticky :hover — collapse when tapping outside */
 @media (hover: none) and (pointer: coarse) {
     #sidebar { transition: max-height 0.35s ease, width 0.35s ease; }
-    #sidebar:hover { max-height: 42px; width: 340px; overflow: hidden; box-shadow: none; }
+    #sidebar:hover { max-height: 46px; width: 340px; overflow: hidden; box-shadow: none; }
     #sidebar.touch-open { max-height: 90vh !important; overflow-y: auto !important; width: 360px !important; box-shadow: 0 0 30px var(--amber-dim) !important; }
     #info-panel:hover { max-height: 50px; width: 280px; overflow: hidden; box-shadow: none; }
     #info-panel.touch-open { max-height: 85vh !important; overflow-y: auto !important; width: 340px !important; box-shadow: 0 0 30px var(--amber-dim) !important; }
@@ -482,7 +482,7 @@ header {
 #sidebar header {
     position: sticky; top: 0; z-index: 10;
     background: var(--panel-bg); backdrop-filter: blur(18px);
-    padding: 6px 12px;
+    padding: 6px 12px 9px;
     display: flex; flex-direction: column;
     justify-content: center;
     min-height: 40px;
