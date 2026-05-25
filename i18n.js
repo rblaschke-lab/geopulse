@@ -52,7 +52,7 @@ const i18n = {
         orientation_hint: 'BEST EXPERIENCED IN LANDSCAPE', launch_connecting: 'CONNECTING TO LAUNCH LIBRARY...',
         // Tour & category labels
         guided_tours: 'THE TOURS',
-        tours_hud_sub: '41 EXPLORATIONS',
+        tours_hud_sub: '42 EXPLORATIONS',
         cat_geopolitics_tours: 'GEOPOLITICS', cat_history_tours: 'HISTORY',
         cat_science_tours: 'SCIENCE & NATURE', cat_sports_tours: 'SPORTS & CULTURE',
         cat_society_tours: 'SOCIETY & RIGHTS',
@@ -80,6 +80,7 @@ const i18n = {
         tour_greatmigrations: 'Great Migrations',
         tour_windsworld: 'Winds of the World',
         tour_spycraft: 'Espionage World',
+        tour_iconicarenas: 'Iconic Arenas',
         layer_aurora: 'Aurora Forecast',
         desc_aurora: 'Real-time aurora borealis/australis probability from NOAA OVATION model.',
         layer_fireballs: 'Fireballs',
@@ -163,7 +164,7 @@ const i18n = {
         orientation_hint: 'AM BESTEN IM QUERFORMAT', launch_connecting: 'VERBINDUNG ZUR LAUNCH LIBRARY...',
         // Tour & category labels
         guided_tours: 'DIE TOUREN',
-        tours_hud_sub: '41 ERKUNDUNGEN',
+        tours_hud_sub: '42 ERKUNDUNGEN',
         cat_geopolitics_tours: 'GEOPOLITIK', cat_history_tours: 'GESCHICHTE',
         cat_science_tours: 'WISSENSCHAFT & NATUR', cat_sports_tours: 'SPORT & KULTUR',
         cat_society_tours: 'GESELLSCHAFT & RECHTE',
@@ -191,6 +192,7 @@ const i18n = {
         tour_greatmigrations: 'Große Wanderungen',
         tour_windsworld: 'Winde der Welt',
         tour_spycraft: 'Spionage-Welt',
+        tour_iconicarenas: 'Legendäre Arenen',
         layer_aurora: 'Polarlicht-Vorhersage',
         desc_aurora: 'Echtzeit-Polarlicht-Wahrscheinlichkeit vom NOAA OVATION-Modell.',
         layer_fireballs: 'Feuerbälle',

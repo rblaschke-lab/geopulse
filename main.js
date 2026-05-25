@@ -4007,7 +4007,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Tours added in V2.0 (released May 15, 2026)
     const V2_NEW_TOURS = [
         'aurorahunters', 'cosmicimpacts', 'climatecrisis',
-        'greatmigrations', 'spycraft'
+        'greatmigrations', 'spycraft', 'iconicarenas'
     ];
     const V2_RELEASE_DATE = new Date('2026-05-15');
     const BADGE_DURATION_DAYS = 30;

@@ -148,6 +148,124 @@
                     video: 'dBbe5oM-mBI'
                 }
             ]
+        },
+
+        iconicarenas: {
+            name: 'Iconic Arenas — Legendary Sports Venues',
+            name_de: 'Legendäre Arenen — Ikonische Sportstätten',
+            category: 'sports',
+            steps: [
+                {
+                    center: [12.4924, 41.8902], zoom: 15,
+                    title: '⚔️ COLOSSEUM — THE ORIGINAL ARENA',
+                    title_de: '⚔️ KOLOSSEUM — DIE ORIGINAL-ARENA',
+                    text: 'The Flavian Amphitheatre, completed in 80 AD under Emperor Titus, is the blueprint for every modern stadium. Built in just 8 years by 60,000 Jewish slaves, it held 50,000–80,000 spectators watching gladiatorial combat, wild animal hunts, and mock naval battles (the arena could be flooded). The hypogeum below contained 80 lift shafts to raise animals and fighters. Construction cost: estimated 200 million sesterces (~$1.5 billion today). UNESCO World Heritage Site and New Wonder of the World.',
+                    text_de: 'Das Flavische Amphitheater, fertiggestellt 80 n.Chr. unter Kaiser Titus, ist die Blaupause für jedes moderne Stadion. Erbaut in nur 8 Jahren von 60.000 jüdischen Sklaven, fasste es 50.000–80.000 Zuschauer für Gladiatorenkämpfe, Tierhetzen und nachgestellte Seeschlachten (die Arena konnte geflutet werden). Das Hypogäum darunter enthielt 80 Aufzugschächte. Baukosten: geschätzt 200 Mio. Sesterzen (~1,5 Mrd. € heute). UNESCO-Welterbe und Neues Weltwunder.',
+                    layers: [],
+                    image: { wiki: 'Colosseum', caption: 'The Colosseum, Rome — built 80 AD' },
+                    video: 'eiJfppOPItQ'
+                },
+                {
+                    center: [-82.0203, 33.5032], zoom: 15,
+                    title: '🏌️ AUGUSTA NATIONAL — THE MASTERS',
+                    title_de: '🏌️ AUGUSTA NATIONAL — THE MASTERS',
+                    text: 'Augusta National Golf Club in Georgia is the most exclusive and revered golf course on Earth. Founded in 1933 by Bobby Jones and Clifford Roberts, it hosts The Masters — the first major of the year. Membership is invitation-only (~300 members; women admitted only since 2012). The iconic Amen Corner (holes 11–13) has decided countless tournaments. Green jacket tradition began 1949. No running, no cell phones, sandwiches cost $1.50. Construction cost: $70,000 in 1933 (~$1.6 million today). TV revenue: $130+ million per Masters.',
+                    text_de: 'Der Augusta National Golf Club in Georgia ist der exklusivste und verehrteste Golfplatz der Welt. 1933 von Bobby Jones und Clifford Roberts gegründet, beheimatet er The Masters — das erste Major des Jahres. Mitgliedschaft nur auf Einladung (~300 Mitglieder; Frauen erst seit 2012 zugelassen). Das ikonische Amen Corner (Löcher 11–13) hat zahllose Turniere entschieden. Grünes-Jackett-Tradition seit 1949. Kein Rennen, keine Handys, Sandwiches kosten $1,50. Baukosten: $70.000 (1933) — ~1,6 Mio. € heute.',
+                    layers: [],
+                    image: { wiki: 'Augusta_National_Golf_Club', caption: 'Augusta National — Amen Corner' },
+                    video: 'K5lJaBwvFjU'
+                },
+                {
+                    center: [-0.2146, 51.4341], zoom: 15,
+                    title: '🎾 WIMBLEDON — THE CHAMPIONSHIPS',
+                    title_de: '🎾 WIMBLEDON — THE CHAMPIONSHIPS',
+                    text: 'The All England Lawn Tennis Club has hosted The Championships since 1877 — the oldest tennis tournament in the world. Centre Court seats 14,979 spectators and got its retractable roof in 2009 (cost: £100 million). Wimbledon is the only Grand Slam played on grass. Strict white clothing rules, strawberries & cream tradition (28,000 kg consumed annually), and the Royal Box make it tennis\' most prestigious event. Queue tradition: fans camp overnight for unreserved seats. Prize money 2024: £44.7 million.',
+                    text_de: 'Der All England Lawn Tennis Club veranstaltet The Championships seit 1877 — das älteste Tennisturnier der Welt. Centre Court fasst 14.979 Zuschauer und erhielt 2009 sein Schiebedach (Kosten: 100 Mio. £). Wimbledon ist das einzige Grand Slam auf Rasen. Strenge weiße Kleiderordnung, Erdbeeren mit Sahne (28.000 kg jährlich), und die Royal Box machen es zum prestigeträchtigsten Tennis-Event. Queue-Tradition: Fans campen über Nacht für Stehplätze. Preisgeld 2024: 44,7 Mio. £.',
+                    layers: [],
+                    image: { wiki: 'The_Championships,_Wimbledon', caption: 'Centre Court, Wimbledon' },
+                    video: 'VqAu4dGkFRk'
+                },
+                {
+                    center: [12.3912, 47.4225], zoom: 14,
+                    title: '⛷️ STREIF, KITZBÜHEL — THE DEADLIEST DESCENT',
+                    title_de: '⛷️ STREIF, KITZBÜHEL — DIE TÖDLICHSTE ABFAHRT',
+                    text: 'The Streif on the Hahnenkamm is the most feared downhill ski course in the world. 3,312 meters long with an 860m vertical drop, racers reach 150 km/h on the Mausefalle (85% gradient — nearly vertical). Since 1931, only 50% of starters have finished. The course has seen multiple career-ending crashes. 100,000+ spectators line the slope each January for the Hahnenkammrennen. Construction cost for modern infrastructure: €50+ million. The Zielschuss finish is so steep that racers experience 4G forces on impact.',
+                    text_de: 'Die Streif am Hahnenkamm ist die gefürchtetste Skiabfahrt der Welt. 3.312 Meter lang mit 860m Höhenunterschied, erreichen Rennläufer 150 km/h an der Mausefalle (85% Gefälle — nahezu senkrecht). Seit 1931 haben nur 50% der Starter ins Ziel gefunden. Die Strecke hat zahlreiche karrierebeendende Stürze gesehen. Über 100.000 Zuschauer säumen jeden Januar die Piste beim Hahnenkammrennen. Infrastrukturkosten: über 50 Mio. €. Beim Zielschuss wirken 4G auf die Fahrer.',
+                    layers: [],
+                    image: { wiki: 'Hahnenkamm_(Kitzbühel)', caption: 'The Streif — Hahnenkamm, Kitzbühel' },
+                    video: 'PVJQ3cUBj_o'
+                },
+                {
+                    center: [6.0392, 45.0906], zoom: 13,
+                    title: '🚴 ALPE D\'HUEZ — TOUR DE FRANCE LEGEND',
+                    title_de: '🚴 ALPE D\'HUEZ — TOUR DE FRANCE LEGENDE',
+                    text: 'Alpe d\'Huez is cycling\'s most iconic mountain climb. 21 hairpin bends over 13.8 km with 1,071m elevation gain and an average gradient of 8.1% (max 13%). First climbed in the Tour de France in 1952 by Fausto Coppi. Known as "the Dutch Mountain" — the Netherlands has the most stage winners. Up to 1 million fans line the switchbacks on race day, creating a deafening corridor. Each hairpin is named after a past winner. Dutch Corner (bend 7) is the wildest party on the mountain. Marco Pantani holds the record: 36 min 50 sec (1997).',
+                    text_de: 'Die Alpe d\'Huez ist der ikonischste Berganstieg im Radsport. 21 Haarnadelkurven über 13,8 km mit 1.071m Höhenunterschied und 8,1% Durchschnittssteigung (max 13%). Erstmals bei der Tour de France 1952 von Fausto Coppi bezwungen. Als „der holländische Berg" bekannt — die Niederlande haben die meisten Etappensieger. Bis zu 1 Million Fans säumen die Serpentinen, Dutch Corner (Kehre 7) ist die wildeste Party am Berg. Marco Pantani hält den Rekord: 36 Min. 50 Sek. (1997).',
+                    layers: [],
+                    image: { wiki: 'Alpe_d%27Huez', caption: 'Alpe d\'Huez — 21 hairpin bends' },
+                    video: 'YZr15QLRT0c'
+                },
+                {
+                    center: [-86.2347, 39.7955], zoom: 14,
+                    title: '🏎️ INDIANAPOLIS MOTOR SPEEDWAY — THE BRICKYARD',
+                    title_de: '🏎️ INDIANAPOLIS MOTOR SPEEDWAY — THE BRICKYARD',
+                    text: 'Indianapolis Motor Speedway is the largest sporting venue in the world by capacity — 257,325 permanent seats (up to 300,000+ with infield). Built in 1909, the 2.5-mile oval was originally paved with 3.2 million bricks (hence "The Brickyard"). Today only a 3-foot strip of original bricks remains at the start-finish line — winners kiss them. The Indy 500 (first held 1911) is the single largest one-day sporting event on Earth. Speeds exceed 370 km/h. Construction cost: $3 million in 1909 (~$100 million today). The facility covers 253 acres — you could fit the Vatican, Wimbledon, and Monaco\'s F1 circuit inside it.',
+                    text_de: 'Der Indianapolis Motor Speedway ist die größte Sportstätte der Welt nach Kapazität — 257.325 feste Sitze (über 300.000 mit Infield). 1909 erbaut, war das 4-km-Oval ursprünglich mit 3,2 Millionen Ziegeln gepflastert (daher „The Brickyard"). Heute bleibt nur ein 1-Meter-Streifen Originalziegel an der Ziellinie — Sieger küssen sie. Das Indy 500 (erstmals 1911) ist das größte eintägige Sportereignis der Erde. Geschwindigkeiten über 370 km/h. Baukosten: $3 Mio. (1909) — ~100 Mio. € heute. Die Anlage ist 102 Hektar groß — Vatikan, Wimbledon und Monacos F1-Strecke passen hinein.',
+                    layers: [],
+                    image: { wiki: 'Indianapolis_Motor_Speedway', caption: 'Indianapolis Motor Speedway — The Brickyard' },
+                    video: 'KfMHkNrPpBU'
+                },
+                {
+                    center: [-0.1297, 51.5945], zoom: 15,
+                    title: '🎯 ALEXANDRA PALACE — THE ALLY PALLY',
+                    title_de: '🎯 ALEXANDRA PALACE — THE ALLY PALLY',
+                    text: 'Alexandra Palace in North London — "The Ally Pally" — has hosted the PDC World Darts Championship since 2007. Originally built in 1873 as "The People\'s Palace", it was the site of the BBC\'s first regular TV broadcast in 1936. The darts atmosphere is unique in sport: 3,000 fans in fancy dress create the most raucous sporting crowd on Earth. "Stand Up If You Love the Darts" echoes through Christmas and New Year. Prize money: £2.5 million (2024). The 7.5-foot walk from backstage to the oche is the most nerve-wracking in sports. Construction cost (1873): £177,000 (~£20 million today).',
+                    text_de: 'Alexandra Palace in Nord-London — „The Ally Pally" — ist seit 2007 Austragungsort der PDC-Darts-WM. 1873 als „The People\'s Palace" erbaut, war es 1936 Standort der ersten regulären BBC-Fernsehsendung. Die Darts-Atmosphäre ist einzigartig: 3.000 kostümierte Fans erzeugen die lauteste Sportkulisse der Welt. „Stand Up If You Love the Darts" hallt durch Weihnachten und Silvester. Preisgeld: 2,5 Mio. £ (2024). Der 2,3-Meter-Gang zur Oche ist der nervenaufreibendste im Sport. Baukosten (1873): £177.000 (~20 Mio. € heute).',
+                    layers: [],
+                    image: { wiki: 'Alexandra_Palace', caption: 'Alexandra Palace — PDC World Darts Championship' },
+                    video: 'gu3Jok6sDXA'
+                },
+                {
+                    center: [144.9834, -37.8200], zoom: 15,
+                    title: '🏏 MCG — MELBOURNE CRICKET GROUND',
+                    title_de: '🏏 MCG — MELBOURNE CRICKET GROUND',
+                    text: 'The Melbourne Cricket Ground (MCG) is the 10th-largest stadium on Earth and Australia\'s spiritual home of sport. Established 1853 — older than modern football, basketball, and baseball. Capacity: 100,024. Hosted the 1956 Olympics opening ceremony and 2006 Commonwealth Games. The Boxing Day Test (cricket) draws 90,000+ annually — a national ritual. MCG has hosted 115+ Test cricket matches — more than any other ground. The Great Southern Stand cost AUD $150 million (1992). The MCC Long Room is one of sport\'s most hallowed viewing areas. It\'s also the home of AFL — Australian Rules Football grand finals regularly sell out within minutes.',
+                    text_de: 'Der Melbourne Cricket Ground (MCG) ist das 10.-größte Stadion der Erde und Australiens geistliche Sportheimstätte. Gegründet 1853 — älter als moderner Fußball, Basketball und Baseball. Kapazität: 100.024. Austragungsort der Olympischen Spiele 1956 und Commonwealth Games 2006. Der Boxing Day Test (Cricket) zieht jährlich über 90.000 Zuschauer — ein nationales Ritual. Der MCG hat über 115 Test-Cricket-Spiele ausgerichtet — mehr als jedes andere Stadion. Die Great Southern Stand kostete 150 Mio. AUD (1992). AFL-Endspiele sind regelmäßig in Minuten ausverkauft.',
+                    layers: [],
+                    image: { wiki: 'Melbourne_Cricket_Ground', caption: 'MCG — Melbourne Cricket Ground, 100,024 seats' },
+                    video: 'fXdz4eFGwzE'
+                },
+                {
+                    center: [10.6665, 59.9628], zoom: 14,
+                    title: '⛷️ HOLMENKOLLEN — NORWAY\'S SACRED HILL',
+                    title_de: '⛷️ HOLMENKOLLEN — NORWEGENS HEILIGER BERG',
+                    text: 'Holmenkollen in Oslo is the world\'s most famous ski jumping hill and a Norwegian national monument. First built 1892, it has been rebuilt 19 times — most recently in 2010 for the 2011 World Championships (cost: NOK 1.8 billion / ~€170 million). The current hill record is 141 meters. The annual Holmenkollen Ski Festival draws 100,000+ spectators — the largest Nordic skiing event globally. The ski jumping tower is also an observation deck with panoramic views of Oslo. The Ski Museum at the base (opened 1923) is the world\'s oldest. Cross-country skiing and biathlon complete the Nordic triple at this venue.',
+                    text_de: 'Der Holmenkollen in Oslo ist die berühmteste Skisprungschanze der Welt und ein norwegisches Nationaldenkmal. 1892 erstmals erbaut, wurde er 19 Mal umgebaut — zuletzt 2010 für die WM 2011 (Kosten: 1,8 Mrd. NOK / ~170 Mio. €). Aktueller Schanzenrekord: 141 Meter. Das jährliche Holmenkollen-Skifestival zieht über 100.000 Zuschauer an — das größte Nordisch-Event weltweit. Der Sprungturm dient auch als Aussichtsplattform über Oslo. Das Skimuseum am Fuß (eröffnet 1923) ist das älteste der Welt.',
+                    layers: [],
+                    image: { wiki: 'Holmenkollen_ski_jump', caption: 'Holmenkollen Ski Jump, Oslo' },
+                    video: '5gXqm2gLwMo'
+                },
+                {
+                    center: [-0.3417, 51.4559], zoom: 15,
+                    title: '🏉 TWICKENHAM — FORTRESS OF RUGBY',
+                    title_de: '🏉 TWICKENHAM — FESTUNG DES RUGBY',
+                    text: 'Twickenham Stadium in Southwest London is the largest dedicated rugby union venue in the world — 82,000 seats. Opened in 1907 on a former cabbage patch (earning the nickname "The Cabbage Patch"). Home of England Rugby and the RFU. Six Nations matches here are legendary — 82,000 singing "Swing Low, Sweet Chariot" creates an unforgettable wall of sound. Hosted the 2015 Rugby World Cup final (New Zealand vs Australia). Major redevelopment in 2006 cost £140 million. The World Rugby Museum on-site chronicles 200 years of the sport. Annual economic impact to the local area: £100+ million.',
+                    text_de: 'Das Twickenham-Stadion in Südwest-London ist die größte reine Rugby-Union-Spielstätte der Welt — 82.000 Plätze. 1907 auf einem ehemaligen Kohlfeld eröffnet (Spitzname: „The Cabbage Patch"). Heimat des englischen Rugby und der RFU. Six-Nations-Spiele hier sind legendär — 82.000 singen „Swing Low, Sweet Chariot" und erzeugen eine unvergessliche Klangwand. Austragungsort des Rugby-WM-Finales 2015. Großumbau 2006: 140 Mio. £. Das World Rugby Museum dokumentiert 200 Jahre Sportgeschichte.',
+                    layers: [],
+                    image: { wiki: 'Twickenham_Stadium', caption: 'Twickenham Stadium — 82,000 seats' },
+                    video: 'I37x7Ohmz4E'
+                },
+                {
+                    center: [7.4206, 43.7347], zoom: 15,
+                    title: '🏎️ CIRCUIT DE MONACO — THE CROWN JEWEL',
+                    title_de: '🏎️ CIRCUIT DE MONACO — DAS KRONJUWEL',
+                    text: 'The Circuit de Monaco is the most famous and prestigious Formula 1 race in the world. First held in 1929, the 3.337 km street circuit threads through Monte Carlo\'s narrow streets, through a tunnel, and along the harbour. Top speed: 290 km/h, average: 160 km/h — the slowest F1 circuit but the hardest. Ayrton Senna won 6 times (record). It takes 3 weeks to build the circuit and 3 weeks to dismantle it. Organising cost: €30+ million per race. Yachts in the harbour sell viewing spots for €100,000+. Graham Hill\'s 5 wins in the 1960s earned Monaco its "Crown Jewel" title. Zero run-off areas — one mistake and you\'re in the barriers.',
+                    text_de: 'Der Circuit de Monaco ist das berühmteste und prestigeträchtigste Formel-1-Rennen der Welt. Erstmals 1929 ausgetragen, schlängelt sich der 3,337 km lange Straßenkurs durch Monte Carlos enge Gassen, durch einen Tunnel und am Hafen entlang. Topspeed: 290 km/h, Durchschnitt: 160 km/h — langsamster F1-Kurs, aber der schwierigste. Ayrton Senna gewann 6 Mal (Rekord). 3 Wochen Aufbau und 3 Wochen Abbau. Organisationskosten: über 30 Mio. € pro Rennen. Yachten im Hafen verkaufen Zuschauerplätze für 100.000 €+. Null Auslaufzonen — ein Fehler und du steckst in der Leitplanke.',
+                    layers: [],
+                    image: { wiki: 'Monaco_Grand_Prix', caption: 'Circuit de Monaco — F1 street circuit' },
+                    video: '0BXFzPDg6rU'
+                }
+            ]
         }
     };
 
@@ -155,7 +273,7 @@
     function mergeNewTours() {
         if (window._TOURS_REF) {
             Object.assign(window._TOURS_REF, NEW_TOURS);
-            console.log('[tours_new] Merged 5 new tours into TOURS');
+            console.log('[tours_new] Merged 6 new tours into TOURS');
             // Rebuild tour sites GeoJSON so new tours get map dots
             if (typeof window._refreshTourSites === 'function') window._refreshTourSites();
         } else {
