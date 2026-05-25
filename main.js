@@ -2796,8 +2796,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 map.addLayer({
                     id: 'country-borders', type: 'line', source: 'borders-src',
                     paint: {
-                        'line-color': 'rgba(255,255,255,0.3)',
-                        'line-width': ['interpolate', ['linear'], ['zoom'], 1, 0.3, 4, 0.8, 8, 1.5]
+                        'line-color': 'rgba(255,255,255,0.35)',
+                        'line-width': ['interpolate', ['linear'], ['zoom'], 1, 0.8, 4, 1.2, 8, 1.8]
                     },
                     layout: { visibility: 'visible' }
                 });
@@ -2813,7 +2813,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     id: 'country-labels', type: 'symbol', source: 'country-labels-src',
                     layout: {
                         'text-field': ['get', 'name'], 'text-font': ['Open Sans Regular'],
-                        'text-size': ['interpolate', ['linear'], ['zoom'], 3, 7, 6, 10, 8, 12],
+                        'text-size': ['interpolate', ['linear'], ['zoom'], 1, 6, 3, 8, 6, 11, 8, 13],
                         'text-transform': 'uppercase', 'text-letter-spacing': 0.08,
                         'text-max-width': 8, visibility: 'visible'
                     },
@@ -2821,7 +2821,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         'text-color': 'rgba(255,255,255,0.45)',
                         'text-halo-color': 'rgba(0,0,0,0.75)', 'text-halo-width': 1.5
                     },
-                    minzoom: 3, maxzoom: 8
+                    minzoom: 1, maxzoom: 8
                 });
                 setStatus(currentLang === 'de' ? 'LÄNDERGRENZEN GELADEN — ' + COUNTRY_CENTROIDS.length + ' NATIONEN' : 'COUNTRY BOUNDARIES LOADED — ' + COUNTRY_CENTROIDS.length + ' NATIONS');
                 if(window.updateLayerStatus) window.updateLayerStatus('borders', 'LIVE', 'Natural Earth Data');
