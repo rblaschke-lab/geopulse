@@ -1,4 +1,4 @@
-// â”€â”€ SPLASH SCREEN — fallback dismiss if gateway is missing â”€â”€
+﻿?// ── SPLASH SCREEN — fallback dismiss if gateway is missing ──
 (function dismissSplash() {
     // If Enter Gateway exists, it controls splash timing (with audio)
     if (document.getElementById('enter-gateway')) return;
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const safeHtml = (s) => { const str = String(s || ''); return str.replace(/<(?!\/?(strong|br|em|b|i)\s*\/?>)[^>]*>/gi, (m) => escHtml(m)); };
     const VERSION = window.GeopulseConfig?.VERSION || '1.4';
 
-    // â”€â”€ RELIABLE FETCH — timeout-safe wrapper for all external API calls â”€â”€
+    // ── RELIABLE FETCH — timeout-safe wrapper for all external API calls ──
     window.reliableFetch = async (url, label, opts = {}) => {
         const timeout = opts.timeout || 10000;
         const controller = new AbortController();
@@ -62,10 +62,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     })();
 
-    // â”€â”€ i18n: loaded from i18n.js module â”€â”€
+    // ── i18n: loaded from i18n.js module ──
     const i18n = window._i18n;
     let currentLang = window.getLanguage ? window.getLanguage() : (localStorage.getItem('geopulseLang') || 'en');
     const setLanguage = window.setLanguage;
+
+    // Sync local currentLang + re-fetch ticker whenever language changes
+    // Wrap window.setLanguage so we catch ALL language switch paths (lang-btn, welcome toggle, setLang event)
+    const _origSetLanguage = window.setLanguage;
+    window.setLanguage = function(lang) {
+        if (_origSetLanguage) _origSetLanguage(lang);
+        currentLang = lang;
+        // Re-fetch ticker in new language after a short delay (fetchNewsTicker defined below)
+        setTimeout(() => { if (typeof fetchNewsTicker === 'function') fetchNewsTicker(); }, 100);
+    };
+    // Also catch the setLang Custom Event (dispatched by welcome overlay inline handler)
+    document.addEventListener('setLang', (e) => {
+        if (e.detail) currentLang = e.detail;
+    });
 
     const toggles = {
         terminator: false, fires: false, weather: false, borders: false,
@@ -210,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if(window.setStatus) setStatus(currentLang === 'de' ? 'ALLE EBENEN ZURÜCKGESETZT' : 'ALL LAYERS RESET');
         });
 
-        // â”€â”€ MAP VIEW RESET — reset pitch/bearing/zoom to default â”€â”€
+        // ── MAP VIEW RESET — reset pitch/bearing/zoom to default ──
         document.getElementById('reset-map-view')?.addEventListener('click', () => {
             map.flyTo({ center: [15.0, 48.0], zoom: 2.2, pitch: 0, bearing: 0, duration: 2000 });
             if(window.setStatus) setStatus(currentLang === 'de' ? 'KARTENANSICHT ZURÜCKGESETZT' : 'MAP VIEW RESET');
@@ -261,7 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
         panel.innerHTML = `
             <div class="briefing-header severity-${escHtml((eventData.severity || 'low').toLowerCase())}">
                 <h2>${escHtml(eventData.title)}</h2>
-                <button class="btn-close-briefing" onclick="closeBriefing()">âœ–</button>
+                <button class="btn-close-briefing" onclick="closeBriefing()">✖</button>
             </div>
             <div class="briefing-body">
                 <h3>SITUATION</h3>
@@ -388,7 +402,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (section) section.classList.toggle('open');
         });
     });
-    // â”€â”€ AUTO-COLLAPSE SIDEBAR ON TOGGLE (Mobile) â”€â”€
+    // ── AUTO-COLLAPSE SIDEBAR ON TOGGLE (Mobile) ──
     // When user toggles a layer or clicks a scenario, close the sidebar
     // after a brief delay so they see the map change
     const autoCollapseMobile = () => {
@@ -415,7 +429,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sidebar.querySelectorAll('.tour-btn').forEach(btn => {
         btn.addEventListener('click', autoCollapseMobile);
     });
-    // â”€â”€ END MOBILE NAVIGATION SETUP â”€â”€
+    // ── END MOBILE NAVIGATION SETUP ──
 
     // INITIALIZE V4 MAPLIBRE GL JS
     // ----------------------------------------------------
@@ -463,11 +477,11 @@ document.addEventListener("DOMContentLoaded", () => {
     map.on('load', async () => {
         setStatus(currentLang === 'de' ? 'KARTE GELADEN. DATENSTRÖME WERDEN INITIALISIERT...' : 'MAP LOADED. INITIALIZING DATA STREAMS...');
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ═══════════════════════════════════════════════════════════
         // GEN Z VISUAL EFFECTS — Atmosphere, Particles, Sounds
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ═══════════════════════════════════════════════════════════
 
-        // â”€â”€ 1. MAP ATMOSPHERE / SKY (3D depth at horizon) â”€â”€
+        // ── 1. MAP ATMOSPHERE / SKY (3D depth at horizon) ──
         try {
             map.setSky({
                 'sky-color': '#000a1a',
@@ -479,7 +493,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         } catch(e) { console.warn('[atmosphere] Sky not supported:', e.message); }
 
-        // â”€â”€ 2. AMBIENT PARTICLE FIELD (floating data-stream particles) â”€â”€
+        // ── 2. AMBIENT PARTICLE FIELD (floating data-stream particles) ──
         try {
             const canvas = document.getElementById('particle-canvas');
             if (canvas) {
@@ -539,11 +553,11 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         } catch(e) { console.warn('[particles] Init failed:', e.message); }
 
-        // ── 3. PROCEDURAL SOUND EFFECTS ENGINE ──
+        // -- 3. PROCEDURAL SOUND EFFECTS ENGINE --
         // Extracted to audio.js module (loaded before main.js)
         // Exposes: window._geoSfx with .tick(), .whoosh(), .chime()
 
-        // â”€â”€ PLACE LABELS OVERLAY (Esri — transparent city/country names) â”€â”€
+        // ── PLACE LABELS OVERLAY (Esri — transparent city/country names) ──
         // Adds city, country, and place names on top of satellite imagery
         // so users can orient themselves during tours and exploration.
         try {
@@ -562,7 +576,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         } catch (err) { console.warn('[labels] Esri reference overlay failed:', err); }
 
-        // â”€â”€ EARTHQUAKES (USGS — Live GeoJSON) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── EARTHQUAKES (USGS — Live GeoJSON) ──────────────────
         try {
             const eqResult = await window.reliableFetch(
                 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson', 'earthquakes'
@@ -591,14 +605,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 const p = e.features[0].properties;
                 const t = new Date(p.time).toLocaleString();
                 new maplibregl.Popup({ maxWidth: '260px' }).setLngLat(e.lngLat).setHTML(
-                    `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;"><h3 style="color:#ff6600;margin:0 0 5px;border-bottom:1px solid #ff660044;padding-bottom:4px;">ðŸŒ ${currentLang==='de'?'SEISMISCHES EREIGNIS':'SEISMIC EVENT'}</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:5px;"><div style="background:rgba(255,100,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'STÄRKE':'MAGNITUDE'}</div><div style="color:#ff6600;font-size:1.1rem;font-weight:bold;">${escHtml(p.mag)}</div></div><div style="background:rgba(255,100,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'TIEFE':'DEPTH'}</div><div>${escHtml(Math.round(e.features[0].geometry.coordinates[2]))} km</div></div></div><div style="font-size:.65rem;opacity:.75;line-height:1.4;">${escHtml(p.place)}</div><div style="font-size:.55rem;opacity:.3;margin-top:5px;">${escHtml(t)} — USGS</div></div>`
+                    `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;"><h3 style="color:#ff6600;margin:0 0 5px;border-bottom:1px solid #ff660044;padding-bottom:4px;">🌍 ${currentLang==='de'?'SEISMISCHES EREIGNIS':'SEISMIC EVENT'}</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:5px;"><div style="background:rgba(255,100,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'STÄRKE':'MAGNITUDE'}</div><div style="color:#ff6600;font-size:1.1rem;font-weight:bold;">${escHtml(p.mag)}</div></div><div style="background:rgba(255,100,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'TIEFE':'DEPTH'}</div><div>${escHtml(Math.round(e.features[0].geometry.coordinates[2]))} km</div></div></div><div style="font-size:.65rem;opacity:.75;line-height:1.4;">${escHtml(p.place)}</div><div style="font-size:.55rem;opacity:.3;margin-top:5px;">${escHtml(t)} — USGS</div></div>`
                 ).addTo(map);
             });
             map.on('mouseenter', 'earthquakes-core', () => map.getCanvas().style.cursor = 'pointer');
             map.on('mouseleave', 'earthquakes-core', () => map.getCanvas().style.cursor = '');
             updateLayerStatus('earthquakes', 'LIVE', 'USGS Feed Online');
 
-            // â”€â”€ EARTHQUAKE PULSE RIPPLE (animated expanding rings) â”€â”€
+            // ── EARTHQUAKE PULSE RIPPLE (animated expanding rings) ──
             map.addLayer({
                 id: 'earthquakes-pulse', type: 'circle', source: 'earthquakes-src',
                 layout: { visibility: 'none' },
@@ -626,7 +640,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 50);
         } catch(e) { console.warn('[EARTHQUAKES] Init failed:', e.message); }
 
-        // â”€â”€ NASA FIRES (GIBS MODIS Thermal Anomalies) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── NASA FIRES (GIBS MODIS Thermal Anomalies) ──────────
         try {
             const dateStr = getYesterdaysDateForGIBS();
             map.addSource('fires-src', {
@@ -638,7 +652,7 @@ document.addEventListener("DOMContentLoaded", () => {
             updateLayerStatus('fires', 'LIVE', 'NASA GIBS Online');
         } catch(e) { console.warn('[FIRES] Init failed:', e.message); }
 
-        // â”€â”€ SOLAR TERMINATOR (Calculated) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── SOLAR TERMINATOR (Calculated) ──────────────────────
         try {
             const calcTerminator = () => {
                 const now = new Date();
@@ -664,16 +678,16 @@ document.addEventListener("DOMContentLoaded", () => {
             terminatorInterval = setInterval(() => { const s = map.getSource('terminator-src'); if(s) s.setData(calcTerminator()); }, 300000);
         } catch(e) { console.warn('[TERMINATOR] Init failed:', e.message); }
 
-        // â”€â”€ SHIPS layer removed — no free keyless AIS API available â”€â”€
+        // ── SHIPS layer removed — no free keyless AIS API available ──
 
-        // â”€â”€ FLIGHTS layer removed â”€â”€
+        // ── FLIGHTS layer removed ──
         // The airplanes.live API only returns aircraft within 250 NM (~460 km) of a single
         // query point. At continental/world zoom the viewport spans thousands of km, so all
         // aircraft pile up in one dense blob around the query center — no amount of clustering
         // or styling can fix this fundamental API geometry mismatch. Removed to maintain the
         // app's visual quality. The ISS tracker remains as the primary orbital/aviation feature.
 
-        // â”€â”€ STARLINK (Simulated LEO Constellation — 500 sats) â”€â”€
+        // ── STARLINK (Simulated LEO Constellation — 500 sats) ──
         try {
             const slFeatures = [];
             for (let i = 0; i < 500; i++) {
@@ -692,7 +706,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 new maplibregl.Popup({ offset: 6, maxWidth: '240px' })
                     .setLngLat(coords)
                     .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
-                        <h3 style="color:#fff;margin:0 0 4px;font-size:.75rem;">ðŸ›°ï¸ ${currentLang==='de'?'STARLINK-SATELLIT':'STARLINK SATELLITE'}</h3>
+                        <h3 style="color:#fff;margin:0 0 4px;font-size:.75rem;">🛰️ ${currentLang==='de'?'STARLINK-SATELLIT':'STARLINK SATELLITE'}</h3>
                         <div style="opacity:.5;font-size:.6rem;margin-bottom:4px;">${currentLang==='de'?'SpaceX LEO-Konstellation':'SpaceX LEO Constellation'}</div>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;">
                             <div style="background:rgba(255,255,255,.05);padding:3px;text-align:center;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'UMLAUFBAHN':'ORBIT'}</div><div style="color:#00d4ff;">~550 km</div></div>
@@ -706,7 +720,7 @@ document.addEventListener("DOMContentLoaded", () => {
             map.on('mouseleave', 'starlink-layer', () => { map.getCanvas().style.cursor = ''; });
         } catch(e) { console.warn('[STARLINK] Init failed:', e.message); }
 
-        // â”€â”€ AURORA BOREALIS FORECAST (NOAA SWPC OVATION Model) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AURORA BOREALIS FORECAST (NOAA SWPC OVATION Model) ──────────
         try {
             map.addSource('aurora-src', {
                 type: 'image',
@@ -732,7 +746,7 @@ document.addEventListener("DOMContentLoaded", () => {
             updateLayerStatus('aurora', 'LIVE', 'NOAA OVATION Model');
         } catch(e) { console.warn('[AURORA] Init failed:', e.message); }
 
-        // â”€â”€ METEOR / FIREBALL TRACKER (NASA CNEOS) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── METEOR / FIREBALL TRACKER (NASA CNEOS) ──────────────────────
         try {
             const fbResult = await window.reliableFetch(
                 'https://ssd-api.jpl.nasa.gov/fireball.api?limit=150', 'fireballs'
@@ -790,7 +804,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const p = e.features[0].properties;
                 const hiroshima = (p.energy / 15).toFixed(1);
                 new maplibregl.Popup({ maxWidth: '280px' }).setLngLat(e.lngLat).setHTML(
-                    `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;"><h3 style="color:#ff8800;margin:0 0 5px;border-bottom:1px solid #ff880044;padding-bottom:4px;">â˜„ï¸ ${currentLang==='de'?'FEUERBALL / BOLIDE':'FIREBALL / BOLIDE'}</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:5px;"><div style="background:rgba(255,136,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'ENERGIE':'ENERGY'}</div><div style="color:#ff8800;font-size:1rem;font-weight:bold;">${escHtml(p.energy)} kT</div></div><div style="background:rgba(255,136,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'GESCHW.':'VELOCITY'}</div><div>${escHtml(p.vel)} km/s</div></div></div><div style="background:rgba(255,136,0,.08);padding:3px 6px;margin-bottom:4px;"><div style="opacity:.5;font-size:.6rem;">â‰ˆ HIROSHIMA</div><div style="color:#ff4400;">${hiroshima}× ${currentLang==='de'?'Hiroshima-Äquivalent':'Hiroshima equivalent'}</div></div><div style="font-size:.6rem;opacity:.5;">${escHtml(p.date)}</div><div style="font-size:.5rem;opacity:.3;margin-top:4px;">Source: NASA CNEOS</div></div>`
+                    `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;"><h3 style="color:#ff8800;margin:0 0 5px;border-bottom:1px solid #ff880044;padding-bottom:4px;">☄️ ${currentLang==='de'?'FEUERBALL / BOLIDE':'FIREBALL / BOLIDE'}</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:5px;"><div style="background:rgba(255,136,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'ENERGIE':'ENERGY'}</div><div style="color:#ff8800;font-size:1rem;font-weight:bold;">${escHtml(p.energy)} kT</div></div><div style="background:rgba(255,136,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'GESCHW.':'VELOCITY'}</div><div>${escHtml(p.vel)} km/s</div></div></div><div style="background:rgba(255,136,0,.08);padding:3px 6px;margin-bottom:4px;"><div style="opacity:.5;font-size:.6rem;">≈ HIROSHIMA</div><div style="color:#ff4400;">${hiroshima}× ${currentLang==='de'?'Hiroshima-Äquivalent':'Hiroshima equivalent'}</div></div><div style="font-size:.6rem;opacity:.5;">${escHtml(p.date)}</div><div style="font-size:.5rem;opacity:.3;margin-top:4px;">Source: NASA CNEOS</div></div>`
                 ).addTo(map);
             });
             map.on('mouseenter', 'fireballs-core', () => map.getCanvas().style.cursor = 'pointer');
@@ -798,7 +812,7 @@ document.addEventListener("DOMContentLoaded", () => {
             updateLayerStatus('fireballs', 'LIVE', `${fbFeatures.length} events`);
         } catch(e) { console.warn('[FIREBALLS] Init failed:', e.message); }
 
-        // â”€â”€ POPULATION DENSITY (NASA GIBS — GPW v4.11, 2020) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── POPULATION DENSITY (NASA GIBS — GPW v4.11, 2020) ──────────────
         try {
             map.addSource('population-src', {
                 type: 'raster',
@@ -866,7 +880,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 new maplibregl.Popup({ offset: 8, maxWidth: '240px' })
                     .setLngLat(coords)
                     .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
-                        <h3 style="color:#ff6633;margin:0 0 5px;font-size:.8rem;border-bottom:1px solid rgba(255,102,51,0.3);padding-bottom:4px;">ðŸ™ï¸ ${escHtml(p.city)}</h3>
+                        <h3 style="color:#ff6633;margin:0 0 5px;font-size:.8rem;border-bottom:1px solid rgba(255,102,51,0.3);padding-bottom:4px;">🏙️ ${escHtml(p.city)}</h3>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:4px;">
                             <div style="background:rgba(255,102,51,.08);padding:4px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">${currentLang==='de'?'LAND':'COUNTRY'}</div><div style="color:#ff6633;font-size:.65rem;">${escHtml(p.country)}</div></div>
                             <div style="background:rgba(255,102,51,.08);padding:4px 6px;border-radius:2px;"><div style="opacity:.4;font-size:.5rem;">RANK</div><div style="color:#ff6633;font-size:.65rem;">#${p.rank}</div></div>
@@ -883,7 +897,7 @@ document.addEventListener("DOMContentLoaded", () => {
             map.on('mouseleave', 'metro-cities-layer', () => { map.getCanvas().style.cursor = ''; });
         } catch(e) { console.warn('[POPULATION] Init failed:', e.message); }
 
-        // â”€â”€ ROMAN EMPIRE TERRITORY (Simplified GeoJSON — 117 AD peak) â”€â”€
+        // ── ROMAN EMPIRE TERRITORY (Simplified GeoJSON — 117 AD peak) ──
         try {
             map.addSource('roman-empire-src', {
                 type: 'geojson',
@@ -936,16 +950,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ============================================================
-    // NEWS TICKER — BBC World RSS via rss2json (free, CORS-enabled)
+    // NEWS TICKER — bilingual: BBC (EN) / DW World (DE)
     // ============================================================
+    const TICKER_FEEDS = {
+        en: 'https://feeds.bbci.co.uk/news/world/rss.xml',
+        de: 'https://rss.dw.com/rdf/rss-de-all'
+    };
     const fetchNewsTicker = async () => {
         try {
+            const lang = window.getLanguage ? window.getLanguage() : currentLang;
+            const feedUrl = TICKER_FEEDS[lang] || TICKER_FEEDS.en;
             const result = await window.reliableFetch(
-                'https://api.rss2json.com/v1/api.json?rss_url=https://feeds.bbci.co.uk/news/world/rss.xml', 'newsticker'
+                `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`, 'newsticker'
             );
             const items = result.data?.items || [];
             if (!items.length) return;
-            const tickerText = items.map(i => `⚡ ${i.title.toUpperCase()}`).join('    //    ');
+            const tickerText = items.map(i => `? ${i.title.toUpperCase()}`).join('    //    ');
             document.querySelectorAll('.ticker-content').forEach(el => el.textContent = tickerText);
         } catch(e) { console.warn('[TICKER] RSS fetch failed:', e.message); }
     };
@@ -979,7 +999,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ? timeRaw.split('T')[1]?.slice(0,5) || '--'
                 : timeRaw.split(' ')[1]?.slice(0,5) || '--';
             hud.innerHTML = `
-                <div class="solar-title">â˜€ SOLAR STORM INDEX</div>
+                <div class="solar-title">☀ SOLAR STORM INDEX</div>
                 <div class="solar-grid">
                     <div class="solar-cell"><div class="solar-val" style="color:${kpColor}">${kp.toFixed(1)}</div><div class="solar-lbl">Kp INDEX</div></div>
                     <div class="solar-cell"><div class="solar-val" style="color:${kpColor}">${kpLabel.split(' ')[0]}</div><div class="solar-lbl">STATUS</div></div>
@@ -987,7 +1007,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 <div class="solar-level" style="color:${kpColor}">${kpLabel}</div>
             `;
-        } catch(e) { hud.innerHTML = '<div class="solar-title">â˜€ SOLAR STORM INDEX</div><div class="solar-loading">NOAA SWPC OFFLINE</div>'; }
+        } catch(e) { hud.innerHTML = '<div class="solar-title">☀ SOLAR STORM INDEX</div><div class="solar-loading">NOAA SWPC OFFLINE</div>'; }
     };
 
     // ============================================================
@@ -1007,14 +1027,14 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const getAgencyIcon = (name = '') => {
-        if (/spacex/i.test(name)) return 'ðŸš€';
-        if (/nasa/i.test(name)) return 'ðŸ›¸';
+        if (/spacex/i.test(name)) return '🚀';
+        if (/nasa/i.test(name)) return '🛸';
         if (/esa|ariane/i.test(name)) return '';
-        if (/roscosmos|russia/i.test(name)) return 'ðŸ›¸';
+        if (/roscosmos|russia/i.test(name)) return '🛸';
         if (/isro/i.test(name)) return '';
         if (/cnsa|china/i.test(name)) return '';
-        if (/rocketlab/i.test(name)) return 'ðŸ”¬';
-        return 'ðŸ›°ï¸';
+        if (/rocketlab/i.test(name)) return '🔬';
+        return '🛰️';
     };
 
     const fetchLaunches = async () => {
@@ -1126,7 +1146,7 @@ document.addEventListener("DOMContentLoaded", () => {
             [21.44,41.99,'North Macedonia','H',71,'Reforms ongoing.'],
             [19.82,41.33,'Albania','H',68,'Reforms toward EU accession.'],
             [18.42,43.86,'Bosnia','H',54,'Fractured ethnic politics.'],
-            [20.46,44.80,'Serbia','H',56,'VuÄiÄ‡ populism, media pressure.'],
+            [20.46,44.80,'Serbia','H',56,'Vučić populism, media pressure.'],
             [20.93,42.66,'Kosovo','H',69,'Young democracy.'],
             [19.25,42.44,'Montenegro','H',68,'Long-ruling DPS now in opposition.'],
             [-79.38,43.65,'Canada','D',99,'Federal parliamentary democracy.'],
@@ -1146,7 +1166,7 @@ document.addEventListener("DOMContentLoaded", () => {
             [-47.93,-15.78,'Bolivia','H',66,'Partial backsliding.'],
             // HYBRID / PARTLY FREE
             [37.61,55.75,'Russia','A',16,'Putin autocracy.'],
-            [32.85,39.93,'Turkey','H',34,'ErdoÄŸan competitive authoritarian.'],
+            [32.85,39.93,'Turkey','H',34,'Erdoğan competitive authoritarian.'],
             [51.43,35.69,'Iran','A',14,'Theocratic republic.'],
             [44.37,33.34,'Iraq','H',41,'Fragile democracy, militia influence.'],
             [35.5,38.5,'Syria','A',0,'HTS governance, post-Assad.'],
@@ -1385,9 +1405,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const initUnderseaCables = () => {
         // Ocean-routed submarine cable coordinates
         // All paths verified to stay in open water / hug coastlines
-        // Red Sea routing: Med → Port Said [32.3,31] → Red Sea → Bab el-Mandeb [43,11.5]
+        // Red Sea routing: Med ? Port Said [32.3,31] ? Red Sea ? Bab el-Mandeb [43,11.5]
         const cables = [
-            // â”€â”€ ATLANTIC â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── ATLANTIC ─────────────────────────────────────────────────────
             { name: 'TAT-14 (Transatlantic)', color: '#00ccff',
               capacity: '3.2 Tbps', year: 2001, length: '15,428 km', owner: 'KPN / Sprint / Deutsche Telekom',
               coords: [[-74,40],[-55,44],[-30,47],[-15,50],[-8,52],[-5,50],[1,51]] },
@@ -1406,7 +1426,7 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: 'South Atlantic (SACS)', color: '#ff4444',
               capacity: '40 Gbps', year: 2000, length: '7,250 km', owner: 'Angola Portugal consortium',
               coords: [[-8.8,38.7],[-20,-15],[-35,-22],[-43,-22.9]] },
-            // â”€â”€ EUROPE / MED → INDIAN OCEAN via Suez â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── EUROPE / MED ? INDIAN OCEAN via Suez ─────────────────────────
             { name: 'SEA-ME-WE 3', color: '#ff00cc',
               capacity: '960 Gbps', year: 1999, length: '39,000 km', owner: '92-nation consortium',
               coords: [
@@ -1436,7 +1456,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 [31,32],[32.3,31.2],[32.5,29.9],[38,16],[43.5,11.5],
                 [50,11],[57,22],[67,24],[80,21],[104,1],[121,25]
               ] },
-            // â”€â”€ AFRICA COASTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── AFRICA COASTS ────────────────────────────────────────────────
             { name: 'SAT-3 / WASC (Africa West)', color: '#ff8800',
               capacity: '120 Gbps', year: 2002, length: '14,350 km', owner: 'West African consortium',
               coords: [
@@ -1450,7 +1470,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 [18,-34],[27,-30],[33,-26],[36,-20],[40,-11],
                 [40,-5],[41,2],[43.5,11.5],[50,11],[51,20],[57,21],[58,23],[72,20]
               ] },
-            // â”€â”€ TRANS-PACIFIC â”€â”€â”€ extended lon: 140°E=-220, 130°E=-230, 121°E=-239
+            // ── TRANS-PACIFIC ─── extended lon: 140°E=-220, 130°E=-230, 121°E=-239
             { name: 'Trans-Pacific (TPE)', color: '#00ff88',
               capacity: '17.7 Tbps', year: 2016, length: '17,700 km', owner: 'Asia-Pacific Telecom consortium',
               coords: [[-118,34],[-130,30],[-145,23],[-157,20],[-170,8],[-178,5],
@@ -1461,20 +1481,20 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: 'Jupiter (Google)', color: '#55ddaa',
               capacity: '60 Tbps', year: 2020, length: '14,557 km', owner: 'Google / PLDT / SoftBank',
               coords: [[-121,38],[-140,30],[-157,21],[-175,15],[-200,14],[-215,32],[-220,34],[-228,37]] },
-            // â”€â”€ PACIFIC â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── PACIFIC ─────────────────────────────────────────────────────
             { name: 'SJC (South Japan Cable)', color: '#88ff88',
               capacity: '2.56 Tbps', year: 2009, length: '8,900 km', owner: 'SJC consortium',
               coords: [[104,1.3],[110,3],[121,25],[126,26],[128,26],[132,34],[137,35],[140,35]] },
-            // â”€â”€ ARCTIC / POLAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── ARCTIC / POLAR ───────────────────────────────────────────────
             { name: 'Arctic Fibre', color: '#aaaaff',
               capacity: '160 Tbps (planned)', year: 2025, length: '15,600 km', owner: 'Far North Digital',
               coords: [[17,69],[5,62],[0,60],[-5,58],[-30,64],[-55,67],
                 [-75,72],[-90,71],[-100,70],[-120,68]] },
-            // â”€â”€ RUSSIA-JAPAN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── RUSSIA-JAPAN ─────────────────────────────────────────────────
             { name: 'Russia-Japan (RJCN)', color: '#ff8888',
               capacity: '640 Gbps', year: 2013, length: '1,520 km', owner: 'KDDI / RTComm.RU',
               coords: [[132,43],[134,43],[136,40],[138,38],[140,36],[140.5,35],[141,35]] },
-            // â”€â”€ ADDITIONAL MAJOR CABLES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── ADDITIONAL MAJOR CABLES ────────────────────────────────
             { name: '2Africa (Meta)', color: '#ff44ff',
               capacity: '180 Tbps', year: 2024, length: '45,000 km', owner: 'Meta / Vodafone / Orange / MTN',
               coords: [
@@ -1530,7 +1550,7 @@ document.addEventListener("DOMContentLoaded", () => {
             new maplibregl.Popup({ maxWidth: '270px' })
                 .setLngLat(e.lngLat)
                 .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
-                    <h3 style="color:${color};margin:0 0 8px;border-bottom:1px solid ${color}44;padding-bottom:5px;">ðŸ”Œ ${name}</h3>
+                    <h3 style="color:${color};margin:0 0 8px;border-bottom:1px solid ${color}44;padding-bottom:5px;">🔌 ${name}</h3>
                     <table style="width:100%;border-collapse:collapse;">
                         <tr><td style="opacity:.5;padding:2px 0;">CAPACITY</td><td style="color:${color};font-weight:bold;text-align:right;">${capacity || 'N/A'}</td></tr>
                         <tr><td style="opacity:.5;padding:2px 0;">LENGTH</td><td style="color:#ccc;text-align:right;">${length || 'N/A'}</td></tr>
@@ -1550,7 +1570,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ============================================================
     const initPipelines = () => {
         const pipelines = [
-            // â”€â”€ EUROPEAN GAS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── EUROPEAN GAS ───────────────────────────────────────────
             { name: 'Nord Stream 1 & 2 (destroyed)', color: '#ff4444', type: 'Gas',
               capacity: '110 bcm/yr (before sabotage)', year: '2011/2021', length: '1,224 km', status: 'Destroyed Sept 2022',
               coords: [[30.1,59.9],[27,59],[22,57],[18,56],[14,55],[12.1,54.1]] },
@@ -1578,7 +1598,7 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: 'Nord Stream backup via LNG terminals', color: '#aaaaaa', type: 'LNG',
               capacity: 'Various', year: 2022, length: 'Multiple', status: 'Active — EU diversification',
               coords: [[-5.5,36],[0,42],[3,51],[5,53],[8,54],[10,54.5],[13,54.5]] },
-            // â”€â”€ MIDDLE EAST / CENTRAL ASIA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── MIDDLE EAST / CENTRAL ASIA ─────────────────────────────
             { name: 'East–West (Saudi Petroline) Oil', color: '#cc0000', type: 'Oil',
               capacity: '5 mbl/day', year: 1981, length: '1,200 km', status: 'Active',
               coords: [[50.1,26.3],[48,25],[46,24.5],[44,24],[42,24],[40,24],[39,21.5]] },
@@ -1588,26 +1608,26 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: 'Iran–Turkey Gas', color: '#ff5500', type: 'Gas',
               capacity: '10 bcm/yr', year: 2001, length: '2,577 km', status: 'Active',
               coords: [[52,33],[48,36],[45,38],[43,39.5],[40,39.5]] },
-            // â”€â”€ AFRICA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── AFRICA ────────────────────────────────────────────────
             { name: 'Trans-Saharan Gas (NIGAL)', color: '#ffdd00', type: 'Gas',
-              capacity: '30 bcm/yr (planned)', year: 'Planned', length: '4,128 km', status: 'Planned — Nigeria→Algeria→Europe',
+              capacity: '30 bcm/yr (planned)', year: 'Planned', length: '4,128 km', status: 'Planned — Nigeria?Algeria?Europe',
               coords: [[3,6.5],[5,10],[4,15],[3,20],[3,25],[2,30],[2,35],[1,36]] },
             { name: 'Sumed (Egypt) Oil', color: '#cc3300', type: 'Oil',
               capacity: '2.5 mbl/day', year: 1977, length: '320 km', status: 'Active — bypasses Suez Canal',
               coords: [[33.8,28.7],[32.5,29.5],[31.2,30.5],[29.9,31]] },
-            // â”€â”€ AMERICAS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // ── AMERICAS ──────────────────────────────────────────────
             { name: 'Keystone XL (Cancelled) + Keystone', color: '#886600', type: 'Oil',
               capacity: '0.59 mbl/day (Keystone)', year: 2010, length: '3,462 km', status: 'Keystone active; XL cancelled 2021',
               coords: [[-110,52],[-108,49],[-104,46],[-100,43],[-98,40],[-97,37],[-97,30]] },
             { name: 'Trans-Alaska (TAPS) Oil', color: '#995500', type: 'Oil',
               capacity: '0.5 mbl/day', year: 1977, length: '1,288 km', status: 'Active — declining throughput',
               coords: [[-148,70],[-147,67],[-146,64],[-146,62],[-147,61]] },
-            // â”€â”€ RUSSIA / ASIA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-            { name: 'Power of Siberia (Russia→China)', color: '#ff2222', type: 'Gas',
+            // ── RUSSIA / ASIA ─────────────────────────────────────────
+            { name: 'Power of Siberia (Russia?China)', color: '#ff2222', type: 'Gas',
               capacity: '38 bcm/yr', year: 2019, length: '3,000 km', status: 'Active — ramping up',
               coords: [[130,62],[128,55],[127,50],[126,48],[128,47],[130,46]] },
             { name: 'ESPO (East Siberia–Pacific Ocean) Oil', color: '#cc4400', type: 'Oil',
-              capacity: '1.6 mbl/day', year: 2012, length: '4,857 km', status: 'Active — main Russia→China/Japan oil route',
+              capacity: '1.6 mbl/day', year: 2012, length: '4,857 km', status: 'Active — main Russia?China/Japan oil route',
               coords: [[105,56],[110,53],[115,51],[120,50],[125,48],[130,47],[132,43]] },
             { name: 'Central Asia–China Gas', color: '#ddaa00', type: 'Gas',
               capacity: '55 bcm/yr', year: 2009, length: '1,833 km', status: 'Active — via Turkmenistan/Uzbekistan/Kazakhstan',
@@ -1640,7 +1660,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Popup on pipeline click
         map.on('click', 'pipelines-layer', (e) => {
             const { name, color, type, capacity, year, length, status } = e.features[0].properties;
-            const icon = type === 'Oil' ? 'ðŸ›¢ï¸' : type === 'LNG' ? 'ðŸš¢' : 'ðŸ”¥';
+            const icon = type === 'Oil' ? '🛢️' : type === 'LNG' ? '🚢' : '🔥';
             new maplibregl.Popup({ maxWidth: '280px' })
                 .setLngLat(e.lngLat)
                 .setHTML(`<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
@@ -1730,7 +1750,7 @@ document.addEventListener("DOMContentLoaded", () => {
             el.style.filter = `drop-shadow(0 0 4px ${c})`;
             const popup = new maplibregl.Popup({ offset: 8, maxWidth: '270px' }).setHTML(`
                 <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
-                <h3 style="color:${c};margin:0 0 5px;border-bottom:1px solid ${c}44;padding-bottom:3px;">ðŸ’¾ ${name}</h3>
+                <h3 style="color:${c};margin:0 0 5px;border-bottom:1px solid ${c}44;padding-bottom:3px;">💾 ${name}</h3>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:5px;">
                     <div style="background:${c}11;padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">PROVIDERS</div><div style="font-size:.62rem;">${provider}</div></div>
                     <div style="background:${c}11;padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">TIER</div><div style="color:${c};">${tier}</div></div>
@@ -1772,7 +1792,7 @@ document.addEventListener("DOMContentLoaded", () => {
             [141.0,37.42,'Fukushima Daiichi','Japan',0,0,'DECOMMISSION','Meltdown 2011. ~40yr decommission ongoing.'],
             [136.43,35.72,'Takahama NPP','Japan',4,3.3,'PARTIAL','2 reactors restarted post-Fukushima.'],
             [136.2,35.55,'Mihama NPP','Japan',1,0.83,'OPERATIONAL',''],
-            [140.38,38.26,'ÅŒnagawa NPP','Japan',3,2.2,'OPERATIONAL','Restarted 2024.'],
+            [140.38,38.26,'Ōnagawa NPP','Japan',3,2.2,'OPERATIONAL','Restarted 2024.'],
             [121.63,29.88,'Qinshan NPP','China',9,6.6,'OPERATIONAL','First Chinese-built NPP.'],
             [120.52,30.44,'Sanmen NPP','China',2,2.5,'OPERATIONAL','First AP1000 globally.'],
             [113.51,22.76,'Daya Bay NPP','China',2,1.97,'OPERATIONAL','HTR-PM demo reactor adjacent.'],
@@ -1783,7 +1803,7 @@ document.addEventListener("DOMContentLoaded", () => {
             [150.14,35.34,'Tokai Daini','Japan',1,1.1,'SUSPENDED',''],
             [33.55,36.35,'Akkuyu NPP','Turkey',4,4.8,'BUILDING','Russian Rosatom build. First reactor 2025.'],
             [51.43,35.69,'Iran (all sites)','Iran',1,0.95,'OPERATIONAL','See Bushehr above.'],
-            [27.52,48.09,'CernavodÄƒ NPP','Romania',2,1.4,'OPERATIONAL','CANDU type. Expanding +2 units.'],
+            [27.52,48.09,'Cernavodă NPP','Romania',2,1.4,'OPERATIONAL','CANDU type. Expanding +2 units.'],
             [30.39,46.84,'South Ukraine NPP','Ukraine',3,3.0,'OPERATIONAL','War threat.'],
             [33.76,47.83,'Rivne NPP','Ukraine',4,2.8,'OPERATIONAL',''],
             [30.17,49.84,'Khmelnytskyi NPP','Ukraine',2,2.0,'OPERATIONAL',''],
@@ -1850,7 +1870,7 @@ document.addEventListener("DOMContentLoaded", () => {
             [18.45, 48.26, 'Mochovce', 'Slovakia', 3, 1.4, 'OPERATIONAL', 'Unit 3 started 2023. Unit 4 building.'],
             [17.68, 48.49, 'Bohunice', 'Slovakia', 2, 1.0, 'OPERATIONAL', 'V-2 plant operational.'],
             [18.85, 46.57, 'Paks', 'Hungary', 4, 2.0, 'OPERATIONAL', 'Provides ~50% of Hungarys electricity.'],
-            [15.52, 45.93, 'KrÅ¡ko', 'Slovenia', 1, 0.7, 'OPERATIONAL', 'Co-owned with Croatia.'],
+            [15.52, 45.93, 'Krško', 'Slovenia', 1, 0.7, 'OPERATIONAL', 'Co-owned with Croatia.'],
             [4.25, 51.32, 'Doel', 'Belgium', 4, 2.9, 'OPERATIONAL', 'Scheduled for phase-out.'],
             [5.28, 50.53, 'Tihange', 'Belgium', 3, 3.0, 'OPERATIONAL', 'Along the Meuse river.'],
             [3.71, 51.43, 'Borssele', 'Netherlands', 1, 0.4, 'OPERATIONAL', 'Only commercial NPP in Netherlands.'],
@@ -1884,7 +1904,7 @@ document.addEventListener("DOMContentLoaded", () => {
             el.style.filter = `drop-shadow(0 0 3px ${c})`;
             const popup = new maplibregl.Popup({ offset: 8, maxWidth: '270px' }).setHTML(`
                 <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
-                <h3 style="color:${c};margin:0 0 5px;border-bottom:1px solid ${c}44;padding-bottom:3px;">â˜¢ ${name}</h3>
+                <h3 style="color:${c};margin:0 0 5px;border-bottom:1px solid ${c}44;padding-bottom:3px;">☢ ${name}</h3>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:5px;">
                     <div style="background:${c}11;padding:3px;text-align:center;"><div style="opacity:.5;font-size:.55rem;">COUNTRY</div><div style="font-size:.65rem;">${country}</div></div>
                     <div style="background:${c}11;padding:3px;text-align:center;"><div style="opacity:.5;font-size:.55rem;">REACTORS</div><div style="color:${c};">${reactors}</div></div>
@@ -1917,12 +1937,12 @@ document.addEventListener("DOMContentLoaded", () => {
             el.style.cssText = 'width:18px;height:18px;cursor:pointer;';
             el.innerHTML = `<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="9" cy="9" r="8" fill="rgba(255,0,0,0.1)" stroke="#ff0000" stroke-width="1.5"/>
-                <text x="9" y="13" text-anchor="middle" font-size="10" fill="#ff0000">â˜¢</text>
+                <text x="9" y="13" text-anchor="middle" font-size="10" fill="#ff0000">☢</text>
             </svg>`;
             el.style.filter = 'drop-shadow(0 0 5px #ff0000)';
             const popup = new maplibregl.Popup({ offset: 10, maxWidth: '260px' }).setHTML(`
                 <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;">
-                <h3 style="color:#ff0000;margin:0 0 5px;border-bottom:1px solid #ff000044;padding-bottom:3px;">â˜¢ ${country} — NUCLEAR ARSENAL</h3>
+                <h3 style="color:#ff0000;margin:0 0 5px;border-bottom:1px solid #ff000044;padding-bottom:3px;">☢ ${country} — NUCLEAR ARSENAL</h3>
                 <div style="background:rgba(255,0,0,.08);border:1px solid rgba(255,0,0,.3);padding:6px 8px;margin-bottom:5px;">
                     <div style="font-size:.6rem;opacity:.5;">ESTIMATED WARHEADS</div>
                     <div style="color:#ff0000;font-size:1.3rem;font-weight:bold;">${warheads.toLocaleString()}</div>
@@ -2094,7 +2114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         {
             name: 'Syria — Post-War Transition', lat: 35.5, lon: 38.5, severity: 'HIGH',
-            type: 'Civil War → Transition', since: 2011,
+            type: 'Civil War ? Transition', since: 2011,
             parties: [['HTS (Hayat Tahrir al-Sham)', 'Controls most of Syria since Dec 2024'], ['SDF (Kurds)', 'NE Syria'], ['SNA + Turkey', 'NW border zone']],
             support: 'HTS: Turkey (ambivalent). SDF: US. IS: self-financed.',
             casualties: '>580,000 dead since 2011 (SOHR)',
@@ -2296,12 +2316,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (map.getLayer('terminator-layer')) map.setLayoutProperty('terminator-layer', 'visibility', toggles.terminator ? 'visible' : 'none');
     });
 
-    // â”€â”€ WEBCAM CAMERA CATALOG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── WEBCAM CAMERA CATALOG ─────────────────────────────
     // Each camera: { id, title, location, country, lat, lon, src, srcType, provider, tags }
     // srcType: 'foto-webcam' = real snapshot from foto-webcam.eu (verified working)
     // All cameras use foto-webcam.eu real snapshots (verified cross-origin working)
     const WEBCAM_CATALOG = [
-        // â”€â”€ Curated foto-webcam.eu cameras — verified working real snapshots â”€â”€
+        // ── Curated foto-webcam.eu cameras — verified working real snapshots ──
         { id: 'zugspitze', title: 'Zugspitze Summit', location: 'Garmisch-Partenkirchen', country: 'DEU',
           lat: 47.421, lon: 10.985, src: 'zugspitze', srcType: 'foto-webcam',
           provider: 'foto-webcam.eu', tags: ['alps', 'mountain', 'germany'] },
@@ -2343,7 +2363,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div style="font-family:'Share Tech Mono',monospace; width:320px; background:rgba(0,10,20,0.97); border:1px solid #00d4ff; padding:0; border-radius:4px; overflow:hidden;">
                     <div style="padding:6px 10px; border-bottom:1px solid rgba(0,212,255,0.2); display:flex; justify-content:space-between; align-items:center;">
                         <span style="color:#00d4ff; font-size:0.72rem; letter-spacing:1px;"><i class="fa-solid fa-video" style="margin-right:4px;"></i>${escHtml(cam.title)}</span>
-                        <span style="font-size:0.5rem; color:#0f0; letter-spacing:1px;">â— LIVE SNAPSHOT</span>
+                        <span style="font-size:0.5rem; color:#0f0; letter-spacing:1px;">● LIVE SNAPSHOT</span>
                     </div>
                     <div style="position:relative; width:100%; background:#000; line-height:0;">
                         <img id="${thumbId}" src="${imgUrl}" style="width:100%; height:auto; display:block; min-height:140px; object-fit:cover;"
@@ -2355,7 +2375,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                     <div style="padding:5px 10px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.06);">
                         <span style="font-size:0.5rem; color:rgba(255,255,255,0.35);">${escHtml(cam.location)}</span>
-                        <a href="https://www.foto-webcam.eu/webcam/${cam.src}/" target="_blank" rel="noopener" style="font-size:0.48rem; color:#00d4ff; text-decoration:none; letter-spacing:1px;">FULL VIEW â†—</a>
+                        <a href="https://www.foto-webcam.eu/webcam/${cam.src}/" target="_blank" rel="noopener" style="font-size:0.48rem; color:#00d4ff; text-decoration:none; letter-spacing:1px;">FULL VIEW ↗</a>
                     </div>
                     <div style="padding:3px 10px 5px; font-size:0.42rem; color:rgba(255,255,255,0.2); letter-spacing:1px;">
                         SOURCE: ${escHtml(cam.provider)} · AUTO-REFRESH 60s · <span style="color:rgba(0,212,255,0.4);">foto-webcam.eu</span>
@@ -2482,7 +2502,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                     <a href="https://${currentLang==='de'?'de':'en'}.wikipedia.org/wiki/${currentLang==='de'?'Internationale_Raumstation':'International_Space_Station'}" target="_blank" rel="noopener"
                        style="display:block;font-size:.6rem;color:#00d4ff;text-decoration:none;letter-spacing:1px;border-top:1px solid rgba(0,212,255,.15);padding-top:4px;">
-                        ðŸ“š ${currentLang==='de'?'Mehr auf Wikipedia erfahren â†—':'Learn more on Wikipedia â†—'}
+                        📚 ${currentLang==='de'?'Mehr auf Wikipedia erfahren ↗':'Learn more on Wikipedia ↗'}
                     </a>
                     <div style="opacity:.3;font-size:.45rem;margin-top:4px;letter-spacing:1px;">${currentLang==='de'?'UMKREIST DIE ERDE ALLE 90 MIN · LIVE VIA WHERETHEISS.AT':'ORBITS EARTH EVERY 90 MIN · LIVE VIA WHERETHEISS.AT'}</div>
                 </div>`;
@@ -2545,7 +2565,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const sstLegend = document.getElementById('layer-legend');
         if (sstLegend) sstLegend.style.display = toggles.sst ? 'block' : 'none';
         if (toggles.sst && sstLegend) {
-            sstLegend.innerHTML = `<div class="legend-title">ðŸŒŠ ${currentLang==='de'?'OZEANTEMPERATUR':'SEA SURFACE TEMP'} (°C)</div><div class="legend-bar" style="background:linear-gradient(90deg,#0000cc,#0066ff,#00ccff,#33ff99,#ffff00,#ff9900,#ff0000);"></div><div class="legend-labels"><span>-2</span><span>10</span><span>20</span><span>30+</span></div>`;
+            sstLegend.innerHTML = `<div class="legend-title">🌊 ${currentLang==='de'?'OZEANTEMPERATUR':'SEA SURFACE TEMP'} (°C)</div><div class="legend-bar" style="background:linear-gradient(90deg,#0000cc,#0066ff,#00ccff,#33ff99,#ffff00,#ff9900,#ff0000);"></div><div class="legend-labels"><span>-2</span><span>10</span><span>20</span><span>30+</span></div>`;
         }
     });
 
@@ -2575,11 +2595,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const tempLegend = document.getElementById('layer-legend');
         if (tempLegend) tempLegend.style.display = toggles.temperature ? 'block' : 'none';
         if (toggles.temperature && tempLegend) {
-            tempLegend.innerHTML = `<div class="legend-title">ðŸŒ¡ï¸ ${currentLang==='de'?'OBERFLÄCHENTEMPERATUR':'SURFACE TEMP'} (°C)</div><div class="legend-bar" style="background:linear-gradient(90deg,#1a0533,#2b1577,#0044cc,#00bbff,#44ff88,#ccff00,#ffcc00,#ff5500,#cc0022);"></div><div class="legend-labels"><span>-25</span><span>0</span><span>25</span><span>50+</span></div>`;
+            tempLegend.innerHTML = `<div class="legend-title">🌡️ ${currentLang==='de'?'OBERFLÄCHENTEMPERATUR':'SURFACE TEMP'} (°C)</div><div class="legend-bar" style="background:linear-gradient(90deg,#1a0533,#2b1577,#0044cc,#00bbff,#44ff88,#ccff00,#ffcc00,#ff5500,#cc0022);"></div><div class="legend-labels"><span>-25</span><span>0</span><span>25</span><span>50+</span></div>`;
         }
     });
 
-    // â”€â”€ POPULATION DENSITY TOGGLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── POPULATION DENSITY TOGGLE ─────────────────────────
     document.getElementById('toggle-population')?.addEventListener('change', (e) => {
         toggles.population = e.target.checked;
         const vis = toggles.population ? 'visible' : 'none';
@@ -2593,11 +2613,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const popLegend = document.getElementById('layer-legend');
         if (popLegend) popLegend.style.display = toggles.population ? 'block' : 'none';
         if (toggles.population && popLegend) {
-            popLegend.innerHTML = `<div class="legend-title">ðŸ‘¥ ${currentLang==='de'?'BEVÖLKERUNGSDICHTE':'POPULATION DENSITY'} (per km²)</div><div class="legend-bar" style="background:linear-gradient(90deg,#000420,#0a1a4a,#1a3a7a,#3366bb,#5599dd,#88ccff,#ffee77,#ffaa33,#ff5500,#cc0000);"></div><div class="legend-labels"><span>0</span><span>50</span><span>500</span><span>5000+</span></div>`;
+            popLegend.innerHTML = `<div class="legend-title">👥 ${currentLang==='de'?'BEVÖLKERUNGSDICHTE':'POPULATION DENSITY'} (per km²)</div><div class="legend-bar" style="background:linear-gradient(90deg,#000420,#0a1a4a,#1a3a7a,#3366bb,#5599dd,#88ccff,#ffee77,#ffaa33,#ff5500,#cc0000);"></div><div class="legend-labels"><span>0</span><span>50</span><span>500</span><span>5000+</span></div>`;
         }
     });
 
-    // â”€â”€ VOLCANOES (Smithsonian GVP — curated dataset) â”€â”€â”€â”€â”€
+    // ── VOLCANOES (Smithsonian GVP — curated dataset) ─────
     const volcanoMarkers = [];
     const initVolcanoes = () => {
         const volcanoes = [
@@ -2630,14 +2650,14 @@ document.addEventListener("DOMContentLoaded", () => {
             el.style.filter = 'drop-shadow(0 0 4px #ff6600)';
             const popup = new maplibregl.Popup({ offset: 8, maxWidth: '260px' }).setHTML(
                 '<div style="font-family:\'Share Tech Mono\',monospace;font-size:.72rem;">' +
-                '<h3 style="color:#ff6600;margin:0 0 5px;border-bottom:1px solid #ff660044;padding-bottom:3px;">ðŸŒ‹ ' + escHtml(name) + '</h3>' +
+                '<h3 style="color:#ff6600;margin:0 0 5px;border-bottom:1px solid #ff660044;padding-bottom:3px;">🌋 ' + escHtml(name) + '</h3>' +
                 '<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:5px;">' +
                 '<div style="background:rgba(255,100,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">COUNTRY</div><div style="font-size:.65rem;">' + escHtml(country) + '</div></div>' +
                 '<div style="background:rgba(255,100,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">ELEVATION</div><div style="color:#ff6600;">' + escHtml(elev) + '</div></div>' +
                 '</div>' +
                 '<div style="font-size:.65rem;opacity:.75;line-height:1.4;">' + escHtml(note) + '</div>' +
                 '<div style="font-size:.55rem;opacity:.3;margin-top:5px;">Source: Smithsonian GVP 2024</div>' +
-                '<a href="https://en.wikipedia.org/wiki/' + encodeURIComponent(name.replace(/\s+/g,'_')) + '" target="_blank" rel="noopener" style="display:block;margin-top:6px;font-size:.6rem;color:#00d4ff;text-decoration:none;letter-spacing:1px;border-top:1px solid rgba(0,212,255,.15);padding-top:4px;">ðŸ“š Learn more on Wikipedia â†—</a></div>');
+                '<a href="https://en.wikipedia.org/wiki/' + encodeURIComponent(name.replace(/\s+/g,'_')) + '" target="_blank" rel="noopener" style="display:block;margin-top:6px;font-size:.6rem;color:#00d4ff;text-decoration:none;letter-spacing:1px;border-top:1px solid rgba(0,212,255,.15);padding-top:4px;">📚 Learn more on Wikipedia ↗</a></div>');
             const m = new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat([lon, lat]).setPopup(popup);
             volcanoMarkers.push(m);
         });
@@ -2649,7 +2669,7 @@ document.addEventListener("DOMContentLoaded", () => {
         volcanoMarkers.forEach(m => toggles.volcanoes ? m.addTo(map) : m.remove());
     });
 
-    // â”€â”€ RADIATION SITES (Nuclear Accidents) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── RADIATION SITES (Nuclear Accidents) ───────────────
     const radiationMarkers = [];
     const initRadiation = () => {
         const sites = [
@@ -2669,11 +2689,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const c = sevColors[severity] || '#ff6600';
             const el = document.createElement('div');
             el.style.cssText = 'width:16px;height:16px;cursor:pointer;';
-            el.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="' + c + '15" stroke="' + c + '" stroke-width="1.5"/><text x="8" y="12" text-anchor="middle" font-size="10" fill="' + c + '">â˜¢</text></svg>';
+            el.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="' + c + '15" stroke="' + c + '" stroke-width="1.5"/><text x="8" y="12" text-anchor="middle" font-size="10" fill="' + c + '">☢</text></svg>';
             el.style.filter = 'drop-shadow(0 0 5px ' + c + ')';
             const popup = new maplibregl.Popup({ offset: 8, maxWidth: '280px' }).setHTML(
                 '<div style="font-family:\'Share Tech Mono\',monospace;font-size:.72rem;">' +
-                '<h3 style="color:' + c + ';margin:0 0 5px;border-bottom:1px solid ' + c + '44;padding-bottom:3px;">â˜¢ ' + escHtml(name) + '</h3>' +
+                '<h3 style="color:' + c + ';margin:0 0 5px;border-bottom:1px solid ' + c + '44;padding-bottom:3px;">☢ ' + escHtml(name) + '</h3>' +
                 '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;margin-bottom:5px;">' +
                 '<div style="background:' + c + '11;padding:3px;text-align:center;"><div style="opacity:.5;font-size:.55rem;">COUNTRY</div><div style="font-size:.6rem;">' + escHtml(country) + '</div></div>' +
                 '<div style="background:' + c + '11;padding:3px;text-align:center;"><div style="opacity:.5;font-size:.55rem;">YEAR</div><div style="color:' + c + ';">' + escHtml(year) + '</div></div>' +
@@ -2681,7 +2701,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 '</div>' +
                 '<div style="font-size:.65rem;opacity:.75;line-height:1.4;">' + escHtml(note) + '</div>' +
                 '<div style="font-size:.55rem;opacity:.3;margin-top:5px;">Source: INES / IAEA / Safecast 2024</div>' +
-                '<a href="https://en.wikipedia.org/wiki/' + encodeURIComponent(name.replace(/\s+/g,'_')) + '" target="_blank" rel="noopener" style="display:block;margin-top:6px;font-size:.6rem;color:#00d4ff;text-decoration:none;letter-spacing:1px;border-top:1px solid rgba(0,212,255,.15);padding-top:4px;">ðŸ“š Learn more on Wikipedia â†—</a></div>');
+                '<a href="https://en.wikipedia.org/wiki/' + encodeURIComponent(name.replace(/\s+/g,'_')) + '" target="_blank" rel="noopener" style="display:block;margin-top:6px;font-size:.6rem;color:#00d4ff;text-decoration:none;letter-spacing:1px;border-top:1px solid rgba(0,212,255,.15);padding-top:4px;">📚 Learn more on Wikipedia ↗</a></div>');
             const m = new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat([lon, lat]).setPopup(popup);
             radiationMarkers.push(m);
         });
@@ -2693,33 +2713,33 @@ document.addEventListener("DOMContentLoaded", () => {
         radiationMarkers.forEach(m => toggles.radiation ? m.addTo(map) : m.remove());
     });
 
-    // â”€â”€ AURORA FORECAST TOGGLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── AURORA FORECAST TOGGLE ────────────────────────────
     document.getElementById('toggle-aurora')?.addEventListener('change', (e) => {
         toggles.aurora = e.target.checked;
         if (map.getLayer('aurora-layer')) map.setLayoutProperty('aurora-layer', 'visibility', toggles.aurora ? 'visible' : 'none');
         if (map.getLayer('aurora-south-layer')) map.setLayoutProperty('aurora-south-layer', 'visibility', toggles.aurora ? 'visible' : 'none');
     });
 
-    // â”€â”€ FIREBALL TRACKER TOGGLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── FIREBALL TRACKER TOGGLE ───────────────────────────
     document.getElementById('toggle-fireballs')?.addEventListener('change', (e) => {
         toggles.fireballs = e.target.checked;
         if (map.getLayer('fireballs-core')) map.setLayoutProperty('fireballs-core', 'visibility', toggles.fireballs ? 'visible' : 'none');
         if (map.getLayer('fireballs-glow')) map.setLayoutProperty('fireballs-glow', 'visibility', toggles.fireballs ? 'visible' : 'none');
     });
 
-    // â”€â”€ NUCLEAR ARSENAL TOGGLE (nukes) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── NUCLEAR ARSENAL TOGGLE (nukes) ────────────────────
     document.getElementById('toggle-nukes')?.addEventListener('change', (e) => {
         toggles.nukes = e.target.checked;
         if (toggles.nukes && nukeArsenalMarkers.length === 0 && nuclearMarkers.length === 0) initNuclearLayer();
         nukeArsenalMarkers.forEach(m => toggles.nukes ? m.addTo(map) : m.remove());
     });
 
-    // â”€â”€ GLOBAL TOGGLE CLICK SOUND â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── GLOBAL TOGGLE CLICK SOUND ──────────────────────────
     document.querySelectorAll('.control-item input[type="checkbox"]').forEach(cb => {
         cb.addEventListener('change', () => { if (window._geoSfx) window._geoSfx.tick(); });
     });
 
-    // â”€â”€ SYSTEM OVERRIDE (toggle-all) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── SYSTEM OVERRIDE (toggle-all) ──────────────────────
     document.getElementById('toggle-all')?.addEventListener('change', (e) => {
         const isOn = e.target.checked;
         const allToggles = document.querySelectorAll('.control-item input[type="checkbox"]');
@@ -2733,7 +2753,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setStatus(isOn ? (currentLang === 'de' ? 'SYSTEM-OVERRIDE: ALLE EBENEN AKTIVIERT' : 'SYSTEM OVERRIDE: ALL LAYERS ACTIVATED') : (currentLang === 'de' ? 'SYSTEM-OVERRIDE: ALLE EBENEN DEAKTIVIERT' : 'SYSTEM OVERRIDE: ALL LAYERS DEACTIVATED'));
     });
 
-    // â”€â”€ NEWS BAND TOGGLE (toggle-ticker) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── NEWS BAND TOGGLE (toggle-ticker) ──────────────────
     document.getElementById('toggle-ticker')?.addEventListener('change', (e) => {
         const isOn = e.target.checked;
         if (isOn) {
@@ -2743,7 +2763,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // â”€â”€ COUNTRY BORDERS & LABELS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── COUNTRY BORDERS & LABELS ─────────────────────────
     const COUNTRY_CENTROIDS = [
         [-98.5,39.8,'USA'],[-106.3,56.1,'Canada'],[-102.5,23.6,'Mexico'],[-51.9,-14.2,'Brazil'],
         [-63.6,-38.4,'Argentina'],[-75.0,-9.2,'Peru'],[-71.4,4.6,'Colombia'],[-56.0,-32.5,'Uruguay'],
@@ -3001,11 +3021,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (sidePanel.classList.contains('sidebar-collapsed')) {
                     sidePanel.style.maxHeight = '42px';
                     sidePanel.style.overflowY = 'hidden';
-                    expandHint.textContent = '▼ EXPAND';
+                    expandHint.textContent = '? EXPAND';
                 } else {
                     sidePanel.style.maxHeight = '90vh';
                     sidePanel.style.overflowY = 'auto';
-                    expandHint.textContent = '▲ COLLAPSE';
+                    expandHint.textContent = '? COLLAPSE';
                 }
             }
         });
@@ -3116,22 +3136,31 @@ document.addEventListener("DOMContentLoaded", () => {
             if (match) match.classList.add('selected');
         }
 
-        // "START GUIDED TOUR" → launches the welcome mini-tour
+        // "START GUIDED TOUR" ? launches the welcome mini-tour
         document.getElementById('welcome-tour')?.addEventListener('click', () => {
             dismissWelcome('welcome');
         });
-        // "OPEN MANUAL" → opens manual (handled by onclick in HTML)
+        // "OPEN MANUAL" ? opens manual (handled by onclick in HTML)
         document.getElementById('welcome-manual')?.addEventListener('click', () => {
             dismissWelcome(null);
         });
-        // "EXPLORE FREELY" → just close and explore
+        // "EXPLORE FREELY" ? just close and explore
         document.getElementById('welcome-explore')?.addEventListener('click', () => {
             dismissWelcome(null);
         });
     }
 
     // Expose startTour globally for the quick-links demo button
-    window._geopulseStartTour = (tourId) => { if (typeof startTour === 'function') startTour(tourId); };
+    window._geopulseStartTour = (tourId) => {
+        if (typeof startTour !== 'function') return;
+        const wo = document.getElementById('welcome-overlay');
+        if (wo && !wo.classList.contains('hidden')) {
+            wo.classList.add('hidden');
+            setTimeout(() => startTour(tourId), 600);
+        } else {
+            startTour(tourId);
+        }
+    };
 
     // ============================================================
     // ============================================================
@@ -3142,11 +3171,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Apply German translations (tours_de.js may have loaded already or not yet)
     if (typeof window._applyToursDE === 'function') window._applyToursDE();
 
-    // â”€â”€ GLOBAL TOUR SITES GLOW LAYER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── GLOBAL TOUR SITES GLOW LAYER ──────────────────────────
     // Build a GeoJSON of all tour stop locations for a subtle ambient glow
     const TOUR_MARKER_LAYERS = new Set(['regimes', 'blocs', 'conflicts', 'nuclear', 'radiation']);
     const allTourSitesFeatures = [];
-    const tourSitesMap = {}; // tourId → [feature indices]
+    const tourSitesMap = {}; // tourId ? [feature indices]
     let featureIdx = 0;
     Object.entries(TOURS).forEach(([tourId, tour]) => {
         // Skip the welcome tour — its locations are generic overviews, not POIs
@@ -3244,7 +3273,7 @@ document.addEventListener("DOMContentLoaded", () => {
         map.on('load', initTourSitesLayer);
     }
 
-    // ── REFRESH TOUR SITES — called by tours_new.js after merging new tours ──
+    // -- REFRESH TOUR SITES — called by tours_new.js after merging new tours --
     // Rebuilds the GeoJSON features array and updates the map source so that
     // late-loaded tours (Aurora Hunters, Cosmic Impacts, etc.) get map dots
     window._refreshTourSites = function() {
@@ -3367,16 +3396,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         _tourPreviousToggles = [];
     }
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-    // ═══════════════════════════════════════════════════════════
+    // ════════════════════════════════════════════════════════════
+    // -----------------------------------------------------------
     // NARRATION ENGINE — Extracted to narration.js module
-    // ═══════════════════════════════════════════════════════════
+    // -----------------------------------------------------------
     // Loaded from narration.js before main.js.
     // Exposes: window.speakText(text), window.stopNarration()
     const speakText = window.speakText || function() {};
     const stopNarration = window.stopNarration || function() {};
 
-    // ── Bilingual tour text helper (depends on local currentLang) ──
+    // -- Bilingual tour text helper (depends on local currentLang) --
     function getTourTitle(step) {
         return (currentLang === 'de' && step.title_de) ? step.title_de : step.title;
     }
@@ -3394,7 +3423,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tourNext = document.getElementById('tour-next');
     const tourClose = document.getElementById('tour-close');
 
-    // â”€â”€ DRAGGABLE TOUR PANEL (mouse + touch) â”€â”€
+    // ── DRAGGABLE TOUR PANEL (mouse + touch) ──
     if (tourPanel) {
         const dragHeader = tourPanel.querySelector('.tour-briefing-header');
         let isDragging = false, dragOffX = 0, dragOffY = 0;
@@ -3455,9 +3484,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     function startTour(tourId) {
         const tour = TOURS[tourId];
-        if (!tour) return;
+        if (!tour) { console.warn('[startTour] Tour not found:', tourId); return; }
 
-        // â”€â”€ CLEAN SLATE: deactivate all data layers for an uncluttered tour view â”€â”€
+        // Guard: if map not yet fully loaded, wait then retry
+        if (!map.loaded()) {
+            map.once('load', () => startTour(tourId));
+            return;
+        }
+
+        // ── CLEAN SLATE: deactivate all data layers for an uncluttered tour view ──
         deactivateAllLayersForTour();
         setTourSitesGlowVisible(false);
 
@@ -3471,7 +3506,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Chime sound on tour start
         if (window._geoSfx) window._geoSfx.chime();
 
-        // â”€â”€ CINEMATIC OVERVIEW INTRO â”€â”€
+        // ── CINEMATIC OVERVIEW INTRO ──
         // 1. Light up all stops as bright pulsing amber dots
         // 2. Zoom out to frame the entire route (NO text panel)
         // 3. Hold for 6 seconds so the user sees all stops
@@ -3511,7 +3546,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (transOverlay) transOverlay.classList.remove('active');
         });
 
-        // â”€â”€ ANIMATED GLOW PULSE on overview dots â”€â”€
+        // ── ANIMATED GLOW PULSE on overview dots ──
         let glowPhase = 0;
         const glowInterval = setInterval(() => {
             glowPhase = (glowPhase + 1) % 50;
@@ -3548,7 +3583,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // â”€â”€ Typewriter effect helper â”€â”€
+    // ── Typewriter effect helper ──
     let _typewriterTimer = null;
     function typewriterEffect(element, text, speed = 18, onComplete) {
         clearInterval(_typewriterTimer);
@@ -3626,22 +3661,22 @@ document.addEventListener("DOMContentLoaded", () => {
         if (tourPrev) tourPrev.disabled = true;
         if (tourNext) tourNext.disabled = true;
 
-        // â”€â”€ Tour Transition Effect (blur overlay + whoosh) â”€â”€
+        // ── Tour Transition Effect (blur overlay + whoosh) ──
         const transOverlay = document.getElementById('tour-transition-overlay');
         if (transOverlay) { transOverlay.classList.add('active'); }
         if (window._geoSfx) window._geoSfx.whoosh();
 
-        // â”€â”€ Update Story-Mode Progress Bar â”€â”€
+        // ── Update Story-Mode Progress Bar ──
         const progressFill = document.getElementById('tour-progress-fill');
         if (progressFill && activeTour) {
             const pct = ((tourStepIndex + 1) / activeTour.steps.length) * 100;
             progressFill.style.width = pct + '%';
         }
 
-        // â”€â”€ Cinematic Camera Choreography â”€â”€
+        // ── Cinematic Camera Choreography ──
         // Each stop gets a unique bearing offset for visual variety.
         // Higher zoom stops get a dramatic pitch tilt.
-        // Overview/world steps (zoom â‰¤ 2.5) stay flat and centered.
+        // Overview/world steps (zoom ≤ 2.5) stay flat and centered.
         const baseZoom = step.zoom;
         const zoomBoost = activeTourId === 'windsworld' ? 1 : 3;
         const boostedZoom = baseZoom <= 2.5 ? baseZoom : Math.min(baseZoom + zoomBoost, 14);
@@ -3653,7 +3688,7 @@ document.addEventListener("DOMContentLoaded", () => {
             : 0;
         const cinematicPitch = isCloseup ? 40 + Math.min(tourStepIndex * 2, 15) : (boostedZoom >= 5 ? 20 : 0);
 
-        // ── WIND TOUR: Global context zoom ──
+        // -- WIND TOUR: Global context zoom --
         // For the Winds of the World tour, show global wind context first
         // then zoom into the specific stop location
         if (activeTourId === 'windsworld' && boostedZoom > 3) {
@@ -3706,7 +3741,7 @@ document.addEventListener("DOMContentLoaded", () => {
             tourTitle.textContent = stepTitle;
             tourCounter.textContent = (currentLang === 'de' ? 'STOPP ' : 'STOP ') + (tourStepIndex + 1) + (currentLang === 'de' ? ' VON ' : ' OF ') + activeTour.steps.length;
 
-            // â”€â”€ Typewriter Text Reveal â”€â”€
+            // ── Typewriter Text Reveal ──
             // Text appears character-by-character for a decoded-intel feel
             typewriterEffect(tourText, stepText, 18, () => {
                 // Auto-narrate after typewriter completes (if enabled)
@@ -3818,7 +3853,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 tourNext.innerHTML = '<i class="fa-solid fa-check"></i> FINISH TOUR';
             }
 
-            // â”€â”€ Cinematic Orbital Drift â”€â”€
+            // ── Cinematic Orbital Drift ──
             // After landing, slowly rotate the camera 8° for a living-map feel
             if (isCloseup) {
                 setTimeout(() => {
@@ -3899,12 +3934,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // ── WIDGETS (wiki helper, feedback, clock): loaded from widgets.js module ──
+    // -- WIDGETS (wiki helper, feedback, clock): loaded from widgets.js module --
 
 
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-    // â”€â”€ GEOQUIZ INITIALIZATION (Phase 2, V2.2) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════════════
+    // ── GEOQUIZ INITIALIZATION (Phase 2, V2.2) ───────────────────
+    // ═══════════════════════════════════════════════════════════════
 
     (function initQuiz() {
         let quizCategory = 'all';
@@ -3947,18 +3982,18 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('[GEOPULSE] GeoQuiz initialized');
     })();
 
-    // ── WIND LAYER INIT (wind.js module) ─────────────────────
+    // -- WIND LAYER INIT (wind.js module) ---------------------
     window._GEOPULSE_MAP = map;
     if (typeof window.initWindLayer === 'function') {
         window.initWindLayer(map);
         console.log('[GEOPULSE] Wind layer initialized');
     }
 
-    // â”€â”€ SMART SIDEBAR SEARCH: loaded from search.js module â”€â”€
+    // ── SMART SIDEBAR SEARCH: loaded from search.js module ──
 
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-    // â”€â”€ OPTION D: Category Collapse Memory + Smart Defaults + ðŸ†• â”€â”€
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════════════
+    // ── OPTION D: Category Collapse Memory + Smart Defaults + 🆕 ──
+    // ═══════════════════════════════════════════════════════════════
 
     // --- 1. Collapse Memory ---
     // Save and restore which tour categories are open/closed
@@ -4003,7 +4038,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     restoreCatState();
 
-    // --- 2. 🆕 Badges for V2.0 tours ---
+    // --- 2. ?? Badges for V2.0 tours ---
     // Tours added in V2.0 (released May 15, 2026)
     const V2_NEW_TOURS = [
         'aurorahunters', 'cosmicimpacts', 'climatecrisis',

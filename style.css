@@ -1515,15 +1515,18 @@ body.no-ticker #sidebar { top: 14px !important; }
     background: linear-gradient(135deg, rgba(10,15,25,0.95), rgba(15,20,35,0.95));
     border: 1px solid rgba(255,176,0,0.3);
     border-radius: 8px;
-    padding: 28px 32px 22px;
-    max-width: 420px; min-width: 380px;
-    width: 100%;
+    padding: 24px 24px 20px;
+    max-width: 420px;
+    width: calc(100% - 32px);
+    box-sizing: border-box;
     flex-shrink: 0;
     text-align: center;
     box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 80px rgba(255,176,0,0.08);
     overflow: hidden;
-    max-height: calc(100vh - 40px);
+    max-height: calc(100% - 40px);
+    max-height: calc(100dvh - 40px);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
 }
 #welcome-card::-webkit-scrollbar { display: none; }
@@ -1985,7 +1988,9 @@ body.no-ticker #sidebar { top: 14px !important; }
         max-height: calc(100vh - var(--mobile-nav-h) - 60px);
     }
     #welcome-card {
-        padding: 28px 20px 20px;
+        padding: 20px 16px 16px;
+        max-height: calc(100% - 20px);
+        max-height: calc(100dvh - 20px);
     }
     .welcome-title { font-size: 1.5rem; }
     #quick-links { display: none; }
@@ -2472,11 +2477,12 @@ body.no-ticker #sidebar { top: 14px !important; }
 .quiz-action-btn:hover { border-color:rgba(255,153,0,0.4); color:#ff9900; }
 
 /* ── QUIZ HUD ── */
-.quiz-hud { top: 172px; z-index: 102; }
+.quiz-hud { top: 180px; z-index: 102; }
 .quiz-hud:hover {
     max-height: 400px; width: 320px;
     box-shadow: 0 0 30px var(--amber-dim);
     overflow-y: auto;
+    z-index: 103;
 }
 .quiz-hud-body { padding: 4px 10px 10px; }
 
@@ -2509,6 +2515,8 @@ body.no-ticker #sidebar { top: 14px !important; }
     max-height: 85vh; width: 320px;
     box-shadow: 0 0 30px var(--amber-dim);
     overflow-y: auto;
+    /* Überschreibt quiz-hud wenn Tours aufgeht */
+    z-index: 110;
 }
 .tours-hud-body {
     padding: 4px 10px 10px;
@@ -2519,6 +2527,6 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 /* iPad/touch: prevent sticky :hover */
 @media (hover: none) and (pointer: coarse) {
-    .tours-hud:hover { max-height: 50px; width: 280px; overflow: hidden; box-shadow: none; }
-    .tours-hud.touch-open { max-height: 85vh !important; overflow-y: auto !important; width: 320px !important; box-shadow: 0 0 30px var(--amber-dim) !important; }
+    .tours-hud:hover { max-height: 50px; width: 280px; overflow: hidden; box-shadow: none; z-index: 101; }
+    .tours-hud.touch-open { max-height: 85vh !important; overflow-y: auto !important; width: 320px !important; box-shadow: 0 0 30px var(--amber-dim) !important; z-index: 110 !important; }
 }
