@@ -1,6 +1,6 @@
 // GEOPULSE Service Worker — V2.3 PWA
 // Cache-first for static assets, network-first for API data
-const CACHE_NAME = 'geopulse-v2.41';
+const CACHE_NAME = 'geopulse-v2.42';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
