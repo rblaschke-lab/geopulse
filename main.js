@@ -1,4 +1,4 @@
-﻿?// ── SPLASH SCREEN — fallback dismiss if gateway is missing ──
+// ── SPLASH SCREEN — fallback dismiss if gateway is missing ──
 (function dismissSplash() {
     // If Enter Gateway exists, it controls splash timing (with audio)
     if (document.getElementById('enter-gateway')) return;
