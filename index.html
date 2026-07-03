@@ -14,7 +14,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <!-- SEO & Social Sharing -->
-    <meta name="description" content="GEOPULSE — explore earthquakes, volcanoes, wildfires, satellites, conflicts and nuclear sites in real-time. 25 guided tours. Free interactive world map for students — no login, no ads.">
+    <meta name="description" content="GEOPULSE — explore earthquakes, volcanoes, wildfires, satellites, conflicts and nuclear sites in real-time. Guided tours across 8 disciplines. Free interactive world map for students — no login, no ads.">
     <meta name="keywords" content="geopulse, interactive map, geography education, earthquakes, volcanoes, satellite tracking, free educational tool, STEM, global intelligence, geopolitics, real-time map, student tool, belt and road, cold war history">
     <meta name="author" content="RB_DESIGN">
     <meta name="robots" content="index, follow">
@@ -27,14 +27,14 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://geopulseworld.com/">
     <meta property="og:title" content="GEOPULSE — Free Interactive World Map for Students">
-    <meta property="og:description" content="Explore earthquakes, volcanoes, wildfires, satellites, conflicts and nuclear sites in real-time. 40 guided tours. 100% free, no login, no ads.">
+    <meta property="og:description" content="Explore earthquakes, volcanoes, wildfires, satellites, conflicts and nuclear sites in real-time. Guided tours across 8 disciplines. 100% free, no login, no ads.">
     <meta property="og:image" content="./og-preview.png">
     <meta property="og:site_name" content="GEOPULSE by RB Design">
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="GEOPULSE — Free Interactive World Map for Students">
-    <meta name="twitter:description" content="Real-time earthquakes, volcanoes, wildfires, satellites & conflicts on one map. 25 guided tours. Free & open source.">
+    <meta name="twitter:description" content="Real-time earthquakes, volcanoes, wildfires, satellites & conflicts on one map. Guided tours across 8 disciplines. Free & open source.">
     <meta name="twitter:image" content="./og-preview.png">
 
     <!-- Security Headers -->
@@ -57,7 +57,7 @@
 
     <script src="./fetchWrapper.js"></script>
     <script src="./config.js"></script>
-    <link rel="stylesheet" href="./style.css?v=2.43">
+    <link rel="stylesheet" href="./style.css?v=2.45">
 
     <!-- Service Worker registration -->
     <script>
@@ -281,99 +281,148 @@
     <div id="tours-hud" class="tours-hud hud-panel-base">
         <header class="hud-header">
             <div class="hud-title"><i class="fa-solid fa-route"></i> <span data-i18n="guided_tours">THE TOURS</span></div>
-            <div class="hud-sub" data-i18n="tours_hud_sub">42 EXPLORATIONS</div>
+            <div class="hud-sub"><span class="tours-count-num">41</span> <span data-i18n="tours_hud_sub">EXPLORATIONS</span></div>
         </header>
         <div class="tours-hud-body">
-
-                    <!-- ★ FEATURED TOUR — Hantavirus 2026 ★ -->
-                    <button class="preset-btn tour-btn" data-tour="hondius" style="border:1px solid rgba(255,60,60,0.6);color:#ff3c3c;text-align:left;padding:8px 10px;margin-bottom:8px;background:rgba(255,60,60,0.08);width:100%;position:relative;overflow:hidden;">
-                        <span style="position:absolute;top:3px;right:6px;background:rgba(255,60,60,0.25);color:#ff3c3c;padding:1px 6px;font-size:.5rem;border-radius:2px;letter-spacing:1px;font-family:'Share Tech Mono',monospace;animation:pulse 2s infinite;">NEW</span>
-                        🦠 <span data-i18n="tour_hondius">MV Hondius — Hantavirus 2026</span>
-                    </button>
-
-                    <!-- Geopolitics -->
-                    <div class="tour-category" data-cat="geopolitics">
-                        <div class="tour-cat-header" onclick="this.parentElement.classList.toggle('open')" style="color:#ff6633;">
+                    <div class="tour-search-wrap">
+                        <i class="fa-solid fa-magnifying-glass tour-search-icon"></i>
+                        <input type="text" id="tour-filter" class="tour-search-input" placeholder="Search tours…" data-i18n-ph="tour_search_ph" autocomplete="off" spellcheck="false">
+                        <button id="tour-filter-clear" class="tour-search-clear" style="display:none;" title="Clear">×</button>
+                    </div>
+                    <div id="tour-filter-empty" class="tour-filter-empty" style="display:none;" data-i18n="tour_search_none">No tours match your search.</div>
+                    <div class="tour-category" data-cat="geopolitics" style="--cat-color:#ff6633;">
+                        <div class="tour-cat-header" style="color:#ff6633;">
                             <span>🔥 <span data-i18n="cat_geopolitics_tours">GEOPOLITICS</span></span>
-                            <span class="tour-cat-meta"><span class="tour-cat-count">7</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
+                            <span class="tour-cat-meta"><span class="tour-cat-count"></span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
                         </div>
+                        <button class="tour-hero-btn" data-tour="coldwar">
+                            <span class="tour-hero-thumb tour-hero-thumb-empty">🧱</span>
+                            <span class="tour-hero-meta"><span class="tour-hero-kicker" data-i18n="tour_hero_kicker">FEATURED</span><span class="tour-hero-name">🧱 <span data-i18n="tour_coldwar">Cold War → Reunification</span></span></span>
+                            <i class="fa-solid fa-play tour-hero-play"></i>
+                        </button>
                         <div class="tour-cat-body">
                             <button class="preset-btn tour-btn" data-tour="coldwar" style="border-color:rgba(180,180,180,0.4);color:#bbb;text-align:left;padding:6px 8px;">🧱 <span data-i18n="tour_coldwar">Cold War → Reunification</span></button>
                             <button class="preset-btn tour-btn" data-tour="trump" style="border-color:rgba(255,102,51,0.5);color:#ff6633;text-align:left;padding:6px 8px;">🏛️ <span data-i18n="tour_trump">Trump World Tour</span></button>
-                            <button class="preset-btn tour-btn" data-tour="bri" style="border-color:rgba(255,200,0,0.4);color:#ffc800;text-align:left;padding:6px 8px;">🛤️ <span data-i18n="tour_bri">Belt &amp; Road Initiative</span></button>
-                            <button class="preset-btn tour-btn" data-tour="chokepoints" style="border-color:rgba(0,180,255,0.4);color:#00b4ff;text-align:left;padding:6px 8px;">🌊 <span data-i18n="tour_chokepoints">Chokepoints</span></button>
-                            <button class="preset-btn tour-btn" data-tour="water" style="border-color:rgba(0,150,255,0.4);color:#0096ff;text-align:left;padding:6px 8px;">💧 <span data-i18n="tour_water">Water Wars</span></button>
-                            <button class="preset-btn tour-btn" data-tour="migration" style="border-color:rgba(255,140,0,0.4);color:#ff8c00;text-align:left;padding:6px 8px;">🚶 <span data-i18n="tour_migration">Migration Routes</span></button>
                             <button class="preset-btn tour-btn" data-tour="spycraft" style="border-color:rgba(100,100,180,0.5);color:#8888cc;text-align:left;padding:6px 8px;">🕵️ <span data-i18n="tour_spycraft">Espionage World</span></button>
+                            <button class="preset-btn tour-btn" data-tour="migration" style="border-color:rgba(255,140,0,0.4);color:#ff8c00;text-align:left;padding:6px 8px;">🚶 <span data-i18n="tour_migration">Migration Routes</span></button>
+                            <button class="preset-btn tour-btn" data-tour="nuclear" style="border-color:rgba(255,0,0,0.4);color:#ff4444;text-align:left;padding:6px 8px;">☢️ <span data-i18n="tour_nuclear">Nuclear Legacy</span></button>
                         </div>
                     </div>
-
-                    <!-- History -->
-                    <div class="tour-category" data-cat="history">
-                        <div class="tour-cat-header" onclick="this.parentElement.classList.toggle('open')" style="color:#c8a860;">
+                    <div class="tour-category" data-cat="history" style="--cat-color:#c8a860;">
+                        <div class="tour-cat-header" style="color:#c8a860;">
                             <span>📜 <span data-i18n="cat_history_tours">HISTORY</span></span>
-                            <span class="tour-cat-meta"><span class="tour-cat-count">8</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
+                            <span class="tour-cat-meta"><span class="tour-cat-count"></span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
                         </div>
+                        <button class="tour-hero-btn" data-tour="romanempire">
+                            <span class="tour-hero-thumb tour-hero-thumb-empty">🏛️</span>
+                            <span class="tour-hero-meta"><span class="tour-hero-kicker" data-i18n="tour_hero_kicker">FEATURED</span><span class="tour-hero-name">🏛️ <span data-i18n="tour_romanempire">Roman Empire (753 BC–476 AD)</span></span></span>
+                            <i class="fa-solid fa-play tour-hero-play"></i>
+                        </button>
                         <div class="tour-cat-body">
                             <button class="preset-btn tour-btn" data-tour="ww2" style="border-color:rgba(200,80,80,0.4);color:#c85050;text-align:left;padding:6px 8px;">⚔️ <span data-i18n="tour_ww2">World War II (1939–1945)</span></button>
                             <button class="preset-btn tour-btn" data-tour="ww1" style="border-color:rgba(200,168,96,0.4);color:#c8a860;text-align:left;padding:6px 8px;">🪖 <span data-i18n="tour_ww1">World War I (1914–1918)</span></button>
                             <button class="preset-btn tour-btn" data-tour="romanempire" style="border-color:rgba(192,57,43,0.5);color:#e74c3c;text-align:left;padding:6px 8px;">🏛️ <span data-i18n="tour_romanempire">Roman Empire (753 BC–476 AD)</span></button>
                             <button class="preset-btn tour-btn" data-tour="lostwonders" style="border-color:rgba(218,165,32,0.5);color:#daa520;text-align:left;padding:6px 8px;">🔺 <span data-i18n="tour_lostwonders">Lost Wonders of the World</span></button>
                             <button class="preset-btn tour-btn" data-tour="forbiddenzones" style="border-color:rgba(255,0,60,0.5);color:#ff003c;text-align:left;padding:6px 8px;">🔒 <span data-i18n="tour_forbiddenzones">Forbidden Zones</span></button>
-                            <button class="preset-btn tour-btn" data-tour="shipwrecks" style="border-color:rgba(0,150,200,0.5);color:#0096c8;text-align:left;padding:6px 8px;">⚓ <span data-i18n="tour_shipwrecks">Shipwrecks &amp; Lost Treasures</span></button>
+                            <button class="preset-btn tour-btn" data-tour="shipwrecks" style="border-color:rgba(0,150,200,0.5);color:#0096c8;text-align:left;padding:6px 8px;">⚓ <span data-i18n="tour_shipwrecks">Shipwrecks & Lost Treasures</span></button>
                             <button class="preset-btn tour-btn" data-tour="structures" style="border-color:rgba(212,160,23,0.5);color:#d4a017;text-align:left;padding:6px 8px;">🏗️ <span data-i18n="tour_structures">Greatest Structures</span></button>
                             <button class="preset-btn tour-btn" data-tour="revolutions" style="border-color:rgba(255,80,80,0.5);color:#ff5050;text-align:left;padding:6px 8px;">✊ <span data-i18n="tour_revolutions">Revolutions</span></button>
                         </div>
                     </div>
-
-                    <!-- Society & Rights — NEW -->
-                    <div class="tour-category" data-cat="society">
-                        <div class="tour-cat-header" onclick="this.parentElement.classList.toggle('open')" style="color:#e066ff;">
-                            <span>✊ <span data-i18n="cat_society_tours">SOCIETY &amp; RIGHTS</span></span>
-                            <span class="tour-cat-meta"><span class="tour-cat-count">2</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
+                    <div class="tour-category" data-cat="earth" style="--cat-color:#ff8844;">
+                        <div class="tour-cat-header" style="color:#ff8844;">
+                            <span>🌍 <span data-i18n="cat_earth_tours">EARTH & CLIMATE</span></span>
+                            <span class="tour-cat-meta"><span class="tour-cat-count"></span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
                         </div>
+                        <button class="tour-hero-btn" data-tour="ringoffire">
+                            <img class="tour-hero-thumb" src="./assets/showcase/earthquakes.jpg" alt="" loading="lazy">
+                            <span class="tour-hero-meta"><span class="tour-hero-kicker" data-i18n="tour_hero_kicker">FEATURED</span><span class="tour-hero-name">🌋 <span data-i18n="tour_ringoffire">Ring of Fire</span></span></span>
+                            <i class="fa-solid fa-play tour-hero-play"></i>
+                        </button>
+                        <div class="tour-cat-body">
+                            <button class="preset-btn tour-btn" data-tour="ringoffire" style="border-color:rgba(255,100,0,0.5);color:#ff8844;text-align:left;padding:6px 8px;">🌋 <span data-i18n="tour_ringoffire">Ring of Fire</span></button>
+                            <button class="preset-btn tour-btn" data-tour="quakes" style="border-color:rgba(255,80,0,0.5);color:#ff5500;text-align:left;padding:6px 8px;">🌋 <span data-i18n="tour_quakes">Earthquakes & Eruptions</span></button>
+                            <button class="preset-btn tour-btn" data-tour="extremeearth" style="border-color:rgba(255,55,120,0.4);color:#ff3778;text-align:left;padding:6px 8px;">🌍 <span data-i18n="tour_extremeearth">Extreme Earth</span></button>
+                            <button class="preset-btn tour-btn" data-tour="climate" style="border-color:rgba(255,150,0,0.4);color:#ff9600;text-align:left;padding:6px 8px;">🌡️ <span data-i18n="tour_climate">Climate Frontlines</span></button>
+                            <button class="preset-btn tour-btn" data-tour="climatecrisis" style="border-color:rgba(255,80,50,0.5);color:#ff5032;text-align:left;padding:6px 8px;">🌍 <span data-i18n="tour_climatecrisis">Climate Crisis</span></button>
+                            <button class="preset-btn tour-btn" data-tour="windsworld" style="border-color:rgba(0,180,220,0.5);color:#00b4dc;text-align:left;padding:6px 8px;">🌬️ <span data-i18n="tour_windsworld">Winds of the World</span></button>
+                            <button class="preset-btn tour-btn" data-tour="greatmigrations" style="border-color:rgba(0,200,150,0.5);color:#00c896;text-align:left;padding:6px 8px;">🐋 <span data-i18n="tour_greatmigrations">Great Migrations</span></button>
+                            <button class="preset-btn tour-btn" data-tour="extremeplaces" style="border-color:rgba(100,200,255,0.5);color:#64c8ff;text-align:left;padding:6px 8px;">🌍 <span data-i18n="tour_extremeplaces">Extreme Places to Live</span></button>
+                        </div>
+                    </div>
+                    <div class="tour-category" data-cat="space" style="--cat-color:#64b4ff;">
+                        <div class="tour-cat-header" style="color:#64b4ff;">
+                            <span>🚀 <span data-i18n="cat_space_tours">SPACE & TECH</span></span>
+                            <span class="tour-cat-meta"><span class="tour-cat-count"></span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
+                        </div>
+                        <button class="tour-hero-btn" data-tour="aurorahunters">
+                            <img class="tour-hero-thumb" src="./assets/showcase/aurora.jpg" alt="" loading="lazy">
+                            <span class="tour-hero-meta"><span class="tour-hero-kicker" data-i18n="tour_hero_kicker">FEATURED</span><span class="tour-hero-name">🌌 <span data-i18n="tour_aurorahunters">Aurora Hunters</span></span></span>
+                            <i class="fa-solid fa-play tour-hero-play"></i>
+                        </button>
+                        <div class="tour-cat-body">
+                            <button class="preset-btn tour-btn" data-tour="spacerace" style="border-color:rgba(100,180,255,0.5);color:#64b4ff;text-align:left;padding:6px 8px;">🚀 <span data-i18n="tour_spacerace">Space Race</span></button>
+                            <button class="preset-btn tour-btn" data-tour="aurorahunters" style="border-color:rgba(100,0,200,0.5);color:#9944ff;text-align:left;padding:6px 8px;">🌌 <span data-i18n="tour_aurorahunters">Aurora Hunters</span></button>
+                            <button class="preset-btn tour-btn" data-tour="cosmicimpacts" style="border-color:rgba(255,136,0,0.5);color:#ff8800;text-align:left;padding:6px 8px;">☄️ <span data-i18n="tour_cosmicimpacts">Cosmic Impacts</span></button>
+                            <button class="preset-btn tour-btn" data-tour="techcapitals" style="border-color:rgba(0,255,200,0.5);color:#00ffc8;text-align:left;padding:6px 8px;">💻 <span data-i18n="tour_techcapitals">Tech Capitals</span></button>
+                            <button class="preset-btn tour-btn" data-tour="cables" style="border-color:rgba(0,212,255,0.4);color:#00d4ff;text-align:left;padding:6px 8px;">🌐 <span data-i18n="tour_cables">Digital Silk Road</span></button>
+                        </div>
+                    </div>
+                    <div class="tour-category" data-cat="economy" style="--cat-color:#ffc800;">
+                        <div class="tour-cat-header" style="color:#ffc800;">
+                            <span>💰 <span data-i18n="cat_economy_tours">ECONOMY & RESOURCES</span></span>
+                            <span class="tour-cat-meta"><span class="tour-cat-count"></span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
+                        </div>
+                        <button class="tour-hero-btn" data-tour="bri">
+                            <span class="tour-hero-thumb tour-hero-thumb-empty">🛤️</span>
+                            <span class="tour-hero-meta"><span class="tour-hero-kicker" data-i18n="tour_hero_kicker">FEATURED</span><span class="tour-hero-name">🛤️ <span data-i18n="tour_bri">Belt & Road Initiative</span></span></span>
+                            <i class="fa-solid fa-play tour-hero-play"></i>
+                        </button>
+                        <div class="tour-cat-body">
+                            <button class="preset-btn tour-btn" data-tour="bri" style="border-color:rgba(255,200,0,0.4);color:#ffc800;text-align:left;padding:6px 8px;">🛤️ <span data-i18n="tour_bri">Belt & Road Initiative</span></button>
+                            <button class="preset-btn tour-btn" data-tour="chokepoints" style="border-color:rgba(0,180,255,0.4);color:#00b4ff;text-align:left;padding:6px 8px;">🌊 <span data-i18n="tour_chokepoints">Chokepoints</span></button>
+                            <button class="preset-btn tour-btn" data-tour="battery" style="border-color:rgba(0,255,136,0.4);color:#00ff88;text-align:left;padding:6px 8px;">🔋 <span data-i18n="tour_battery">Battery Race</span></button>
+                            <button class="preset-btn tour-btn" data-tour="water" style="border-color:rgba(0,150,255,0.4);color:#0096ff;text-align:left;padding:6px 8px;">💧 <span data-i18n="tour_water">Water Wars</span></button>
+                        </div>
+                    </div>
+                    <div class="tour-category" data-cat="society" style="--cat-color:#e066ff;">
+                        <div class="tour-cat-header" style="color:#e066ff;">
+                            <span>✊ <span data-i18n="cat_society_tours">SOCIETY & RIGHTS</span></span>
+                            <span class="tour-cat-meta"><span class="tour-cat-count"></span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
+                        </div>
+                        <button class="tour-hero-btn" data-tour="womenworld">
+                            <span class="tour-hero-thumb tour-hero-thumb-empty">♀️</span>
+                            <span class="tour-hero-meta"><span class="tour-hero-kicker" data-i18n="tour_hero_kicker">FEATURED</span><span class="tour-hero-name">♀️ <span data-i18n="tour_womenwworld">Women Who Changed the World</span></span></span>
+                            <i class="fa-solid fa-play tour-hero-play"></i>
+                        </button>
                         <div class="tour-cat-body">
                             <button class="preset-btn tour-btn" data-tour="womenworld" style="border-color:rgba(224,102,255,0.5);color:#e066ff;text-align:left;padding:6px 8px;">♀️ <span data-i18n="tour_womenwworld">Women Who Changed the World</span></button>
                             <button class="preset-btn tour-btn" data-tour="genocide" style="border-color:rgba(255,50,50,0.5);color:#ff5555;text-align:left;padding:6px 8px;">🕯️ <span data-i18n="tour_genocide">Genocide Sites — Never Again</span></button>
-                        </div>
-                    </div>
-
-                    <!-- Science & Nature -->
-                    <div class="tour-category" data-cat="science">
-                        <div class="tour-cat-header" onclick="this.parentElement.classList.toggle('open')" style="color:#00ff88;">
-                            <span>🔬 <span data-i18n="cat_science_tours">SCIENCE &amp; NATURE</span></span>
-                            <span class="tour-cat-meta"><span class="tour-cat-count">16</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
-                        </div>
-                        <div class="tour-cat-body">
-                            <button class="preset-btn tour-btn" data-tour="ringoffire" style="border-color:rgba(255,100,0,0.5);color:#ff8844;text-align:left;padding:6px 8px;">🌋 <span data-i18n="tour_ringoffire">Ring of Fire</span></button>
-                            <button class="preset-btn tour-btn" data-tour="nuclear" style="border-color:rgba(255,0,0,0.4);color:#ff4444;text-align:left;padding:6px 8px;">☢️ <span data-i18n="tour_nuclear">Nuclear Legacy</span></button>
-                            <button class="preset-btn tour-btn" data-tour="cables" style="border-color:rgba(0,212,255,0.4);color:#00d4ff;text-align:left;padding:6px 8px;">🌐 <span data-i18n="tour_cables">Digital Silk Road</span></button>
-                            <button class="preset-btn tour-btn" data-tour="battery" style="border-color:rgba(0,255,136,0.4);color:#00ff88;text-align:left;padding:6px 8px;">🔋 <span data-i18n="tour_battery">Battery Race</span></button>
-                            <button class="preset-btn tour-btn" data-tour="climate" style="border-color:rgba(255,150,0,0.4);color:#ff9600;text-align:left;padding:6px 8px;">🌡️ <span data-i18n="tour_climate">Climate Frontlines</span></button>
-                            <button class="preset-btn tour-btn" data-tour="quakes" style="border-color:rgba(255,80,0,0.5);color:#ff5500;text-align:left;padding:6px 8px;">🌋 <span data-i18n="tour_quakes">Earthquakes &amp; Eruptions</span></button>
-                            <button class="preset-btn tour-btn" data-tour="extremeearth" style="border-color:rgba(255,55,120,0.4);color:#ff3778;text-align:left;padding:6px 8px;">🌍 <span data-i18n="tour_extremeearth">Extreme Earth</span></button>
-                            <button class="preset-btn tour-btn" data-tour="spacerace" style="border-color:rgba(100,180,255,0.5);color:#64b4ff;text-align:left;padding:6px 8px;">🚀 <span data-i18n="tour_spacerace">Space Race</span></button>
-                            <button class="preset-btn tour-btn" data-tour="techcapitals" style="border-color:rgba(0,255,200,0.5);color:#00ffc8;text-align:left;padding:6px 8px;">💻 <span data-i18n="tour_techcapitals">Tech Capitals</span></button>
-                            <button class="preset-btn tour-btn" data-tour="extremeplaces" style="border-color:rgba(100,200,255,0.5);color:#64c8ff;text-align:left;padding:6px 8px;">🌍 <span data-i18n="tour_extremeplaces">Extreme Places to Live</span></button>
                             <button class="preset-btn tour-btn" data-tour="pandemics" style="border-color:rgba(180,80,180,0.5);color:#b450b4;text-align:left;padding:6px 8px;">💀 <span data-i18n="tour_pandemics">Pandemics</span></button>
-                            <button class="preset-btn tour-btn" data-tour="aurorahunters" style="border-color:rgba(100,0,200,0.5);color:#9944ff;text-align:left;padding:6px 8px;">🌌 <span data-i18n="tour_aurorahunters">Aurora Hunters</span></button>
-                            <button class="preset-btn tour-btn" data-tour="cosmicimpacts" style="border-color:rgba(255,136,0,0.5);color:#ff8800;text-align:left;padding:6px 8px;">☄️ <span data-i18n="tour_cosmicimpacts">Cosmic Impacts</span></button>
-                            <button class="preset-btn tour-btn" data-tour="climatecrisis" style="border-color:rgba(255,80,50,0.5);color:#ff5032;text-align:left;padding:6px 8px;">🌍 <span data-i18n="tour_climatecrisis">Climate Crisis</span></button>
-                            <button class="preset-btn tour-btn" data-tour="greatmigrations" style="border-color:rgba(0,200,150,0.5);color:#00c896;text-align:left;padding:6px 8px;">🐋 <span data-i18n="tour_greatmigrations">Great Migrations</span></button>
-                            <button class="preset-btn tour-btn" data-tour="windsworld" style="border-color:rgba(0,180,220,0.5);color:#00b4dc;text-align:left;padding:6px 8px;">🌬️ <span data-i18n="tour_windsworld">Winds of the World</span></button>
+                            <button class="preset-btn tour-btn" data-tour="hondius" data-new style="border-color:rgba(255,60,60,0.6);color:#ff3c3c;text-align:left;padding:6px 8px;position:relative;overflow:hidden;">🦠 <span data-i18n="tour_hondius">MV Hondius — Hantavirus 2026</span><span class="tour-new-badge tour-new-badge-live">NEW</span></button>
                         </div>
                     </div>
-
-                    <!-- Sports & Culture -->
-                    <div class="tour-category" data-cat="sports">
-                        <div class="tour-cat-header" onclick="this.parentElement.classList.toggle('open')" style="color:#ff3355;">
-                            <span>🏆 <span data-i18n="cat_sports_tours">SPORTS &amp; CULTURE</span></span>
-                            <span class="tour-cat-meta"><span class="tour-cat-count">6</span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
+                    <div class="tour-category tour-category-teaser" data-cat="religion" style="--cat-color:#8a94a6;">
+                        <div class="tour-cat-header" style="color:#8a94a6;cursor:default;" aria-disabled="true">
+                            <span>🕊️ <span data-i18n="cat_religion_tours">RELIGION</span></span>
+                            <span class="tour-cat-meta"><span class="tour-cat-soon" data-i18n="cat_soon">COMING SOON</span></span>
                         </div>
+                    </div>
+                    <div class="tour-category" data-cat="sports" style="--cat-color:#ff3355;">
+                        <div class="tour-cat-header" style="color:#ff3355;">
+                            <span>🏆 <span data-i18n="cat_sports_tours">SPORTS & CULTURE</span></span>
+                            <span class="tour-cat-meta"><span class="tour-cat-count"></span> <i class="fa-solid fa-chevron-right tour-cat-chevron"></i></span>
+                        </div>
+                        <button class="tour-hero-btn" data-tour="worldcup">
+                            <span class="tour-hero-thumb tour-hero-thumb-empty">⚽</span>
+                            <span class="tour-hero-meta"><span class="tour-hero-kicker" data-i18n="tour_hero_kicker">FEATURED</span><span class="tour-hero-name">⚽ <span data-i18n="tour_worldcup">FIFA World Cup</span></span></span>
+                            <i class="fa-solid fa-play tour-hero-play"></i>
+                        </button>
                         <div class="tour-cat-body">
                             <button class="preset-btn tour-btn" data-tour="f1" style="border-color:rgba(255,51,85,0.4);color:#ff3355;text-align:left;padding:6px 8px;">🏎️ <span data-i18n="tour_f1">Formula 1 World Tour</span></button>
                             <button class="preset-btn tour-btn" data-tour="worldcup" style="border-color:rgba(0,200,100,0.4);color:#00c864;text-align:left;padding:6px 8px;">⚽ <span data-i18n="tour_worldcup">FIFA World Cup</span></button>
                             <button class="preset-btn tour-btn" data-tour="olympics" style="border-color:rgba(255,215,0,0.5);color:#ffd700;text-align:left;padding:6px 8px;">🏅 <span data-i18n="tour_olympics">Olympic Games History</span></button>
+                            <button class="preset-btn tour-btn" data-tour="iconicarenas" style="border-color:rgba(255,180,80,0.5);color:#ffb450;text-align:left;padding:6px 8px;">🏟️ <span data-i18n="tour_iconicarenas">Iconic Arenas</span></button>
                             <button class="preset-btn tour-btn" data-tour="summits14" style="border-color:rgba(180,220,255,0.5);color:#b4dcff;text-align:left;padding:6px 8px;">🏔️ <span data-i18n="tour_summits14">14 Summits (8000ers)</span></button>
                             <button class="preset-btn tour-btn" data-tour="musicworld" style="border-color:rgba(255,100,200,0.5);color:#ff64c8;text-align:left;padding:6px 8px;">🎵 <span data-i18n="tour_musicworld">Music That Changed the World</span></button>
                             <button class="preset-btn tour-btn" data-tour="filmlocations" style="border-color:rgba(255,180,50,0.5);color:#ffb432;text-align:left;padding:6px 8px;">🎬 <span data-i18n="tour_filmlocations">Filming Locations</span></button>
@@ -382,7 +431,6 @@
         </div>
     </div>
 
-    
     <!-- TOP NEWS TICKER (Mobile Focus) -->
     <div id="ticker-top" class="global-ticker">
         <div class="ticker-content" id="ticker-content-top">INITIALIZING GLOBAL INTELLIGENCE STREAM...</div>
@@ -698,85 +746,30 @@
 
     <!-- WELCOME OVERLAY (First Visit) -->
     <div id="welcome-overlay">
-        <!-- Left showcase column (desktop only) -->
-        <div class="welcome-showcase welcome-showcase-left">
-            <div class="showcase-card">
-                <img src="./assets/showcase/earthquakes.jpg" alt="Ring of Fire">
-                <span class="showcase-label" data-i18n="showcase_ringoffire">🌋 RING OF FIRE</span>
-            </div>
-            <div class="showcase-card">
-                <img src="./assets/showcase/aurora.jpg" alt="Aurora Forecast">
-                <span class="showcase-label" data-i18n="showcase_aurora">🌌 AURORA FORECAST</span>
-            </div>
-        </div>
+        <!-- Ambient map scrim (the live map renders behind this overlay) -->
+        <div class="welcome-scrim"></div>
 
         <div id="welcome-card">
             <div class="welcome-glow"></div>
-            <button id="welcome-lang-toggle" class="welcome-lang-btn" onclick="var l=document.documentElement.lang==='de'?'en':'de'; if(window.setLanguage){setLanguage(l)}else{var e=new CustomEvent('setLang',{detail:l});document.dispatchEvent(e)}" title="Switch language">
+            <button id="welcome-lang-toggle" class="welcome-lang-btn" onclick="var l=document.documentElement.lang==='de'?'en':'de'; if(window.setLanguage){setLanguage(l)}else{var ev=new CustomEvent('setLang',{detail:l});document.dispatchEvent(ev)}" title="Switch language">
                 <span class="welcome-lang-flag" id="welcome-lang-label">DE</span>
             </button>
             <div class="welcome-icon">🌍</div>
             <h1 class="welcome-title">GEOPULSE</h1>
-            <p class="welcome-subtitle"><span data-i18n="welcome_subtitle">EXPLORE HISTORY. UNDERSTAND THE WORLD.</span></p>
-            <p class="welcome-credit">by RB Design 2026</p>
-            <div class="welcome-features">
-                <div class="welcome-feat"><i class="fa-solid fa-route"></i> <span data-i18n="welcome_feat_tours">Now 40 guided tours! Fly to real locations with satellite imagery</span></div>
-                <div class="welcome-feat"><i class="fa-solid fa-landmark"></i> <span data-i18n="welcome_feat_1">World Wars, Roman Empire, Forbidden Zones &amp; Lost Wonders</span></div>
-                <div class="welcome-feat"><i class="fa-solid fa-volcano"></i> <span data-i18n="welcome_feat_2">Live earthquakes, volcanoes, wildfires &amp; satellite orbits</span></div>
-                <div class="welcome-feat"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="welcome_feat_3">Built for students — Geography, History, Science &amp; Politics</span></div>
-            </div>
+            <p class="welcome-subtitle"><span data-i18n="ob_value">Explore history. Understand the world.</span></p>
 
-            <!-- Interest Selector -->
-            <div class="welcome-interest" id="welcome-interest">
-                <div class="welcome-interest-label" data-i18n="welcome_interest_label">WHAT INTERESTS YOU?</div>
-                <div class="welcome-interest-grid">
-                    <button class="interest-btn" data-interest="geopolitics">
-                        <span class="interest-icon">🔥</span>
-                        <span class="interest-text" data-i18n="interest_geopolitics">Geopolitics &amp; Conflicts</span>
-                    </button>
-                    <button class="interest-btn" data-interest="history">
-                        <span class="interest-icon">📜</span>
-                        <span class="interest-text" data-i18n="interest_history">History &amp; Civilizations</span>
-                    </button>
-                    <button class="interest-btn" data-interest="science">
-                        <span class="interest-icon">🔬</span>
-                        <span class="interest-text" data-i18n="interest_science">Science &amp; Nature</span>
-                    </button>
-                    <button class="interest-btn" data-interest="sports">
-                        <span class="interest-icon">🏆</span>
-                        <span class="interest-text" data-i18n="interest_sports">Sports &amp; Culture</span>
-                    </button>
-                    <button class="interest-btn interest-btn-all" data-interest="all">
-                        <span class="interest-icon">🌐</span>
-                        <span class="interest-text" data-i18n="interest_all">Show Me Everything</span>
-                    </button>
-                </div>
-            </div>
+            <!-- Live intelligence ticker (real feeds; hidden on feed failure) -->
+            <div id="welcome-ticker" class="welcome-ticker" style="display:none;"></div>
 
             <div class="welcome-actions">
                 <button id="welcome-tour" class="welcome-btn welcome-btn-primary" data-tour="welcome">
                     <i class="fa-solid fa-route"></i> <span data-i18n="welcome_start_tour">START DEMO TOUR</span>
-                </button>
-                <button id="welcome-manual" class="welcome-btn welcome-btn-secondary" onclick="window.open('./manual.html','_blank'); return false;">
-                    <i class="fa-solid fa-book"></i> <span data-i18n="welcome_manual">OPEN MANUAL</span>
                 </button>
                 <button id="welcome-explore" class="welcome-btn welcome-btn-secondary">
                     <i class="fa-solid fa-compass"></i> <span data-i18n="welcome_explore">EXPLORE FREELY</span>
                 </button>
             </div>
             <div class="welcome-footer" data-i18n="welcome_footer">No login · No ads · 100% free &amp; open source · For students, educators &amp; the curious</div>
-        </div>
-
-        <!-- Right showcase column (desktop only) -->
-        <div class="welcome-showcase welcome-showcase-right">
-            <div class="showcase-card">
-                <img src="./assets/showcase/pyramids.jpg" alt="Pyramids Tour">
-                <span class="showcase-label" data-i18n="showcase_wonders">🏛️ LOST WONDERS</span>
-            </div>
-            <div class="showcase-card">
-                <img src="./assets/showcase/cables.jpg" alt="Undersea Cables">
-                <span class="showcase-label" data-i18n="showcase_cables">🌐 DIGITAL SILK ROAD</span>
-            </div>
         </div>
     </div>
 
@@ -894,18 +887,18 @@
         <span id="live-clock" title="Local Time" style="display:flex;align-items:center;height:28px;padding:0 12px;"></span>
     </div>
 
-    <script src="./i18n.js?v=2.43"></script>
-    <script src="./quiz_bank.js?v=2.43"></script>
-    <script src="./quiz.js?v=2.43"></script>
-    <script src="./audio.js?v=2.43"></script>
-    <script src="./narration.js?v=2.43"></script>
-    <script src="./tours_data.js?v=2.43"></script>
-    <script src="./wind.js?v=2.43"></script>
-    <script src="./main.js?v=2.43"></script>
-    <script src="./search.js?v=2.43"></script>
-    <script src="./widgets.js?v=2.43"></script>
-    <script src="./tours_de.js?v=2.43"></script>
-    <script src="./tours_new.js?v=2.43"></script>
-    <script src="./tours_wind.js?v=2.43"></script>
+    <script src="./i18n.js?v=2.45"></script>
+    <script src="./quiz_bank.js?v=2.45"></script>
+    <script src="./quiz.js?v=2.45"></script>
+    <script src="./audio.js?v=2.45"></script>
+    <script src="./narration.js?v=2.45"></script>
+    <script src="./tours_data.js?v=2.45"></script>
+    <script src="./wind.js?v=2.45"></script>
+    <script src="./main.js?v=2.45"></script>
+    <script src="./search.js?v=2.45"></script>
+    <script src="./widgets.js?v=2.45"></script>
+    <script src="./tours_de.js?v=2.45"></script>
+    <script src="./tours_new.js?v=2.45"></script>
+    <script src="./tours_wind.js?v=2.45"></script>
 </body>
 </html>

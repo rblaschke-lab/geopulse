@@ -841,6 +841,9 @@ body.no-ticker #sidebar { top: 14px !important; }
 
 /* ── INFO PANEL ── */
 #info-panel { top: 52px; z-index: 100; }
+/* Desktop: hide the redundant floating "ABOUT THIS MAP" strip — About stays reachable
+   via the compact info icon (→ about.html) and, on mobile, the INFO bottom-nav button. */
+@media (min-width: 769px) { #info-panel { display: none; } }
 #info-panel:hover {
     max-height: 85vh; width: 340px;
     box-shadow: 0 0 30px var(--amber-dim);
@@ -1422,6 +1425,117 @@ body.no-ticker #sidebar { top: 14px !important; }
     margin-left: 2px;
 }
 
+/* ── Hero tour (showcase shown while category is collapsed) ── */
+.tour-hero-btn {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 4px;
+    padding: 6px;
+    text-align: left;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-left: 2px solid var(--cat-color, rgba(255,176,0,0.5));
+    border-radius: 4px;
+    cursor: pointer;
+    color: #cdd6e0;
+    font-family: inherit;
+    transition: background .2s, border-color .2s, transform .15s;
+}
+.tour-category:not(.open) .tour-hero-btn { display: flex; }
+.tour-hero-btn:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: var(--cat-color, rgba(255,176,0,0.5));
+    transform: translateX(2px);
+}
+.tour-hero-thumb {
+    width: 42px; height: 32px; flex-shrink: 0;
+    object-fit: cover; border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.4);
+}
+.tour-hero-thumb-empty {
+    font-size: 1rem;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+.tour-hero-meta { display: flex; flex-direction: column; gap: 1px; flex: 1; min-width: 0; }
+.tour-hero-kicker {
+    font-size: .42rem; letter-spacing: 1.5px; font-weight: 700;
+    color: var(--cat-color, #ffb000); opacity: .85;
+}
+.tour-hero-name {
+    font-size: .64rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tour-hero-play { font-size: .55rem; opacity: .4; flex-shrink: 0; }
+
+/* ── Religion teaser (scaffold, non-clickable) ── */
+.tour-category-teaser { opacity: .55; }
+.tour-category-teaser .tour-cat-header,
+.tour-category-teaser .tour-cat-header:hover {
+    cursor: default;
+    background: rgba(255,255,255,0.015);
+    border-style: dashed;
+    border-color: rgba(255,255,255,0.08);
+}
+.tour-cat-soon {
+    font-size: .42rem; letter-spacing: 1.5px; font-weight: 700;
+    color: #8a94a6; border: 1px solid rgba(138,148,166,0.4);
+    padding: 1px 6px; border-radius: 8px;
+}
+
+/* ── Category header NEW indicator (propagated from new tours) ── */
+.tour-cat-header.cat-has-new > span:first-child::after {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    margin-left: 6px;
+    border-radius: 50%;
+    background: #ff3c3c;
+    box-shadow: 0 0 6px #ff3c3c;
+    vertical-align: middle;
+    animation: badgePulse 2s ease-in-out infinite;
+}
+.tour-new-badge-live {
+    position: absolute; top: 3px; right: 6px;
+    background: rgba(255,60,60,0.25); color: #ff3c3c;
+    padding: 1px 6px; font-size: .5rem; border-radius: 2px;
+    letter-spacing: 1px; font-family: 'Share Tech Mono', monospace;
+    animation: badgePulse 2s infinite; margin-left: 0;
+}
+
+/* ── Tour panel inline search / filter ── */
+.tour-search-wrap { position: relative; display: flex; align-items: center; margin-bottom: 8px; }
+.tour-search-icon {
+    position: absolute; left: 9px; font-size: .6rem;
+    color: rgba(255,255,255,0.35); pointer-events: none;
+}
+.tour-search-input {
+    width: 100%; box-sizing: border-box;
+    padding: 7px 26px;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 5px; color: #e8eef5;
+    font-family: inherit; font-size: .64rem; letter-spacing: .5px;
+    outline: none; transition: border-color .2s;
+}
+.tour-search-input:focus { border-color: rgba(255,176,0,0.5); }
+.tour-search-input::placeholder { color: rgba(255,255,255,0.35); }
+.tour-search-clear {
+    position: absolute; right: 6px;
+    background: none; border: none; color: rgba(255,255,255,0.5);
+    font-size: .9rem; cursor: pointer; line-height: 1; padding: 2px 4px;
+}
+.tour-search-clear:hover { color: #fff; }
+.tour-filter-empty { font-size: .6rem; color: rgba(255,255,255,0.5); padding: 8px 4px; text-align: center; }
+/* Filtering state: reveal all matched tours, hide heroes + non-matches */
+.tours-hud-body.filtering .tour-hero-btn { display: none !important; }
+.tours-hud-body.filtering .tour-category.filter-hit .tour-cat-body {
+    max-height: 2000px; opacity: 1; padding: 4px 0 2px;
+}
+.tours-hud-body.filtering .tour-category.filter-miss { display: none; }
+.tours-hud-body.filtering .tour-btn.filter-miss { display: none; }
+
 /* -------------------------------------------------------
    LAYER DESCRIPTIONS
 ------------------------------------------------------- */
@@ -1445,14 +1559,33 @@ body.no-ticker #sidebar { top: 14px !important; }
 ------------------------------------------------------- */
 #welcome-overlay {
     position: fixed; inset: 0; z-index: 10000;
-    background: rgba(0, 0, 0, 0.85);
+    background: transparent;
     display: flex; align-items: center; justify-content: center;
     gap: 24px;
-    backdrop-filter: blur(8px);
     animation: fadeIn 0.6s ease;
     padding: 20px;
     opacity: 0; pointer-events: none;
     transition: opacity 0.6s ease;
+}
+/* Ambient scrim — the live map renders behind, lightly dimmed */
+.welcome-scrim {
+    position: fixed; inset: 0; z-index: -1;
+    background: radial-gradient(ellipse at center, rgba(3,7,15,0.42) 0%, rgba(3,7,15,0.6) 100%);
+    backdrop-filter: blur(1.5px);
+    pointer-events: none;
+}
+/* Live intelligence ticker on the onboarding card */
+.welcome-ticker {
+    margin: 4px auto 14px;
+    padding: 6px 12px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.5px;
+    color: rgba(0, 255, 200, 0.85);
+    background: rgba(0, 40, 40, 0.25);
+    border: 1px solid rgba(0, 255, 200, 0.18);
+    border-radius: 4px;
+    line-height: 1.5;
 }
 #welcome-overlay.splash-done {
     opacity: 1; pointer-events: auto;
@@ -2477,7 +2610,8 @@ body.no-ticker #sidebar { top: 14px !important; }
 .quiz-action-btn:hover { border-color:rgba(255,153,0,0.4); color:#ff9900; }
 
 /* ── QUIZ HUD ── */
-.quiz-hud { top: 180px; z-index: 102; }
+/* Desktop: anchored bottom-left so it never overlaps the taller TOURS panel (top-left) */
+.quiz-hud { top: auto; bottom: 14px; z-index: 102; }
 .quiz-hud:hover {
     max-height: 400px; width: 320px;
     box-shadow: 0 0 30px var(--amber-dim);
@@ -2510,7 +2644,7 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 
 /* ── TOURS HUD ── */
-.tours-hud { top: 112px; z-index: 101; }
+.tours-hud { top: 52px; z-index: 101; }
 .tours-hud:hover {
     max-height: 85vh; width: 320px;
     box-shadow: 0 0 30px var(--amber-dim);
@@ -2529,4 +2663,16 @@ body.no-ticker #sidebar { top: 14px !important; }
 @media (hover: none) and (pointer: coarse) {
     .tours-hud:hover { max-height: 50px; width: 280px; overflow: hidden; box-shadow: none; z-index: 101; }
     .tours-hud.touch-open { max-height: 85vh !important; overflow-y: auto !important; width: 320px !important; box-shadow: 0 0 30px var(--amber-dim) !important; z-index: 110 !important; }
+}
+
+/* Accessibility: honour prefers-reduced-motion — snap animations to their
+   end state (splash, radar sweep, badge pulses, ambient drift, accordions).
+   Entrance animations reach their final frame; looping decoration goes static. */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
 }

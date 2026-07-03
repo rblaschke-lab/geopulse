@@ -326,11 +326,23 @@ document.addEventListener("DOMContentLoaded", () => {
         if (el) el.addEventListener('mouseleave', () => { setTimeout(() => { el.scrollTop = 0; }, 450); });
     });
     let activeMobilePanel = null;
+    // Fully close the TOURS overlay (clears the inline styles set when it was opened)
+    // and collapse the QUIZ panel, so no two floating panels overlap on mobile.
+    const closeFloatingHuds = () => {
+        const toursHud = document.getElementById('tours-hud');
+        if (toursHud) {
+            toursHud.classList.remove('touch-open');
+            ['display','position','top','left','right','width','maxHeight','borderRadius','zIndex','overflowY']
+                .forEach(p => { toursHud.style[p] = ''; });
+        }
+        document.getElementById('quiz-hud')?.classList.remove('touch-open');
+    };
     const switchSection = (target) => {
         if(window.innerWidth > 768) return;
         if (activeMobilePanel === target && target !== 'map') {
             sidebar.classList.remove('active');
             if (infoPanel) infoPanel.classList.remove('active');
+            closeFloatingHuds();
             document.body.classList.remove('mobile-panel-open');
             activeMobilePanel = null;
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -340,6 +352,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         sidebar.classList.remove('active');
         if (infoPanel) infoPanel.classList.remove('active');
+        closeFloatingHuds();
         document.body.classList.remove('mobile-panel-open');
         activeMobilePanel = null;
         if(target === 'layers') {
@@ -3055,12 +3068,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // ============================================================
     const welcomeOverlay = document.getElementById('welcome-overlay');
 
+    const ONBOARD_KEY = 'gp_onboarded';
+    let _stopWelcomeDrift = null;
+
     const dismissWelcome = (startTourId) => {
         if (!welcomeOverlay) return;
         welcomeOverlay.classList.add('hidden');
-        // Apply user interest
-        const interest = localStorage.getItem('geopulse_interest') || 'all';
-        applyInterest(interest);
+        // Returning visitors skip the onboarding overlay next time
+        try { localStorage.setItem(ONBOARD_KEY, '1'); } catch(e) {}
+        if (_stopWelcomeDrift) { try { _stopWelcomeDrift(); } catch(e) {} }
         if (startTourId) {
             setTimeout(() => startTour(startTourId), 600);
         }
@@ -3117,37 +3133,78 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (welcomeOverlay) {
-        // Always show the welcome overlay as an impressive gateway
-        welcomeOverlay.classList.remove('hidden');
+        const alreadyOnboarded = (() => { try { return localStorage.getItem(ONBOARD_KEY) === '1'; } catch(e) { return false; } })();
 
-        // Interest buttons — toggle selection
-        document.querySelectorAll('.interest-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.interest-btn').forEach(b => b.classList.remove('selected'));
-                btn.classList.add('selected');
-                localStorage.setItem('geopulse_interest', btn.getAttribute('data-interest'));
-            });
-        });
+        if (alreadyOnboarded) {
+            // Returning visitor — skip Screen 2 entirely, go straight to the map after ENTER
+            welcomeOverlay.classList.add('hidden');
+        } else {
+            welcomeOverlay.classList.remove('hidden');
 
-        // Pre-select if returning user
-        const savedInterest = localStorage.getItem('geopulse_interest');
-        if (savedInterest) {
-            const match = document.querySelector(`.interest-btn[data-interest="${savedInterest}"]`);
-            if (match) match.classList.add('selected');
+            // CTA wiring
+            document.getElementById('welcome-tour')?.addEventListener('click', () => dismissWelcome('welcome'));
+            document.getElementById('welcome-explore')?.addEventListener('click', () => dismissWelcome(null));
+
+            // ── Live intelligence ticker (real feeds; hide silently on failure) ──
+            (function initWelcomeTicker() {
+                const el = document.getElementById('welcome-ticker');
+                if (!el) return;
+                const lang = (window.getLanguage && window.getLanguage()) || document.documentElement.lang || 'en';
+                const de = lang === 'de';
+                const coarseRegion = (lat, lon) => {
+                    if (lat > 35 && lat < 72 && lon > -12 && lon < 45) return de ? 'Europa' : 'Europe';
+                    if (lat > -37 && lat < 37 && lon > -18 && lon < 52) return de ? 'Afrika' : 'Africa';
+                    if (lat > 5 && lat < 78 && lon > 45 && lon < 150) return de ? 'Asien' : 'Asia';
+                    if (lat > -50 && lat < 13 && lon > -82 && lon < -34) return de ? 'Südamerika' : 'South America';
+                    if (lat > 13 && lat < 78 && lon > -168 && lon < -52) return de ? 'Nordamerika' : 'North America';
+                    if (lat > -48 && lat < -10 && lon > 110 && lon < 180) return de ? 'Australien' : 'Australia';
+                    if (lon >= -70 && lon < 20) return de ? 'dem Atlantik' : 'the Atlantic';
+                    if (lon >= 20 && lon < 150) return de ? 'dem Indischen Ozean' : 'the Indian Ocean';
+                    return de ? 'dem Pazifik' : 'the Pacific';
+                };
+                Promise.allSettled([
+                    fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson')
+                        .then(r => r.ok ? r.json() : Promise.reject())
+                        .then(d => {
+                            const n = (d.features || []).length;
+                            const label = window._i18n?.[lang]?.ob_ticker_quakes || 'earthquakes in the last hour';
+                            return `🌍 ${n} ${label}`;
+                        }),
+                    fetch('https://api.wheretheiss.at/v1/satellites/25544')
+                        .then(r => r.ok ? r.json() : Promise.reject())
+                        .then(d => {
+                            const label = window._i18n?.[lang]?.ob_ticker_iss || 'ISS over';
+                            return `🛰️ ${label} ${coarseRegion(d.latitude, d.longitude)}`;
+                        })
+                ]).then(results => {
+                    const parts = results.filter(r => r.status === 'fulfilled').map(r => r.value);
+                    if (parts.length && !welcomeOverlay.classList.contains('hidden')) {
+                        el.textContent = parts.join('  ·  ');
+                        el.style.display = 'block';
+                    }
+                });
+            })();
+
+            // ── Ambient map drift behind the overlay (static on reduced-motion) ──
+            (function initAmbientDrift() {
+                const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if (reduced || typeof map === 'undefined' || !map) return;
+                let raf = null, stopped = false;
+                let bearing = map.getBearing();
+                const step = () => {
+                    if (stopped) return;
+                    bearing += 0.015;
+                    try { map.setBearing(bearing); } catch(e) {}
+                    raf = requestAnimationFrame(step);
+                };
+                raf = requestAnimationFrame(step);
+                _stopWelcomeDrift = () => {
+                    stopped = true;
+                    if (raf) cancelAnimationFrame(raf);
+                    try { map.easeTo({ bearing: 0, duration: 800 }); } catch(e) {}
+                };
+            })();
         }
-
-        // "START GUIDED TOUR" ? launches the welcome mini-tour
-        document.getElementById('welcome-tour')?.addEventListener('click', () => {
-            dismissWelcome('welcome');
-        });
-        // "OPEN MANUAL" ? opens manual (handled by onclick in HTML)
-        document.getElementById('welcome-manual')?.addEventListener('click', () => {
-            dismissWelcome(null);
-        });
-        // "EXPLORE FREELY" ? just close and explore
-        document.getElementById('welcome-explore')?.addEventListener('click', () => {
-            dismissWelcome(null);
-        });
     }
 
     // Expose startTour globally for the quick-links demo button
@@ -4003,10 +4060,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Default categories to open on first visit — empty = all collapsed for cleaner overview
     const FIRST_VISIT_DEFAULTS = [];
 
-    // All tour categories
-    const tourCats = document.querySelectorAll('.tour-category[data-cat]');
+    // All tour categories (exclude the Religion teaser — non-interactive scaffold)
+    const tourCats = document.querySelectorAll('.tour-category[data-cat]:not(.tour-category-teaser)');
 
-    // Override the inline onclick to add persistence
+    // Accordion: only one category open at a time
     tourCats.forEach(cat => {
         const header = cat.querySelector('.tour-cat-header');
         if (!header) return;
@@ -4015,8 +4072,41 @@ document.addEventListener("DOMContentLoaded", () => {
         header.removeAttribute('onclick');
 
         header.addEventListener('click', () => {
-            cat.classList.toggle('open');
+            const willOpen = !cat.classList.contains('open');
+            // Collapse every category first (single-open accordion)
+            tourCats.forEach(c => c.classList.remove('open'));
+            if (willOpen) cat.classList.add('open');
             saveCatState();
+        });
+    });
+
+    // ── Dynamic counters (single source of truth = the tour registry) ──
+    function refreshTourCounts() {
+        let total = 0;
+        document.querySelectorAll('.tour-category[data-cat]').forEach(cat => {
+            const n = cat.querySelectorAll('.tour-cat-body .tour-btn[data-tour]').length;
+            const countEl = cat.querySelector('.tour-cat-count');
+            if (countEl) countEl.textContent = n;
+            total += n;
+        });
+        document.querySelectorAll('.tours-count-num').forEach(el => { el.textContent = total; });
+        return total;
+    }
+    const TOUR_TOTAL = refreshTourCounts();
+    console.log('[GEOPULSE] Tour registry total:', TOUR_TOTAL);
+
+    // ── Propagate NEW badge up to the category header ──
+    document.querySelectorAll('.tour-category[data-cat]').forEach(cat => {
+        if (cat.querySelector('.tour-btn[data-new], .tour-btn .tour-new-badge')) {
+            cat.querySelector('.tour-cat-header')?.classList.add('cat-has-new');
+        }
+    });
+
+    // ── Hero tour buttons (collapsed-state showcase) launch their tour ──
+    document.querySelectorAll('.tour-hero-btn[data-tour]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.dataset.tour;
+            if (id && typeof startTour === 'function') startTour(id);
         });
     });
 
@@ -4037,6 +4127,57 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     restoreCatState();
+
+    // ── Inline tour filter (visible search box at head of the tour panel) ──
+    (function initTourFilter() {
+        const input = document.getElementById('tour-filter');
+        const clearBtn = document.getElementById('tour-filter-clear');
+        const emptyMsg = document.getElementById('tour-filter-empty');
+        const body = document.querySelector('.tours-hud-body');
+        if (!input || !body) return;
+
+        // Build a bilingual search index from the registry buttons
+        const idx = [];
+        body.querySelectorAll('.tour-cat-body .tour-btn[data-tour]').forEach(btn => {
+            const id = btn.dataset.tour;
+            const key = btn.querySelector('[data-i18n]')?.getAttribute('data-i18n');
+            const en = (window._i18n?.en?.[key] || btn.textContent || '').toLowerCase();
+            const de = (window._i18n?.de?.[key] || '').toLowerCase();
+            idx.push({ btn, cat: btn.closest('.tour-category'), text: (en + ' ' + de + ' ' + id).toLowerCase() });
+        });
+
+        function apply(q) {
+            q = q.trim().toLowerCase();
+            clearBtn.style.display = q ? 'block' : 'none';
+            if (!q) {
+                body.classList.remove('filtering');
+                idx.forEach(it => it.btn.classList.remove('filter-miss'));
+                document.querySelectorAll('.tour-category').forEach(c => c.classList.remove('filter-hit', 'filter-miss'));
+                if (emptyMsg) emptyMsg.style.display = 'none';
+                return;
+            }
+            body.classList.add('filtering');
+            const words = q.split(/\s+/).filter(Boolean);
+            let hits = 0;
+            const catHits = new Map();
+            idx.forEach(it => {
+                const match = words.every(w => it.text.includes(w));
+                it.btn.classList.toggle('filter-miss', !match);
+                if (match) { hits++; catHits.set(it.cat, true); }
+            });
+            document.querySelectorAll('.tour-category[data-cat]').forEach(cat => {
+                const hit = catHits.get(cat);
+                cat.classList.toggle('filter-hit', !!hit);
+                cat.classList.toggle('filter-miss', !hit);
+            });
+            if (emptyMsg) emptyMsg.style.display = hits ? 'none' : 'block';
+        }
+
+        let t;
+        input.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => apply(input.value), 100); });
+        clearBtn.addEventListener('click', () => { input.value = ''; apply(''); input.focus(); });
+        input.addEventListener('keydown', (e) => { if (e.key === 'Escape') { input.value = ''; apply(''); input.blur(); } });
+    })();
 
     // --- 2. ?? Badges for V2.0 tours ---
     // Tours added in V2.0 (released May 15, 2026)

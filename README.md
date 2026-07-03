@@ -13,7 +13,7 @@
 
 > 🌐 *Now live at **geopulseworld.com***
 
-> *10,000+ lines of code · 22+ data layers · 40 guided tours · GeoQuiz · Zero API keys · Zero cost*
+> *10,000+ lines of code · 22+ data layers · 41 guided tours across 8 disciplines · GeoQuiz · Zero API keys · Zero cost*
 
 ## Features
 

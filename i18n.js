@@ -52,10 +52,15 @@ const i18n = {
         orientation_hint: 'BEST EXPERIENCED IN LANDSCAPE', launch_connecting: 'CONNECTING TO LAUNCH LIBRARY...',
         // Tour & category labels
         guided_tours: 'THE TOURS',
-        tours_hud_sub: '42 EXPLORATIONS',
+        tours_hud_sub: 'EXPLORATIONS',
         cat_geopolitics_tours: 'GEOPOLITICS', cat_history_tours: 'HISTORY',
         cat_science_tours: 'SCIENCE & NATURE', cat_sports_tours: 'SPORTS & CULTURE',
         cat_society_tours: 'SOCIETY & RIGHTS',
+        cat_earth_tours: 'EARTH & CLIMATE', cat_space_tours: 'SPACE & TECHNOLOGY',
+        cat_economy_tours: 'ECONOMY & RESOURCES', cat_religion_tours: 'RELIGION',
+        cat_soon: 'COMING SOON',
+        tour_hero_kicker: 'FEATURED', tour_search_ph: 'Search tours…',
+        tour_search_none: 'No tours match your search.',
         tour_coldwar: 'Cold War → Reunification', tour_bri: 'Belt & Road Initiative',
         tour_trump: 'Trump World Tour', tour_chokepoints: 'Chokepoints', tour_water: 'Water Wars',
         tour_migration: 'Migration Routes',
@@ -97,6 +102,8 @@ const i18n = {
         welcome_feat_3: 'Built for students — Geography, History, Science & Politics',
         welcome_start_tour: 'START DEMO TOUR', welcome_explore: 'EXPLORE FREELY',
         welcome_dont_show: "Don't show again",
+        ob_value: 'Explore history. Understand the world.',
+        ob_ticker_quakes: 'earthquakes in the last hour', ob_ticker_iss: 'ISS over',
         welcome_footer: 'No login · No ads · 100% free & open source · For students, educators & the curious',
         // Interest selector
         welcome_interest_label: 'WHAT INTERESTS YOU?',
@@ -164,10 +171,15 @@ const i18n = {
         orientation_hint: 'AM BESTEN IM QUERFORMAT', launch_connecting: 'VERBINDUNG ZUR LAUNCH LIBRARY...',
         // Tour & category labels
         guided_tours: 'DIE TOUREN',
-        tours_hud_sub: '42 ERKUNDUNGEN',
+        tours_hud_sub: 'ERKUNDUNGEN',
         cat_geopolitics_tours: 'GEOPOLITIK', cat_history_tours: 'GESCHICHTE',
         cat_science_tours: 'WISSENSCHAFT & NATUR', cat_sports_tours: 'SPORT & KULTUR',
         cat_society_tours: 'GESELLSCHAFT & RECHTE',
+        cat_earth_tours: 'ERDE & KLIMA', cat_space_tours: 'WELTRAUM & TECHNOLOGIE',
+        cat_economy_tours: 'WIRTSCHAFT & RESSOURCEN', cat_religion_tours: 'RELIGION',
+        cat_soon: 'IN VORBEREITUNG',
+        tour_hero_kicker: 'EMPFOHLEN', tour_search_ph: 'Touren suchen…',
+        tour_search_none: 'Keine Touren gefunden.',
         tour_coldwar: 'Kalter Krieg → Wiedervereinigung', tour_bri: 'Neue Seidenstraße',
         tour_trump: 'Trump Welttour', tour_chokepoints: 'Nadelöhre der Welt', tour_water: 'Wasserkriege',
         tour_migration: 'Fluchtrouten der Welt',
@@ -208,6 +220,8 @@ const i18n = {
         welcome_feat_2: 'Echtzeit-Erdbeben, Vulkane, Waldbrände & Satelliten',
         welcome_feat_3: 'Für Schüler — Erdkunde, Geschichte, Naturwissenschaft & Politik',
         welcome_start_tour: 'DEMO-TOUR STARTEN', welcome_explore: 'FREI ERKUNDEN',
+        ob_value: 'Geschichte erleben. Die Welt verstehen.',
+        ob_ticker_quakes: 'Erdbeben in der letzten Stunde', ob_ticker_iss: 'ISS über',
         welcome_dont_show: 'Nicht mehr anzeigen',
         welcome_footer: 'Kein Login · Keine Werbung · 100% kostenlos & Open Source · Für Schüler, Studenten, Lehrer & Interessierte',
         welcome_interest_label: 'WAS INTERESSIERT DICH?',
@@ -244,6 +258,11 @@ const setLanguage = (lang) => {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
         if (dict[key]) el.textContent = dict[key];
+    });
+    // Placeholder translations (e.g. search inputs)
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.dataset.i18nPh;
+        if (dict[key]) el.setAttribute('placeholder', dict[key]);
     });
     // Update welcome lang toggle label (show opposite language)
     const lbl = document.getElementById('welcome-lang-label');
