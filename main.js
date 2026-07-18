@@ -3054,6 +3054,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // iPad/touch: toggle tours-hud on header tap.
+    // Desktop opens the floating tours panel on hover — iOS has no hover, so in the
+    // desktop layout (viewport > 768px, no bottom nav) the panel was unreachable.
+    if (isTouchDevice) {
+        const toursHudEl = document.getElementById('tours-hud');
+        const toursHeader = toursHudEl?.querySelector('header');
+        if (toursHeader) {
+            toursHeader.addEventListener('click', () => {
+                toursHudEl.classList.toggle('touch-open');
+            });
+        }
+    }
+
     // iPad/touch: close panels when tapping the map
     if (isTouchDevice) {
         document.getElementById('map')?.addEventListener('click', () => {
@@ -3542,6 +3555,20 @@ document.addEventListener("DOMContentLoaded", () => {
     function startTour(tourId) {
         const tour = TOURS[tourId];
         if (!tour) { console.warn('[startTour] Tour not found:', tourId); return; }
+
+        // ── Close the tour menu so the tour is visible, not hidden behind it ──
+        // On mobile the tours-hud opens as a full overlay (z-index 950); on iPad/touch
+        // it is the expanded floating panel. Neither closed itself on tour selection,
+        // so the tour appeared to "do nothing". Close it here for every entry point.
+        if (window.innerWidth <= 768) {
+            closeFloatingHuds();
+            document.body.classList.remove('mobile-panel-open');
+            activeMobilePanel = null;
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('.nav-btn[data-target="map"]')?.classList.add('active');
+        } else {
+            document.getElementById('tours-hud')?.classList.remove('touch-open');
+        }
 
         // Guard: if map not yet fully loaded, wait then retry
         if (!map.loaded()) {
