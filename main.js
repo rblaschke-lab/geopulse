@@ -653,17 +653,77 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 50);
         } catch(e) { console.warn('[EARTHQUAKES] Init failed:', e.message); }
 
-        // ── NASA FIRES (GIBS MODIS Thermal Anomalies) ──────────
+        // ── WILDFIRES (NASA EONET — Live GeoJSON) ──────────────
+        // NOTE: the old GIBS raster source (MODIS_Terra_Thermal_Anomalies_Day .png)
+        // 404'd on every tile — GIBS serves the thermal anomaly layers as vector
+        // tiles only, there is no raster PNG. EONET is keyless and CORS-enabled.
         try {
-            const dateStr = getYesterdaysDateForGIBS();
+            const fireResult = await window.reliableFetch(
+                'https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires&status=open&days=14', 'fires'
+            );
+            const fireFeatures = (fireResult.data.events || []).map(ev => {
+                const g = ev.geometry?.[ev.geometry.length - 1];
+                if (!g || g.type !== 'Point' || !Array.isArray(g.coordinates)) return null;
+                return {
+                    type: 'Feature',
+                    geometry: { type: 'Point', coordinates: g.coordinates },
+                    properties: {
+                        title: (ev.title || '').replace(/^Wildfire\s+/i, ''),
+                        date: g.date,
+                        acres: g.magnitudeUnit === 'acres' ? g.magnitudeValue : null,
+                        source: ev.sources?.[0]?.url || ''
+                    }
+                };
+            }).filter(Boolean);
+
             map.addSource('fires-src', {
-                type: 'raster',
-                tiles: [`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_Thermal_Anomalies_Day/default/${dateStr}/GoogleMapsCompatible_Level7/{z}/{y}/{x}.png`],
-                tileSize: 256
+                type: 'geojson',
+                data: { type: 'FeatureCollection', features: fireFeatures }
             });
-            map.addLayer({ id: 'fires-layer', type: 'raster', source: 'fires-src', layout: { visibility: 'none' }, paint: { 'raster-opacity': 0.75 } });
-            updateLayerStatus('fires', 'LIVE', 'NASA GIBS Online');
-        } catch(e) { console.warn('[FIRES] Init failed:', e.message); }
+            map.addLayer({
+                id: 'fires-glow', type: 'circle', source: 'fires-src',
+                layout: { visibility: 'none' },
+                paint: {
+                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 9, 6, 22, 10, 45],
+                    'circle-color': '#ff5500',
+                    'circle-opacity': 0.18,
+                    'circle-blur': 1
+                }
+            });
+            map.addLayer({
+                id: 'fires-layer', type: 'circle', source: 'fires-src',
+                layout: { visibility: 'none' },
+                paint: {
+                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 3, 6, 7, 10, 13],
+                    'circle-color': ['case',
+                        ['>', ['coalesce', ['get', 'acres'], 0], 50000], '#ff2200',
+                        ['>', ['coalesce', ['get', 'acres'], 0], 5000], '#ff6600',
+                        '#ffaa00'
+                    ],
+                    'circle-opacity': 0.9,
+                    'circle-stroke-color': '#ffdd88',
+                    'circle-stroke-width': 0.5,
+                    'circle-stroke-opacity': 0.5
+                }
+            });
+            map.on('click', 'fires-layer', (e) => {
+                const p = e.features[0].properties;
+                const when = p.date ? new Date(p.date).toLocaleString() : '';
+                const acres = p.acres ? Number(p.acres) : null;
+                const areaLine = acres
+                    ? `<div style="background:rgba(255,85,0,.08);padding:3px 6px;margin-bottom:5px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'FLÄCHE':'AREA'}</div><div style="color:#ff6600;font-size:1.05rem;font-weight:bold;">${escHtml(acres.toLocaleString())} ${currentLang==='de'?'Acres':'acres'}</div></div>`
+                    : '';
+                new maplibregl.Popup({ maxWidth: '260px' }).setLngLat(e.lngLat).setHTML(
+                    `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;"><h3 style="color:#ff6600;margin:0 0 5px;border-bottom:1px solid #ff660044;padding-bottom:4px;">🔥 ${currentLang==='de'?'WALDBRAND':'WILDFIRE'}</h3>${areaLine}<div style="font-size:.65rem;opacity:.75;line-height:1.4;">${escHtml(p.title)}</div><div style="font-size:.55rem;opacity:.3;margin-top:5px;">${escHtml(when)} — NASA EONET</div></div>`
+                ).addTo(map);
+            });
+            map.on('mouseenter', 'fires-layer', () => map.getCanvas().style.cursor = 'pointer');
+            map.on('mouseleave', 'fires-layer', () => map.getCanvas().style.cursor = '');
+            updateLayerStatus('fires', fireResult.status === 'DEGRADED' ? 'DEGRADED' : 'LIVE', `${fireFeatures.length} active fires`);
+        } catch(e) {
+            console.warn('[FIRES] Init failed:', e.message);
+            updateLayerStatus('fires', 'ERROR', 'EONET unreachable');
+        }
 
         // ── SOLAR TERMINATOR (Calculated) ──────────────────────
         try {
@@ -2321,7 +2381,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('toggle-fires')?.addEventListener('change', (e) => {
         toggles.fires = e.target.checked;
-        if (map.getLayer('fires-layer')) map.setLayoutProperty('fires-layer', 'visibility', toggles.fires ? 'visible' : 'none');
+        const firesVis = toggles.fires ? 'visible' : 'none';
+        if (map.getLayer('fires-layer')) map.setLayoutProperty('fires-layer', 'visibility', firesVis);
+        if (map.getLayer('fires-glow')) map.setLayoutProperty('fires-glow', 'visibility', firesVis);
     });
 
     document.getElementById('toggle-terminator')?.addEventListener('change', (e) => {
@@ -2865,6 +2927,126 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (map.getLayer('country-borders')) map.setLayoutProperty('country-borders', 'visibility', toggles.borders ? 'visible' : 'none');
         if (map.getLayer('country-labels')) map.setLayoutProperty('country-labels', 'visibility', toggles.borders ? 'visible' : 'none');
+    });
+
+    // ============================================================
+    // RELIGIOUS AFFILIATION TODAY — country choropleth (Pew 2020)
+    // Colour = largest religious group per country. Descriptive only.
+    // ============================================================
+    const RELIGION_COLORS = {
+        christian: '#6a8ec9', muslim: '#4c9a7a', hindu: '#d98a3d', buddhist: '#d4b24a',
+        jewish: '#7d6bb0', unaffiliated: '#9aa3ad', other: '#b06a72'
+    };
+    const RELIGION_LABELS = {
+        en: { christian: 'Christian', muslim: 'Muslim', hindu: 'Hindu', buddhist: 'Buddhist', jewish: 'Jewish', unaffiliated: 'Unaffiliated', other: 'Other religions' },
+        de: { christian: 'Christen', muslim: 'Muslime', hindu: 'Hindus', buddhist: 'Buddhisten', jewish: 'Juden', unaffiliated: 'Konfessionslos', other: 'Andere Religionen' }
+    };
+    let _religionData = null;
+    let _religionPopup = null;
+
+    function renderReligionLegend(show) {
+        let el = document.getElementById('religion-legend');
+        if (!show) { if (el) el.style.display = 'none'; return; }
+        const lang = currentLang === 'de' ? 'de' : 'en';
+        const L = RELIGION_LABELS[lang];
+        if (!el) {
+            el = document.createElement('div');
+            el.id = 'religion-legend';
+            el.className = 'map-legend';
+            (document.getElementById('map') || document.body).appendChild(el);
+        }
+        const title = lang === 'de' ? 'RELIGIONSZUGEHÖRIGKEIT (2020)' : 'RELIGIOUS AFFILIATION (2020)';
+        const rows = Object.keys(RELIGION_COLORS).map(k =>
+            '<div class="ml-row"><span class="ml-dot" style="background:' + RELIGION_COLORS[k] + '"></span>' + L[k] + '</div>'
+        ).join('');
+        el.innerHTML = '<div class="ml-title">' + title + '</div>' + rows +
+            '<div class="ml-foot">Source: Pew Research Center · 2020</div>';
+        el.style.display = 'block';
+    }
+
+    function onReligionClick(e) {
+        if (!e.features || !e.features.length || !_religionData) return;
+        const f = e.features[0];
+        const iso = f.properties && f.properties.iso;
+        const lang = currentLang === 'de' ? 'de' : 'en';
+        const rec = iso ? _religionData.countries[iso] : null;
+        const nm = (rec && rec.name) || (f.properties && f.properties.name) || '';
+        let body;
+        if (!rec) {
+            body = '<div style="opacity:.7;font-size:.72rem">' +
+                (lang === 'de' ? 'Keine Daten in diesem Snapshot.' : 'No data in this snapshot.') + '</div>';
+        } else {
+            const L = RELIGION_LABELS[lang];
+            const rows = Object.keys(RELIGION_COLORS)
+                .map(k => ({ k, v: rec.shares[k] || 0 }))
+                .filter(r => r.v > 0)
+                .sort((a, b) => b.v - a.v)
+                .map(r => '<div class="rel-row"><span class="rel-dot" style="background:' + RELIGION_COLORS[r.k] + '"></span><span class="rel-lbl">' + L[r.k] + '</span><span class="rel-val">' + r.v + '%</span></div>')
+                .join('');
+            const src = lang === 'de'
+                ? 'Quelle: Pew Research Center — Religionszugehörigkeit nach Ländern · 2020.'
+                : 'Source: Pew Research Center — Religious Composition by Country · 2020.';
+            const disc = lang === 'de'
+                ? 'Zugehörigkeit ≠ Praxis oder Glaubensintensität; Erhebungsmethoden variieren je Land.'
+                : 'Affiliation ≠ practice or intensity of belief; survey methods vary by country.';
+            body = rows + '<div class="rel-src">' + src + '</div><div class="rel-disc">' + disc + '</div>';
+        }
+        const html = '<div class="religion-popup"><strong>' + nm + '</strong>' + body + '</div>';
+        if (_religionPopup) _religionPopup.remove();
+        _religionPopup = new maplibregl.Popup({ closeButton: true, maxWidth: '260px' })
+            .setLngLat(e.lngLat).setHTML(html).addTo(map);
+    }
+
+    document.getElementById('toggle-religion')?.addEventListener('change', async (e) => {
+        const on = e.target.checked;
+        if (on && !map.getSource('religion-src')) {
+            try {
+                setStatus(currentLang === 'de' ? 'RELIGIONSDATEN WERDEN GELADEN...' : 'LOADING RELIGION DATA...');
+                const [worldResp, relResp] = await Promise.all([
+                    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'),
+                    fetch('./data/religion_composition.json')
+                ]);
+                const world = await worldResp.json();
+                _religionData = await relResp.json();
+                const fc = topojson.feature(world, world.objects.countries);
+                const byNum = {};
+                const pad3 = v => String(v).padStart(3, '0'); // world-atlas ids are zero-padded (e.g. "004")
+                Object.keys(_religionData.countries).forEach(iso => {
+                    const c = _religionData.countries[iso];
+                    byNum[pad3(c.num)] = iso;
+                });
+                fc.features.forEach(ft => {
+                    ft.properties = ft.properties || {};
+                    const iso = byNum[pad3(ft.id)];
+                    const rec = iso ? _religionData.countries[iso] : null;
+                    ft.properties.iso = iso || null;
+                    ft.properties.top = rec ? rec.top : null;
+                });
+                map.addSource('religion-src', { type: 'geojson', data: fc });
+                const colorExpr = ['match', ['get', 'top']];
+                Object.keys(RELIGION_COLORS).forEach(k => { colorExpr.push(k, RELIGION_COLORS[k]); });
+                colorExpr.push('rgba(150,150,150,0.12)'); // no-data fallback
+                const beforeId = map.getLayer('country-labels') ? 'country-labels' : undefined;
+                map.addLayer({
+                    id: 'religion-fill', type: 'fill', source: 'religion-src',
+                    layout: { visibility: 'visible' },
+                    paint: { 'fill-color': colorExpr, 'fill-opacity': 0.5, 'fill-outline-color': 'rgba(0,0,0,0.3)' }
+                }, beforeId);
+                map.on('click', 'religion-fill', onReligionClick);
+                map.on('mouseenter', 'religion-fill', () => { map.getCanvas().style.cursor = 'pointer'; });
+                map.on('mouseleave', 'religion-fill', () => { map.getCanvas().style.cursor = ''; });
+                setStatus(currentLang === 'de' ? 'RELIGIONSZUGEHÖRIGKEIT GELADEN (PEW · 2020)' : 'RELIGIOUS AFFILIATION LOADED (PEW · 2020)');
+                if (window.updateLayerStatus) window.updateLayerStatus('religion', 'STATIC', 'Pew Research Center 2020');
+            } catch (err) {
+                console.warn('[religion] Failed:', err);
+                setStatus(currentLang === 'de' ? 'RELIGIONSDATEN NICHT VERFÜGBAR' : 'RELIGION DATA UNAVAILABLE');
+                e.target.checked = false;
+                return;
+            }
+        }
+        if (map.getLayer('religion-fill')) map.setLayoutProperty('religion-fill', 'visibility', on ? 'visible' : 'none');
+        renderReligionLegend(on);
+        if (!on && _religionPopup) { _religionPopup.remove(); _religionPopup = null; }
     });
 
     // ============================================================
@@ -3414,7 +3596,7 @@ document.addEventListener("DOMContentLoaded", () => {
             'pipelines-layer',
             'starlink-layer',
             'terminator-layer',
-            'fires-layer',
+            'fires-layer', 'fires-glow',
             'country-borders', 'country-labels',
             'population-layer', 'temp-layer', 'sst-layer',
             'ai-atlas-lines',

@@ -13,6 +13,8 @@ const i18n = {
         reset_layers: 'RESET LAYERS', command_manual: 'COMMAND MANUAL',
         cat_realtime: 'REAL-TIME TRACKING', cat_geopolitics: 'GEOPOLITICS',
         cat_environment: 'ENVIRONMENT & SPACE',
+        cat_society_layers: 'SOCIETY & CULTURE',
+        layer_religion: 'Religious Affiliation', desc_religion: 'Largest religious group per country, coloured by tradition. Click a country for the full breakdown. Source: Pew Research Center, 2020.',
 
         layer_iss: 'ISS Tracker', desc_iss: 'International Space Station — orbits Earth every 90 minutes at 28,000 km/h.',
         layer_webcams: 'Live Webcams', desc_webcams: '9 curated alpine & city webcams with real-time snapshots from foto-webcam.eu.',
@@ -79,6 +81,7 @@ const i18n = {
         tour_revolutions: 'Revolutions',
         tour_pandemics: 'Pandemics',
         tour_hondius: 'MV Hondius — Hantavirus 2026',
+        tour_worldreligions: 'World Religions — Sacred Sites',
         tour_aurorahunters: 'Aurora Hunters',
         tour_cosmicimpacts: 'Cosmic Impacts',
         tour_climatecrisis: 'Climate Crisis',
@@ -132,6 +135,8 @@ const i18n = {
         reset_layers: 'EBENEN ZURÜCKSETZEN', command_manual: 'KOMMANDO-HANDBUCH',
         cat_realtime: 'ECHTZEIT-TRACKING', cat_geopolitics: 'GEOPOLITIK',
         cat_environment: 'UMWELT & WELTRAUM',
+        cat_society_layers: 'GESELLSCHAFT & KULTUR',
+        layer_religion: 'Religionszugehörigkeit', desc_religion: 'Größte Religionsgruppe je Land, nach Tradition eingefärbt. Land anklicken für die vollständige Aufschlüsselung. Quelle: Pew Research Center, 2020.',
 
         layer_iss: 'ISS Tracker', desc_iss: 'Internationale Raumstation — umkreist die Erde alle 90 Minuten mit 28.000 km/h.',
         layer_webcams: 'Live-Webcams', desc_webcams: '9 kuratierte Alpen- & Stadt-Webcams mit Echtzeit-Schnappschüssen von foto-webcam.eu.',
@@ -198,6 +203,7 @@ const i18n = {
         tour_revolutions: 'Revolutionen',
         tour_pandemics: 'Pandemien',
         tour_hondius: 'MV Hondius — Hantavirus 2026',
+        tour_worldreligions: 'Weltreligionen — Heilige Stätten',
         tour_aurorahunters: 'Polarlichtjäger',
         tour_cosmicimpacts: 'Kosmische Einschläge',
         tour_climatecrisis: 'Klimakrise',

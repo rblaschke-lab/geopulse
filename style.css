@@ -698,6 +698,25 @@ input:checked + .slider:before {
 .maplibregl-popup-tip { border-top-color: var(--panel-bg) !important; }
 .maplibregl-popup-close-button { color: #888 !important; outline: none !important; }
 
+/* Religious affiliation popup + legend */
+.religion-popup strong { display: block; margin-bottom: 6px; font-size: 0.9rem; }
+.rel-row { display: flex; align-items: center; gap: 6px; font-size: 0.74rem; padding: 1px 0; }
+.rel-row .rel-lbl { flex: 1; }
+.rel-row .rel-val { opacity: 0.8; font-variant-numeric: tabular-nums; }
+.rel-dot, .ml-dot { width: 9px; height: 9px; border-radius: 2px; flex: 0 0 auto; display: inline-block; }
+.rel-src { margin-top: 7px; font-size: 0.6rem; opacity: 0.55; line-height: 1.35; }
+.rel-disc { margin-top: 3px; font-size: 0.58rem; opacity: 0.45; line-height: 1.35; font-style: italic; }
+.map-legend {
+    position: absolute; right: 12px; bottom: 34px; z-index: 5;
+    background: rgba(10, 14, 20, 0.9); border: 1px solid var(--glass-edge);
+    border-radius: 4px; padding: 8px 10px; font-family: 'Share Tech Mono', monospace;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.7); pointer-events: none; max-width: 190px;
+}
+.map-legend .ml-title { font-size: 0.55rem; letter-spacing: 1px; color: rgba(255,255,255,0.55); margin-bottom: 6px; }
+.map-legend .ml-row { display: flex; align-items: center; gap: 6px; font-size: 0.66rem; color: rgba(255,255,255,0.82); padding: 1px 0; }
+.map-legend .ml-foot { margin-top: 6px; font-size: 0.52rem; opacity: 0.45; }
+@media (max-width: 768px) { .map-legend { bottom: 74px; right: 8px; transform: scale(0.92); transform-origin: bottom right; } }
+
 /* MapLibre attribution — collapsed by default */
 .maplibregl-ctrl-attrib { font-size: 0 !important; background: transparent !important; }
 .maplibregl-ctrl-attrib.maplibregl-compact { min-height: 20px; }
