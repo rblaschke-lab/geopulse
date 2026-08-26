@@ -1,7 +1,9 @@
 // Global GEOPULSE Configuration
 window.GeopulseConfig = {
-    VERSION: "2.41",
-    // Zero API keys — all data sources are free and keyless
+    VERSION: "2.5",
+    // NASA FIRMS map key — free, per-user, rate-limited, read-only.
+    // Public by design (client-side); rotate at firms.modaps.eosdis.nasa.gov if needed.
+    FIRMS_MAP_KEY: "53809ad8a8e6c66c28d2b1e2a85b3d80",
     METRICS: {
         FEEDS: 20,
         COUNTRIES: 102,
@@ -11,7 +13,7 @@ window.GeopulseConfig = {
         "weather": { id: "weather", name: "Weather Radar", status: "STATIC", source: "RainViewer API", reliabilityScore: 99 },
 
         "iss": { id: "iss", name: "ISS Track", status: "STATIC", source: "WhereTheISS API", reliabilityScore: 99 },
-        "fires": { id: "fires", name: "NASA Wildfires", status: "LIVE", source: "NASA EONET", reliabilityScore: 95 },
+        "fires": { id: "fires", name: "NASA Wildfires", status: "LIVE", source: "NASA FIRMS (VIIRS)", reliabilityScore: 95 },
         "earthquakes": { id: "earthquakes", name: "Seismic Activity", status: "STATIC", source: "USGS Feed", reliabilityScore: 99 },
         "internet": { id: "internet", name: "Internet Outages", status: "STATIC", source: "Global Net Monitor", reliabilityScore: 90 },
         "terminator": { id: "terminator", name: "Solar Terminator", status: "STATIC", source: "Astro Math", reliabilityScore: 100 },

@@ -2695,3 +2695,110 @@ body.no-ticker #sidebar { top: 14px !important; }
         scroll-behavior: auto !important;
     }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LEFT COLUMN — LAYER ORDER & STACK GEOMETRY            (added 2026-08-26)
+   ══════════════════════════════════════════════════════════════════════════
+
+   The problem this fixes, measured at 1280x720 before the change:
+
+     #tours-hud   top 52     z 101   <- primary navigation
+     #quiz-hud    bottom 14  z 102   <- primary navigation
+     #map-search  bottom 48  z 200
+     #quick-links bottom 0   z 501
+     #launch-hud  bottom 45  z 800
+
+   All five share left:14px / width:280px, so they are one column fighting
+   over one strip -- and the ordering was upside down: the two surfaces a
+   visitor actually navigates with sat at the BOTTOM of the stack while the
+   launch feed, the ticker and the quick links painted over them.
+
+   Concretely, #quiz-hud is 50px tall and was covered 16px from above by
+   #map-search and 14px from below by #quick-links: 20 of 50px visible, with
+   the covered top 16px being its own "MAP QUIZ" header. Hence "the quiz is
+   stranded down there". #launch-hud (z 800) erased the search bar AND the
+   quiz outright as soon as its feed loaded.
+
+   Two rules restore order:
+     1. NAVIGATION OUTRANKS DECORATION. Tours and quiz sit above the ticker,
+        the legend, the quick links and the launch feed -- never under them.
+     2. THE COLUMN IS A STACK, not five independent pins. Each panel's
+        `bottom` is derived from the one below it, so nothing can silently
+        overlap when a height changes; edit the height vars, not the offsets.
+
+   Desktop only. Below 769px the panels are already laid out separately
+   (quiz moves bottom-right, tours hides), so this must not reach mobile.
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root {
+    /* Layer scale. Deliberately sparse: five named tiers beat 15 magic numbers. */
+    --gp-z-chrome:    100;   /* tickers, legend, quick links, launch feed */
+    --gp-z-nav:       600;   /* tours + quiz, collapsed */
+    --gp-z-search:    620;   /* search sits just above the resting navigation */
+    --gp-z-nav-open:  700;   /* whichever navigation panel is expanded */
+
+    /* Bottom stack, built upward from the quick-links bar. */
+    --gp-col-gap:        8px;
+    --gp-bottom-chrome: 28px;   /* #quick-links height */
+    --gp-quiz-h:        50px;   /* .hud-panel-base collapsed height */
+    --gp-search-h:      31px;   /* .map-search-float height */
+
+    --gp-stack-1: calc(var(--gp-bottom-chrome) + var(--gp-col-gap));                  /* quiz   ->  36px */
+    --gp-stack-2: calc(var(--gp-stack-1) + var(--gp-quiz-h) + var(--gp-col-gap));     /* search ->  94px */
+    --gp-stack-3: calc(var(--gp-stack-2) + var(--gp-search-h) + var(--gp-col-gap));   /* launch -> 133px */
+}
+
+@media (min-width: 769px) {
+    /* ── 1. Decoration drops below the navigation ───────────────────────── */
+    #ticker-top,
+    #ticker-bottom,
+    #quick-links,
+    #layer-legend,
+    #launch-hud      { z-index: var(--gp-z-chrome); }
+
+    /* ── 2. Navigation comes up, and the expanded one comes up further ──── */
+    #tours-hud,
+    #quiz-hud        { z-index: var(--gp-z-nav); }
+    #map-search      { z-index: var(--gp-z-search); }
+    #tours-hud:hover,
+    #quiz-hud:hover,
+    #tours-hud.touch-open,
+    #quiz-hud.touch-open  { z-index: var(--gp-z-nav-open); }
+
+    /* ── 3. The column becomes a derived stack ─────────────────────────── */
+    #quiz-hud        { bottom: var(--gp-stack-1); }
+    #map-search      { bottom: var(--gp-stack-2); }
+    #launch-hud      { bottom: var(--gp-stack-3); }
+
+    /* ── 4. One panel open at a time ────────────────────────────────────
+       An expanded panel needs the whole column: #tours-hud grows to 85vh
+       downward from top:52px and #quiz-hud grows to 400px upward, and either
+       one alone is taller than the gaps between its neighbours. Raising
+       z-index only decides who wins the pixels -- it still looks like a
+       collision. So the siblings step aside while one is open.
+       `data-gp-panel` is set by the controller appended to main.js. */
+    body[data-gp-panel] #map-search,
+    body[data-gp-panel] #launch-hud,
+    body[data-gp-panel="tours-hud"] #quiz-hud,
+    body[data-gp-panel="quiz-hud"] #tours-hud {
+        opacity: 0;
+        pointer-events: none;
+    }
+    /* The open panel itself is never the one that steps aside. */
+    body[data-gp-panel="map-search"] #map-search,
+    body[data-gp-panel="launch-hud"] #launch-hud {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    #map-search,
+    #launch-hud,
+    #quiz-hud,
+    #tours-hud { transition: opacity 0.18s ease; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #map-search,
+    #launch-hud,
+    #quiz-hud,
+    #tours-hud { transition: none; }
+}

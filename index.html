@@ -57,7 +57,7 @@
 
     <script src="./fetchWrapper.js"></script>
     <script src="./config.js"></script>
-    <link rel="stylesheet" href="./style.css?v=2.46">
+    <link rel="stylesheet" href="./style.css?v=2.5">
 
     <!-- Service Worker registration -->
     <script>
@@ -134,7 +134,7 @@
 
             if (audioCtx) {
                 var now = audioCtx.currentTime;
-                var duration = 5.5; // matches splash duration
+                var duration = 5.5; // audio envelope; deliberately outlives the 1.2s splash
 
                 // Master gain (overall volume — "dezent")
                 var master = audioCtx.createGain();
@@ -203,28 +203,68 @@
                 ping.start(now + 1.5);
                 ping.stop(now + 2.3);
 
-                // Store context for cleanup
+                // Store context for cleanup.
+                //
+                // The drone now deliberately OUTLIVES the visual splash: the
+                // splash is a 1.2s transition while this envelope runs its full
+                // fade over `duration`. Closing the context with the splash
+                // (as before) would chop the drone off mid-fade, so cleanup
+                // rides the audio's own clock instead of the overlay's.
                 window._splashAudioCtx = audioCtx;
+                setTimeout(function(){
+                    try { audioCtx.close(); } catch(e){}
+                    if (window._splashAudioCtx === audioCtx) window._splashAudioCtx = null;
+                }, (duration + 0.4) * 1000);
             }
 
-            // ── SPLASH DISMISS TIMER ──
+            // ── SPLASH DISMISS ──
+            //
+            // ONE gate, not three. ENTER stays (a user gesture is required
+            // before an AudioContext may play, and it is the brand moment), but
+            // the splash is now a short transition rather than a second waiting
+            // room: it used to hold the screen for 4.5s and only then reveal the
+            // welcome overlay, so a first-time visitor paid the entry price
+            // three times before seeing a map.
+            //
+            // Anything that dismisses early — a click, Esc, or the timer —
+            // funnels through `finishSplash`, which is idempotent.
             if (sp) {
-                setTimeout(function(){
-                    sp.style.transition = 'opacity 1.2s ease, filter 1s ease';
+                var SPLASH_HOLD_MS = 1200;   // was 4500
+                var SPLASH_FADE_MS = 900;    // was 1500
+                var splashDone = false;
+
+                var finishSplash = function() {
+                    if (splashDone) return;
+                    splashDone = true;
+                    document.removeEventListener('keydown', onSplashKey);
+                    sp.removeEventListener('click', finishSplash);
+
+                    sp.style.transition = 'opacity 0.5s ease, filter 0.5s ease';
                     sp.style.opacity = '0';
                     sp.style.filter = 'blur(12px)';
                     sp.style.pointerEvents = 'none';
-                    // Show welcome overlay after splash fades
+                    // Hand over to the welcome overlay immediately — it is the
+                    // one surface that still asks the visitor for something.
                     var wo = document.getElementById('welcome-overlay');
                     if (wo) wo.classList.add('splash-done');
                     setTimeout(function(){
                         if(sp.parentNode) sp.parentNode.removeChild(sp);
-                        // Close audio context
-                        if (window._splashAudioCtx) {
-                            try { window._splashAudioCtx.close(); } catch(e){}
-                        }
-                    }, 1500);
-                }, 4500);
+                        // Audio cleanup is NOT done here — the drone owns its
+                        // own timer (see above) so dismissing the splash early
+                        // never cuts it off mid-fade.
+                    }, SPLASH_FADE_MS);
+                };
+
+                var onSplashKey = function(e) {
+                    if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') finishSplash();
+                };
+
+                // Let people leave early. A skippable intro is still an intro;
+                // an unskippable one is a toll booth.
+                sp.style.cursor = 'pointer';
+                sp.addEventListener('click', finishSplash);
+                document.addEventListener('keydown', onSplashKey);
+                setTimeout(finishSplash, SPLASH_HOLD_MS);
             }
         }, { once: true });
     })();
@@ -764,9 +804,10 @@
         <p data-i18n="orientation_hint">BEST EXPERIENCED IN LANDSCAPE</p>
     </div>
 
-    <div id="layer-legend" style="display:none;"></div>
-
-
+    <!-- NOTE: the layer legend lives ONCE, further down next to the quick links.
+         A second stray copy used to sit here; because getElementById returns the
+         FIRST match, every legend write landed in this undocumented div while
+         the documented one stayed empty. -->
 
     <!-- WELCOME OVERLAY (First Visit) -->
     <div id="welcome-overlay">
@@ -911,18 +952,18 @@
         <span id="live-clock" title="Local Time" style="display:flex;align-items:center;height:28px;padding:0 12px;"></span>
     </div>
 
-    <script src="./i18n.js?v=2.46"></script>
-    <script src="./quiz_bank.js?v=2.46"></script>
-    <script src="./quiz.js?v=2.46"></script>
-    <script src="./audio.js?v=2.46"></script>
-    <script src="./narration.js?v=2.46"></script>
-    <script src="./tours_data.js?v=2.46"></script>
-    <script src="./wind.js?v=2.46"></script>
-    <script src="./main.js?v=2.46"></script>
-    <script src="./search.js?v=2.46"></script>
-    <script src="./widgets.js?v=2.46"></script>
-    <script src="./tours_de.js?v=2.46"></script>
-    <script src="./tours_new.js?v=2.46"></script>
-    <script src="./tours_wind.js?v=2.46"></script>
+    <script src="./i18n.js?v=2.5"></script>
+    <script src="./quiz_bank.js?v=2.5"></script>
+    <script src="./quiz.js?v=2.5"></script>
+    <script src="./audio.js?v=2.5"></script>
+    <script src="./narration.js?v=2.5"></script>
+    <script src="./tours_data.js?v=2.5"></script>
+    <script src="./wind.js?v=2.5"></script>
+    <script src="./main.js?v=2.5"></script>
+    <script src="./search.js?v=2.5"></script>
+    <script src="./widgets.js?v=2.5"></script>
+    <script src="./tours_de.js?v=2.5"></script>
+    <script src="./tours_new.js?v=2.5"></script>
+    <script src="./tours_wind.js?v=2.5"></script>
 </body>
 </html>

@@ -653,76 +653,98 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 50);
         } catch(e) { console.warn('[EARTHQUAKES] Init failed:', e.message); }
 
-        // ── WILDFIRES (NASA EONET — Live GeoJSON) ──────────────
-        // NOTE: the old GIBS raster source (MODIS_Terra_Thermal_Anomalies_Day .png)
-        // 404'd on every tile — GIBS serves the thermal anomaly layers as vector
-        // tiles only, there is no raster PNG. EONET is keyless and CORS-enabled.
+        // ── WILDFIRES (NASA FIRMS — VIIRS satellite hotspots, lazy-loaded) ──
+        // EONET (the previous source) only lists curated, US-centric *named* fire
+        // events — Europe/global fires never appeared. FIRMS returns raw VIIRS
+        // 375m thermal hotspots worldwide via its keyed CSV area API (CORS: *).
+        // The world/1-day payload is ~5 MB, so we defer the fetch until the user
+        // first switches the layer on (see toggle-fires handler).
         try {
-            const fireResult = await window.reliableFetch(
-                'https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires&status=open&days=14', 'fires'
-            );
-            const fireFeatures = (fireResult.data.events || []).map(ev => {
-                const g = ev.geometry?.[ev.geometry.length - 1];
-                if (!g || g.type !== 'Point' || !Array.isArray(g.coordinates)) return null;
-                return {
-                    type: 'Feature',
-                    geometry: { type: 'Point', coordinates: g.coordinates },
-                    properties: {
-                        title: (ev.title || '').replace(/^Wildfire\s+/i, ''),
-                        date: g.date,
-                        acres: g.magnitudeUnit === 'acres' ? g.magnitudeValue : null,
-                        source: ev.sources?.[0]?.url || ''
-                    }
-                };
-            }).filter(Boolean);
-
             map.addSource('fires-src', {
                 type: 'geojson',
-                data: { type: 'FeatureCollection', features: fireFeatures }
-            });
-            map.addLayer({
-                id: 'fires-glow', type: 'circle', source: 'fires-src',
-                layout: { visibility: 'none' },
-                paint: {
-                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 9, 6, 22, 10, 45],
-                    'circle-color': '#ff5500',
-                    'circle-opacity': 0.18,
-                    'circle-blur': 1
-                }
+                data: { type: 'FeatureCollection', features: [] }
             });
             map.addLayer({
                 id: 'fires-layer', type: 'circle', source: 'fires-src',
                 layout: { visibility: 'none' },
                 paint: {
-                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 3, 6, 7, 10, 13],
+                    // small dots — at world zoom their density IS the wildfire signal
+                    'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 1.6, 5, 3, 8, 6, 11, 11],
                     'circle-color': ['case',
-                        ['>', ['coalesce', ['get', 'acres'], 0], 50000], '#ff2200',
-                        ['>', ['coalesce', ['get', 'acres'], 0], 5000], '#ff6600',
-                        '#ffaa00'
+                        ['>', ['coalesce', ['get', 'frp'], 0], 100], '#ff2200',
+                        ['>', ['coalesce', ['get', 'frp'], 0], 20], '#ff6600',
+                        '#ffcc00'
                     ],
-                    'circle-opacity': 0.9,
-                    'circle-stroke-color': '#ffdd88',
-                    'circle-stroke-width': 0.5,
-                    'circle-stroke-opacity': 0.5
+                    'circle-opacity': ['interpolate', ['linear'], ['zoom'], 2, 0.55, 8, 0.85],
+                    'circle-stroke-color': '#ff3300',
+                    'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 5, 0, 9, 0.4],
+                    'circle-stroke-opacity': 0.4
                 }
             });
             map.on('click', 'fires-layer', (e) => {
                 const p = e.features[0].properties;
-                const when = p.date ? new Date(p.date).toLocaleString() : '';
-                const acres = p.acres ? Number(p.acres) : null;
-                const areaLine = acres
-                    ? `<div style="background:rgba(255,85,0,.08);padding:3px 6px;margin-bottom:5px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'FLÄCHE':'AREA'}</div><div style="color:#ff6600;font-size:1.05rem;font-weight:bold;">${escHtml(acres.toLocaleString())} ${currentLang==='de'?'Acres':'acres'}</div></div>`
+                const when = (p.date && p.time != null)
+                    ? `${p.date} ${String(p.time).padStart(4, '0').replace(/(\d{2})(\d{2})/, '$1:$2')} UTC`
+                    : (p.date || '');
+                const frp = (p.frp != null && p.frp !== '') ? Number(p.frp).toFixed(1) : null;
+                const confLabel = { h: currentLang==='de'?'hoch':'high', n: currentLang==='de'?'normal':'nominal', l: currentLang==='de'?'niedrig':'low' }[p.conf] || p.conf || '';
+                const frpLine = frp
+                    ? `<div style="background:rgba(255,85,0,.08);padding:3px 6px;margin-bottom:5px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'STRAHLUNGSLEISTUNG':'FIRE RADIATIVE POWER'}</div><div style="color:#ff6600;font-size:1.05rem;font-weight:bold;">${escHtml(frp)} MW</div></div>`
                     : '';
                 new maplibregl.Popup({ maxWidth: '260px' }).setLngLat(e.lngLat).setHTML(
-                    `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;"><h3 style="color:#ff6600;margin:0 0 5px;border-bottom:1px solid #ff660044;padding-bottom:4px;">🔥 ${currentLang==='de'?'WALDBRAND':'WILDFIRE'}</h3>${areaLine}<div style="font-size:.65rem;opacity:.75;line-height:1.4;">${escHtml(p.title)}</div><div style="font-size:.55rem;opacity:.3;margin-top:5px;">${escHtml(when)} — NASA EONET</div></div>`
+                    `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;"><h3 style="color:#ff6600;margin:0 0 5px;border-bottom:1px solid #ff660044;padding-bottom:4px;">🔥 ${currentLang==='de'?'FEUER-HOTSPOT':'FIRE HOTSPOT'}</h3>${frpLine}<div style="font-size:.6rem;opacity:.75;line-height:1.5;">${currentLang==='de'?'Konfidenz':'Confidence'}: ${escHtml(confLabel)}<br>${currentLang==='de'?'Satellit':'Satellite'}: ${escHtml(p.sat || 'VIIRS')}</div><div style="font-size:.55rem;opacity:.3;margin-top:5px;">${escHtml(when)} — NASA FIRMS</div></div>`
                 ).addTo(map);
             });
             map.on('mouseenter', 'fires-layer', () => map.getCanvas().style.cursor = 'pointer');
             map.on('mouseleave', 'fires-layer', () => map.getCanvas().style.cursor = '');
-            updateLayerStatus('fires', fireResult.status === 'DEGRADED' ? 'DEGRADED' : 'LIVE', `${fireFeatures.length} active fires`);
+
+            // Lazy loader — fetched on first toggle-on, then cached in the source.
+            window.__firesLoaded = false;
+            window.__loadFires = async () => {
+                if (window.__firesLoaded) return;
+                window.__firesLoaded = true;              // guard re-entry
+                updateLayerStatus('fires', 'LIVE', 'loading…');
+                try {
+                    const KEY = window.GeopulseConfig.FIRMS_MAP_KEY;
+                    const url = `https://firms.modaps.eosdis.nasa.gov/api/area/csv/${KEY}/VIIRS_SNPP_NRT/world/1`;
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    const text = await res.text();
+                    const lines = text.trim().split(/\r?\n/);
+                    const cols = lines[0].split(',');
+                    const ci = {}; cols.forEach((c, i) => ci[c] = i);
+                    const features = [];
+                    for (let i = 1; i < lines.length; i++) {
+                        const c = lines[i].split(',');
+                        const conf = c[ci.confidence];
+                        if (conf === 'l') continue;         // drop low-confidence noise
+                        const lon = +c[ci.longitude], lat = +c[ci.latitude];
+                        if (isNaN(lon) || isNaN(lat)) continue;
+                        features.push({
+                            type: 'Feature',
+                            geometry: { type: 'Point', coordinates: [lon, lat] },
+                            properties: {
+                                frp: parseFloat(c[ci.frp]) || 0,
+                                conf: conf,
+                                sat: c[ci.satellite] || '',
+                                date: c[ci.acq_date] || '',
+                                time: c[ci.acq_time] || ''
+                            }
+                        });
+                    }
+                    const src = map.getSource('fires-src');
+                    if (src) src.setData({ type: 'FeatureCollection', features });
+                    updateLayerStatus('fires', 'LIVE', `${features.length} hotspots`);
+                } catch (err) {
+                    console.warn('[FIRES] FIRMS load failed:', err.message);
+                    window.__firesLoaded = false;           // allow retry on next toggle
+                    updateLayerStatus('fires', 'ERROR', 'FIRMS unreachable');
+                }
+            };
+            updateLayerStatus('fires', 'STANDBY', 'tap to load');
         } catch(e) {
             console.warn('[FIRES] Init failed:', e.message);
-            updateLayerStatus('fires', 'ERROR', 'EONET unreachable');
+            updateLayerStatus('fires', 'ERROR', 'init failed');
         }
 
         // ── SOLAR TERMINATOR (Calculated) ──────────────────────
@@ -2381,9 +2403,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('toggle-fires')?.addEventListener('change', (e) => {
         toggles.fires = e.target.checked;
+        if (toggles.fires && !window.__firesLoaded && window.__loadFires) window.__loadFires();
         const firesVis = toggles.fires ? 'visible' : 'none';
         if (map.getLayer('fires-layer')) map.setLayoutProperty('fires-layer', 'visibility', firesVis);
-        if (map.getLayer('fires-glow')) map.setLayoutProperty('fires-glow', 'visibility', firesVis);
     });
 
     document.getElementById('toggle-terminator')?.addEventListener('change', (e) => {
@@ -3609,7 +3631,7 @@ document.addEventListener("DOMContentLoaded", () => {
             'pipelines-layer',
             'starlink-layer',
             'terminator-layer',
-            'fires-layer', 'fires-glow',
+            'fires-layer',
             'country-borders', 'country-labels',
             'population-layer', 'temp-layer', 'sst-layer',
             'ai-atlas-lines',
@@ -4439,3 +4461,81 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log('[GEOPULSE] Option D: Collapse memory + NEW badges initialized');
 
 }); // end DOMContentLoaded
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LEFT-COLUMN EXCLUSIVITY CONTROLLER                    (added 2026-08-26)
+   ══════════════════════════════════════════════════════════════════════════
+   Publishes which left-column panel is currently open as `data-gp-panel` on
+   <body>; the stylesheet uses it to let the siblings step aside (see the
+   "LEFT COLUMN" block at the end of style.css).
+
+   Deliberately self-contained and appended at the end: it owns exactly one
+   attribute, reads no app state, and can be deleted in one piece. It does NOT
+   open or close anything — expansion stays with the existing :hover and
+   .touch-open rules; this only reports what is already open.
+   ────────────────────────────────────────────────────────────────────────── */
+(function gpLeftColumnExclusivity() {
+    var PANEL_IDS = ['tours-hud', 'quiz-hud'];
+    var DESKTOP = '(min-width: 769px)';
+
+    function init() {
+        var body = document.body;
+        if (!body) return;
+
+        var clearTimer = null;
+
+        function setOpen(id) {
+            if (clearTimer) { clearTimeout(clearTimer); clearTimer = null; }
+            if (id) body.setAttribute('data-gp-panel', id);
+            else body.removeAttribute('data-gp-panel');
+        }
+
+        // Small grace period on leave: moving the pointer between the header
+        // and the body of the same panel briefly leaves both, and clearing
+        // instantly would make the neighbours flash back in.
+        function scheduleClear() {
+            if (clearTimer) clearTimeout(clearTimer);
+            clearTimer = setTimeout(function () { setOpen(null); }, 120);
+        }
+
+        PANEL_IDS.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+
+            el.addEventListener('mouseenter', function () {
+                // Touch devices fire synthetic mouse events; there the
+                // .touch-open observer below is the source of truth.
+                if (!window.matchMedia(DESKTOP).matches) return;
+                if (!window.matchMedia('(hover: hover)').matches) return;
+                setOpen(id);
+            });
+            el.addEventListener('mouseleave', function () {
+                if (!window.matchMedia('(hover: hover)').matches) return;
+                scheduleClear();
+            });
+
+            // Touch/pointer-coarse path: the app toggles `.touch-open` itself,
+            // so mirror that class rather than guessing from touch events.
+            if (typeof MutationObserver === 'function') {
+                new MutationObserver(function () {
+                    if (!window.matchMedia(DESKTOP).matches) return;
+                    if (el.classList.contains('touch-open')) setOpen(id);
+                    else if (body.getAttribute('data-gp-panel') === id) setOpen(null);
+                }).observe(el, { attributes: true, attributeFilter: ['class'] });
+            }
+        });
+
+        // Leaving the viewport entirely (alt-tab, cursor off-window) must not
+        // strand the column in a half-open state.
+        document.addEventListener('visibilitychange', function () {
+            if (document.hidden) setOpen(null);
+        });
+        window.addEventListener('blur', function () { setOpen(null); });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
