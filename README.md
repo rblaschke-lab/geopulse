@@ -2,7 +2,7 @@
 
 **Free, real-time educational world map combining satellite imagery, geopolitical data, and live intelligence feeds into one interactive dashboard. By RB Design 2026.**
 
-![Version](https://img.shields.io/badge/version-2.6-blue)
+![Version](https://img.shields.io/badge/version-2.7-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Platform](https://img.shields.io/badge/platform-GitHub%20Pages-orange)
 ![Cost](https://img.shields.io/badge/cost-%240%2Fmonth-brightgreen)
@@ -129,4 +129,4 @@ This project is open source under the [MIT License](LICENSE).
 
 ---
 
-**GEOPULSE V2.6** — Built with 🛰️ by RB Design 2026
+**GEOPULSE V2.7** — Built with 🛰️ by RB Design 2026

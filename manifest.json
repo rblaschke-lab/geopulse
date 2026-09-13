@@ -1,7 +1,7 @@
 {
   "name": "GeoPulse — Live World Intelligence Map",
   "short_name": "GeoPulse",
-  "description": "Free educational world map with 50 quiz questions, 40 guided tours, 22 live data layers. Bilingual EN/DE.",
+  "description": "Free educational world map with 50 quiz questions, 42 guided tours, 23 live data layers. Bilingual EN/DE.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

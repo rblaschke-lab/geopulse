@@ -305,9 +305,28 @@
 
     <div class="timeline">
 
-        <!-- V2.6 — CURRENT -->
+        <!-- V2.7 — CURRENT -->
         <div class="version-entry">
             <div class="version-dot current"></div>
+            <div class="version-header">
+                <span class="version-number">V2.7</span>
+                <span class="version-type type-minor">MINOR</span>
+                <span class="version-name">Faster Start, Shareable Views, Findable Tours</span>
+                <span class="version-date">13 SEP 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon perf">⚡</span> <strong>Half the startup payload is gone</strong> — 429 KB less JavaScript before the page finishes loading (856 KB → 426 KB, measured in Chromium under identical conditions). The ~450 KB of tour prose is no longer fetched on arrival: the tour catalogue is plain markup and search reads the page itself, so the texts are only needed once a tour actually starts</li>
+                <li><span class="change-icon perf">⚡</span> <strong>Scripts no longer block the page</strong> — Everything loads with <code>defer</code>, and <code>tours_loader.js</code> picks up the tour texts when the browser goes idle. Click a tour before that finishes and the click is caught, the texts fetched, and the click replayed — no error, just a short wait</li>
+                <li><span class="change-icon feat">✦</span> <strong>Every view has its own link</strong> — The address bar now carries what is on screen: position, zoom, active layers, language and the running tour. Send that URL to thirty students and they land on exactly your view, not the homepage. No button, no account — the URL <em>is</em> the share link</li>
+                <li><span class="change-icon feat">✦</span> <strong>42 tours became 42 findable pages</strong> — Each guided tour now has a real address (<code>/tours/coldwar/</code>) with its stations, description and structured data, plus a <code>sitemap.xml</code> and a <code>robots.txt</code>. Until now a search for "Cold War map" could find nothing here, because there was only ever one URL to find</li>
+                <li><span class="change-icon fix">●</span> <strong>Offline mode actually works now</strong> — The service worker pre-cached paths like <code>/main.js</code> while the page asked for <code>/main.js?v=2.6</code>. Those never match, so the entire pre-cache sat unused and offline only ever worked by accident. The list is versioned now, the four files it was missing are in it, and a reload without a connection serves the app</li>
+                <li><span class="change-icon fix">●</span> <strong>Link previews show the preview image</strong> — <code>og:image</code> pointed at a relative path, which most platforms do not resolve. Shared links were arriving blank</li>
+            </ul>
+        </div>
+
+        <!-- V2.6 -->
+        <div class="version-entry">
+            <div class="version-dot"></div>
             <div class="version-header">
                 <span class="version-number">V2.6</span>
                 <span class="version-type type-minor">MINOR</span>
