@@ -44,15 +44,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
     
-    // Real visitor counter via CounterAPI.dev (persistent across all users)
+    // Visitor counter on our own IONOS webspace — no third party, no API key, no cookies.
+    // CounterAPI v1 was shut down (HTTP 410); v2 would need an API key in public JS.
+    // The historical offset (1247) now lives server-side in z.php.
     const COUNTER_OFFSET = 1247;
     (async () => {
         const sessionEl = document.getElementById('session-count');
         if (!sessionEl) return;
         try {
-            const res = await fetch('https://api.counterapi.dev/v1/geopulse-rbdesign/visits/up');
+            const res = await fetch('https://ralfblaschke.com/z.php?s=geopulse', { mode: 'cors' });
             const data = await res.json();
-            sessionEl.innerHTML = '<i class="fa-solid fa-eye" style="opacity:.6;margin-right:4px;"></i>' + ((data.count || 0) + COUNTER_OFFSET).toLocaleString() + ' VISITS';
+            sessionEl.innerHTML = '<i class="fa-solid fa-eye" style="opacity:.6;margin-right:4px;"></i>' + (data.count || 0).toLocaleString() + ' VISITS';
         } catch (e) {
             // Fallback: localStorage counter if API unreachable
             let count = parseInt(localStorage.getItem('geopulseSessionCount') || String(COUNTER_OFFSET), 10);
@@ -688,8 +690,19 @@ document.addEventListener("DOMContentLoaded", () => {
                     : (p.date || '');
                 const frp = (p.frp != null && p.frp !== '') ? Number(p.frp).toFixed(1) : null;
                 const confLabel = { h: currentLang==='de'?'hoch':'high', n: currentLang==='de'?'normal':'nominal', l: currentLang==='de'?'niedrig':'low' }[p.conf] || p.conf || '';
+                // FRP = Fire Radiative Power: die Wärmestrahlung, die der Satellit
+                // aus dem Bildpixel misst, in Megawatt. Ohne Einordnung ist "37 MW"
+                // für Laien bedeutungslos — darum Klasse + ein Satz Erklärung.
+                // Schwellen wie die Punktfarben der Ebene (20 / 100 MW).
+                const de = currentLang === 'de';
+                const frpN = frp != null ? Number(p.frp) : null;
+                const frpClass = frpN == null ? ''
+                    : frpN > 100 ? (de ? 'großes, intensives Feuer' : 'large, intense fire')
+                    : frpN > 20 ? (de ? 'mittleres Feuer' : 'moderate fire')
+                    : (de ? 'kleines Feuer / Feldbrand' : 'small fire / field burn');
+                const pixel = /modis|terra|aqua/i.test(p.sat || '') ? '1 km' : '375 m';
                 const frpLine = frp
-                    ? `<div style="background:rgba(255,85,0,.08);padding:3px 6px;margin-bottom:5px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'STRAHLUNGSLEISTUNG':'FIRE RADIATIVE POWER'}</div><div style="color:#ff6600;font-size:1.05rem;font-weight:bold;">${escHtml(frp)} MW</div></div>`
+                    ? `<div style="background:rgba(255,85,0,.08);padding:3px 6px;margin-bottom:5px;"><div style="opacity:.5;font-size:.6rem;">${de?'STRAHLUNGSLEISTUNG':'FIRE RADIATIVE POWER'}</div><div style="color:#ff6600;font-size:1.05rem;font-weight:bold;">${escHtml(frp)} MW <span style="font-size:.6rem;font-weight:normal;opacity:.85;">· ${frpClass}</span></div><div style="font-size:.55rem;opacity:.6;line-height:1.35;margin-top:2px;">${de ? `Wärme, die das Feuer abstrahlt — gemessen vom Satelliten im ≈${pixel}-Bildpunkt. Ein Maß für die Intensität: unter 20 MW klein, über 100 MW groß.` : `Heat radiated by the fire, measured by the satellite across a ≈${pixel} pixel. A gauge of intensity: under 20 MW small, over 100 MW large.`}</div></div>`
                     : '';
                 new maplibregl.Popup({ maxWidth: '260px' }).setLngLat(e.lngLat).setHTML(
                     `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;"><h3 style="color:#ff6600;margin:0 0 5px;border-bottom:1px solid #ff660044;padding-bottom:4px;">🔥 ${currentLang==='de'?'FEUER-HOTSPOT':'FIRE HOTSPOT'}</h3>${frpLine}<div style="font-size:.6rem;opacity:.75;line-height:1.5;">${currentLang==='de'?'Konfidenz':'Confidence'}: ${escHtml(confLabel)}<br>${currentLang==='de'?'Satellit':'Satellite'}: ${escHtml(p.sat || 'VIIRS')}</div><div style="font-size:.55rem;opacity:.3;margin-top:5px;">${escHtml(when)} — NASA FIRMS</div></div>`
@@ -1132,70 +1145,58 @@ document.addEventListener("DOMContentLoaded", () => {
         return '🛰️';
     };
 
+    // V2.7: the feed lives inline in the Real-Time menu (it used to be a
+    // hover-only HUD). Rendering is split from fetching so the countdown can
+    // tick every minute without spending the Launch Library quota
+    // (free tier: 15 requests/hour — we fetch every 10 minutes).
+    let lastLaunches = [];
+
+    const renderLaunches = () => {
+        if (!launchFeed) return;
+        // Out of i18n's hands: otherwise a language switch would overwrite the
+        // loaded list with "CONNECTING TO LAUNCH LIBRARY...". We re-render instead.
+        launchFeed.removeAttribute('data-i18n');
+        const de = currentLang === 'de';
+        if (!lastLaunches.length) {
+            launchFeed.innerHTML = `<div class="lm-empty">${de ? 'Keine Starttermine' : 'No upcoming data'}</div>`;
+            return;
+        }
+        launchFeed.innerHTML = lastLaunches.slice(0, 4).map(l => {
+            const agency = l.launch_service_provider?.name || 'Unknown';
+            const rocket = l.rocket?.configuration?.name || 'Unknown Rocket';
+            // LL2 names read "Rocket | Mission"; the rocket already has its own
+            // line below, so the headline is the mission.
+            const parts = String(l.name || '').split('|').map(s => s.trim()).filter(Boolean);
+            const name = parts[1] || parts[0] || 'Classified';
+            const pad = l.pad?.location?.name || '';
+            return `<div class="lm-row">
+                <div class="lm-top"><div class="lm-name" title="${escHtml(name)}">${getAgencyIcon(agency)} ${escHtml(name)}</div>${getCountdown(l.net)}</div>
+                <div class="lm-sub">${escHtml(rocket)}${pad ? ` · ${escHtml(pad)}` : ''}</div>
+            </div>`;
+        }).join('');
+    };
+
     const fetchLaunches = async () => {
         if (!launchFeed) return;
         try {
             const { data } = await window.reliableFetch('https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=5&format=json', 'launches', { timeout: 8000, retries: 1 });
-            const launches = data?.results || [];
-            if (!launches.length) {
-                launchFeed.innerHTML = '<span style="opacity:.5;">No upcoming data</span>';
-                return;
-            }
-            launchFeed.innerHTML = launches.map(l => {
-                const agency = l.launch_service_provider?.name || 'Unknown';
-                const rocket = l.rocket?.configuration?.name || 'Unknown Rocket';
-                const name = l.name?.split('|')[0]?.trim() || 'Classified';
-                const icon = getAgencyIcon(agency);
-                const countdown = getCountdown(l.net);
-                const pad = l.pad?.location?.name || '';
-                return `<div style="padding:4px 0;border-bottom:1px solid rgba(255,100,0,.15);font-size:.68rem;">
-                    <div style="color:#ff9955;">${icon} ${escHtml(name.length > 28 ? name.slice(0,27)+'…' : name)}</div>
-                    <div style="display:flex;justify-content:space-between;margin-top:2px;">
-                        <span style="opacity:.8;">${escHtml(rocket)}</span>
-                        ${countdown}
-                    </div>
-                    ${pad ? `<div style="opacity:.5;font-size:.58rem;">${escHtml(pad)}</div>` : ''}
-                </div>`;
-            }).join('');
+            lastLaunches = data?.results || [];
+            renderLaunches();
         } catch(e) {
-            launchFeed.innerHTML = '<span style="opacity:.4;">Launch data offline</span>';
+            // Keep showing the last good list rather than blanking it.
+            if (lastLaunches.length) return;
+            launchFeed.removeAttribute('data-i18n');
+            launchFeed.innerHTML = `<div class="lm-empty">${currentLang === 'de' ? 'Startdaten offline' : 'Launch data offline'}</div>`;
         }
     };
 
-    // ============================================================
-    // LAUNCH HUD — show on hover over menu trigger, hide on leave
-    // ============================================================
-    const launchHud = document.getElementById('launch-hud');
-    const launchTrigger = document.getElementById('launch-tracker-trigger');
-    let launchHudTimeout = null;
-
-    const showLaunchHud = () => {
-        clearTimeout(launchHudTimeout);
-        if (launchHud) {
-            launchHud.style.opacity = '1';
-            launchHud.style.pointerEvents = 'all';
-            launchHud.style.transform = 'translateX(0)';
-        }
+    setInterval(() => { if (lastLaunches.length) renderLaunches(); }, 60000);
+    document.addEventListener('setLang', () => setTimeout(renderLaunches, 0));
+    const _launchPrevSetLanguage = window.setLanguage;
+    window.setLanguage = function (lang) {
+        if (_launchPrevSetLanguage) _launchPrevSetLanguage(lang);
+        setTimeout(() => { if (lastLaunches.length) renderLaunches(); }, 0);
     };
-    const hideLaunchHud = () => {
-        // Small delay so user can move mouse into the HUD without it closing
-        launchHudTimeout = setTimeout(() => {
-            if (launchHud) {
-                launchHud.style.opacity = '0';
-                launchHud.style.pointerEvents = 'none';
-                launchHud.style.transform = 'translateX(-8px)';
-            }
-        }, 180);
-    };
-
-    if (launchTrigger) {
-        launchTrigger.addEventListener('mouseenter', showLaunchHud);
-        launchTrigger.addEventListener('mouseleave', hideLaunchHud);
-    }
-    if (launchHud) {
-        launchHud.addEventListener('mouseenter', showLaunchHud);
-        launchHud.addEventListener('mouseleave', hideLaunchHud);
-    }
 
     // ============================================================
     // REGIME MAP — Democracy vs Autocracy (Freedom House 2024)
@@ -2413,130 +2414,22 @@ document.addEventListener("DOMContentLoaded", () => {
         if (map.getLayer('terminator-layer')) map.setLayoutProperty('terminator-layer', 'visibility', toggles.terminator ? 'visible' : 'none');
     });
 
-    // ── WEBCAM CAMERA CATALOG ─────────────────────────────
-    // Each camera: { id, title, location, country, lat, lon, src, srcType, provider, tags }
-    // srcType: 'foto-webcam' = real snapshot from foto-webcam.eu (verified working)
-    // All cameras use foto-webcam.eu real snapshots (verified cross-origin working)
-    const WEBCAM_CATALOG = [
-        // ── Curated foto-webcam.eu cameras — verified working real snapshots ──
-        { id: 'zugspitze', title: 'Zugspitze Summit', location: 'Garmisch-Partenkirchen', country: 'DEU',
-          lat: 47.421, lon: 10.985, src: 'zugspitze', srcType: 'foto-webcam',
-          provider: 'foto-webcam.eu', tags: ['alps', 'mountain', 'germany'] },
-        { id: 'feldberg-ts', title: 'Großer Feldberg', location: 'Taunus / Wiesbaden Area', country: 'DEU',
-          lat: 50.222, lon: 8.446, src: 'feldberg-ts', srcType: 'foto-webcam',
-          provider: 'foto-webcam.eu', tags: ['taunus', 'hessen', 'wiesbaden'] },
-        { id: 'nebelhorn', title: 'Nebelhorn Panorama', location: 'Oberstdorf, Allgäu Alps', country: 'DEU',
-          lat: 47.408, lon: 10.343, src: 'nebelhorn', srcType: 'foto-webcam',
-          provider: 'foto-webcam.eu', tags: ['alps', 'panorama', 'germany'] },
-        { id: 'muenchen', title: 'Munich Panorama', location: 'Munich, Bavaria', country: 'DEU',
-          lat: 48.137, lon: 11.576, src: 'muenchen', srcType: 'foto-webcam',
-          provider: 'foto-webcam.eu', tags: ['city', 'bavaria', 'germany'] },
-        { id: 'innsbruck', title: 'Innsbruck Seegrube', location: 'Innsbruck, Austria', country: 'AUT',
-          lat: 47.306, lon: 11.388, src: 'innsbruck', srcType: 'foto-webcam',
-          provider: 'foto-webcam.eu', tags: ['city', 'alps', 'austria'] },
-        { id: 'wien', title: 'Vienna Skyline', location: 'Wien Donaustadt', country: 'AUT',
-          lat: 48.236, lon: 16.441, src: 'wien', srcType: 'foto-webcam',
-          provider: 'foto-webcam.eu', tags: ['city', 'austria'] },
-        { id: 'salzburg', title: 'Salzburg Panorama', location: 'Hochstaufen View', country: 'AUT',
-          lat: 47.760, lon: 12.873, src: 'salzburg', srcType: 'foto-webcam',
-          provider: 'foto-webcam.eu', tags: ['city', 'alps', 'austria'] },
-        { id: 'sonnblick', title: 'Sonnblick Observatory', location: '3106m, Hohe Tauern', country: 'AUT',
-          lat: 47.054, lon: 12.957, src: 'sonnblick', srcType: 'foto-webcam',
-          provider: 'foto-webcam.eu', tags: ['alps', 'science', 'austria'] },
-        { id: 'konkordiahuette', title: 'Konkordiahütte', location: 'Aletsch Glacier, Switzerland', country: 'CHE',
-          lat: 46.495, lon: 8.041, src: 'konkordiahuette', srcType: 'foto-webcam',
-          provider: 'foto-webcam.eu', tags: ['alps', 'glacier', 'switzerland'] },
-    ];
-
-
-    let webcamRefreshTimers = [];
-
-    const buildWebcamPopup = (cam) => {
-        if (cam.srcType === 'foto-webcam') {
-            // Real snapshot from foto-webcam.eu — verified working cross-origin
-            const imgUrl = `https://www.foto-webcam.eu/webcam/${cam.src}/current/640.jpg`;
-            const thumbId = `wcam-img-${cam.id}`;
-            return `
-                <div style="font-family:'Share Tech Mono',monospace; width:320px; background:rgba(0,10,20,0.97); border:1px solid #00d4ff; padding:0; border-radius:4px; overflow:hidden;">
-                    <div style="padding:6px 10px; border-bottom:1px solid rgba(0,212,255,0.2); display:flex; justify-content:space-between; align-items:center;">
-                        <span style="color:#00d4ff; font-size:0.72rem; letter-spacing:1px;"><i class="fa-solid fa-video" style="margin-right:4px;"></i>${escHtml(cam.title)}</span>
-                        <span style="font-size:0.5rem; color:#0f0; letter-spacing:1px;">● LIVE SNAPSHOT</span>
-                    </div>
-                    <div style="position:relative; width:100%; background:#000; line-height:0;">
-                        <img id="${thumbId}" src="${imgUrl}" style="width:100%; height:auto; display:block; min-height:140px; object-fit:cover;"
-                             alt="${escHtml(cam.title)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                        <div style="display:none; width:100%; height:160px; align-items:center; justify-content:center; flex-direction:column; background:rgba(0,0,0,0.9);">
-                            <i class="fa-solid fa-signal" style="color:#ff3344; font-size:1.5rem; margin-bottom:8px;"></i>
-                            <span style="color:#ff3344; font-size:0.7rem; letter-spacing:1px;">SIGNAL LOST</span>
-                        </div>
-                    </div>
-                    <div style="padding:5px 10px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.06);">
-                        <span style="font-size:0.5rem; color:rgba(255,255,255,0.35);">${escHtml(cam.location)}</span>
-                        <a href="https://www.foto-webcam.eu/webcam/${cam.src}/" target="_blank" rel="noopener" style="font-size:0.48rem; color:#00d4ff; text-decoration:none; letter-spacing:1px;">FULL VIEW ↗</a>
-                    </div>
-                    <div style="padding:3px 10px 5px; font-size:0.42rem; color:rgba(255,255,255,0.2); letter-spacing:1px;">
-                        SOURCE: ${escHtml(cam.provider)} · AUTO-REFRESH 60s · <span style="color:rgba(0,212,255,0.4);">foto-webcam.eu</span>
-                    </div>
-                </div>`;
-        }
-        return '<div style="padding:10px;color:#888;font-size:0.7rem;">No feed available</div>';
-    };
-
-    const initWebcams = () => {
-        const camCount = WEBCAM_CATALOG.length;
-
-        WEBCAM_CATALOG.forEach(cam => {
-            const el = document.createElement('div');
-            const markerColor = 'rgba(0,255,136,0.85)';
-            const glowColor = 'rgba(0,255,136,0.6)';
-            el.className = 'marker-webcam';
-            el.style.cssText = `width:20px;height:20px;cursor:pointer;`;
-            el.innerHTML = `<div style="width:20px;height:20px;background:${markerColor};border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;box-shadow:0 0 10px ${glowColor};transition:transform 0.2s;"><i class="fa-solid fa-video" style="font-size:8px;"></i></div>`;
-            const inner = el.firstElementChild;
-            el.onmouseenter = () => { inner.style.transform = 'scale(1.3)'; };
-            el.onmouseleave = () => { inner.style.transform = 'scale(1)'; };
-
-            const popup = new maplibregl.Popup({ offset: 14, maxWidth: '340px', closeButton: true })
-                .setHTML(buildWebcamPopup(cam));
-
-            const m = new maplibregl.Marker({ element: el, anchor: 'center' })
-                .setLngLat([cam.lon, cam.lat])
-                .setPopup(popup);
-
-            webcamMarkers.push(m);
-            if (toggles.webcams) m.addTo(map);
-        });
-
-        // Auto-refresh foto-webcam snapshots every 60s
-        const refreshInterval = setInterval(() => {
-            if (!toggles.webcams) return;
-            WEBCAM_CATALOG.filter(c => c.srcType === 'foto-webcam').forEach(cam => {
-                const img = document.getElementById(`wcam-img-${cam.id}`);
-                if (img) {
-                    img.src = `https://www.foto-webcam.eu/webcam/${cam.src}/current/640.jpg?t=${Date.now()}`;
-                }
-            });
-        }, 60000);
-        webcamRefreshTimers.push(refreshInterval);
-
-        if (window.updateLayerStatus) updateLayerStatus('webcams', 'LIVE', `${camCount} live snapshot cameras`);
-        setStatus(currentLang === 'de' ? `WEBCAMS ONLINE: ${camCount} Live-Kameras (foto-webcam.eu)` : `WEBCAMS ONLINE: ${camCount} live cameras (foto-webcam.eu)`);
-    };
-
     // ══════════════════════════════════════════════════════════════════════
     // KAMERA-RASTER — indexgestützt, zoomgesteuert                    (V2.6)
     // ══════════════════════════════════════════════════════════════════════
     //
-    // Die neun kuratierten foto-webcam.eu-Kameras oben bleiben unverändert:
-    // Panoramen, die man auch aus der Ferne sehen will. Hier kommt die Masse
-    // dazu — knapp 5.000 öffentliche Verkehrskameras aus London, Austin und
-    // Kalifornien.
+    // Seit V2.7 EIN System für alle Kameras: Verkehrskameras (London, Austin,
+    // Kalifornien, Finnland, Hongkong, British Columbia, Ontario, Neuseeland)
+    // und die Panoramen von foto-webcam.eu (Deutschland, Österreich, Italien,
+    // Schweiz). Die früheren neun fest verdrahteten Panoramakameras sind darin
+    // aufgegangen — sie waren eine Teilmenge desselben Katalogs.
     //
     // Drei Regeln halten das beherrschbar:
     //
     //  1. NICHTS VOR DER STADTEBENE. Unterhalb CAM_MIN_ZOOM wird kein einziger
-    //     Marker gezeichnet. 5.000 Punkte auf einer Weltkarte sind kein
-    //     Informationsgewinn, sondern Konfetti.
+    //     Verkehrskamera-Marker gezeichnet. Tausende Punkte auf einer Weltkarte
+    //     sind kein Informationsgewinn, sondern Konfetti. Einzige Ausnahme:
+    //     Panoramen (dünn gesät) erscheinen schon auf Landesebene.
     //  2. NUR DER AUSSCHNITT, gedeckelt auf CAM_MAX_MARKERS. Der Index bleibt
     //     vollständig im Speicher — er ist Daten, keine DOM-Knoten, und kostet
     //     die Karte nichts.
@@ -2547,6 +2440,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // scripts/build-camera-index.mjs und wird träge geladen: wer den Layer nie
     // einschaltet und nie nach einer Kamera sucht, lädt ihn nie.
     const CAM_MIN_ZOOM = 11;        // Stadtebene — Straßenzüge unterscheidbar
+    /** Ausnahmen je Quelle. MUSS zu REGION_ZOOM in scripts/build-camera-index.mjs passen. */
+    const CAM_MIN_ZOOM_SRC = { f: 7 };
+    const camMinZoom = (src) => CAM_MIN_ZOOM_SRC[src] ?? CAM_MIN_ZOOM;
+    const CAM_LOWEST_ZOOM = Math.min(CAM_MIN_ZOOM, ...Object.values(CAM_MIN_ZOOM_SRC));
     const CAM_MAX_MARKERS = 300;    // Obergrenze je Ausschnitt
     const CAM_REFRESH_MS = 60000;
 
@@ -2554,8 +2451,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const CAM_IMAGE_URL = {
         t: (id) => `https://s3-eu-west-1.amazonaws.com/jamcams.tfl.gov.uk/${id}.jpg`,
         a: (id) => `https://cctv.austinmobility.io/image/${id}.jpg`,
+        f: (id) => `https://www.foto-webcam.eu/webcam/${id}/current/640.jpg`,
+        d: (id) => `https://weathercam.digitraffic.fi/${id}.jpg`,
+        h: (id) => `https://tdcctv.data.one.gov.hk/${id}.JPG`,
+        b: (id) => `https://images.drivebc.ca/bchighwaycam/pub/cameras/${id}.jpg`,
+        o: (id) => `https://511on.ca/map/Cctv/${id}`,
+        n: (id) => `https://www.trafficnz.info/camera/${id}.jpg`,
     };
-    const CAM_SOURCE_LABEL = { t: 'TfL Open Data', a: 'City of Austin', c: 'Caltrans' };
+    const CAM_SOURCE_LABEL = {
+        t: 'TfL Open Data', a: 'City of Austin', c: 'Caltrans', f: 'foto-webcam.eu',
+        d: 'Fintraffic', h: 'Transport Department HKSAR', b: 'DriveBC', o: '511ON', n: 'NZTA',
+    };
 
     let camIndex = null;            // { generated, attribution, cameras: [...] }
     let camIndexPromise = null;
@@ -2598,6 +2504,14 @@ document.addEventListener("DOMContentLoaded", () => {
         // Notnagel, falls der Index eine unbekannte Quelle mitbringt.
         const src = camIndex?.attribution?.[c[0]] || CAM_SOURCE_LABEL[c[0]] || c[0];
         const de = currentLang === 'de';
+        const sep = img.includes('?') ? '&' : '?';
+        // Panoramen haben auf foto-webcam.eu eine Vollbild- und Zeitraffer-Seite —
+        // die ist das eigentliche Erlebnis, das 640-px-Bild nur die Vorschau.
+        // Nur eigene Kameras (ohne mitgespeicherte Bild-URL) — Partnerkameras
+        // haben ihre Vollbildseite auf fremden Servern mit eigenem Schema.
+        const full = c[0] === 'f' && !c[5]
+            ?`<a href="https://www.foto-webcam.eu/webcam/${encodeURIComponent(c[1])}/" target="_blank" rel="noopener" style="color:#00d4ff; text-decoration:none; letter-spacing:1px; margin-left:6px;">${de ? 'VOLLBILD' : 'FULL VIEW'} ↗</a>`
+            : '';
         return `
             <div style="font-family:'Share Tech Mono',monospace; width:320px; background:rgba(0,10,20,0.97); border:1px solid #00d4ff; border-radius:4px; overflow:hidden;">
                 <div style="padding:6px 10px; border-bottom:1px solid rgba(0,212,255,0.2); display:flex; justify-content:space-between; align-items:center; gap:8px;">
@@ -2605,7 +2519,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span style="font-size:0.5rem; color:#0f0; letter-spacing:1px; flex-shrink:0;">● LIVE</span>
                 </div>
                 <div style="position:relative; width:100%; background:#000; line-height:0;">
-                    <img src="${escHtml(img)}?t=${Date.now()}" style="width:100%; height:auto; display:block; min-height:120px; object-fit:cover;"
+                    <img src="${escHtml(img)}${sep}t=${Date.now()}" style="width:100%; height:auto; display:block; min-height:120px; object-fit:cover;"
                          alt="${escHtml(c[4])}" loading="lazy"
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                     <div style="display:none; width:100%; height:140px; align-items:center; justify-content:center; flex-direction:column; background:rgba(0,0,0,0.9);">
@@ -2614,7 +2528,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 </div>
                 <div style="padding:4px 10px 6px; font-size:0.42rem; color:rgba(255,255,255,0.3); letter-spacing:0.5px; line-height:1.35;">
-                    ${escHtml(src)}${camIndex?.generated ? ` · ${de ? 'Index' : 'index'} ${escHtml(camIndex.generated)}` : ''}
+                    ${escHtml(src)}${camIndex?.generated ? ` · ${de ? 'Index' : 'index'} ${escHtml(camIndex.generated)}` : ''}${full}
                 </div>
             </div>`;
     }
@@ -2633,49 +2547,80 @@ document.addEventListener("DOMContentLoaded", () => {
      * weil ihm niemand gesagt hat, wo überhaupt etwas ist. Diese Marken sagen es,
      * und ein Klick bringt einen hin.
      */
-    const camRegionMarkers = [];
+    const camRegionMarkers = new Map();   // region.key -> maplibregl.Marker
 
-    function showCamRegions() {
-        if (camRegionMarkers.length || !camIndex?.regions) return;
+    /**
+     * Ab welcher Zoomstufe eine Region Einzelkameras zeigt. Jede Marke bleibt
+     * genau so lange stehen, bis ihre eigenen Kameras sichtbar werden — die
+     * Panoramen lösen sich also früher auf als die Verkehrskameras.
+     * Ältere Indizes ohne `zoom`/`src` fallen auf die Quellregel zurück.
+     */
+    const regionZoom = (r) => r.zoom ?? camMinZoom(r.src || r.key);
+
+    function buildCamRegionMarker(r) {
         const de = currentLang === 'de';
+        const pano = (r.src || r.key) === 'f';
+        const rgb = pano ? '0,230,140' : '0,212,255';
+        const el = document.createElement('div');
+        el.className = 'marker-cam-region';
+        el.style.cssText = 'cursor:pointer;white-space:nowrap;';
+        el.innerHTML = `<div style="display:flex;align-items:center;gap:5px;padding:3px 9px;background:rgba(0,20,35,0.92);border:1px solid rgba(${rgb},0.55);border-radius:11px;box-shadow:0 0 10px rgba(${rgb},0.25);font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:rgb(${rgb});letter-spacing:0.5px;transition:transform .15s;">
+            <i class="fa-solid ${pano ? 'fa-mountain-sun' : 'fa-video'}" style="font-size:0.55rem;opacity:.8;"></i>
+            <span><strong>${r.count.toLocaleString(de ? 'de-DE' : 'en-US')}</strong> ${escHtml(de ? r.label_de : r.label_en)}</span>
+        </div>`;
+        const inner = el.firstElementChild;
+        el.onmouseenter = () => { inner.style.transform = 'scale(1.08)'; };
+        el.onmouseleave = () => { inner.style.transform = 'scale(1)'; };
+        el.onclick = (ev) => {
+            ev.stopPropagation();
+            map.flyTo({ center: [r.lon, r.lat], zoom: regionZoom(r) + 1, speed: 1.3 });
+        };
+        return new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat([r.lon, r.lat]).addTo(map);
+    }
+
+    function syncCamRegions(zoom) {
+        if (!camIndex?.regions) return;
         for (const r of camIndex.regions) {
-            const el = document.createElement('div');
-            el.className = 'marker-cam-region';
-            el.style.cssText = 'cursor:pointer;white-space:nowrap;';
-            el.innerHTML = `<div style="display:flex;align-items:center;gap:5px;padding:3px 9px;background:rgba(0,20,35,0.92);border:1px solid rgba(0,212,255,0.55);border-radius:11px;box-shadow:0 0 10px rgba(0,212,255,0.25);font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:#00d4ff;letter-spacing:0.5px;transition:transform .15s;">
-                <i class="fa-solid fa-video" style="font-size:0.55rem;opacity:.8;"></i>
-                <span><strong>${r.count.toLocaleString(de ? 'de-DE' : 'en-US')}</strong> ${escHtml(de ? r.label_de : r.label_en)}</span>
-            </div>`;
-            const inner = el.firstElementChild;
-            el.onmouseenter = () => { inner.style.transform = 'scale(1.08)'; };
-            el.onmouseleave = () => { inner.style.transform = 'scale(1)'; };
-            el.onclick = (ev) => {
-                ev.stopPropagation();
-                map.flyTo({ center: [r.lon, r.lat], zoom: 12, speed: 1.3 });
-            };
-            camRegionMarkers.push(new maplibregl.Marker({ element: el, anchor: 'center' })
-                .setLngLat([r.lon, r.lat]).addTo(map));
+            const want = zoom < regionZoom(r);
+            const have = camRegionMarkers.get(r.key);
+            if (want && !have) camRegionMarkers.set(r.key, buildCamRegionMarker(r));
+            else if (!want && have) { have.remove(); camRegionMarkers.delete(r.key); }
         }
     }
 
-    function hideCamRegions() {
+    function clearCamRegions() {
         camRegionMarkers.forEach((m) => m.remove());
-        camRegionMarkers.length = 0;
+        camRegionMarkers.clear();
+    }
+
+    /** Nächste Kamera zur Kartenmitte — für "hier gibt es nichts, aber dort". */
+    function nearestCamera() {
+        if (!camIndex?.cameras.length) return null;
+        const { lng, lat } = map.getCenter();
+        const kx = 111.32 * Math.cos(lat * Math.PI / 180), ky = 110.57;
+        let best = null, bestD = Infinity;
+        for (const c of camIndex.cameras) {
+            const dx = (c[3] - lng) * kx, dy = (c[2] - lat) * ky;
+            const d = dx * dx + dy * dy;
+            if (d < bestD) { bestD = d; best = c; }
+        }
+        return best && { cam: best, km: Math.round(Math.sqrt(bestD)) };
     }
 
     /** Zeichnet die Kameras des aktuellen Ausschnitts und räumt weg, was hinausgescrollt ist. */
     function renderCamViewport() {
         if (!toggles.webcams || !camIndex) return;
 
-        if (map.getZoom() < CAM_MIN_ZOOM) {
+        const zoom = map.getZoom();
+        syncCamRegions(zoom);
+
+        if (zoom < CAM_LOWEST_ZOOM) {
             camMarkers.forEach((m) => m.remove());
             camMarkers.clear();
             camPopup?.remove();
-            showCamRegions();
             reportCamStatus(0, true);
             return;
         }
-        hideCamRegions();
 
         const b = map.getBounds();
         const w = b.getWest(), e = b.getEast(), s = b.getSouth(), n = b.getNorth();
@@ -2683,6 +2628,7 @@ document.addEventListener("DOMContentLoaded", () => {
         for (const c of camIndex.cameras) {
             const lat = c[2], lon = c[3];
             if (lat < s || lat > n || lon < w || lon > e) continue;
+            if (zoom < camMinZoom(c[0])) continue;
             visible.push(c);
             if (visible.length >= CAM_MAX_MARKERS) break;
         }
@@ -2693,10 +2639,15 @@ document.addEventListener("DOMContentLoaded", () => {
         for (const c of visible) {
             const k = camKey(c);
             if (camMarkers.has(k)) continue;
+            // Panoramen grün mit Bergsymbol, Verkehrskameras als schlichter
+            // Cyan-Punkt — auf einen Blick unterscheidbar, gleiches Popup.
+            const pano = c[0] === 'f';
+            const size = pano ? 16 : 14;
+            const rgb = pano ? '0,230,140' : '0,212,255';
             const el = document.createElement('div');
             el.className = 'marker-webcam marker-cctv';
-            el.style.cssText = 'width:14px;height:14px;cursor:pointer;';
-            el.innerHTML = '<div style="width:14px;height:14px;background:rgba(0,212,255,0.8);border-radius:50%;border:1.5px solid rgba(255,255,255,0.9);box-shadow:0 0 6px rgba(0,212,255,0.5);transition:transform 0.15s;"></div>';
+            el.style.cssText = `width:${size}px;height:${size}px;cursor:pointer;`;
+            el.innerHTML = `<div style="width:${size}px;height:${size}px;background:rgba(${rgb},0.85);border-radius:50%;border:1.5px solid rgba(255,255,255,0.9);box-shadow:0 0 6px rgba(${rgb},0.5);transition:transform 0.15s;display:flex;align-items:center;justify-content:center;">${pano ? '<i class="fa-solid fa-mountain-sun" style="font-size:7px;color:#fff;"></i>' : ''}</div>`;
             const inner = el.firstElementChild;
             el.onmouseenter = () => { inner.style.transform = 'scale(1.4)'; };
             el.onmouseleave = () => { inner.style.transform = 'scale(1)'; };
@@ -2731,31 +2682,29 @@ document.addEventListener("DOMContentLoaded", () => {
             ?.closest('.control-item')?.querySelector('.layer-desc');
         if (!el) return;
 
-        const total = (camIndex?.cameras.length || 0) + WEBCAM_CATALOG.length;
+        const total = camIndex?.cameras.length || 0;
         const de = currentLang === 'de';
         const num = (n) => n.toLocaleString(de ? 'de-DE' : 'en-US');
         let detail;
         if (!camIndex) {
-            detail = de ? `${WEBCAM_CATALOG.length} Panoramakameras` : `${WEBCAM_CATALOG.length} panorama cameras`;
+            detail = de ? 'Kameraindex wird geladen …' : 'Loading camera index …';
         } else if (zoomedOut) {
-            // Regionen NAMENTLICH nennen. "4.992 Kameras, auf Stadtebene zoomen"
-            // wäre eine Lüge durch Auslassung: außerhalb dieser drei Gebiete
-            // gibt es keine, und wer das nicht weiß, sucht vergeblich.
-            const names = (camIndex.regions || []).map((r) => (de ? r.label_de : r.label_en));
-            const list = names.length
-                ? names.slice(0, -1).join(', ') + (names.length > 1 ? (de ? ' und ' : ' and ') : '') + names[names.length - 1]
-                : '';
+            // Bei zehn Regionen passt keine Namensliste mehr in die Zeile — die
+            // Marken auf der Karte nennen sie ohnehin, mit Zahl und Klickziel.
+            const nReg = (camIndex.regions || []).length;
             detail = de
-                ? `${num(total)} Kameras · Verkehrskameras in ${list} — dort auf Stadtebene zoomen`
-                : `${num(total)} cameras · traffic cams in ${list} — zoom to city level there`;
+                ? `${num(total)} Kameras in ${nReg} Regionen · Marke anklicken oder heranzoomen`
+                : `${num(total)} cameras in ${nReg} regions · click a badge or zoom in`;
         } else if (shown === 0) {
-            // Der Fall, der das Feature kaputt aussehen lässt: Stadtebene, aber
+            // Der Fall, der das Feature kaputt aussehen lässt: nah dran, aber
             // außerhalb der abgedeckten Gebiete. "0 im Ausschnitt" wäre richtig
-            // und trotzdem nutzlos — es muss dastehen, wo etwas zu finden ist.
-            const names = (camIndex.regions || []).map((r) => (de ? r.label_de : r.label_en)).join(' · ');
-            detail = de
-                ? `hier keine Verkehrskameras · ${num(total)} in ${names}`
-                : `no traffic cams here · ${num(total)} in ${names}`;
+            // und trotzdem nutzlos — es muss dastehen, wo die nächste ist.
+            const near = nearestCamera();
+            detail = near
+                ? (de
+                    ? `hier keine Kameras · nächste ${num(near.km)} km entfernt: ${near.cam[4]}`
+                    : `no cameras here · nearest ${num(near.km)} km away: ${near.cam[4]}`)
+                : (de ? 'hier keine Kameras' : 'no cameras here');
         } else {
             const capped = shown >= CAM_MAX_MARKERS ? '+' : '';
             detail = de
@@ -2775,7 +2724,7 @@ document.addEventListener("DOMContentLoaded", () => {
         reportCamStatus(camStatusState.shown, camStatusState.zoomedOut);
         // Die Abdeckungsmarken tragen Text ("890 London") — neu aufbauen, sonst
         // steht die Zahl in der alten Sprachformatierung da.
-        if (camRegionMarkers.length) { hideCamRegions(); showCamRegions(); }
+        if (camRegionMarkers.size) { clearCamRegions(); syncCamRegions(map.getZoom()); }
     }
     document.addEventListener('setLang', () => setTimeout(refreshCamLocalisation, 0));
     const _camPrevSetLanguage = window.setLanguage;
@@ -2806,8 +2755,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('toggle-webcams')?.addEventListener('change', (e) => {
         toggles.webcams = e.target.checked;
-        if (toggles.webcams && webcamMarkers.length === 0) initWebcams();
-        webcamMarkers.forEach(m => toggles.webcams ? m.addTo(map) : m.remove());
 
         if (toggles.webcams) {
             if (!camGridBound) {
@@ -2821,11 +2768,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (img) img.src = img.src.replace(/([?&]t=)\d+/, `$1${Date.now()}`);
                 }, CAM_REFRESH_MS);
             }
-            ensureCamIndex().then(renderCamViewport).catch(() => { /* Panoramakameras laufen weiter */ });
+            reportCamStatus(0, true);   // "wird geladen" statt des statischen Beschreibungstexts
+            ensureCamIndex().then(renderCamViewport).catch(() => {
+                setStatus(currentLang === 'de' ? 'KAMERAINDEX NICHT LADBAR' : 'CAMERA INDEX UNAVAILABLE');
+            });
         } else {
             camMarkers.forEach((m) => m.remove());
             camMarkers.clear();
-            hideCamRegions();
+            clearCamRegions();
             camPopup?.remove();
         }
     });

@@ -2,7 +2,7 @@
 
 **Free, real-time educational world map combining satellite imagery, geopolitical data, and live intelligence feeds into one interactive dashboard. By RB Design 2026.**
 
-![Version](https://img.shields.io/badge/version-2.7-blue)
+![Version](https://img.shields.io/badge/version-2.8-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Platform](https://img.shields.io/badge/platform-GitHub%20Pages-orange)
 ![Cost](https://img.shields.io/badge/cost-%240%2Fmonth-brightgreen)
@@ -48,7 +48,7 @@
 | Architecture | Vanilla JavaScript (no frameworks, no bundlers) |
 | Hosting | GitHub Pages (static, free) |
 | Audio | Web Audio API (procedural) + Web Speech API |
-| Data Sources | USGS, NASA FIRMS/GIBS, NOAA, foto-webcam.eu, TfL Open Data, City of Austin, Caltrans, WhereTheISS, Wikipedia |
+| Data Sources | USGS, NASA FIRMS/GIBS, NOAA, Launch Library 2, foto-webcam.eu, TfL Open Data, City of Austin, Caltrans, Fintraffic Digitraffic, HK Transport Department, DriveBC, 511 Ontario, NZ Transport Agency, WhereTheISS, Wikipedia |
 
 > 📋 See [TECH_SPEC.md](TECH_SPEC.md) for the full technical specification, complexity analysis, and API inventory.
 
@@ -74,18 +74,28 @@ open http://localhost:8080
 
 ### Refreshing the camera index
 
-`data/cameras.json` holds 4,996 traffic cameras and is the one file in the project
-that is generated rather than hand-written:
+`data/cameras.json` holds about 9,400 public cameras and is the one file in the
+project that is generated rather than hand-written:
 
 ```bash
 node scripts/build-camera-index.mjs
 ```
 
-It reads the open catalogues of TfL London, the City of Austin and nine Caltrans
-districts — together over 3 MB — and condenses them to what the map needs:
-position, name, and how to reach the image. The result is 662 KB (143 KB gzipped)
-and is loaded lazily in the browser, only when the webcam layer is switched on or
+It reads nine open catalogues — foto-webcam.eu (panoramas in Germany, Austria,
+Italy, Switzerland), TfL London, the City of Austin, nine Caltrans districts,
+Fintraffic (Finland), the Hong Kong Transport Department, DriveBC, 511 Ontario and
+NZ Transport Agency — and condenses them to what the map needs: position, name,
+and how to reach the image. The result is about 1 MB (234 KB gzipped) and is
+loaded lazily in the browser, only when the webcam layer is switched on or
 someone searches.
+
+Each source is one parser function in the script; the frontend is source-agnostic
+apart from one image-URL template per source in `main.js` (`CAM_IMAGE_URL`) and
+the image host in the CSP `img-src` of `index.html`. A new source needs all three.
+
+German traffic cameras are not in it because none are openly available: the
+Autobahn GmbH webcam API is empty, Hamburg withdrew its camera images for legal
+reasons, and BayernInfo publishes only through the registration-based Mobilithek.
 
 Two things worth knowing:
 
@@ -129,4 +139,4 @@ This project is open source under the [MIT License](LICENSE).
 
 ---
 
-**GEOPULSE V2.7** — Built with 🛰️ by RB Design 2026
+**GEOPULSE V2.8** — Built with 🛰️ by RB Design 2026

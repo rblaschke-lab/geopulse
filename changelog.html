@@ -305,11 +305,11 @@
 
     <div class="timeline">
 
-        <!-- V2.7 — CURRENT -->
+        <!-- V2.8 — CURRENT -->
         <div class="version-entry">
             <div class="version-dot current"></div>
             <div class="version-header">
-                <span class="version-number">V2.7</span>
+                <span class="version-number">V2.8</span>
                 <span class="version-type type-minor">MINOR</span>
                 <span class="version-name">Faster Start, Shareable Views, Findable Tours</span>
                 <span class="version-date">13 SEP 2026</span>
@@ -319,8 +319,29 @@
                 <li><span class="change-icon perf">⚡</span> <strong>Scripts no longer block the page</strong> — Everything loads with <code>defer</code>, and <code>tours_loader.js</code> picks up the tour texts when the browser goes idle. Click a tour before that finishes and the click is caught, the texts fetched, and the click replayed — no error, just a short wait</li>
                 <li><span class="change-icon feat">✦</span> <strong>Every view has its own link</strong> — The address bar now carries what is on screen: position, zoom, active layers, language and the running tour. Send that URL to thirty students and they land on exactly your view, not the homepage. No button, no account — the URL <em>is</em> the share link</li>
                 <li><span class="change-icon feat">✦</span> <strong>42 tours became 42 findable pages</strong> — Each guided tour now has a real address (<code>/tours/coldwar/</code>) with its stations, description and structured data, plus a <code>sitemap.xml</code> and a <code>robots.txt</code>. Until now a search for "Cold War map" could find nothing here, because there was only ever one URL to find</li>
-                <li><span class="change-icon fix">●</span> <strong>Offline mode actually works now</strong> — The service worker pre-cached paths like <code>/main.js</code> while the page asked for <code>/main.js?v=2.6</code>. Those never match, so the entire pre-cache sat unused and offline only ever worked by accident. The list is versioned now, the four files it was missing are in it, and a reload without a connection serves the app</li>
+                <li><span class="change-icon fix">●</span> <strong>Offline mode actually works now</strong> — The service worker pre-cached paths like <code>/main.js</code> while the page asked for <code>/main.js?v=2.7</code>. Those never match, so the entire pre-cache sat unused and offline only ever worked by accident. The list is versioned now, the four files it was missing are in it, and a reload without a connection serves the app</li>
                 <li><span class="change-icon fix">●</span> <strong>Link previews show the preview image</strong> — <code>og:image</code> pointed at a relative path, which most platforms do not resolve. Shared links were arriving blank</li>
+            </ul>
+        </div>
+
+        <!-- V2.7 -->
+        <div class="version-entry">
+            <div class="version-dot"></div>
+            <div class="version-header">
+                <span class="version-number">V2.7</span>
+                <span class="version-type type-minor">MINOR</span>
+                <span class="version-name">9,438 Cameras on Four Continents</span>
+                <span class="version-date">11 SEP 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon feat">✦</span> <strong>340 panoramas instead of 9</strong> — The full foto-webcam.eu catalogue replaces the nine hand-picked cameras: 101 in Germany (Bavarian Alps, Munich, Sauerland, Taunus), 189 in Austria, 42 in South Tyrol &amp; Italy, 8 in Switzerland. Green markers, visible from country level; the popup links to the full-size view with time-lapse</li>
+                <li><span class="change-icon feat">✦</span> <strong>Five new traffic-camera regions</strong> — Finland (806, Fintraffic), Hong Kong (1,013), British Columbia (1,040), Ontario (944) and New Zealand (255) join London, Austin and California. All open data, no API key, no server</li>
+                <li><span class="change-icon ui">◆</span> <strong>One badge per region</strong> — Zoomed out, twelve labelled badges show where cameras are and how many; each disappears exactly when its own cameras take over. Out of range, the layer names the nearest camera and its distance instead of "none here"</li>
+                <li><span class="change-icon ui">◆</span> <strong>Upcoming launches back in the menu</strong> — The next four launches with live countdowns sit directly under Real-Time Tracking, in place of the old "9 webcams" line. The hover-only launch panel is gone — it never opened on touch screens and covered the search bar</li>
+                <li><span class="change-icon ui">◆</span> <strong>New welcome globe</strong> — The bouncing 🌍 emoji is replaced by a drawn wireframe globe: turning meridians, an orbiting satellite and live-event pings, in the map's own cyan and amber. Motion stops for visitors who prefer reduced motion</li>
+                <li><span class="change-icon ui">◆</span> <strong>Fire hotspots explained</strong> — The MW value in a wildfire popup now says what it is (radiant heat measured by the satellite across a ≈375 m pixel) and classifies it: small under 20 MW, moderate, large over 100 MW</li>
+                <li><span class="change-icon fix">●</span> <strong>Index and CSP cannot drift apart</strong> — The build script reads the page's <code>img-src</code> and skips any partner camera whose image host isn't allowed, naming the missing host, instead of shipping dead markers</li>
+                <li><span class="change-icon fix">●</span> <strong>Germany, honestly</strong> — German traffic cameras are not openly available: the Autobahn GmbH webcam API is empty, Hamburg withdrew its camera images for legal reasons, and BayernInfo publishes only via the registration-based Mobilithek. Germany is covered by panoramas instead</li>
             </ul>
         </div>
 

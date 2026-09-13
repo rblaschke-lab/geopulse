@@ -17,7 +17,7 @@ const i18n = {
         layer_religion: 'Religious Affiliation', desc_religion: 'Largest religious group per country, coloured by tradition. Click a country for the full breakdown. Source: Pew Research Center, 2020.',
 
         layer_iss: 'ISS Tracker', desc_iss: 'International Space Station — orbits Earth every 90 minutes at 28,000 km/h.',
-        layer_webcams: 'Live Webcams', desc_webcams: '9 curated alpine & city webcams with real-time snapshots from foto-webcam.eu.',
+        layer_webcams: 'Live Webcams', desc_webcams: 'Thousands of public traffic & panorama cameras — Alps & Germany, London, Finland, Hong Kong, North America, New Zealand. Zoom in to see them.',
         layer_earthquakes: 'Earthquakes', desc_earthquakes: 'Live seismic events from USGS. Circle size = magnitude. Updated every 5 min.',
         layer_fires: 'NASA Wildfires', desc_fires: 'Active fire detection by NASA FIRMS satellites. Near real-time hotspots.',
         layer_terminator: 'Day/Night Line', desc_terminator: 'Solar terminator — the real-time boundary between day and night on Earth.',
@@ -139,7 +139,7 @@ const i18n = {
         layer_religion: 'Religionszugehörigkeit', desc_religion: 'Größte Religionsgruppe je Land, nach Tradition eingefärbt. Land anklicken für die vollständige Aufschlüsselung. Quelle: Pew Research Center, 2020.',
 
         layer_iss: 'ISS Tracker', desc_iss: 'Internationale Raumstation — umkreist die Erde alle 90 Minuten mit 28.000 km/h.',
-        layer_webcams: 'Live-Webcams', desc_webcams: '9 kuratierte Alpen- & Stadt-Webcams mit Echtzeit-Schnappschüssen von foto-webcam.eu.',
+        layer_webcams: 'Live-Webcams', desc_webcams: 'Tausende öffentliche Verkehrs- & Panoramakameras — Alpen & Deutschland, London, Finnland, Hongkong, Nordamerika, Neuseeland. Heranzoomen, um sie zu sehen.',
         layer_earthquakes: 'Erdbeben', desc_earthquakes: 'Live-Seismik von USGS. Kreisgröße = Magnitude. Aktualisierung alle 5 Min.',
         layer_fires: 'NASA Waldbrände', desc_fires: 'Aktive Branderkennung durch NASA FIRMS Satelliten. Nahezu Echtzeit.',
         layer_terminator: 'Tag/Nacht-Linie', desc_terminator: 'Solarterminator — die Echtzeit-Grenze zwischen Tag und Nacht auf der Erde.',
