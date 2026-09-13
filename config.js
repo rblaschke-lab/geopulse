@@ -1,6 +1,6 @@
 // Global GEOPULSE Configuration
 window.GeopulseConfig = {
-    VERSION: "2.6",
+    VERSION: "2.7",
     // NASA FIRMS map key — free, per-user, rate-limited, read-only.
     // Public by design (client-side); rotate at firms.modaps.eosdis.nasa.gov if needed.
     FIRMS_MAP_KEY: "53809ad8a8e6c66c28d2b1e2a85b3d80",
@@ -28,7 +28,7 @@ window.GeopulseConfig = {
         "sst": { id: "sst", name: "Ocean Temp", status: "STATIC", source: "NOAA", reliabilityScore: 98 },
         "population": { id: "population", name: "Population", status: "STATIC", source: "CIESIN", reliabilityScore: 95 },
         "temperature": { id: "temperature", name: "Surface Temp", status: "STATIC", source: "Global Temp", reliabilityScore: 98 },
-        "webcams": { id: "webcams", name: "Live Webcams", status: "LIVE", source: "foto-webcam.eu", reliabilityScore: 92 },
+        "webcams": { id: "webcams", name: "Live Webcams", status: "LIVE", source: "foto-webcam.eu + 8 open traffic-camera feeds", reliabilityScore: 92 },
         "starlink": { id: "starlink", name: "Starlink Net", status: "STATIC", source: "Orbital Sim", reliabilityScore: 100 },
         "satellites": { id: "satellites", name: "Sat & Debris", status: "STATIC", source: "SpaceTrack", reliabilityScore: 92 },
         "volcanoes": { id: "volcanoes", name: "Volcanoes", status: "STATIC", source: "Smithsonian", reliabilityScore: 95 },

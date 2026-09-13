@@ -305,9 +305,30 @@
 
     <div class="timeline">
 
-        <!-- V2.6 — CURRENT -->
+        <!-- V2.7 — CURRENT -->
         <div class="version-entry">
             <div class="version-dot current"></div>
+            <div class="version-header">
+                <span class="version-number">V2.7</span>
+                <span class="version-type type-minor">MINOR</span>
+                <span class="version-name">9,438 Cameras on Four Continents</span>
+                <span class="version-date">11 SEP 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon feat">✦</span> <strong>340 panoramas instead of 9</strong> — The full foto-webcam.eu catalogue replaces the nine hand-picked cameras: 101 in Germany (Bavarian Alps, Munich, Sauerland, Taunus), 189 in Austria, 42 in South Tyrol &amp; Italy, 8 in Switzerland. Green markers, visible from country level; the popup links to the full-size view with time-lapse</li>
+                <li><span class="change-icon feat">✦</span> <strong>Five new traffic-camera regions</strong> — Finland (806, Fintraffic), Hong Kong (1,013), British Columbia (1,040), Ontario (944) and New Zealand (255) join London, Austin and California. All open data, no API key, no server</li>
+                <li><span class="change-icon ui">◆</span> <strong>One badge per region</strong> — Zoomed out, twelve labelled badges show where cameras are and how many; each disappears exactly when its own cameras take over. Out of range, the layer names the nearest camera and its distance instead of "none here"</li>
+                <li><span class="change-icon ui">◆</span> <strong>Upcoming launches back in the menu</strong> — The next four launches with live countdowns sit directly under Real-Time Tracking, in place of the old "9 webcams" line. The hover-only launch panel is gone — it never opened on touch screens and covered the search bar</li>
+                <li><span class="change-icon ui">◆</span> <strong>New welcome globe</strong> — The bouncing 🌍 emoji is replaced by a drawn wireframe globe: turning meridians, an orbiting satellite and live-event pings, in the map's own cyan and amber. Motion stops for visitors who prefer reduced motion</li>
+                <li><span class="change-icon ui">◆</span> <strong>Fire hotspots explained</strong> — The MW value in a wildfire popup now says what it is (radiant heat measured by the satellite across a ≈375 m pixel) and classifies it: small under 20 MW, moderate, large over 100 MW</li>
+                <li><span class="change-icon fix">●</span> <strong>Index and CSP cannot drift apart</strong> — The build script reads the page's <code>img-src</code> and skips any partner camera whose image host isn't allowed, naming the missing host, instead of shipping dead markers</li>
+                <li><span class="change-icon fix">●</span> <strong>Germany, honestly</strong> — German traffic cameras are not openly available: the Autobahn GmbH webcam API is empty, Hamburg withdrew its camera images for legal reasons, and BayernInfo publishes only via the registration-based Mobilithek. Germany is covered by panoramas instead</li>
+            </ul>
+        </div>
+
+        <!-- V2.6 -->
+        <div class="version-entry">
+            <div class="version-dot"></div>
             <div class="version-header">
                 <span class="version-number">V2.6</span>
                 <span class="version-type type-minor">MINOR</span>

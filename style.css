@@ -659,13 +659,18 @@ input:checked + .slider:before {
 
 
 
-#launch-hud {
-    position: fixed; bottom: 45px; left: 14px; z-index: 800;
-    background: rgba(0,5,20,0.9); border: 1px solid rgba(255,100,0,0.4);
-    backdrop-filter: blur(10px); padding: 10px; border-radius: 4px;
-    font-size: 0.65rem; opacity: 0; pointer-events: none;
-    transition: all 0.3s;
-}
+/* Upcoming launches — inline in the Real-Time menu (V2.7; was the hover-only #launch-hud) */
+.launch-inline { display: block; }
+.launch-inline .layer-info { width: 100%; }
+.launch-menu-feed { margin-top: 5px; font-size: 0.64rem; line-height: 1.35; }
+.launch-menu-feed .lm-row { padding: 4px 0; border-top: 1px solid rgba(255,100,0,0.14); }
+.launch-menu-feed .lm-row:first-child { border-top: none; padding-top: 0; }
+.launch-menu-feed .lm-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.launch-menu-feed .lm-name { color: #ff9955; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.launch-menu-feed .lm-sub { opacity: 0.5; font-size: 0.56rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.launch-menu-feed .lm-empty { opacity: 0.45; }
+/* `.control-item span` forces 0.72rem on every span; the countdown needs to stay compact */
+.control-item .launch-menu-feed span { font-size: 0.6rem !important; flex-shrink: 0; }
 
 /* -------------------------------------------------------
    V7.1 MAP BRANDING & POPUPS
@@ -1692,14 +1697,39 @@ body.no-ticker #sidebar { top: 14px !important; }
 }
 @keyframes welcome-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+/* Wireframe globe (V2.7) — replaces the bobbing 🌍 emoji */
 .welcome-icon {
-    font-size: 2.8rem;
-    margin-bottom: 4px;
-    animation: welcome-float 3s ease-in-out infinite;
+    width: 96px; height: 96px;
+    margin: 0 auto 6px;
+    line-height: 0;
+    filter: drop-shadow(0 0 14px rgba(0,212,255,0.18));
 }
-@keyframes welcome-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
+.welcome-icon .wg { display: block; width: 100%; height: 100%; overflow: visible; }
+/* A turning meridian's projected width is |cos θ|: ease-in-sine towards the
+   edge-on moment, ease-out-sine back to the silhouette. Three meridians, 60° apart. */
+.wg-mer {
+    transform-box: fill-box; transform-origin: center;
+    transform: scaleX(0.55);               /* static pose if animation is off */
+    animation: wg-turn 6s linear infinite;
+}
+.wg-mer:nth-child(2) { transform: scaleX(0.02); }
+@keyframes wg-turn {
+    0%   { transform: scaleX(1);     animation-timing-function: cubic-bezier(.12,0,.39,0); }
+    50%  { transform: scaleX(0.012); animation-timing-function: cubic-bezier(.61,1,.88,1); }
+    100% { transform: scaleX(1); }
+}
+.wg-ping {
+    fill: none; stroke: #ffb000; stroke-width: 0.8; vector-effect: non-scaling-stroke;
+    transform-box: fill-box; transform-origin: center;
+    opacity: 0;
+    animation: wg-ping 2.7s ease-out infinite;
+}
+@keyframes wg-ping {
+    0%   { transform: scale(1);   opacity: 0.9; }
+    100% { transform: scale(5.5); opacity: 0; }
+}
+@media (max-height: 640px) {
+    .welcome-icon { width: 72px; height: 72px; }
 }
 
 .welcome-title {
