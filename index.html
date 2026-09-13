@@ -28,14 +28,14 @@
     <meta property="og:url" content="https://geopulseworld.com/">
     <meta property="og:title" content="GEOPULSE — Free Interactive World Map for Students">
     <meta property="og:description" content="Explore earthquakes, volcanoes, wildfires, satellites, conflicts and nuclear sites in real-time. Guided tours across 8 disciplines. 100% free, no login, no ads.">
-    <meta property="og:image" content="./og-preview.png">
+    <meta property="og:image" content="https://geopulseworld.com/og-preview.png">
     <meta property="og:site_name" content="GEOPULSE by RB Design">
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="GEOPULSE — Free Interactive World Map for Students">
     <meta name="twitter:description" content="Real-time earthquakes, volcanoes, wildfires, satellites & conflicts on one map. Guided tours across 8 disciplines. Free & open source.">
-    <meta name="twitter:image" content="./og-preview.png">
+    <meta name="twitter:image" content="https://geopulseworld.com/og-preview.png">
 
     <!-- Security Headers -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com https://fonts.openmaptiles.org; img-src 'self' https://*.arcgisonline.com https://s3-eu-west-1.amazonaws.com https://cctv.austinmobility.io https://cwwp2.dot.ca.gov https://tile.openstreetmap.org https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://www.foto-webcam.eu https://upload.wikimedia.org https://img.youtube.com https://services.swpc.noaa.gov data: blob:; connect-src 'self' https://earthquake.usgs.gov https://eonet.gsfc.nasa.gov https://api.wheretheiss.at https://services.swpc.noaa.gov https://ll.thespacedevs.com https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://*.arcgisonline.com https://fonts.googleapis.com https://fonts.gstatic.com https://fonts.openmaptiles.org https://unpkg.com https://cdnjs.cloudflare.com https://api.counterapi.dev https://en.wikipedia.org https://de.wikipedia.org https://cdn.jsdelivr.net https://api.rss2json.com https://ssd-api.jpl.nasa.gov https://api.rainviewer.com https://api.open-meteo.com; frame-src https://www.foto-webcam.eu; worker-src 'self' blob:; child-src blob:;">
@@ -48,8 +48,8 @@
     
     <!-- MapLibre GL CSS & JS (V4) -->
     <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
-    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
-    <script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
+    <script defer src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    <script defer src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -952,18 +952,17 @@
         <span id="live-clock" title="Local Time" style="display:flex;align-items:center;height:28px;padding:0 12px;"></span>
     </div>
 
-    <script src="./i18n.js?v=2.6"></script>
-    <script src="./quiz_bank.js?v=2.6"></script>
-    <script src="./quiz.js?v=2.6"></script>
-    <script src="./audio.js?v=2.6"></script>
-    <script src="./narration.js?v=2.6"></script>
-    <script src="./tours_data.js?v=2.6"></script>
-    <script src="./wind.js?v=2.6"></script>
-    <script src="./main.js?v=2.6"></script>
-    <script src="./search.js?v=2.6"></script>
-    <script src="./widgets.js?v=2.6"></script>
-    <script src="./tours_de.js?v=2.6"></script>
-    <script src="./tours_new.js?v=2.6"></script>
-    <script src="./tours_wind.js?v=2.6"></script>
+    <script defer src="./i18n.js?v=2.6"></script>
+    <script defer src="./quiz_bank.js?v=2.6"></script>
+    <script defer src="./quiz.js?v=2.6"></script>
+    <script defer src="./audio.js?v=2.6"></script>
+    <script defer src="./narration.js?v=2.6"></script>
+    <script defer src="./wind.js?v=2.6"></script>
+    <script defer src="./main.js?v=2.6"></script>
+    <script defer src="./search.js?v=2.6"></script>
+    <script defer src="./widgets.js?v=2.6"></script>
+    <!-- Tour prose (~450 KB) is fetched on idle by tours_loader.js, not on first paint -->
+    <script defer src="./tours_loader.js?v=2.6"></script>
+    <script defer src="./permalink.js?v=2.6"></script>
 </body>
 </html>

@@ -7,7 +7,7 @@
 (function () {
     "use strict";
 
-    window._TOURS_DATA = {
+    Object.assign(window._TOURS_DATA || (window._TOURS_DATA = {}), {
         welcome: {
             name: 'Welcome to GEOPULSE',
             name_de: 'Willkommen bei GEOPULSE',
@@ -1164,7 +1164,7 @@
                 { center: [131.0369, -25.3444], zoom: 13, title: '🌄 ULURU — LIVING TRADITION (Indigenous Spirituality)', title_de: '🌄 ULURU — LEBENDIGE TRADITION (Indigene Spiritualität)', text: '📍 Uluru (Ayers Rock), Northern Territory, Australia.\n\n🪨 For the Anangu, the traditional custodians, Uluru is a sacred landscape woven into Tjukurpa — the ancestral law and creation knowledge passed down orally. It is an example of a spiritual tradition carried through story, song and place rather than written scripture.\n\n🚫 Out of respect for the Anangu, climbing Uluru was permanently banned in October 2019. The site is a reminder that the world\'s spiritual traditions are diverse — some ancient and oral, without a single founder or book.\n\n🌍 From Varanasi to Uluru, this tour has traced how billions of people locate meaning in place. Religions are described here descriptively — their spread, history and practice — without ranking or judging any belief.', text_de: '📍 Uluru (Ayers Rock), Northern Territory, Australien.\n\n🪨 Für die Anangu, die traditionellen Hüter, ist Uluru eine heilige Landschaft, verwoben mit dem Tjukurpa — dem mündlich überlieferten Ahnengesetz und Schöpfungswissen. Es ist ein Beispiel für eine spirituelle Tradition, die durch Geschichte, Gesang und Ort weitergegeben wird statt durch geschriebene Schrift.\n\n🚫 Aus Respekt vor den Anangu ist das Besteigen des Uluru seit Oktober 2019 dauerhaft verboten. Der Ort erinnert daran, wie vielfältig die spirituellen Traditionen der Welt sind — manche uralt und mündlich, ohne einzelnen Stifter oder ein Buch.\n\n🌍 Von Varanasi bis Uluru hat diese Tour nachgezeichnet, wie Milliarden Menschen Sinn an Orten verankern. Religionen werden hier deskriptiv beschrieben — ihre Verbreitung, Geschichte und Praxis — ohne einen Glauben zu bewerten oder zu ordnen.', layers: [], image: { wiki: 'Uluru', caption: 'Uluru, Northern Territory, Australia (Wikimedia Commons)' } }
             ]
         }
-    };
+    });
 
     console.log("[TOURS_DATA] " + Object.keys(window._TOURS_DATA).length + " core tours loaded");
 
