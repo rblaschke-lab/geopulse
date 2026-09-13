@@ -1,0 +1,6 @@
+# GEOPULSE — free educational world map
+# No login, no ads. Everything here is meant to be found.
+User-agent: *
+Allow: /
+
+Sitemap: https://geopulseworld.com/sitemap.xml
