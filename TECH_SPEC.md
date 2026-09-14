@@ -47,7 +47,7 @@ GEOPULSE is an interactive geospatial intelligence platform built for education.
 
 | Component | Technology | Version |
 |---|---|---|
-| Map engine | [MapLibre GL JS](https://maplibre.org/) | 4.x (via CDN) |
+| Map engine | [MapLibre GL JS](https://maplibre.org/) | 5.x (via CDN, globe projection) |
 | Map tiles | Esri World Imagery (satellite) | REST API |
 | Icons | Font Awesome | 6.x (via CDN) |
 | Typography | Google Fonts (Share Tech Mono, Outfit, Inter) | — |

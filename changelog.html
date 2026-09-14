@@ -305,9 +305,26 @@
 
     <div class="timeline">
 
-        <!-- V2.8 — CURRENT -->
+        <!-- V2.9 — CURRENT -->
         <div class="version-entry">
             <div class="version-dot current"></div>
+            <div class="version-header">
+                <span class="version-number">V2.9</span>
+                <span class="version-type type-minor">MINOR</span>
+                <span class="version-name">The Globe Is Real Now</span>
+                <span class="version-date">14 SEPT 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon feat">✦</span> <strong>Earth is a sphere again</strong> — Zoom out and the map is an actual globe hanging in space, not a stretched rectangle. Greenland is the size of Greenland. Zoom back in and it flattens into an ordinary map on its own, so nothing about working at street level changes</li>
+                <li><span class="change-icon fix">●</span> <strong>The globe was configured all along — in the wrong place</strong> — <code>projection: {type: 'globe'}</code> sat in the map's options, where MapLibre silently ignores it. It belongs in the style object. Verified against the library directly: as a map option it reads back as <code>undefined</code>, in the style it reads back as <code>globe</code></li>
+                <li><span class="change-icon perf">⚡</span> <strong>MapLibre 4.7.1 → 5.24.0</strong> — Globe projection arrived in version 5. The upgrade costs 63 KB over the wire (211 → 276 KB compressed), against the 429 KB taken out of the startup path in V2.8. The library is still loaded the same way, so nothing else had to change</li>
+                <li><span class="change-icon ui">◆</span> <strong>Markers know which side of the world they are on</strong> — A marker on the far side of the globe now fades out instead of showing through the planet. Day/night shading curves around the sphere, and the wind field follows the curvature instead of sliding off it</li>
+            </ul>
+        </div>
+
+        <!-- V2.8 -->
+        <div class="version-entry">
+            <div class="version-dot"></div>
             <div class="version-header">
                 <span class="version-number">V2.8</span>
                 <span class="version-type type-minor">MINOR</span>

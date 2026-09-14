@@ -446,12 +446,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     // ── END MOBILE NAVIGATION SETUP ──
 
-    // INITIALIZE V4 MAPLIBRE GL JS
+    // INITIALIZE MAPLIBRE GL JS V5 — globe projection
     // ----------------------------------------------------
     const map = new maplibregl.Map({
         container: 'map',
         style: {
             version: 8,
+            // Globe belongs in the style, not in the Map options. As a Map
+            // option it is silently ignored — which is why the globe never
+            // appeared despite being configured. Verified against 5.24.0.
+            projection: { type: 'globe' },
             glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
             sources: {
                 'esri-satellite': {
@@ -464,7 +468,6 @@ document.addEventListener("DOMContentLoaded", () => {
             layers: [{ id: 'base-map', type: 'raster', source: 'esri-satellite', minzoom: 0, maxzoom: 15 }]
         },
         center: [15.0, 48.0], zoom: 2.2, pitch: 0, bearing: 0,
-        projection: { type: 'globe' }, 
         dragRotate: true, dragPan: true, scrollZoom: true
     });
 

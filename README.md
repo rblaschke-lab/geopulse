@@ -2,7 +2,7 @@
 
 **Free, real-time educational world map combining satellite imagery, geopolitical data, and live intelligence feeds into one interactive dashboard. By RB Design 2026.**
 
-![Version](https://img.shields.io/badge/version-2.8-blue)
+![Version](https://img.shields.io/badge/version-2.9-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Platform](https://img.shields.io/badge/platform-GitHub%20Pages-orange)
 ![Cost](https://img.shields.io/badge/cost-%240%2Fmonth-brightgreen)
@@ -43,7 +43,7 @@
 
 | Component | Technology |
 |-----------|------------|
-| Map Engine | [MapLibre GL JS](https://maplibre.org/) V4 |
+| Map Engine | [MapLibre GL JS](https://maplibre.org/) V5 (globe) |
 | Satellite Imagery | Esri World Imagery |
 | Architecture | Vanilla JavaScript (no frameworks, no bundlers) |
 | Hosting | GitHub Pages (static, free) |
@@ -139,4 +139,4 @@ This project is open source under the [MIT License](LICENSE).
 
 ---
 
-**GEOPULSE V2.8** — Built with 🛰️ by RB Design 2026
+**GEOPULSE V2.9** — Built with 🛰️ by RB Design 2026
