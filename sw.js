@@ -3,11 +3,11 @@
 //
 // The page requests every asset with a ?v= cache-buster, so the
 // precache list has to carry the same query — a bare '/main.js'
-// never matches a request for '/main.js?v=2.9', and a precache that
+// never matches a request for '/main.js?v=3.0', and a precache that
 // never matches is a precache that does nothing. VERSION below is
 // the single place that changes on a release.
 // ══════════════════════════════════════════════════════════════
-const VERSION    = '2.9';
+const VERSION    = '3.0';
 const CACHE_NAME = 'geopulse-v' + VERSION;
 const V          = '?v=' + VERSION;
 
@@ -32,6 +32,9 @@ const STATIC_ASSETS = [
   '/widgets.js' + V,
   '/tours_loader.js' + V,
   '/permalink.js' + V,
+  '/today.js' + V,
+  '/teacher.js' + V,
+  '/timelapse.js' + V,
   '/manual.html'
 ];
 

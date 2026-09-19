@@ -1840,6 +1840,16 @@ body.no-ticker #sidebar { top: 14px !important; }
     color: rgba(255,255,255,0.4);
     letter-spacing: 1px;
 }
+.welcome-teachers {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.62rem;
+    letter-spacing: 1px;
+    color: #ff9900;
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(255,153,0,0.5);
+}
+.welcome-teachers:hover { color: #ffb547; }
 
 /* ── Interest Selector ── */
 .welcome-interest {
@@ -2820,3 +2830,86 @@ body.no-ticker #sidebar { top: 14px !important; }
     #quiz-hud,
     #tours-hud { transition: none; }
 }
+
+/* ══ TODAY ON EARTH (today.js) — daily briefing card ═══════════════ */
+.today-panel {
+    position: fixed; left: 50%; top: 74px; transform: translate(-50%, -12px);
+    width: min(420px, calc(100vw - 24px)); max-height: calc(100vh - 150px); overflow-y: auto;
+    background: rgba(8, 12, 20, 0.96); border: 1px solid rgba(255,153,0,0.45); border-radius: 6px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.55), 0 0 22px rgba(255,153,0,0.12);
+    font-family: 'Share Tech Mono', monospace; color: #d8e0e6;
+    padding: 14px 16px 12px; z-index: 750;
+    opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+}
+.today-panel.open { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
+.today-head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,153,0,0.2); padding-bottom: 8px; margin-bottom: 6px; }
+.today-title { color: #ff9900; font-size: .85rem; letter-spacing: 2px; }
+.today-date { font-size: .62rem; opacity: .55; margin-top: 2px; }
+.today-close { background: none; border: 0; color: #d8e0e6; opacity: .6; cursor: pointer; font-size: .9rem; }
+.today-close:hover { opacity: 1; }
+.today-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.today-icon { font-size: 1.15rem; width: 26px; text-align: center; flex-shrink: 0; }
+.today-body { flex: 1; min-width: 0; }
+.today-label { font-size: .56rem; letter-spacing: 1.2px; text-transform: uppercase; opacity: .5; }
+.today-value { font-size: .72rem; line-height: 1.35; overflow-wrap: anywhere; }
+.today-value strong { color: #ffb547; }
+.today-sub { font-size: .58rem; opacity: .5; margin-top: 2px; }
+.today-action { flex-shrink: 0; background: transparent; border: 1px solid rgba(255,153,0,0.5); color: #ff9900; font-family: inherit;
+                font-size: .58rem; letter-spacing: 1px; text-transform: uppercase; padding: 5px 9px; border-radius: 3px; cursor: pointer; }
+.today-action:hover { background: rgba(255,153,0,0.12); }
+.today-tour .today-action { background: #ff9900; color: #0a0c14; border-color: #ff9900; }
+.today-empty { font-size: .68rem; opacity: .55; padding: 12px 0; }
+.today-foot { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-top: 10px; }
+.today-share { background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.4); color: #00d4ff; font-family: inherit;
+               font-size: .6rem; letter-spacing: 1px; text-transform: uppercase; padding: 6px 12px; border-radius: 3px; cursor: pointer; }
+.today-teachers { font-size: .6rem; color: #ff9900; text-decoration: none; opacity: .85; }
+.today-teachers:hover { opacity: 1; text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) { .today-panel { transition: none; } }
+
+/* ══ CLASSROOM SHARE (teacher.js) ══════════════════════════════════ */
+.btn-class-briefing {
+    background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.45); color: #00d4ff; cursor: pointer;
+    font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; font-weight: 600; letter-spacing: 1px;
+    padding: 5px 12px; border-radius: 4px; margin-right: 8px; display: flex; align-items: center; gap: 6px;
+}
+.btn-class-briefing:hover { background: rgba(0,212,255,0.2); }
+.class-card {
+    position: fixed; inset: 0; z-index: 2000; display: none; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.6); padding: 16px;
+}
+.class-card.open { display: flex; }
+.class-box { max-width: 360px; width: 100%; display: flex; flex-direction: column; }
+.class-head, .class-qr, .class-scan, .class-link, .class-foot { background: rgba(8,12,20,0.98); font-family: 'Share Tech Mono', monospace; }
+.class-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px 8px;
+              border: 1px solid rgba(0,212,255,0.4); border-bottom: 0; border-radius: 6px 6px 0 0; color: #00d4ff; font-size: .8rem; letter-spacing: 2px; }
+.class-close { background: none; border: 0; color: #d8e0e6; cursor: pointer; font-size: .9rem; opacity: .7; }
+.class-qr { padding: 10px 40px; border-left: 1px solid rgba(0,212,255,0.4); border-right: 1px solid rgba(0,212,255,0.4); }
+.class-qr svg { display: block; width: 100%; height: auto; border-radius: 4px; }
+.class-scan { margin: 0; padding: 4px 16px 10px; color: #9fb0bb; font-size: .66rem; line-height: 1.4; text-align: center;
+              border-left: 1px solid rgba(0,212,255,0.4); border-right: 1px solid rgba(0,212,255,0.4); }
+.class-link { display: flex; gap: 6px; padding: 0 16px 10px; border-left: 1px solid rgba(0,212,255,0.4); border-right: 1px solid rgba(0,212,255,0.4); }
+.class-url { flex: 1; min-width: 0; background: #0a0c14; border: 1px solid #1e2a35; color: #d8e0e6; font-family: inherit; font-size: .62rem; padding: 6px 8px; border-radius: 3px; }
+.class-copy { background: #00d4ff; color: #0a0c14; border: 0; border-radius: 3px; font-family: inherit; font-size: .6rem; letter-spacing: 1px; padding: 0 10px; cursor: pointer; }
+.class-foot { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 10px 16px 14px;
+              border: 1px solid rgba(0,212,255,0.4); border-top: 1px solid rgba(255,255,255,0.06); border-radius: 0 0 6px 6px; }
+.class-foot a { color: #ff9900; font-size: .64rem; text-decoration: none; }
+.class-foot a:hover { text-decoration: underline; }
+
+/* ══ EARTHQUAKE TIME-LAPSE (timelapse.js) ══════════════════════════ */
+.timelapse-btn {
+    display: inline-block; margin-top: 6px; background: transparent; border: 1px solid rgba(255,102,0,0.5); color: #ff9955;
+    font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 1px; padding: 4px 9px; border-radius: 3px; cursor: pointer;
+}
+.timelapse-btn:hover { background: rgba(255,102,0,0.12); }
+#timelapse-bar {
+    position: fixed; left: 50%; bottom: 58px; transform: translateX(-50%); z-index: 740;
+    width: min(560px, calc(100vw - 24px)); display: none; align-items: center; gap: 10px;
+    background: rgba(8,12,20,0.94); border: 1px solid rgba(255,102,0,0.5); border-radius: 6px; padding: 8px 12px;
+    font-family: 'Share Tech Mono', monospace; color: #d8e0e6; box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+}
+#timelapse-bar.open { display: flex; }
+#timelapse-bar button { background: none; border: 1px solid rgba(255,102,0,0.5); color: #ff9955; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; flex-shrink: 0; }
+#timelapse-bar .tl-close { border-color: rgba(255,255,255,0.2); color: #d8e0e6; }
+.tl-mid { flex: 1; min-width: 0; }
+.tl-label { font-size: .64rem; letter-spacing: .5px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tl-range { width: 100%; accent-color: #ff6600; }

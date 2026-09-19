@@ -1,0 +1,61 @@
+# Tells IndexNow search engines (Bing, Yandex, Seznam, Naver …) which pages
+# changed in a push, so they re-crawl within hours instead of weeks. Free, no
+# account. Google does not use IndexNow — submit the sitemap in Search Console.
+#
+# Key file: /7b7ad5ed318fb04f979b0affbe94ac09.txt (proves we own the host).
+
+name: IndexNow ping
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '**.html'
+      - 'sitemap.xml'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # GitHub Pages deploys in parallel; give it time so crawlers find the new version.
+      - name: Wait for Pages deploy
+        run: sleep 120
+
+      - name: Submit changed URLs
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+          MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          node - <<'EOF'
+          const { execSync } = require('node:child_process');
+          const host = 'geopulseworld.com';
+          const key = '7b7ad5ed318fb04f979b0affbe94ac09';
+          let files;
+          const zero = /^0+$/.test(process.env.BEFORE || '');
+          if (process.env.MANUAL === 'true' || zero || !process.env.BEFORE) {
+            // Manual run: everything in the sitemap.
+            const xml = require('node:fs').readFileSync('sitemap.xml', 'utf8');
+            files = null;
+            var urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
+          } else {
+            files = execSync(`git diff --name-only ${process.env.BEFORE} ${process.env.AFTER}`).toString().split('\n').filter(Boolean);
+            var urls = files.filter(f => f.endsWith('.html')).map(f => {
+              const p = f.replace(/(^|\/)index\.html$/, '$1');
+              return `https://${host}/${p}`;
+            });
+          }
+          urls = [...new Set(urls)].slice(0, 10000);
+          if (!urls.length) { console.log('No page changes.'); process.exit(0); }
+          fetch('https://api.indexnow.org/indexnow', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            body: JSON.stringify({ host, key, keyLocation: `https://${host}/${key}.txt`, urlList: urls })
+          }).then(r => { console.log(`IndexNow: HTTP ${r.status} for ${urls.length} URLs`); if (r.status >= 400) process.exit(1); });
+          EOF

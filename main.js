@@ -3976,6 +3976,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         activeTour = tour;
         activeTourId = tourId;
+        // Public: permalink.js puts it in the share URL, teacher.js builds its QR from it.
+        window._geopulseActiveTour = tourId;
         tourStepIndex = 0;
 
         const nm = getTourName(tour).toUpperCase();
@@ -4349,6 +4351,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function endTour() {
         activeTour = null;
         activeTourId = null;
+        window._geopulseActiveTour = null;
         tourStepIndex = 0;
         if (tourPanel) tourPanel.classList.add('hidden');
         stopNarration();

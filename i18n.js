@@ -49,7 +49,7 @@ const i18n = {
         info_src_infra: 'Submarine cables and nuclear power plant databases.',
         info_explore_title: '🔬 Explore Further',
         info_about_title: 'ℹ️ About GEOPULSE',
-        info_about_desc: 'GEOPULSE is an open-source global intelligence dashboard built with MapLibre GL JS and vanilla JavaScript. No API keys, no accounts — just real-time data from public sources. By RB Design 2026.',
+        info_about_desc: 'GEOPULSE is a free, open-source interactive world atlas for classrooms and curious minds: guided tours through history and live data from the planet today, on one map. No login, no ads, no cookies. By RB Design 2026.',
         info_full_about: 'Full About Page ↗', info_manual_link: 'Command Manual ↗',
         orientation_hint: 'BEST EXPERIENCED IN LANDSCAPE',
         // Tour & category labels
@@ -105,9 +105,11 @@ const i18n = {
         welcome_feat_3: 'Built for students — Geography, History, Science & Politics',
         welcome_start_tour: 'START DEMO TOUR', welcome_explore: 'EXPLORE FREELY',
         welcome_dont_show: "Don't show again",
-        ob_value: 'Explore history. Understand the world.',
+        ob_value: 'History and the live world — on one map.',
         ob_ticker_quakes: 'earthquakes in the last hour', ob_ticker_iss: 'ISS over',
-        welcome_footer: 'No login · No ads · 100% free & open source · For students, educators & the curious',
+        welcome_footer: 'Free · No login · No ads · No cookies — for classrooms and curious minds',
+        welcome_teachers: 'For teachers: worksheets, QR codes, lesson links →',
+        nav_teachers: 'Teachers', nav_today: 'Today',
         // Interest selector
         welcome_interest_label: 'WHAT INTERESTS YOU?',
         interest_geopolitics: 'Geopolitics & Conflicts', interest_history: 'History & Civilizations',
@@ -171,7 +173,7 @@ const i18n = {
         info_src_infra: 'Unterseekabel- und Kernkraftwerk-Datenbanken.',
         info_explore_title: '🔬 Weiter erkunden',
         info_about_title: 'ℹ️ Über GEOPULSE',
-        info_about_desc: 'GEOPULSE ist ein Open-Source Global Intelligence Dashboard, gebaut mit MapLibre GL JS und Vanilla JavaScript. Keine API-Schlüssel, keine Konten — nur Echtzeitdaten aus öffentlichen Quellen. Von RB Design 2026.',
+        info_about_desc: 'GEOPULSE ist ein kostenloser, quelloffener interaktiver Weltatlas für Schule und Neugierige: geführte Touren durch die Geschichte und Live-Daten vom Planeten heute, auf einer Karte. Ohne Login, ohne Werbung, ohne Cookies. Von RB Design 2026.',
         info_full_about: 'Vollständige About-Seite ↗', info_manual_link: 'Kommando-Handbuch ↗',
         orientation_hint: 'AM BESTEN IM QUERFORMAT',
         // Tour & category labels
@@ -226,10 +228,12 @@ const i18n = {
         welcome_feat_2: 'Echtzeit-Erdbeben, Vulkane, Waldbrände & Satelliten',
         welcome_feat_3: 'Für Schüler — Erdkunde, Geschichte, Naturwissenschaft & Politik',
         welcome_start_tour: 'DEMO-TOUR STARTEN', welcome_explore: 'FREI ERKUNDEN',
-        ob_value: 'Geschichte erleben. Die Welt verstehen.',
+        ob_value: 'Geschichte und Gegenwart — auf einer Karte.',
         ob_ticker_quakes: 'Erdbeben in der letzten Stunde', ob_ticker_iss: 'ISS über',
         welcome_dont_show: 'Nicht mehr anzeigen',
-        welcome_footer: 'Kein Login · Keine Werbung · 100% kostenlos & Open Source · Für Schüler, Studenten, Lehrer & Interessierte',
+        welcome_footer: 'Kostenlos · Ohne Login · Ohne Werbung · Ohne Cookies — für Schule und Neugierige',
+        welcome_teachers: 'Für Lehrkräfte: Arbeitsblätter, QR-Codes, Unterrichtslinks →',
+        nav_teachers: 'Lehrkräfte', nav_today: 'Heute',
         welcome_interest_label: 'WAS INTERESSIERT DICH?',
         interest_geopolitics: 'Geopolitik & Konflikte', interest_history: 'Geschichte & Zivilisationen',
         interest_science: 'Wissenschaft & Natur', interest_sports: 'Sport & Kultur',
@@ -264,6 +268,9 @@ const setLanguage = (lang) => {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
         if (dict[key]) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-href-en][data-href-de]').forEach(el => {
+        el.setAttribute('href', lang === 'de' ? el.dataset.hrefDe : el.dataset.hrefEn);
     });
     // Placeholder translations (e.g. search inputs)
     document.querySelectorAll('[data-i18n-ph]').forEach(el => {

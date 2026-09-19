@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- Custom domain: geopulseworld.com — no <base> needed at root -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">GEOPULSE | Live World Intelligence Map</title>
+    <title id="page-title">GEOPULSE — Interactive World Atlas for Classrooms | History &amp; Live Earth</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>" type="image/svg+xml">
 
     <!-- PWA -->
@@ -14,8 +14,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <!-- SEO & Social Sharing -->
-    <meta name="description" content="GEOPULSE — explore earthquakes, volcanoes, wildfires, satellites, conflicts and nuclear sites in real-time. Guided tours across 8 disciplines. Free interactive world map for students — no login, no ads.">
-    <meta name="keywords" content="geopulse, interactive map, geography education, earthquakes, volcanoes, satellite tracking, free educational tool, STEM, global intelligence, geopolitics, real-time map, student tool, belt and road, cold war history">
+    <meta name="description" content="Free interactive world atlas for school and curious minds: 42 guided map tours through history plus live earthquakes, wildfires and satellites. No login, no ads, no cookies.">
+    <meta name="keywords" content="geopulse, interactive map, geography education, earthquakes, volcanoes, satellite tracking, free educational tool, STEM, interactive world atlas, history map, geography lesson, teaching material, classroom map, interaktive Weltkarte, Weltatlas, Unterrichtsmaterial Geschichte, Erdkunde, geopolitics, real-time map, student tool, belt and road, cold war history">
     <meta name="author" content="RB_DESIGN">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#ff9900">
@@ -26,19 +26,42 @@
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://geopulseworld.com/">
-    <meta property="og:title" content="GEOPULSE — Free Interactive World Map for Students">
-    <meta property="og:description" content="Explore earthquakes, volcanoes, wildfires, satellites, conflicts and nuclear sites in real-time. Guided tours across 8 disciplines. 100% free, no login, no ads.">
+    <meta property="og:title" content="GEOPULSE — History and the Live World on One Map">
+    <meta property="og:description" content="42 guided map tours from the Roman Empire to the Cold War, plus live earthquakes, wildfires and satellites. Free for classrooms: no login, no ads, no cookies.">
     <meta property="og:image" content="https://geopulseworld.com/og-preview.png">
     <meta property="og:site_name" content="GEOPULSE by RB Design">
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="GEOPULSE — Free Interactive World Map for Students">
-    <meta name="twitter:description" content="Real-time earthquakes, volcanoes, wildfires, satellites & conflicts on one map. Guided tours across 8 disciplines. Free & open source.">
+    <meta name="twitter:title" content="GEOPULSE — History and the Live World on One Map">
+    <meta name="twitter:description" content="42 guided map tours from the Roman Empire to the Cold War, plus live earthquakes, wildfires and satellites. Free for classrooms: no login, no ads, no cookies.">
     <meta name="twitter:image" content="https://geopulseworld.com/og-preview.png">
 
+    <!-- Structured data: what this site is, for search engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["WebApplication", "LearningResource"],
+      "name": "GEOPULSE",
+      "alternateName": "GEOPULSE — Interactive World Atlas",
+      "url": "https://geopulseworld.com/",
+      "description": "Free interactive world atlas for school and curious minds: guided map tours through history plus live earthquakes, wildfires and satellites. No login, no ads, no cookies.",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Any (web browser)",
+      "inLanguage": ["en", "de"],
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+      "educationalLevel": "Secondary education",
+      "learningResourceType": ["Interactive map", "Guided tour", "Quiz"],
+      "audience": { "@type": "EducationalAudience", "educationalRole": ["teacher", "student"] },
+      "about": ["History", "Geography", "Earth science", "Geopolitics"],
+      "author": { "@type": "Organization", "name": "RB Design", "url": "https://ralfblaschke.com" },
+      "license": "https://opensource.org/licenses/MIT"
+    }
+    </script>
+
     <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com https://fonts.openmaptiles.org; img-src 'self' https://*.arcgisonline.com https://s3-eu-west-1.amazonaws.com https://cctv.austinmobility.io https://cwwp2.dot.ca.gov https://weathercam.digitraffic.fi https://tdcctv.data.one.gov.hk https://images.drivebc.ca https://511on.ca https://www.trafficnz.info https://sauerland.camera https://www.megacam.at https://www.foto-webcam.net https://foto-webcam.ch https://www.stwo.biz https://www.jens-oerter.de https://www.wetter-pfalzen.it https://tile.openstreetmap.org https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://www.foto-webcam.eu https://upload.wikimedia.org https://img.youtube.com https://services.swpc.noaa.gov data: blob:; connect-src 'self' https://earthquake.usgs.gov https://eonet.gsfc.nasa.gov https://api.wheretheiss.at https://services.swpc.noaa.gov https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://*.arcgisonline.com https://fonts.googleapis.com https://fonts.gstatic.com https://fonts.openmaptiles.org https://unpkg.com https://cdnjs.cloudflare.com https://ralfblaschke.com https://en.wikipedia.org https://de.wikipedia.org https://cdn.jsdelivr.net https://api.rss2json.com https://api.rainviewer.com https://api.open-meteo.com; frame-src https://www.foto-webcam.eu; worker-src 'self' blob:; child-src blob:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com https://fonts.openmaptiles.org; img-src 'self' https://*.arcgisonline.com https://s3-eu-west-1.amazonaws.com https://cctv.austinmobility.io https://cwwp2.dot.ca.gov https://weathercam.digitraffic.fi https://tdcctv.data.one.gov.hk https://images.drivebc.ca https://511on.ca https://www.trafficnz.info https://sauerland.camera https://www.megacam.at https://www.foto-webcam.net https://foto-webcam.ch https://www.stwo.biz https://www.jens-oerter.de https://www.wetter-pfalzen.it https://tile.openstreetmap.org https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://www.foto-webcam.eu https://upload.wikimedia.org https://thumb.wikimedia.org https://img.youtube.com https://services.swpc.noaa.gov data: blob:; connect-src 'self' https://earthquake.usgs.gov https://eonet.gsfc.nasa.gov https://api.wheretheiss.at https://services.swpc.noaa.gov https://firms.modaps.eosdis.nasa.gov https://gibs.earthdata.nasa.gov https://*.arcgisonline.com https://fonts.googleapis.com https://fonts.gstatic.com https://fonts.openmaptiles.org https://unpkg.com https://cdnjs.cloudflare.com https://ralfblaschke.com https://en.wikipedia.org https://de.wikipedia.org https://cdn.jsdelivr.net https://api.rss2json.com https://api.rainviewer.com https://api.open-meteo.com; frame-src https://www.foto-webcam.eu; worker-src 'self' blob:; child-src blob:;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="no-referrer">
     
@@ -58,7 +81,7 @@
 
     <script src="./fetchWrapper.js"></script>
     <script src="./config.js"></script>
-    <link rel="stylesheet" href="./style.css?v=2.9">
+    <link rel="stylesheet" href="./style.css?v=3.0">
 
     <!-- Service Worker registration -->
     <script>
@@ -73,7 +96,7 @@
     <!-- ═══ ENTER GATEWAY — enables audio via user gesture ═══ -->
     <div id="enter-gateway">
         <div class="gateway-title"><span class="gw-geo">GEO</span><span class="gw-pulse">PULSE</span></div>
-        <div class="gateway-sub">LIVE WORLD INTELLIGENCE</div>
+        <div class="gateway-sub">INTERACTIVE WORLD ATLAS</div>
         <div class="gateway-enter">▶ ENTER</div>
         <div class="gateway-credit">by RB Design 2026</div>
     </div>
@@ -99,7 +122,7 @@
             <div class="splash-title">
                 <span class="splash-geo">GEO</span><span class="splash-pulse">PULSE</span>
             </div>
-            <div class="splash-tagline">LIVE WORLD INTELLIGENCE</div>
+            <div class="splash-tagline">HISTORY · LIVE EARTH · ONE MAP</div>
             <div class="splash-bar">
                 <div class="splash-bar-fill"></div>
             </div>
@@ -482,7 +505,7 @@
 
     <!-- TOP NEWS TICKER (Mobile Focus) -->
     <div id="ticker-top" class="global-ticker">
-        <div class="ticker-content" id="ticker-content-top">INITIALIZING GLOBAL INTELLIGENCE STREAM...</div>
+        <div class="ticker-content" id="ticker-content-top">LOADING TODAY'S WORLD NEWS...</div>
     </div>
 
     <button id="mobile-menu-btn" title="Toggle Terminal"><i class="fa-solid fa-bars"></i></button>
@@ -774,7 +797,7 @@
             <!-- ABOUT APP -->
             <div class="info-section" style="border-bottom:none;">
                 <h3 data-i18n="info_about_title">ℹ️ About GEOPULSE</h3>
-                <p data-i18n="info_about_desc">GEOPULSE is an open-source global intelligence dashboard built with MapLibre GL JS and vanilla JavaScript. No API keys, no accounts — just real-time data from public sources. By RB Design 2026.</p>
+                <p data-i18n="info_about_desc">GEOPULSE is a free, open-source interactive world atlas for classrooms and curious minds: guided tours through history and live data from the planet today, on one map. No login, no ads, no cookies. By RB Design 2026.</p>
                 <div style="margin-top:10px; display:flex; gap:6px; flex-wrap:wrap;">
                     <a href="./about.html" target="_blank" class="info-link" style="flex:1; text-align:center;" data-i18n="info_full_about">Full About Page ↗</a>
                     <a href="./manual.html" target="_blank" class="info-link" style="flex:1; text-align:center;" data-i18n="info_manual_link">Command Manual ↗</a>
@@ -870,7 +893,7 @@
                 try { if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelector('.wg').pauseAnimations(); } catch (e) {}
             </script>
             <h1 class="welcome-title">GEOPULSE</h1>
-            <p class="welcome-subtitle"><span data-i18n="ob_value">Explore history. Understand the world.</span></p>
+            <p class="welcome-subtitle"><span data-i18n="ob_value">History and the live world — on one map.</span></p>
 
             <!-- Live intelligence ticker (real feeds; hidden on feed failure) -->
             <div id="welcome-ticker" class="welcome-ticker" style="display:none;"></div>
@@ -883,7 +906,8 @@
                     <i class="fa-solid fa-compass"></i> <span data-i18n="welcome_explore">EXPLORE FREELY</span>
                 </button>
             </div>
-            <div class="welcome-footer" data-i18n="welcome_footer">No login · No ads · 100% free &amp; open source · For students, educators &amp; the curious</div>
+            <div class="welcome-footer" data-i18n="welcome_footer">Free · No login · No ads · No cookies — for classrooms and curious minds</div>
+            <a class="welcome-teachers" href="/teachers/" data-href-en="/teachers/" data-href-de="/lehrkraefte/"><i class="fa-solid fa-chalkboard-user"></i> <span data-i18n="welcome_teachers">For teachers: worksheets, QR codes, lesson links →</span></a>
         </div>
     </div>
 
@@ -911,7 +935,7 @@
     </div>
 
     <script>
-        document.getElementById('page-title').innerText = `GEOPULSE V${window.GeopulseConfig.VERSION} | Live World Intelligence Map`;
+        document.getElementById('page-title').innerText = `GEOPULSE — Interactive World Atlas | History & Live Earth`;
         document.querySelectorAll('.dyn-version').forEach(el => el.innerText = `V${window.GeopulseConfig.VERSION}`);
         document.querySelectorAll('.dyn-version-stable').forEach(el => el.innerText = `V${window.GeopulseConfig.VERSION}_STABLE`);
     </script>
@@ -992,6 +1016,8 @@
     <!-- QUICK LINKS (bottom-left) -->
     <div id="quick-links">
         <a href="./about.html" target="_blank" title="About GEOPULSE"><i class="fa-solid fa-circle-info"></i> About</a>
+        <a href="/teachers/" data-href-en="/teachers/" data-href-de="/lehrkraefte/" title="For teachers — worksheets, QR codes, lesson links"><i class="fa-solid fa-chalkboard-user"></i> <span data-i18n="nav_teachers">Teachers</span></a>
+        <a href="#" id="today-link" title="Today on Earth"><i class="fa-solid fa-calendar-day"></i> <span data-i18n="nav_today">Today</span></a>
         <a href="./manual.html" target="_blank" title="Command Manual"><i class="fa-solid fa-book"></i> Manual</a>
         <a href="./changelog.html" target="_blank" title="Changelog"><i class="fa-solid fa-code-branch"></i> Changelog</a>
         <a href="#" id="demo-tour-link" title="Quick Demo Tour" onclick="event.preventDefault(); if(window._geopulseStartTour) window._geopulseStartTour('welcome');"><i class="fa-solid fa-play-circle"></i> Demo</a>
@@ -1001,17 +1027,20 @@
         <span id="live-clock" title="Local Time" style="display:flex;align-items:center;height:28px;padding:0 12px;"></span>
     </div>
 
-    <script defer src="./i18n.js?v=2.9"></script>
-    <script defer src="./quiz_bank.js?v=2.9"></script>
-    <script defer src="./quiz.js?v=2.9"></script>
-    <script defer src="./audio.js?v=2.9"></script>
-    <script defer src="./narration.js?v=2.9"></script>
-    <script defer src="./wind.js?v=2.9"></script>
-    <script defer src="./main.js?v=2.9"></script>
-    <script defer src="./search.js?v=2.9"></script>
-    <script defer src="./widgets.js?v=2.9"></script>
+    <script defer src="./i18n.js?v=3.0"></script>
+    <script defer src="./quiz_bank.js?v=3.0"></script>
+    <script defer src="./quiz.js?v=3.0"></script>
+    <script defer src="./audio.js?v=3.0"></script>
+    <script defer src="./narration.js?v=3.0"></script>
+    <script defer src="./wind.js?v=3.0"></script>
+    <script defer src="./main.js?v=3.0"></script>
+    <script defer src="./search.js?v=3.0"></script>
+    <script defer src="./widgets.js?v=3.0"></script>
     <!-- Tour prose (~450 KB) is fetched on idle by tours_loader.js, not on first paint -->
-    <script defer src="./tours_loader.js?v=2.9"></script>
-    <script defer src="./permalink.js?v=2.9"></script>
+    <script defer src="./tours_loader.js?v=3.0"></script>
+    <script defer src="./permalink.js?v=3.0"></script>
+    <script defer src="./today.js?v=3.0"></script>
+    <script defer src="./teacher.js?v=3.0"></script>
+    <script defer src="./timelapse.js?v=3.0"></script>
 </body>
 </html>

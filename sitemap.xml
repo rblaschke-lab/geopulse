@@ -1,284 +1,806 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://geopulseworld.com/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/about.html</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/manual.html</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/changelog.html</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.3</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/impressum.html</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
+    <priority>0.1</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/teachers/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/teachers/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/lehrkraefte/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/teachers/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/lehrkraefte/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/teachers/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/lehrkraefte/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/teachers/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/aurorahunters/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/aurorahunters/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/aurorahunters/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/aurorahunters/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/aurorahunters/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/aurorahunters/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/aurorahunters/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/aurorahunters/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/battery/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/battery/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/battery/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/battery/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/battery/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/battery/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/battery/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/battery/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/bri/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/bri/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/bri/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/bri/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/bri/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/bri/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/bri/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/bri/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/cables/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/cables/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/cables/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/cables/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/cables/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/cables/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/cables/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/cables/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/chokepoints/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/chokepoints/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/chokepoints/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/chokepoints/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/chokepoints/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/chokepoints/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/chokepoints/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/chokepoints/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/climate/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/climate/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/climate/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/climate/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/climate/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/climate/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/climate/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/climate/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/climatecrisis/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/climatecrisis/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/climatecrisis/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/climatecrisis/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/climatecrisis/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/climatecrisis/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/climatecrisis/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/climatecrisis/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/coldwar/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/coldwar/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/coldwar/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/coldwar/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/coldwar/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/coldwar/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/coldwar/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/coldwar/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/cosmicimpacts/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/cosmicimpacts/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/cosmicimpacts/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/cosmicimpacts/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/cosmicimpacts/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/cosmicimpacts/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/cosmicimpacts/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/cosmicimpacts/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/extremeearth/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/extremeearth/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/extremeearth/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/extremeearth/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/extremeearth/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/extremeearth/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/extremeearth/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/extremeearth/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/extremeplaces/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/extremeplaces/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/extremeplaces/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/extremeplaces/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/extremeplaces/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/extremeplaces/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/extremeplaces/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/extremeplaces/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/f1/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/f1/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/f1/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/f1/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/f1/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/f1/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/f1/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/f1/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/filmlocations/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/filmlocations/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/filmlocations/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/filmlocations/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/filmlocations/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/filmlocations/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/filmlocations/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/filmlocations/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/forbiddenzones/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/forbiddenzones/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/forbiddenzones/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/forbiddenzones/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/forbiddenzones/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/forbiddenzones/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/forbiddenzones/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/forbiddenzones/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/genocide/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/genocide/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/genocide/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/genocide/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/genocide/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/genocide/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/genocide/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/genocide/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/greatmigrations/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/greatmigrations/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/greatmigrations/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/greatmigrations/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/greatmigrations/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/greatmigrations/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/greatmigrations/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/greatmigrations/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/hondius/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/hondius/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/hondius/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/hondius/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/hondius/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/hondius/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/hondius/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/hondius/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/iconicarenas/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/iconicarenas/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/iconicarenas/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/iconicarenas/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/iconicarenas/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/iconicarenas/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/iconicarenas/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/iconicarenas/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/lostwonders/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/lostwonders/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/lostwonders/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/lostwonders/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/lostwonders/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/lostwonders/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/lostwonders/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/lostwonders/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/migration/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/migration/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/migration/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/migration/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/migration/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/migration/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/migration/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/migration/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/musicworld/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/musicworld/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/musicworld/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/musicworld/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/musicworld/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/musicworld/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/musicworld/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/musicworld/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/nuclear/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/nuclear/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/nuclear/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/nuclear/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/nuclear/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/nuclear/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/nuclear/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/nuclear/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/olympics/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/olympics/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/olympics/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/olympics/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/olympics/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/olympics/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/olympics/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/olympics/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/pandemics/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/pandemics/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/pandemics/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/pandemics/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/pandemics/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/pandemics/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/pandemics/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/pandemics/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/quakes/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/quakes/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/quakes/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/quakes/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/quakes/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/quakes/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/quakes/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/quakes/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/revolutions/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/revolutions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/revolutions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/revolutions/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/revolutions/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/revolutions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/revolutions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/revolutions/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/ringoffire/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/ringoffire/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/ringoffire/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/ringoffire/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/ringoffire/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/ringoffire/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/ringoffire/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/ringoffire/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/romanempire/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/romanempire/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/romanempire/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/romanempire/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/romanempire/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/romanempire/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/romanempire/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/romanempire/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/shipwrecks/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/shipwrecks/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/shipwrecks/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/shipwrecks/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/shipwrecks/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/shipwrecks/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/shipwrecks/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/shipwrecks/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/spacerace/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/spacerace/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/spacerace/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/spacerace/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/spacerace/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/spacerace/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/spacerace/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/spacerace/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/spycraft/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/spycraft/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/spycraft/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/spycraft/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/spycraft/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/spycraft/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/spycraft/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/spycraft/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/structures/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/structures/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/structures/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/structures/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/structures/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/structures/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/structures/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/structures/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/summits14/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/summits14/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/summits14/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/summits14/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/summits14/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/summits14/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/summits14/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/summits14/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/techcapitals/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/techcapitals/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/techcapitals/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/techcapitals/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/techcapitals/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/techcapitals/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/techcapitals/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/techcapitals/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/trump/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/trump/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/trump/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/trump/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/trump/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/trump/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/trump/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/trump/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/water/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/water/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/water/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/water/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/water/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/water/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/water/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/water/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/windsworld/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/windsworld/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/windsworld/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/windsworld/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/windsworld/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/windsworld/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/windsworld/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/windsworld/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/womenworld/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/womenworld/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/womenworld/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/womenworld/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/womenworld/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/womenworld/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/womenworld/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/womenworld/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/worldcup/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/worldcup/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/worldcup/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/worldcup/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/worldcup/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/worldcup/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/worldcup/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/worldcup/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/worldreligions/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/worldreligions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/worldreligions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/worldreligions/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/worldreligions/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/worldreligions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/worldreligions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/worldreligions/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/ww1/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/ww1/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/ww1/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/ww1/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/ww1/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/ww1/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/ww1/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/ww1/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://geopulseworld.com/tours/ww2/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/ww2/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/ww2/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/ww2/"/>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geopulseworld.com/de/touren/ww2/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geopulseworld.com/tours/ww2/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://geopulseworld.com/de/touren/ww2/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geopulseworld.com/tours/ww2/"/>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

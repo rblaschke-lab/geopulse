@@ -1,8 +1,8 @@
-# 🌍 GEOPULSE — Live World Intelligence Map
+# 🌍 GEOPULSE — Interactive World Atlas
 
-**Free, real-time educational world map combining satellite imagery, geopolitical data, and live intelligence feeds into one interactive dashboard. By RB Design 2026.**
+**History and the live world on one map — a free, open-source interactive world atlas for classrooms and curious minds. 42 guided tours, live earth data, map quiz, worksheets for teachers. No login, no ads, no cookies. By RB Design 2026.**
 
-![Version](https://img.shields.io/badge/version-2.9-blue)
+![Version](https://img.shields.io/badge/version-3.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Platform](https://img.shields.io/badge/platform-GitHub%20Pages-orange)
 ![Cost](https://img.shields.io/badge/cost-%240%2Fmonth-brightgreen)
@@ -139,4 +139,4 @@ This project is open source under the [MIT License](LICENSE).
 
 ---
 
-**GEOPULSE V2.9** — Built with 🛰️ by RB Design 2026
+**GEOPULSE V3.0** — Built with 🛰️ by RB Design 2026

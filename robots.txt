@@ -1,5 +1,5 @@
-# GEOPULSE — free educational world map
-# No login, no ads. Everything here is meant to be found.
+# GEOPULSE — free interactive world atlas for classrooms
+# No login, no ads, no cookies. Everything here is meant to be found.
 User-agent: *
 Allow: /
 
