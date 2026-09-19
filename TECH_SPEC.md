@@ -140,7 +140,6 @@ All APIs are **free, keyless, and public**. Zero cost, zero credentials.
 | NOAA SWPC | services.swpc.noaa.gov | Planetary K-index (solar storms) | 15 min |
 | RainViewer | api.rainviewer.com | Global weather radar composites | 10 min |
 | Wikipedia REST | en.wikipedia.org/api/rest_v1 | Tour stop thumbnails & summaries | On demand |
-| Launch Library 2 | ll.thespacedevs.com | Upcoming rocket launches | On demand |
 | CounterAPI | api.counterapi.dev | Visitor count tracking | On page load |
 | rss2json | api.rss2json.com | BBC World News RSS → JSON | On demand |
 | foto-webcam.eu | www.foto-webcam.eu | Alpine & city webcam snapshots | 5 min |

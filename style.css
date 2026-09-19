@@ -659,18 +659,6 @@ input:checked + .slider:before {
 
 
 
-/* Upcoming launches — inline in the Real-Time menu (V2.7; was the hover-only #launch-hud) */
-.launch-inline { display: block; }
-.launch-inline .layer-info { width: 100%; }
-.launch-menu-feed { margin-top: 5px; font-size: 0.64rem; line-height: 1.35; }
-.launch-menu-feed .lm-row { padding: 4px 0; border-top: 1px solid rgba(255,100,0,0.14); }
-.launch-menu-feed .lm-row:first-child { border-top: none; padding-top: 0; }
-.launch-menu-feed .lm-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.launch-menu-feed .lm-name { color: #ff9955; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.launch-menu-feed .lm-sub { opacity: 0.5; font-size: 0.56rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.launch-menu-feed .lm-empty { opacity: 0.45; }
-/* `.control-item span` forces 0.72rem on every span; the countdown needs to stay compact */
-.control-item .launch-menu-feed span { font-size: 0.6rem !important; flex-shrink: 0; }
 
 /* -------------------------------------------------------
    V7.1 MAP BRANDING & POPUPS

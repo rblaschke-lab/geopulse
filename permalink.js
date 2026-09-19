@@ -35,7 +35,10 @@
         var out = {};
         raw.split('&').forEach(function (pair) {
             var i = pair.indexOf('=');
-            if (i > 0) out[pair.slice(0, i)] = decodeURIComponent(pair.slice(i + 1));
+            if (i <= 0) return;
+            // A hand-edited link with a stray '%' must not throw here — that
+            // would kill URL syncing for the whole session.
+            try { out[pair.slice(0, i)] = decodeURIComponent(pair.slice(i + 1)); } catch (e) {}
         });
 
         var state = {};
@@ -47,8 +50,11 @@
             }
         }
         if (out.layers !== undefined) state.layers = out.layers ? out.layers.split(',') : [];
-        if (out.lang) state.lang = out.lang;
-        if (out.tour) state.tour = out.tour;
+        // Anyone can craft a share link, so only accept values the app knows.
+        // setLanguage persists its argument to localStorage — an unchecked
+        // lang would stick in the visitor's browser beyond this visit.
+        if (out.lang === 'en' || out.lang === 'de') state.lang = out.lang;
+        if (out.tour && /^[a-z0-9_-]{1,40}$/i.test(out.tour)) state.tour = out.tour;
         return Object.keys(state).length ? state : null;
     }
 
@@ -99,6 +105,21 @@
         }
     }
 
+    // A linked tour must not run before the data layers exist (the end of the
+    // init sequence would overwrite its status line) nor behind the ENTER
+    // gateway and splash, where nobody sees the opening shot. The gateway
+    // removes itself from the DOM on click; the splash then fades for ~1.2 s.
+    function whenVisitorIsIn(cb) {
+        var deadline = Date.now() + 120000;
+        (function poll() {
+            var ready = !!window._geopulseDataReady;
+            var gatewayGone = !document.getElementById('enter-gateway');
+            if (ready && gatewayGone) return setTimeout(cb, 1500);
+            if (Date.now() > deadline) return;
+            setTimeout(poll, 150);
+        })();
+    }
+
     // ── Restore ───────────────────────────────────────────────────
     function restore(state) {
         if (!state) return;
@@ -123,12 +144,27 @@
                     cb.dispatchEvent(new Event('change'));
                 }
             });
+            // Live layers (earthquakes, fires, fireballs …) are added after their
+            // fetch resolves — usually after this restore. Their toggle handlers
+            // skip a layer that doesn't exist yet, and the layer is then created
+            // hidden. Re-fire once everything exists.
+            if (!window._geopulseDataReady) {
+                document.addEventListener('geopulse:data-ready', function () {
+                    layerBoxes().forEach(function (cb) {
+                        if (cb.checked && want[cb.id.slice(7)]) cb.dispatchEvent(new Event('change'));
+                    });
+                }, { once: true });
+            }
         }
 
         if (state.tour && typeof window.ensureTours === 'function') {
             window.ensureTours(state.tour).then(function () {
+                var tours = window._TOURS_REF || window._TOURS_DATA || {};
+                if (!Object.prototype.hasOwnProperty.call(tours, state.tour)) return;
                 window._geopulseActiveTour = state.tour;
-                if (typeof window._geopulseStartTour === 'function') window._geopulseStartTour(state.tour);
+                whenVisitorIsIn(function () {
+                    if (typeof window._geopulseStartTour === 'function') window._geopulseStartTour(state.tour);
+                });
             });
         }
 

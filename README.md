@@ -2,7 +2,7 @@
 
 **Free, real-time educational world map combining satellite imagery, geopolitical data, and live intelligence feeds into one interactive dashboard. By RB Design 2026.**
 
-![Version](https://img.shields.io/badge/version-2.8-blue)
+![Version](https://img.shields.io/badge/version-2.9-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Platform](https://img.shields.io/badge/platform-GitHub%20Pages-orange)
 ![Cost](https://img.shields.io/badge/cost-%240%2Fmonth-brightgreen)
@@ -48,7 +48,7 @@
 | Architecture | Vanilla JavaScript (no frameworks, no bundlers) |
 | Hosting | GitHub Pages (static, free) |
 | Audio | Web Audio API (procedural) + Web Speech API |
-| Data Sources | USGS, NASA FIRMS/GIBS, NOAA, Launch Library 2, foto-webcam.eu, TfL Open Data, City of Austin, Caltrans, Fintraffic Digitraffic, HK Transport Department, DriveBC, 511 Ontario, NZ Transport Agency, WhereTheISS, Wikipedia |
+| Data Sources | USGS, NASA FIRMS/GIBS, NOAA, foto-webcam.eu, TfL Open Data, City of Austin, Caltrans, Fintraffic Digitraffic, HK Transport Department, DriveBC, 511 Ontario, NZ Transport Agency, WhereTheISS, Wikipedia |
 
 > 📋 See [TECH_SPEC.md](TECH_SPEC.md) for the full technical specification, complexity analysis, and API inventory.
 
@@ -139,4 +139,4 @@ This project is open source under the [MIT License](LICENSE).
 
 ---
 
-**GEOPULSE V2.8** — Built with 🛰️ by RB Design 2026
+**GEOPULSE V2.9** — Built with 🛰️ by RB Design 2026

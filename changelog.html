@@ -305,9 +305,29 @@
 
     <div class="timeline">
 
-        <!-- V2.8 — CURRENT -->
+        <!-- V2.9 — CURRENT -->
         <div class="version-entry">
             <div class="version-dot current"></div>
+            <div class="version-header">
+                <span class="version-number">V2.9</span>
+                <span class="version-type type-patch">PATCH</span>
+                <span class="version-name">Tours Start Again</span>
+                <span class="version-date">19 SEP 2026</span>
+            </div>
+            <ul class="version-changes">
+                <li><span class="change-icon fix">●</span> <strong>Tours start again</strong> — A variable the tour engine reads before its first use was never declared, so every tour start ended in a silent error and nothing happened. Declared; all 42 tours start from the menu again</li>
+                <li><span class="change-icon fix">●</span> <strong>Tour links and tour pages open the tour</strong> — A link like <code>/#tour=coldwar</code> waited for the map's load event a second time, but that event only ever fires once. The tour now starts as soon as the data is ready and the visitor has entered — which is also what the 42 tour landing pages link to</li>
+                <li><span class="change-icon fix">●</span> <strong>Shared links show their layers</strong> — A link with <code>layers=earthquakes,fires</code> ticked the boxes, but live layers that load a moment later were created hidden. They are switched on once they exist</li>
+                <li><span class="change-icon fix">●</span> <strong>Fireballs are back</strong> — NASA's fireball API sends no CORS header, so browsers refused it and the layer stayed empty. A daily GitHub Action now snapshots it into <code>data/fireballs.json</code>; the same workflow renews the camera index monthly</li>
+                <li><span class="change-icon fix">●</span> <strong>Upcoming launches removed from the menu</strong> — Less clutter in Real-Time, and no more background polling of the Launch Library</li>
+                <li><span class="change-icon fix">●</span> <strong>CDN code is pinned and verified</strong> — MapLibre, TopoJSON and Font Awesome load with Subresource Integrity hashes (checked identical on two independent CDNs); TopoJSON was an unpinned <code>@3</code> before. Share links only accept known languages and tour ids, and a malformed link can no longer switch sharing off</li>
+                <li><span class="change-icon fix">●</span> <strong>News ticker glyphs</strong> — The ⚡ separator and the ▼/▲ expand arrows showed as "?" after an old encoding repair</li>
+            </ul>
+        </div>
+
+        <!-- V2.8 -->
+        <div class="version-entry">
+            <div class="version-dot"></div>
             <div class="version-header">
                 <span class="version-number">V2.8</span>
                 <span class="version-type type-minor">MINOR</span>

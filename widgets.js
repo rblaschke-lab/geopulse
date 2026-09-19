@@ -79,7 +79,7 @@ if (fbToggle && fbPanel) {
             [cfg.FIELD_WISH || 'entry.3']: wish
         });
 
-        window.open(formUrl + '?' + params.toString(), '_blank');
+        window.open(formUrl + '?' + params.toString(), '_blank', 'noopener');
 
         // Reset form
         selectedRating = 0;

@@ -470,6 +470,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     map.addControl(new maplibregl.NavigationControl(), 'bottom-right');
 
+    // True once the initial 'load' has fired. map.loaded() and isStyleLoaded()
+    // both turn false again whenever a source is still fetching, so they can't
+    // answer "may I start using the map yet?" — and 'load' never fires twice.
+    let mapHasLoaded = false;
+    map.once('load', () => { mapHasLoaded = true; });
+
     // [Mobile nav code (switchSection, nav-btn listeners, handleOrientation, cat-toggle) 
     //  is registered BEFORE map init for resilience — see line ~424]
 
@@ -855,9 +861,11 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch(e) { console.warn('[AURORA] Init failed:', e.message); }
 
         // ── METEOR / FIREBALL TRACKER (NASA CNEOS) ──────────────────────
+        // The JPL API sends no CORS header, so browsers can't call it directly.
+        // scripts/build-fireballs.mjs snapshots it daily into our own origin.
         try {
             const fbResult = await window.reliableFetch(
-                'https://ssd-api.jpl.nasa.gov/fireball.api?limit=150', 'fireballs'
+                './data/fireballs.json', 'fireballs'
             );
             const fbFields = fbResult.data?.fields || [];
             const fbData = fbResult.data?.data || [];
@@ -1039,6 +1047,11 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch(e) { console.warn('[ROMAN EMPIRE] Init failed:', e.message); }
 
         setStatus(currentLang === 'de' ? 'ALLE DATENSTRÖME INITIALISIERT. SYSTEM BEREIT.' : 'ALL DATA STREAMS INITIALIZED. SYSTEM READY.');
+        // Every async data layer now exists. permalink.js waits for this to
+        // re-apply layers from a share link that were ticked before their layer
+        // was added (the toggle handlers skip layers that don't exist yet).
+        window._geopulseDataReady = true;
+        document.dispatchEvent(new Event('geopulse:data-ready'));
 
         // Keep labels on top of all data layers
         const elevateLabels = () => {
@@ -1051,8 +1064,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Kick off periodic data fetches
         fetchNewsTicker();
         setInterval(fetchNewsTicker, 300000);
-        fetchLaunches();
-        setInterval(fetchLaunches, 600000);
         fetchSolarData();
         setInterval(fetchSolarData, 600000);
     });
@@ -1073,7 +1084,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
             const items = result.data?.items || [];
             if (!items.length) return;
-            const tickerText = items.map(i => `? ${i.title.toUpperCase()}`).join('    //    ');
+            const tickerText = items.map(i => `⚡ ${i.title.toUpperCase()}`).join('    //    ');
             document.querySelectorAll('.ticker-content').forEach(el => el.textContent = tickerText);
         } catch(e) { console.warn('[TICKER] RSS fetch failed:', e.message); }
     };
@@ -1116,86 +1127,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="solar-level" style="color:${kpColor}">${kpLabel}</div>
             `;
         } catch(e) { hud.innerHTML = '<div class="solar-title">☀ SOLAR STORM INDEX</div><div class="solar-loading">NOAA SWPC OFFLINE</div>'; }
-    };
-
-    // ============================================================
-    // ROCKET LAUNCH TRACKER (Launch Library 2 — free, CORS-enabled)
-    // ============================================================
-    const launchFeed = document.getElementById('launch-feed');
-
-    const getCountdown = (net) => {
-        const diff = new Date(net) - new Date();
-        if (diff < 0) return '<span style="color:#0f0;">LAUNCHED</span>';
-        const d = Math.floor(diff / 86400000);
-        const h = Math.floor((diff % 86400000) / 3600000);
-        const m = Math.floor((diff % 3600000) / 60000);
-        if (d > 0) return `<span style="color:#ff6600;">T-${d}d ${h}h</span>`;
-        if (h > 0) return `<span style="color:#ffb000;">T-${h}h ${m}m</span>`;
-        return `<span style="color:#ff4400;animation:pulse-ring .8s infinite;">T-${m}m &#9654;</span>`;
-    };
-
-    const getAgencyIcon = (name = '') => {
-        if (/spacex/i.test(name)) return '🚀';
-        if (/nasa/i.test(name)) return '🛸';
-        if (/esa|ariane/i.test(name)) return '';
-        if (/roscosmos|russia/i.test(name)) return '🛸';
-        if (/isro/i.test(name)) return '';
-        if (/cnsa|china/i.test(name)) return '';
-        if (/rocketlab/i.test(name)) return '🔬';
-        return '🛰️';
-    };
-
-    // V2.7: the feed lives inline in the Real-Time menu (it used to be a
-    // hover-only HUD). Rendering is split from fetching so the countdown can
-    // tick every minute without spending the Launch Library quota
-    // (free tier: 15 requests/hour — we fetch every 10 minutes).
-    let lastLaunches = [];
-
-    const renderLaunches = () => {
-        if (!launchFeed) return;
-        // Out of i18n's hands: otherwise a language switch would overwrite the
-        // loaded list with "CONNECTING TO LAUNCH LIBRARY...". We re-render instead.
-        launchFeed.removeAttribute('data-i18n');
-        const de = currentLang === 'de';
-        if (!lastLaunches.length) {
-            launchFeed.innerHTML = `<div class="lm-empty">${de ? 'Keine Starttermine' : 'No upcoming data'}</div>`;
-            return;
-        }
-        launchFeed.innerHTML = lastLaunches.slice(0, 4).map(l => {
-            const agency = l.launch_service_provider?.name || 'Unknown';
-            const rocket = l.rocket?.configuration?.name || 'Unknown Rocket';
-            // LL2 names read "Rocket | Mission"; the rocket already has its own
-            // line below, so the headline is the mission.
-            const parts = String(l.name || '').split('|').map(s => s.trim()).filter(Boolean);
-            const name = parts[1] || parts[0] || 'Classified';
-            const pad = l.pad?.location?.name || '';
-            return `<div class="lm-row">
-                <div class="lm-top"><div class="lm-name" title="${escHtml(name)}">${getAgencyIcon(agency)} ${escHtml(name)}</div>${getCountdown(l.net)}</div>
-                <div class="lm-sub">${escHtml(rocket)}${pad ? ` · ${escHtml(pad)}` : ''}</div>
-            </div>`;
-        }).join('');
-    };
-
-    const fetchLaunches = async () => {
-        if (!launchFeed) return;
-        try {
-            const { data } = await window.reliableFetch('https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=5&format=json', 'launches', { timeout: 8000, retries: 1 });
-            lastLaunches = data?.results || [];
-            renderLaunches();
-        } catch(e) {
-            // Keep showing the last good list rather than blanking it.
-            if (lastLaunches.length) return;
-            launchFeed.removeAttribute('data-i18n');
-            launchFeed.innerHTML = `<div class="lm-empty">${currentLang === 'de' ? 'Startdaten offline' : 'Launch data offline'}</div>`;
-        }
-    };
-
-    setInterval(() => { if (lastLaunches.length) renderLaunches(); }, 60000);
-    document.addEventListener('setLang', () => setTimeout(renderLaunches, 0));
-    const _launchPrevSetLanguage = window.setLanguage;
-    window.setLanguage = function (lang) {
-        if (_launchPrevSetLanguage) _launchPrevSetLanguage(lang);
-        setTimeout(() => { if (lastLaunches.length) renderLaunches(); }, 0);
     };
 
     // ============================================================
@@ -3489,11 +3420,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (sidePanel.classList.contains('sidebar-collapsed')) {
                     sidePanel.style.maxHeight = '42px';
                     sidePanel.style.overflowY = 'hidden';
-                    expandHint.textContent = '? EXPAND';
+                    expandHint.textContent = '▼ EXPAND';
                 } else {
                     sidePanel.style.maxHeight = '90vh';
                     sidePanel.style.overflowY = 'auto';
-                    expandHint.textContent = '? COLLAPSE';
+                    expandHint.textContent = '▲ COLLAPSE';
                 }
             }
         });
@@ -3939,6 +3870,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let activeTour = null;
+    // Was never declared: deactivateAllLayersForTour() reads it before the
+    // first assignment → ReferenceError, and no tour could start at all.
+    let activeTourId = null;
     let tourStepIndex = 0;
     const tourPanel = document.getElementById('tour-briefing');
     const tourTitle = document.getElementById('tour-briefing-title');
@@ -4008,7 +3942,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return (currentLang === 'de' && tour.name_de) ? tour.name_de : tour.name;
     }
     function startTour(tourId) {
-        const tour = TOURS[tourId];
+        // Own properties only: tour ids arrive from share links, and
+        // TOURS['__proto__'] / TOURS['constructor'] would otherwise be truthy.
+        const tour = Object.prototype.hasOwnProperty.call(TOURS, tourId) ? TOURS[tourId] : null;
         if (!tour) { console.warn('[startTour] Tour not found:', tourId); return; }
 
         // ── Close the tour menu so the tour is visible, not hidden behind it ──
@@ -4025,8 +3961,11 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('tours-hud')?.classList.remove('touch-open');
         }
 
-        // Guard: if map not yet fully loaded, wait then retry
-        if (!map.loaded()) {
+        // Guard: wait for the first 'load' only. The old check was map.loaded(),
+        // which is false while any tile or source is still loading — including
+        // after 'load' — so it re-armed a listener for an event that never fires
+        // twice, and deep-linked tours silently never started.
+        if (!mapHasLoaded) {
             map.once('load', () => startTour(tourId));
             return;
         }

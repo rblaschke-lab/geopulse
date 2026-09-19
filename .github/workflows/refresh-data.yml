@@ -1,0 +1,54 @@
+# Refreshes the build-time data snapshots that the site serves from its own origin.
+#   data/fireballs.json — daily   (NASA CNEOS API has no CORS header)
+#   data/cameras.json   — monthly (open camera catalogues drift; see build-camera-index.mjs)
+# Commits only when a file actually changed; a push to master redeploys GitHub Pages.
+
+name: Refresh data snapshots
+
+on:
+  schedule:
+    - cron: '17 4 * * *'   # daily 04:17 UTC — fireballs
+    - cron: '41 3 1 * *'   # 1st of month 03:41 UTC — cameras
+  workflow_dispatch:
+    inputs:
+      cameras:
+        description: 'Also rebuild the camera index'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Fireballs
+        run: node scripts/build-fireballs.mjs
+
+      - name: Cameras (monthly or on request)
+        if: github.event.schedule == '41 3 1 * *' || inputs.cameras
+        run: node scripts/build-camera-index.mjs
+
+      - name: Commit changes
+        run: |
+          if git diff --quiet -- data/; then
+            echo "No data changes."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "chore(data): refresh snapshots $(date -u +%Y-%m-%d)"
+          git push
