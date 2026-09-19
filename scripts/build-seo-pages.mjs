@@ -312,12 +312,14 @@ function tourPage(lang, id, tour, quiz, cat, total) {
 <meta property="og:url" content="${url}">
 <meta property="og:title" content="${esc(title)} — GEOPULSE">
 <meta property="og:description" content="${esc(desc)}">
-<meta property="og:image" content="${ORIGIN}/og-preview.png">
+<meta property="og:image" content="${ORIGIN}/og-preview${de ? '-de' : ''}.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:site_name" content="GEOPULSE by RB Design">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(title)} — GEOPULSE">
 <meta name="twitter:description" content="${esc(desc)}">
-<meta name="twitter:image" content="${ORIGIN}/og-preview.png">
+<meta name="twitter:image" content="${ORIGIN}/og-preview${de ? '-de' : ''}.jpg">
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 <style>${STYLE}</style>
 </head>
@@ -454,12 +456,14 @@ function hubPage(lang, cats, TOURS, quizByTour, total) {
 <meta property="og:url" content="${url}">
 <meta property="og:title" content="${esc(H.h1)}">
 <meta property="og:description" content="${esc(H.desc)}">
-<meta property="og:image" content="${ORIGIN}/og-preview.png">
+<meta property="og:image" content="${ORIGIN}/og-preview${de ? '-de' : ''}.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:site_name" content="GEOPULSE by RB Design">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(H.h1)}">
 <meta name="twitter:description" content="${esc(H.desc)}">
-<meta name="twitter:image" content="${ORIGIN}/og-preview.png">
+<meta name="twitter:image" content="${ORIGIN}/og-preview${de ? '-de' : ''}.jpg">
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 <style>${STYLE}</style>
 </head>
