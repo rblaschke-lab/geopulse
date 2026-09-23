@@ -15,7 +15,7 @@
     var T = {
         en: {
             title: 'TODAY ON EARTH', quake: 'Strongest earthquake · 24 h', quakes: 'earthquakes M2.5+ in 24 h',
-            fireball: 'Newest fireball', fireballEnergy: 'kt energy', kp: 'Solar storm index (Kp)',
+            fireball: 'Newest fireball', fireballEnergy: 'kT explosion energy', kp: 'Solar storm index (Kp)',
             kpQuiet: 'quiet', kpActive: 'active', kpStorm: 'storm — aurora likely',
             fires: 'Wildfires', firesText: 'Satellite hotspots from the last 24 h',
             tour: 'Tour of the day', startTour: 'Start tour', show: 'Show', share: 'Share today',
@@ -24,7 +24,7 @@
         },
         de: {
             title: 'HEUTE AUF DER WELT', quake: 'Stärkstes Erdbeben · 24 h', quakes: 'Erdbeben ab M2,5 in 24 h',
-            fireball: 'Neuester Feuerball', fireballEnergy: 'kt Energie', kp: 'Sonnensturm-Index (Kp)',
+            fireball: 'Neuester Feuerball', fireballEnergy: 'kT Explosionsenergie', kp: 'Sonnensturm-Index (Kp)',
             kpQuiet: 'ruhig', kpActive: 'aktiv', kpStorm: 'Sturm — Polarlicht wahrscheinlich',
             fires: 'Waldbrände', firesText: 'Satelliten-Hotspots der letzten 24 h',
             tour: 'Tour des Tages', startTour: 'Tour starten', show: 'Zeigen', share: 'Heute teilen',

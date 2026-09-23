@@ -860,19 +860,24 @@ document.addEventListener("DOMContentLoaded", () => {
             const iLatDir = fbFields.indexOf('lat-dir');
             const iLon = fbFields.indexOf('lon');
             const iLonDir = fbFields.indexOf('lon-dir');
-            const iEnergy = fbFields.indexOf('energy');
+            // Two different energies in the CNEOS data: 'energy' is the light the
+            // flash radiated, in 10^10 joules; 'impact-e' is the total explosion
+            // energy in kilotons of TNT. Only the second compares to a bomb.
+            const iEnergy = fbFields.indexOf('impact-e');
+            const iRadiated = fbFields.indexOf('energy');
             const iVel = fbFields.indexOf('vel');
             const iAlt = fbFields.indexOf('alt');
             const fbFeatures = fbData.filter(r => r[iLat] && r[iLon]).map(r => {
                 const lat = parseFloat(r[iLat]) * (r[iLatDir] === 'S' ? -1 : 1);
                 const lon = parseFloat(r[iLon]) * (r[iLonDir] === 'W' ? -1 : 1);
-                const energy = parseFloat(r[iEnergy]) || 0.1;
+                const energy = parseFloat(r[iEnergy]) || 0.05;
                 return {
                     type: 'Feature',
                     geometry: { type: 'Point', coordinates: [lon, lat] },
                     properties: {
                         date: r[iDate] || 'Unknown',
-                        energy: energy,
+                        energy: energy,          // kilotons TNT (read by today.js)
+                        radiated: parseFloat(r[iRadiated]) || null,
                         vel: r[iVel] || '—',
                         alt: r[iAlt] || '—'
                     }
@@ -884,7 +889,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 id: 'fireballs-glow', type: 'circle', source: 'fireballs-src',
                 layout: { visibility: 'none' },
                 paint: {
-                    'circle-radius': ['interpolate', ['linear'], ['get', 'energy'], 0.1, 12, 1, 20, 10, 35, 100, 55],
+                    'circle-radius': ['interpolate', ['linear'], ['get', 'energy'], 0.05, 12, 0.5, 20, 3, 32, 15, 50],
                     'circle-color': 'transparent',
                     'circle-stroke-color': '#ffaa33',
                     'circle-stroke-width': 1.5, 'circle-stroke-opacity': 0.3
@@ -895,8 +900,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 id: 'fireballs-core', type: 'circle', source: 'fireballs-src',
                 layout: { visibility: 'none' },
                 paint: {
-                    'circle-radius': ['interpolate', ['linear'], ['get', 'energy'], 0.1, 3, 1, 5, 10, 9, 100, 16],
-                    'circle-color': ['interpolate', ['linear'], ['get', 'energy'], 0.1, '#ffcc66', 1, '#ff8800', 10, '#ff4400', 100, '#ff0000'],
+                    'circle-radius': ['interpolate', ['linear'], ['get', 'energy'], 0.05, 3, 0.5, 5, 3, 9, 15, 15],
+                    'circle-color': ['interpolate', ['linear'], ['get', 'energy'], 0.05, '#ffcc66', 0.5, '#ff8800', 3, '#ff4400', 15, '#ff0000'],
                     'circle-opacity': 0.9,
                     'circle-blur': 0.3
                 }
@@ -904,9 +909,33 @@ document.addEventListener("DOMContentLoaded", () => {
             // Click popup
             map.on('click', 'fireballs-core', (e) => {
                 const p = e.features[0].properties;
-                const hiroshima = (p.energy / 15).toFixed(1);
-                new maplibregl.Popup({ maxWidth: '280px' }).setLngLat(e.lngLat).setHTML(
-                    `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;"><h3 style="color:#ff8800;margin:0 0 5px;border-bottom:1px solid #ff880044;padding-bottom:4px;">☄️ ${currentLang==='de'?'FEUERBALL / BOLIDE':'FIREBALL / BOLIDE'}</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:5px;"><div style="background:rgba(255,136,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'ENERGIE':'ENERGY'}</div><div style="color:#ff8800;font-size:1rem;font-weight:bold;">${escHtml(p.energy)} kT</div></div><div style="background:rgba(255,136,0,.08);padding:3px 6px;"><div style="opacity:.5;font-size:.6rem;">${currentLang==='de'?'GESCHW.':'VELOCITY'}</div><div>${escHtml(p.vel)} km/s</div></div></div><div style="background:rgba(255,136,0,.08);padding:3px 6px;margin-bottom:4px;"><div style="opacity:.5;font-size:.6rem;">≈ HIROSHIMA</div><div style="color:#ff4400;">${hiroshima}× ${currentLang==='de'?'Hiroshima-Äquivalent':'Hiroshima equivalent'}</div></div><div style="font-size:.6rem;opacity:.5;">${escHtml(p.date)}</div><div style="font-size:.5rem;opacity:.3;margin-top:4px;">Source: NASA CNEOS</div></div>`
+                const de = currentLang === 'de';
+                const kt = Number(p.energy) || 0;
+                const num = (v, d) => v.toLocaleString(de ? 'de-DE' : 'en-GB', { maximumFractionDigits: d });
+                // Hiroshima bomb ≈ 15 kT TNT. Most fireballs are a few percent of it.
+                const ratio = kt / 15;
+                const hiro = ratio >= 1
+                    ? (de ? `≈ ${num(ratio, 1)}× die Hiroshima-Bombe` : `≈ ${num(ratio, 1)}× the Hiroshima bomb`)
+                    : (de ? `≈ ${num(Math.max(ratio * 100, 0.1), ratio < 0.1 ? 1 : 0)} % der Hiroshima-Bombe` : `≈ ${num(Math.max(ratio * 100, 0.1), ratio < 0.1 ? 1 : 0)}% of the Hiroshima bomb`);
+                const alt = parseFloat(p.alt);
+                const vel = parseFloat(p.vel);
+                const cell = (label, value) => `<div style="background:rgba(255,136,0,.08);padding:3px 6px;"><div style="opacity:.55;font-size:.6rem;">${label}</div><div>${value}</div></div>`;
+                const explain = de
+                    ? 'Ein Brocken aus dem All – meist ein Asteroidensplitter, nur Dezimeter bis wenige Meter groß – ist hier mit enormer Geschwindigkeit in die Atmosphäre eingetreten, hat sich aufgeheizt und ist in großer Höhe explodiert. Fast immer verglüht er dabei vollständig; am Boden merkt man meist nur einen Lichtblitz, manchmal einen Knall. Satelliten registrieren solche Blitze weltweit – rund 30 bis 40 pro Jahr, die meisten über dem Meer.'
+                    : 'A rock from space – usually an asteroid fragment only decimetres to a few metres across – hit the atmosphere at enormous speed, heated up and exploded high in the sky. It almost always burns up completely; on the ground you would at most see a flash or hear a bang. Satellites record such flashes worldwide – about 30 to 40 a year, most of them over the ocean.';
+                const note = de
+                    ? 'Zum Vergleich: Die Hiroshima-Bombe setzte ca. 15 kT TNT frei – aber am Boden. Ein Feuerball gibt seine Energie in 20–60 km Höhe ab.'
+                    : 'For scale: the Hiroshima bomb released about 15 kT of TNT – at ground level. A fireball releases its energy 20–60 km up.';
+                new maplibregl.Popup({ maxWidth: '300px' }).setLngLat(e.lngLat).setHTML(
+                    `<div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;"><h3 style="color:#ff8800;margin:0 0 5px;border-bottom:1px solid #ff880044;padding-bottom:4px;">☄️ ${de ? 'FEUERBALL (BOLIDE)' : 'FIREBALL (BOLIDE)'}</h3>` +
+                    `<div style="background:rgba(255,136,0,.08);padding:4px 6px;margin-bottom:3px;"><div style="opacity:.55;font-size:.6rem;">${de ? 'EXPLOSIONSENERGIE' : 'EXPLOSION ENERGY'}</div><div style="color:#ff8800;font-size:1rem;font-weight:bold;">${escHtml(num(kt, 2))} kT TNT</div><div style="color:#ffb080;">${hiro}</div></div>` +
+                    `<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:5px;">` +
+                    cell(de ? 'HÖHE' : 'ALTITUDE', isFinite(alt) ? `${escHtml(num(alt, 0))} km` : '—') +
+                    cell(de ? 'GESCHW.' : 'VELOCITY', isFinite(vel) ? `${escHtml(num(vel, 1))} km/s` : '—') +
+                    `</div>` +
+                    `<p style="font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:.72rem;line-height:1.45;margin:0 0 5px;color:#d8e0e6;">${explain}</p>` +
+                    `<p style="font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:.66rem;line-height:1.4;margin:0 0 5px;opacity:.7;">${note}</p>` +
+                    `<div style="font-size:.6rem;opacity:.5;">${escHtml(p.date)} UTC</div><div style="font-size:.5rem;opacity:.35;margin-top:3px;">Source: NASA/JPL CNEOS</div></div>`
                 ).addTo(map);
             });
             map.on('mouseenter', 'fireballs-core', () => map.getCanvas().style.cursor = 'pointer');

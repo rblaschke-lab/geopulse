@@ -92,7 +92,7 @@ const i18n = {
         layer_aurora: 'Aurora Forecast',
         desc_aurora: 'Real-time aurora borealis/australis probability from NOAA OVATION model.',
         layer_fireballs: 'Fireballs',
-        desc_fireballs: 'NASA-confirmed meteor impacts — circle size = energy release (kT).',
+        desc_fireballs: 'Meteors that exploded in the atmosphere since 2022 (NASA). Almost all burn up completely. Circle size = explosion energy — click one for the explanation.',
         layer_wind: 'Global Winds',
         desc_wind: 'Animated wind particle visualization from Open-Meteo forecast data.',
         // Tour hint
@@ -220,7 +220,7 @@ const i18n = {
         layer_aurora: 'Polarlicht-Vorhersage',
         desc_aurora: 'Echtzeit-Polarlicht-Wahrscheinlichkeit vom NOAA OVATION-Modell.',
         layer_fireballs: 'Feuerbälle',
-        desc_fireballs: 'NASA-bestätigte Meteoreinschläge — Kreisgröße = Energiefreisetzung (kT).',
+        desc_fireballs: 'Meteore, die seit 2022 in der Atmosphäre explodiert sind (NASA). Fast alle verglühen vollständig. Kreisgröße = Explosionsenergie – Klick für die Erklärung.',
         layer_wind: 'Globale Winde',
         desc_wind: 'Animierte Wind-Partikelvisualisierung aus Open-Meteo Vorhersagedaten.',
         // Tour hint
