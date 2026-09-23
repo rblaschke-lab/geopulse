@@ -7,7 +7,7 @@
 // never matches is a precache that does nothing. VERSION below is
 // the single place that changes on a release.
 // ══════════════════════════════════════════════════════════════
-const VERSION    = '3.0';
+const VERSION    = '3.1';
 const CACHE_NAME = 'geopulse-v' + VERSION;
 const V          = '?v=' + VERSION;
 
@@ -25,7 +25,6 @@ const STATIC_ASSETS = [
   '/quiz_bank.js' + V,
   '/quiz.js' + V,
   '/audio.js' + V,
-  '/narration.js' + V,
   '/wind.js' + V,
   '/main.js' + V,
   '/search.js' + V,
@@ -35,6 +34,7 @@ const STATIC_ASSETS = [
   '/today.js' + V,
   '/teacher.js' + V,
   '/timelapse.js' + V,
+  '/tour_library.js' + V,
   '/manual.html'
 ];
 

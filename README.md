@@ -33,7 +33,6 @@
 - **Ken Burns Effect** — Wikipedia thumbnails slowly pan & zoom like a documentary
 - **Story Progress Bar** — Amber gradient bar fills as you advance through tour stops
 - **Bilingual Interface** — Full English/German (EN/DE) toggle with persistent preference
-- **Audio Narration** — Text-to-speech in English and German with smart voice picker
 - **Wikipedia Integration** — Click markers for detailed context with direct Wikipedia links
 - **Mobile-First** — Full touch support with swipeable panels and responsive layout
 - **Scenario Presets** — One-click educational presets (Taiwan, Red Sea, Europe Energy, Nuclear Risk)
@@ -47,7 +46,7 @@
 | Satellite Imagery | Esri World Imagery |
 | Architecture | Vanilla JavaScript (no frameworks, no bundlers) |
 | Hosting | GitHub Pages (static, free) |
-| Audio | Web Audio API (procedural) + Web Speech API |
+| Audio | Web Audio API (procedural sound effects) |
 | Data Sources | USGS, NASA FIRMS/GIBS, NOAA, foto-webcam.eu, TfL Open Data, City of Austin, Caltrans, Fintraffic Digitraffic, HK Transport Department, DriveBC, 511 Ontario, NZ Transport Agency, WhereTheISS, Wikipedia |
 
 > 📋 See [TECH_SPEC.md](TECH_SPEC.md) for the full technical specification, complexity analysis, and API inventory.

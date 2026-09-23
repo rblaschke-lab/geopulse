@@ -84,7 +84,7 @@
 
     <script src="./fetchWrapper.js"></script>
     <script src="./config.js"></script>
-    <link rel="stylesheet" href="./style.css?v=3.0">
+    <link rel="stylesheet" href="./style.css?v=3.1">
 
     <!-- Service Worker registration -->
     <script>
@@ -99,8 +99,9 @@
     <!-- ═══ ENTER GATEWAY — enables audio via user gesture ═══ -->
     <div id="enter-gateway">
         <div class="gateway-title"><span class="gw-geo">GEO</span><span class="gw-pulse">PULSE</span></div>
-        <div class="gateway-sub">INTERACTIVE WORLD ATLAS</div>
-        <div class="gateway-enter">▶ ENTER</div>
+        <div class="gateway-sub" data-gw-en="THE INTERACTIVE WORLD ATLAS FOR SCHOOL &amp; UNIVERSITY" data-gw-de="DER INTERAKTIVE WELTATLAS FÜR SCHULE &amp; UNI">THE INTERACTIVE WORLD ATLAS FOR SCHOOL &amp; UNIVERSITY</div>
+        <div class="gateway-subjects" data-gw-en="HISTORY · GEOGRAPHY · POLITICS · SCIENCE" data-gw-de="GESCHICHTE · ERDKUNDE · POLITIK · NATURWISSENSCHAFT">HISTORY · GEOGRAPHY · POLITICS · SCIENCE</div>
+        <div class="gateway-enter" data-gw-en="▶ ENTER" data-gw-de="▶ STARTEN">▶ ENTER</div>
         <div class="gateway-credit">by RB Design 2026</div>
     </div>
 
@@ -125,13 +126,22 @@
             <div class="splash-title">
                 <span class="splash-geo">GEO</span><span class="splash-pulse">PULSE</span>
             </div>
-            <div class="splash-tagline">HISTORY · LIVE EARTH · ONE MAP</div>
+            <div class="splash-tagline" data-gw-en="LEARN THE WORLD ON ONE MAP" data-gw-de="DIE WELT VERSTEHEN – AUF EINER KARTE">LEARN THE WORLD ON ONE MAP</div>
             <div class="splash-bar">
                 <div class="splash-bar-fill"></div>
             </div>
             <div class="splash-credit">by <strong>RB Design</strong> 2026</div>
         </div>
     </div>
+    <script>
+    // Gateway + splash run before i18n.js loads: pick the language the same way it will.
+    (function(){
+        var l = 'en';
+        try { l = localStorage.getItem('geopulseLang') || (/[#&]lang=de\b/.test(location.hash) ? 'de' : 'en'); } catch(e) {}
+        if (l !== 'de') return;
+        document.querySelectorAll('[data-gw-de]').forEach(function(el){ el.textContent = el.getAttribute('data-gw-de'); });
+    })();
+    </script>
 
     <!-- Gateway + Cinematic Audio Controller -->
     <script>
@@ -347,8 +357,8 @@
     <!-- ═══ TOURS HUD — Standalone floating panel (left side) ═══ -->
     <div id="tours-hud" class="tours-hud hud-panel-base">
         <header class="hud-header">
-            <div class="hud-title"><i class="fa-solid fa-route"></i> <span data-i18n="guided_tours">THE TOURS</span></div>
-            <div class="hud-sub"><span class="tours-count-num">41</span> <span data-i18n="tours_hud_sub">EXPLORATIONS</span></div>
+            <div class="hud-title"><i class="fa-solid fa-route"></i> <span data-i18n="guided_tours">THE TOURS</span> <i class="fa-solid fa-arrow-right tours-hud-go" aria-hidden="true"></i></div>
+            <div class="hud-sub"><span class="tours-count-num">41</span> <span data-i18n="tours_hud_sub">GUIDED TOURS · OPEN LIBRARY</span></div>
         </header>
         <div class="tours-hud-body">
                     <div class="tour-search-wrap">
@@ -896,21 +906,33 @@
                 try { if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelector('.wg').pauseAnimations(); } catch (e) {}
             </script>
             <h1 class="welcome-title">GEOPULSE</h1>
-            <p class="welcome-subtitle"><span data-i18n="ob_value">History and the live world — on one map.</span></p>
+            <p class="welcome-subtitle"><span data-i18n="ob_value">The interactive world atlas for school and university</span></p>
+
+            <!-- V3.1: education first — what a class gets, in three lines -->
+            <ul class="welcome-features welcome-edu">
+                <li class="welcome-feat"><i class="fa-solid fa-route" aria-hidden="true"></i> <span><span class="tours-count-num">41</span> <span data-i18n="ob_feat_tours">guided tours — from the Roman Empire to the climate crisis</span></span></li>
+                <li class="welcome-feat"><i class="fa-solid fa-book-open" aria-hidden="true"></i> <span data-i18n="ob_feat_subjects">For history, geography, politics, religion and science</span></li>
+                <li class="welcome-feat"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> <span data-i18n="ob_feat_sheets">Worksheet &amp; QR code for every tour — projector or tablet</span></li>
+            </ul>
 
             <!-- Live intelligence ticker (real feeds; hidden on feed failure) -->
             <div id="welcome-ticker" class="welcome-ticker" style="display:none;"></div>
 
             <div class="welcome-actions">
-                <button id="welcome-tour" class="welcome-btn welcome-btn-primary" data-tour="welcome">
-                    <i class="fa-solid fa-route"></i> <span data-i18n="welcome_start_tour">START DEMO TOUR</span>
+                <button id="welcome-library" class="welcome-btn welcome-btn-primary">
+                    <i class="fa-solid fa-route"></i> <span data-i18n="welcome_browse_tours">BROWSE THE TOURS</span>
                 </button>
-                <button id="welcome-explore" class="welcome-btn welcome-btn-secondary">
-                    <i class="fa-solid fa-compass"></i> <span data-i18n="welcome_explore">EXPLORE FREELY</span>
-                </button>
+                <div class="welcome-actions-row">
+                    <button id="welcome-tour" class="welcome-btn welcome-btn-secondary" data-tour="welcome">
+                        <i class="fa-solid fa-play"></i> <span data-i18n="welcome_start_tour">DEMO TOUR</span>
+                    </button>
+                    <button id="welcome-explore" class="welcome-btn welcome-btn-secondary">
+                        <i class="fa-solid fa-compass"></i> <span data-i18n="welcome_explore">EXPLORE FREELY</span>
+                    </button>
+                </div>
             </div>
-            <div class="welcome-footer" data-i18n="welcome_footer">Free · No login · No ads · No cookies — for classrooms and curious minds</div>
             <a class="welcome-teachers" href="/teachers/" data-href-en="/teachers/" data-href-de="/lehrkraefte/"><i class="fa-solid fa-chalkboard-user"></i> <span data-i18n="welcome_teachers">For teachers: worksheets, QR codes, lesson links →</span></a>
+            <div class="welcome-footer" data-i18n="welcome_footer">Free · No login · No ads · No cookies</div>
         </div>
     </div>
 
@@ -919,9 +941,6 @@
         <div class="tour-progress-bar"><div class="tour-progress-fill" id="tour-progress-fill" style="width:0%"></div></div>
         <div class="tour-briefing-header">
             <span id="tour-step-counter" class="tour-step-num">1/5</span>
-            <button id="tour-narrate" class="btn-narrate-briefing" title="Toggle audio narration" onclick="this.classList.toggle('active'); if(!this.classList.contains('active') &amp;&amp; window.speechSynthesis) speechSynthesis.cancel();">
-                <i class="fa-solid fa-volume-high"></i> AUDIO
-            </button>
             <button id="tour-close" class="btn-close-briefing"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <h2 id="tour-briefing-title" class="tour-title"></h2>
@@ -1019,7 +1038,7 @@
     <!-- QUICK LINKS (bottom-left) -->
     <div id="quick-links">
         <a href="./about.html" target="_blank" title="About GEOPULSE"><i class="fa-solid fa-circle-info"></i> About</a>
-        <a href="/teachers/" data-href-en="/teachers/" data-href-de="/lehrkraefte/" title="For teachers — worksheets, QR codes, lesson links"><i class="fa-solid fa-chalkboard-user"></i> <span data-i18n="nav_teachers">Teachers</span></a>
+        <a href="/teachers/" id="teachers-link" class="ql-teachers" data-href-en="/teachers/" data-href-de="/lehrkraefte/" title="For teachers — worksheets, QR codes, lesson links"><i class="fa-solid fa-chalkboard-user"></i> <span data-i18n="nav_teachers">Teachers</span></a>
         <a href="#" id="today-link" title="Today on Earth"><i class="fa-solid fa-calendar-day"></i> <span data-i18n="nav_today">Today</span></a>
         <a href="./manual.html" target="_blank" title="Command Manual"><i class="fa-solid fa-book"></i> Manual</a>
         <a href="./changelog.html" target="_blank" title="Changelog"><i class="fa-solid fa-code-branch"></i> Changelog</a>
@@ -1030,20 +1049,20 @@
         <span id="live-clock" title="Local Time" style="display:flex;align-items:center;height:28px;padding:0 12px;"></span>
     </div>
 
-    <script defer src="./i18n.js?v=3.0"></script>
-    <script defer src="./quiz_bank.js?v=3.0"></script>
-    <script defer src="./quiz.js?v=3.0"></script>
-    <script defer src="./audio.js?v=3.0"></script>
-    <script defer src="./narration.js?v=3.0"></script>
-    <script defer src="./wind.js?v=3.0"></script>
-    <script defer src="./main.js?v=3.0"></script>
-    <script defer src="./search.js?v=3.0"></script>
-    <script defer src="./widgets.js?v=3.0"></script>
+    <script defer src="./i18n.js?v=3.1"></script>
+    <script defer src="./quiz_bank.js?v=3.1"></script>
+    <script defer src="./quiz.js?v=3.1"></script>
+    <script defer src="./audio.js?v=3.1"></script>
+    <script defer src="./wind.js?v=3.1"></script>
+    <script defer src="./main.js?v=3.1"></script>
+    <script defer src="./search.js?v=3.1"></script>
+    <script defer src="./widgets.js?v=3.1"></script>
     <!-- Tour prose (~450 KB) is fetched on idle by tours_loader.js, not on first paint -->
-    <script defer src="./tours_loader.js?v=3.0"></script>
-    <script defer src="./permalink.js?v=3.0"></script>
-    <script defer src="./today.js?v=3.0"></script>
-    <script defer src="./teacher.js?v=3.0"></script>
-    <script defer src="./timelapse.js?v=3.0"></script>
+    <script defer src="./tours_loader.js?v=3.1"></script>
+    <script defer src="./permalink.js?v=3.1"></script>
+    <script defer src="./today.js?v=3.1"></script>
+    <script defer src="./teacher.js?v=3.1"></script>
+    <script defer src="./tour_library.js?v=3.1"></script>
+    <script defer src="./timelapse.js?v=3.1"></script>
 </body>
 </html>

@@ -365,22 +365,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (fs && !sidebar.querySelector('.collapsible-section.open')) fs.classList.add('open');
         }
         if(target === 'tours') {
-            // On mobile, toggle tours-hud as overlay
-            const toursHud = document.getElementById('tours-hud');
-            if (toursHud) {
-                toursHud.classList.toggle('touch-open');
-                toursHud.style.display = 'block';
-                toursHud.style.position = 'fixed';
-                toursHud.style.top = '28px';
-                toursHud.style.left = '0';
-                toursHud.style.right = '0';
-                toursHud.style.width = '100%';
-                toursHud.style.maxHeight = '85vh';
-                toursHud.style.borderRadius = '0';
-                toursHud.style.zIndex = '950';
-                toursHud.style.overflowY = 'auto';
-            }
-            document.body.classList.add('mobile-panel-open');
+            // V3.1: the tours open as their own full-screen page (tour_library.js)
+            window.geopulseTourLibrary?.open();
             activeMobilePanel = 'tours';
         }
 
@@ -3440,18 +3426,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // iPad/touch: toggle tours-hud on header tap.
-    // Desktop opens the floating tours panel on hover — iOS has no hover, so in the
-    // desktop layout (viewport > 768px, no bottom nav) the panel was unreachable.
-    if (isTouchDevice) {
+    // "THE TOURS" opens the tour library page (tour_library.js) on every device.
+    // The old hover-expanding list was hard to use and unreachable without hover.
+    {
         const toursHudEl = document.getElementById('tours-hud');
-        const toursHeader = toursHudEl?.querySelector('header');
-        if (toursHeader) {
-            toursHeader.addEventListener('click', () => {
-                toursHudEl.classList.toggle('touch-open');
+        if (toursHudEl) {
+            toursHudEl.setAttribute('role', 'button');
+            toursHudEl.setAttribute('tabindex', '0');
+            const openLib = () => window.geopulseTourLibrary?.open();
+            toursHudEl.addEventListener('click', openLib);
+            toursHudEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLib(); }
             });
         }
     }
+    // Mobile: leaving the library hands the bottom bar back to SCOPE
+    document.addEventListener('tourlibrary:close', () => {
+        if (activeMobilePanel !== 'tours') return;
+        activeMobilePanel = null;
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.target === 'map'));
+    });
 
     // iPad/touch: close panels when tapping the map
     if (isTouchDevice) {
@@ -3543,6 +3537,10 @@ document.addEventListener("DOMContentLoaded", () => {
             // CTA wiring
             document.getElementById('welcome-tour')?.addEventListener('click', () => dismissWelcome('welcome'));
             document.getElementById('welcome-explore')?.addEventListener('click', () => dismissWelcome(null));
+            document.getElementById('welcome-library')?.addEventListener('click', () => {
+                dismissWelcome(null);
+                window.geopulseTourLibrary?.open();
+            });
 
             // ── Live intelligence ticker (real feeds; hide silently on failure) ──
             (function initWelcomeTicker() {
@@ -3853,14 +3851,6 @@ document.addEventListener("DOMContentLoaded", () => {
         _tourPreviousToggles = [];
     }
     // ════════════════════════════════════════════════════════════
-    // -----------------------------------------------------------
-    // NARRATION ENGINE — Extracted to narration.js module
-    // -----------------------------------------------------------
-    // Loaded from narration.js before main.js.
-    // Exposes: window.speakText(text), window.stopNarration()
-    const speakText = window.speakText || function() {};
-    const stopNarration = window.stopNarration || function() {};
-
     // -- Bilingual tour text helper (depends on local currentLang) --
     function getTourTitle(step) {
         return (currentLang === 'de' && step.title_de) ? step.title_de : step.title;
@@ -4125,8 +4115,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Stop any ongoing narration + typewriter
-        stopNarration();
+        // Stop any ongoing typewriter
         clearInterval(_typewriterTimer);
 
         // Hide briefing during flight + reset drag position to default
@@ -4223,13 +4212,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // ── Typewriter Text Reveal ──
             // Text appears character-by-character for a decoded-intel feel
-            typewriterEffect(tourText, stepText, 18, () => {
-                // Auto-narrate after typewriter completes (if enabled)
-                const narrateActive = document.getElementById('tour-narrate');
-                if (narrateActive && narrateActive.classList.contains('active')) {
-                    speakText(stepText);
-                }
-            });
+            typewriterEffect(tourText, stepText, 18);
 
             // Load Wikipedia thumbnail image if available
             const imgContainer = document.getElementById('tour-briefing-image');
@@ -4354,7 +4337,6 @@ document.addEventListener("DOMContentLoaded", () => {
         window._geopulseActiveTour = null;
         tourStepIndex = 0;
         if (tourPanel) tourPanel.classList.add('hidden');
-        stopNarration();
         clearInterval(_typewriterTimer);
         // Reset progress bar
         const progressFill = document.getElementById('tour-progress-fill');
@@ -4385,26 +4367,6 @@ document.addEventListener("DOMContentLoaded", () => {
             endTour();
         }
     });
-    // Audio narrate button — speak current step immediately on click
-    const narrateBtn = document.getElementById('tour-narrate');
-    if (narrateBtn) {
-        // Remove inline onclick (set in HTML) and use proper handler
-        narrateBtn.removeAttribute('onclick');
-        narrateBtn.addEventListener('click', () => {
-            narrateBtn.classList.toggle('active');
-            if (narrateBtn.classList.contains('active')) {
-                // Start narrating the current step text
-                if (activeTour) {
-                    const currentText = document.getElementById('tour-briefing-text')?.textContent;
-                    if (currentText) speakText(currentText);
-                }
-            } else {
-                // Deactivated — stop speaking
-                stopNarration();
-            }
-        });
-    }
-
     tourClose?.addEventListener('click', () => endTour());
 
     // Sidebar tour buttons
@@ -4668,7 +4630,8 @@ document.addEventListener("DOMContentLoaded", () => {
    .touch-open rules; this only reports what is already open.
    ────────────────────────────────────────────────────────────────────────── */
 (function gpLeftColumnExclusivity() {
-    var PANEL_IDS = ['tours-hud', 'quiz-hud'];
+    // tours-hud no longer expands (V3.1: it opens the tour library page instead)
+    var PANEL_IDS = ['quiz-hud'];
     var DESKTOP = '(min-width: 769px)';
 
     function init() {
