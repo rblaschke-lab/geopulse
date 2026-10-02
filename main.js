@@ -369,6 +369,10 @@ document.addEventListener("DOMContentLoaded", () => {
             window.geopulseTourLibrary?.open();
             activeMobilePanel = 'tours';
         }
+        if(target === 'quiz') {
+            document.getElementById('quiz-hud')?.classList.add('touch-open');
+            activeMobilePanel = 'quiz';
+        }
 
         if(target === 'info') {
             if (infoPanel) infoPanel.classList.add('active');
@@ -470,6 +474,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if(document.documentElement.clientWidth <= 768 && activeMobilePanel) {
             sidebar.classList.remove('active');
             if (infoPanel) infoPanel.classList.remove('active');
+            closeFloatingHuds();
             document.body.classList.remove('mobile-panel-open');
             activeMobilePanel = null;
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -3556,8 +3561,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (welcomeOverlay) {
         const alreadyOnboarded = (() => { try { return localStorage.getItem(ONBOARD_KEY) === '1'; } catch(e) { return false; } })();
+        // Phones skip the card: it covered the map, and the bottom bar already offers tours, layers and quiz
+        const isPhone = document.documentElement.clientWidth <= 768;
 
-        if (alreadyOnboarded) {
+        if (alreadyOnboarded || isPhone) {
             // Returning visitor — skip Screen 2 entirely, go straight to the map after ENTER
             welcomeOverlay.classList.add('hidden');
         } else {
@@ -4448,6 +4455,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Close sidebar on mobile
                 const sidebar = document.getElementById('sidebar');
                 if (window.innerWidth < 900 && sidebar) sidebar.classList.remove('open');
+                // Phones: fold the quiz setup panel away so it does not cover the question
+                if (activeMobilePanel === 'quiz') switchSection('quiz');
             });
         }
 

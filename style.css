@@ -2636,8 +2636,13 @@ body.no-ticker #sidebar { top: 14px !important; }
 .quiz-hud-body { padding: 4px 10px 10px; }
 
 @media (max-width: 768px) {
-    .quiz-hud { top: auto; bottom: 70px; left: auto; right: 8px; width: 240px; }
-    .quiz-hud:hover { width: 300px; }
+    /* Phones: no floating quiz header above the bottom bar; its QUIZ button opens this panel */
+    .quiz-hud { display: none; }
+    .quiz-hud.touch-open {
+        display: block; top: auto; left: 8px; right: 8px; width: auto !important;
+        bottom: calc(var(--mobile-nav-h) + 8px);
+        max-height: 70vh !important; overflow-y: auto !important; z-index: 1001 !important;
+    }
 }
 
 /* Tour NEW badges */
