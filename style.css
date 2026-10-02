@@ -63,9 +63,10 @@
 .gateway-credit {
     position: absolute; bottom: 28px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.55rem; letter-spacing: 0.3em;
-    color: rgba(255,255,255,0.12);
+    font-size: 0.7rem; letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.6);
 }
+.gateway-credit strong { color: #00d4ff; font-weight: 400; }
 @keyframes gateway-glow {
     0% { text-shadow: 0 0 20px rgba(0,212,255,0.2), 0 0 40px rgba(0,212,255,0.08); }
     100% { text-shadow: 0 0 40px rgba(0,212,255,0.45), 0 0 80px rgba(0,212,255,0.2); }
@@ -243,14 +244,14 @@
 /* Credit */
 .splash-credit {
     font-family: 'Inter', sans-serif;
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     letter-spacing: 3px;
-    color: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.6);
     text-transform: uppercase;
     animation: splash-credit-in 1.5s ease 1s both;
 }
 .splash-credit strong {
-    color: rgba(255,176,0,0.45);
+    color: #00d4ff;
     font-weight: 600;
 }
 @keyframes splash-credit-in {
