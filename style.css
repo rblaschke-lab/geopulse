@@ -336,8 +336,9 @@ body, html { width: 100%; height: 100%; overflow: hidden; background: #000; colo
     #ticker-top { transform: translateY(0); opacity: 1; }
     #ticker-bottom { transform: translateY(0); opacity: 1; bottom: var(--mobile-nav-h); border-bottom: none; }
 
-    /* Accelerate ticker on mobile — 120s is painfully slow on small viewports */
-    .ticker-content { animation-duration: 45s; }
+    /* Mobile ticker: 45s was too fast to read; the shorter run-in (padding-left:100%)
+       still makes 100s slightly quicker than the 120s desktop pace */
+    .ticker-content { animation-duration: 100s; }
     
     #mobile-nav { display: flex; z-index: 1000; }
     #mobile-menu-btn { display: none !important; }
@@ -1090,6 +1091,12 @@ body.no-ticker #sidebar { top: 14px !important; }
         right: 10px;
         left: 10px;
         width: auto;
+    }
+    /* Do not slide the hidden panel off-screen to the right: on Android Chrome that
+       overflow widens the layout viewport (innerWidth ~790px) and the mobile nav stops working */
+    #briefing-panel.hidden {
+        transform: none;
+        visibility: hidden;
     }
 }
 

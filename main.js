@@ -340,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('quiz-hud')?.classList.remove('touch-open');
     };
     const switchSection = (target) => {
-        if(window.innerWidth > 768) return;
+        if(document.documentElement.clientWidth > 768) return;
         if (activeMobilePanel === target && target !== 'map') {
             sidebar.classList.remove('active');
             if (infoPanel) infoPanel.classList.remove('active');
@@ -407,7 +407,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // When user toggles a layer or clicks a scenario, close the sidebar
     // after a brief delay so they see the map change
     const autoCollapseMobile = () => {
-        if (window.innerWidth > 768) return;
+        if (document.documentElement.clientWidth > 768) return;
         setTimeout(() => {
             sidebar.classList.remove('active');
             if (infoPanel) infoPanel.classList.remove('active');
@@ -467,7 +467,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Close panels on map tap — requires the map object so stays here
     map.on('click', () => {
-        if(window.innerWidth <= 768 && activeMobilePanel) {
+        if(document.documentElement.clientWidth <= 768 && activeMobilePanel) {
             sidebar.classList.remove('active');
             if (infoPanel) infoPanel.classList.remove('active');
             document.body.classList.remove('mobile-panel-open');
@@ -3970,7 +3970,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // On mobile the tours-hud opens as a full overlay (z-index 950); on iPad/touch
         // it is the expanded floating panel. Neither closed itself on tour selection,
         // so the tour appeared to "do nothing". Close it here for every entry point.
-        if (window.innerWidth <= 768) {
+        if (document.documentElement.clientWidth <= 768) {
             closeFloatingHuds();
             document.body.classList.remove('mobile-panel-open');
             activeMobilePanel = null;
