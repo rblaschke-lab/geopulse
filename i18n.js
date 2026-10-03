@@ -264,7 +264,7 @@ const i18n = {
 };
 
 // ── Language System ──
-let currentLang = localStorage.getItem('geopulseLang') || 'en';
+let currentLang = localStorage.getItem('geopulseLang') || 'de';
 
 const setLanguage = (lang) => {
     currentLang = lang;

@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ── i18n: loaded from i18n.js module ──
     const i18n = window._i18n;
-    let currentLang = window.getLanguage ? window.getLanguage() : (localStorage.getItem('geopulseLang') || 'en');
+    let currentLang = window.getLanguage ? window.getLanguage() : (localStorage.getItem('geopulseLang') || 'de');
     const setLanguage = window.setLanguage;
 
     // Sync local currentLang + re-fetch ticker whenever language changes
@@ -3490,166 +3490,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ============================================================
-    // WELCOME OVERLAY (First Visit Experience)
-    // ============================================================
-    const welcomeOverlay = document.getElementById('welcome-overlay');
-
-    const ONBOARD_KEY = 'gp_onboarded';
-    let _stopWelcomeDrift = null;
-
-    const dismissWelcome = (startTourId) => {
-        if (!welcomeOverlay) return;
-        welcomeOverlay.classList.add('hidden');
-        // Returning visitors skip the onboarding overlay next time
-        try { localStorage.setItem(ONBOARD_KEY, '1'); } catch(e) {}
-        if (_stopWelcomeDrift) { try { _stopWelcomeDrift(); } catch(e) {} }
-        if (startTourId) {
-            setTimeout(() => startTour(startTourId), 600);
-        }
-    };
-
-    // Interest application: opens matching tour category, pre-selects quiz, toggles layers
-    function applyInterest(interest) {
-        if (!interest || interest === 'all') return;
-
-        // 1. Open the matching tour category in sidebar
-        const catMap = {
-            geopolitics: 'geopolitics',
-            history: 'history',
-            science: 'science',
-            sports: 'sports'
-        };
-        const targetCat = catMap[interest];
-        if (targetCat) {
-            document.querySelectorAll('.tour-category[data-cat]').forEach(cat => {
-                const isMatch = cat.getAttribute('data-cat') === targetCat;
-                cat.classList.toggle('open', isMatch);
-            });
-            // Save to collapse state
-            try {
-                const state = {};
-                document.querySelectorAll('.tour-category[data-cat]').forEach(c => {
-                    state[c.getAttribute('data-cat')] = c.classList.contains('open');
-                });
-                localStorage.setItem('geopulse_cat_state', JSON.stringify(state));
-            } catch(e) {}
-        }
-
-        // 2. Pre-select quiz category
-        const quizCatBtns = document.querySelectorAll('.quiz-cat-btn');
-        quizCatBtns.forEach(btn => {
-            const btnCat = btn.getAttribute('data-cat');
-            btn.classList.toggle('active', btnCat === interest);
-        });
-
-        // 3. Toggle relevant layers (gently — 1-2 key layers per interest)
-        const layerMap = {
-            geopolitics: ['toggleConflicts'],
-            history: [],
-            science: ['toggleEarthquakes'],
-            sports: []
-        };
-        const layersToActivate = layerMap[interest] || [];
-        layersToActivate.forEach(fnName => {
-            const btn = document.querySelector(`[onclick*="${fnName}"]`);
-            if (btn && !btn.classList.contains('active')) {
-                try { btn.click(); } catch(e) {}
-            }
-        });
-    }
-
-    if (welcomeOverlay) {
-        const alreadyOnboarded = (() => { try { return localStorage.getItem(ONBOARD_KEY) === '1'; } catch(e) { return false; } })();
-        // Phones skip the card: it covered the map, and the bottom bar already offers tours, layers and quiz
-        const isPhone = document.documentElement.clientWidth <= 768;
-
-        if (alreadyOnboarded || isPhone) {
-            // Returning visitor — skip Screen 2 entirely, go straight to the map after ENTER
-            welcomeOverlay.classList.add('hidden');
-        } else {
-            welcomeOverlay.classList.remove('hidden');
-
-            // CTA wiring
-            document.getElementById('welcome-tour')?.addEventListener('click', () => dismissWelcome('welcome'));
-            document.getElementById('welcome-explore')?.addEventListener('click', () => dismissWelcome(null));
-            document.getElementById('welcome-library')?.addEventListener('click', () => {
-                dismissWelcome(null);
-                window.geopulseTourLibrary?.open();
-            });
-
-            // ── Live intelligence ticker (real feeds; hide silently on failure) ──
-            (function initWelcomeTicker() {
-                const el = document.getElementById('welcome-ticker');
-                if (!el) return;
-                const lang = (window.getLanguage && window.getLanguage()) || document.documentElement.lang || 'en';
-                const de = lang === 'de';
-                const coarseRegion = (lat, lon) => {
-                    if (lat > 35 && lat < 72 && lon > -12 && lon < 45) return de ? 'Europa' : 'Europe';
-                    if (lat > -37 && lat < 37 && lon > -18 && lon < 52) return de ? 'Afrika' : 'Africa';
-                    if (lat > 5 && lat < 78 && lon > 45 && lon < 150) return de ? 'Asien' : 'Asia';
-                    if (lat > -50 && lat < 13 && lon > -82 && lon < -34) return de ? 'Südamerika' : 'South America';
-                    if (lat > 13 && lat < 78 && lon > -168 && lon < -52) return de ? 'Nordamerika' : 'North America';
-                    if (lat > -48 && lat < -10 && lon > 110 && lon < 180) return de ? 'Australien' : 'Australia';
-                    if (lon >= -70 && lon < 20) return de ? 'dem Atlantik' : 'the Atlantic';
-                    if (lon >= 20 && lon < 150) return de ? 'dem Indischen Ozean' : 'the Indian Ocean';
-                    return de ? 'dem Pazifik' : 'the Pacific';
-                };
-                Promise.allSettled([
-                    fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson')
-                        .then(r => r.ok ? r.json() : Promise.reject())
-                        .then(d => {
-                            const n = (d.features || []).length;
-                            const label = window._i18n?.[lang]?.ob_ticker_quakes || 'earthquakes in the last hour';
-                            return `🌍 ${n} ${label}`;
-                        }),
-                    fetch('https://api.wheretheiss.at/v1/satellites/25544')
-                        .then(r => r.ok ? r.json() : Promise.reject())
-                        .then(d => {
-                            const label = window._i18n?.[lang]?.ob_ticker_iss || 'ISS over';
-                            return `🛰️ ${label} ${coarseRegion(d.latitude, d.longitude)}`;
-                        })
-                ]).then(results => {
-                    const parts = results.filter(r => r.status === 'fulfilled').map(r => r.value);
-                    if (parts.length && !welcomeOverlay.classList.contains('hidden')) {
-                        el.textContent = parts.join('  ·  ');
-                        el.style.display = 'block';
-                    }
-                });
-            })();
-
-            // ── Ambient map drift behind the overlay (static on reduced-motion) ──
-            (function initAmbientDrift() {
-                const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                if (reduced || typeof map === 'undefined' || !map) return;
-                let raf = null, stopped = false;
-                let bearing = map.getBearing();
-                const step = () => {
-                    if (stopped) return;
-                    bearing += 0.015;
-                    try { map.setBearing(bearing); } catch(e) {}
-                    raf = requestAnimationFrame(step);
-                };
-                raf = requestAnimationFrame(step);
-                _stopWelcomeDrift = () => {
-                    stopped = true;
-                    if (raf) cancelAnimationFrame(raf);
-                    try { map.easeTo({ bearing: 0, duration: 800 }); } catch(e) {}
-                };
-            })();
-        }
-    }
-
     // Expose startTour globally for the quick-links demo button
     window._geopulseStartTour = (tourId) => {
         if (typeof startTour !== 'function') return;
-        const wo = document.getElementById('welcome-overlay');
-        if (wo && !wo.classList.contains('hidden')) {
-            wo.classList.add('hidden');
-            setTimeout(() => startTour(tourId), 600);
-        } else {
-            startTour(tourId);
-        }
+        startTour(tourId);
     };
 
     // ============================================================

@@ -68,7 +68,7 @@
         if (on.length) parts.push('layers=' + on.join(','));
 
         var lang = typeof window.getLanguage === 'function' ? window.getLanguage() : null;
-        if (lang && lang !== 'en') parts.push('lang=' + lang);
+        if (lang && lang !== 'de') parts.push('lang=' + lang);
 
         if (window._geopulseActiveTour) parts.push('tour=' + window._geopulseActiveTour);
 

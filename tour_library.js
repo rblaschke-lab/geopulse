@@ -64,6 +64,17 @@
     // Good first tours for a lesson: well-known curriculum topics.
     const FEATURED = ['coldwar', 'romanempire', 'climatecrisis', 'ringoffire'];
 
+    // Tour of the month: one tour per calendar month, rolling through this list.
+    // October 2026 is the first entry; after twelve months the list starts over.
+    const MONTHLY = ['coldwar', 'revolutions', 'aurorahunters', 'spacerace', 'extremeearth', 'water',
+                     'climatecrisis', 'ww2', 'worldcup', 'summits14', 'chokepoints', 'romanempire'];
+    const MONTHLY_ORIGIN = 2026 * 12 + 9;
+    const tourOfMonth = (d) => {
+        const now = d || new Date();
+        const n = now.getFullYear() * 12 + now.getMonth() - MONTHLY_ORIGIN;
+        return MONTHLY[((n % MONTHLY.length) + MONTHLY.length) % MONTHLY.length];
+    };
+
     // School subjects per category (kept in step with CAT in build-seo-pages.mjs).
     const SUBJECTS = {
         geopolitics: { en: 'History · Politics · Social studies', de: 'Geschichte · Politik · Sozialkunde' },
@@ -87,7 +98,8 @@
             none: 'No tour matches your search.', stops: (n) => `${n} stops`, mins: (n) => `approx. ${n} min`,
             sheet: 'Worksheet', sheetHref: (id) => `/tours/${id}/`, sensitive: 'Sensitive topic – best with guidance',
             start: 'Start tour', close: 'Close', teachers: 'For teachers: worksheets, QR codes, lesson links →', teachersHref: '/teachers/',
-            count: (n) => `${n} tours`
+            count: (n) => `${n} tours`,
+            month: 'Tour of the month', monthShort: 'TOUR OF THE MONTH'
         },
         de: {
             kicker: 'Geführte Kartentouren',
@@ -99,7 +111,8 @@
             none: 'Keine Tour passt zu deiner Suche.', stops: (n) => `${n} Stationen`, mins: (n) => `ca. ${n} Min.`,
             sheet: 'Arbeitsblatt', sheetHref: (id) => `/de/touren/${id}/`, sensitive: 'Sensibles Thema – am besten begleitet',
             start: 'Tour starten', close: 'Schließen', teachers: 'Für Lehrkräfte: Arbeitsblätter, QR-Codes, Unterrichtslinks →', teachersHref: '/lehrkraefte/',
-            count: (n) => `${n} Touren`
+            count: (n) => `${n} Touren`,
+            month: 'Tour des Monats', monthShort: 'TOUR DES MONATS'
         }
     };
 
@@ -176,11 +189,12 @@
         });
     }
 
-    function card(t, x, big) {
+    function card(t, x, big, badge) {
         const mins = Math.max(5, Math.round(t.stops * 1.2));
         return `
         <article class="tlib-card${big ? ' tlib-card-big' : ''}" style="--c:${esc(t.color)}" data-lib-card="${esc(t.id)}" data-lib-cat-of="${esc(t.cat)}">
             <button type="button" class="tlib-card-main" data-lib-tour="${esc(t.id)}" aria-label="${esc(x.start + ': ' + t.name)}">
+                ${badge ? `<span class="tlib-month-badge"><i class="fa-solid fa-star" aria-hidden="true"></i> ${esc(badge)}</span>` : ''}
                 <span class="tlib-emoji" aria-hidden="true">${esc(t.emoji)}</span>
                 <span class="tlib-card-title">${esc(t.name)}${t.isNew ? ' <span class="tlib-new">NEW</span>' : ''}</span>
                 <span class="tlib-card-blurb">${esc(t.blurb)}</span>
@@ -198,7 +212,9 @@
         const cats = readCatalogue();
         const all = cats.flatMap((c) => c.tours);
         const byId = Object.fromEntries(all.map((t) => [t.id, t]));
-        const featured = FEATURED.map((id) => byId[id]).filter(Boolean);
+        const monthId = tourOfMonth();
+        const monthLabel = x.month + ' · ' + new Date().toLocaleDateString(L === 'de' ? 'de-DE' : 'en-GB', { month: 'long', year: 'numeric' });
+        const featured = [monthId, ...FEATURED.filter((id) => id !== monthId)].slice(0, 4).map((id) => byId[id]).filter(Boolean);
         if (activeCat !== 'all' && !cats.some((c) => c.id === activeCat)) activeCat = 'all';
 
         root.setAttribute('lang', L);
@@ -236,7 +252,7 @@
 
             <section class="tlib-featured" aria-labelledby="tlib-feat-h">
                 <h3 id="tlib-feat-h" class="tlib-sec-title">${esc(x.featured)}</h3>
-                <div class="tlib-grid tlib-grid-big">${featured.map((t) => card(t, x, true)).join('')}</div>
+                <div class="tlib-grid tlib-grid-big">${featured.map((t) => card(t, x, true, t.id === monthId ? monthLabel : '')).join('')}</div>
             </section>
 
             ${cats.map((c) => `
@@ -333,9 +349,36 @@
         if (typeof window.ensureTours === 'function') window.ensureTours(id).then(go); else go();
     }
 
+    // Tour of the month on the map: one line inside the "THE TOURS" panel.
+    // The panel itself opens the library, so a click on this line is caught
+    // first and starts the tour directly.
+    function renderHudMonth() {
+        const header = document.querySelector('#tours-hud .hud-header');
+        if (!header) return;
+        const t = readCatalogue().flatMap((c) => c.tours).find((tt) => tt.id === tourOfMonth());
+        let el = header.querySelector('.hud-month');
+        if (!t) { if (el) el.remove(); return; }
+        if (!el) {
+            el = document.createElement('div');
+            el.className = 'hud-month';
+            header.appendChild(el);
+        }
+        const x = UI[lang()];
+        el.dataset.tour = t.id;
+        el.title = x.start + ': ' + t.name;
+        el.innerHTML = `<i class="fa-solid fa-star" aria-hidden="true"></i> <span class="hud-month-kicker">${esc(x.monthShort)}</span> <span class="hud-month-name">${esc(t.name)}</span>`;
+    }
+    document.addEventListener('click', (e) => {
+        const m = e.target.closest && e.target.closest('.hud-month[data-tour]');
+        if (!m) return;
+        e.stopPropagation();
+        startTour(m.dataset.tour);
+    }, true);
+    renderHudMonth();
+
     // Re-render when the language switches while the page is open
-    new MutationObserver(() => { if (root && !root.hidden) render(); })
+    new MutationObserver(() => { renderHudMonth(); if (root && !root.hidden) render(); })
         .observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
 
-    window.geopulseTourLibrary = { open, close, isOpen: () => !!root && !root.hidden };
+    window.geopulseTourLibrary = { open, close, isOpen: () => !!root && !root.hidden, tourOfMonth };
 })();

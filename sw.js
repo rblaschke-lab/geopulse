@@ -7,7 +7,7 @@
 // never matches is a precache that does nothing. VERSION below is
 // the single place that changes on a release.
 // ══════════════════════════════════════════════════════════════
-const VERSION    = '3.1.3';
+const VERSION    = '3.2.0';
 const CACHE_NAME = 'geopulse-v' + VERSION;
 const V          = '?v=' + VERSION;
 

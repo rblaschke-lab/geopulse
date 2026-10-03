@@ -84,7 +84,7 @@
 
     <script src="./fetchWrapper.js"></script>
     <script src="./config.js"></script>
-    <link rel="stylesheet" href="./style.css?v=3.1.3">
+    <link rel="stylesheet" href="./style.css?v=3.2.0">
 
     <!-- Service Worker registration -->
     <script>
@@ -95,7 +95,7 @@
     }
     </script>
 </head>
-<body class="theme-clean">
+<body class="theme-clean no-ticker">
     <!-- ═══ ENTER GATEWAY — enables audio via user gesture ═══ -->
     <div id="enter-gateway">
         <div class="gateway-title"><span class="gw-geo">GEO</span><span class="gw-pulse">PULSE</span></div>
@@ -136,8 +136,8 @@
     <script>
     // Gateway + splash run before i18n.js loads: pick the language the same way it will.
     (function(){
-        var l = 'en';
-        try { l = localStorage.getItem('geopulseLang') || (/[#&]lang=de\b/.test(location.hash) ? 'de' : 'en'); } catch(e) {}
+        var l = 'de';
+        try { l = localStorage.getItem('geopulseLang') || (/[#&]lang=en\b/.test(location.hash) ? 'en' : 'de'); } catch(e) {}
         if (l !== 'de') return;
         document.querySelectorAll('[data-gw-de]').forEach(function(el){ el.textContent = el.getAttribute('data-gw-de'); });
     })();
@@ -280,10 +280,6 @@
                     sp.style.opacity = '0';
                     sp.style.filter = 'blur(12px)';
                     sp.style.pointerEvents = 'none';
-                    // Hand over to the welcome overlay immediately — it is the
-                    // one surface that still asks the visitor for something.
-                    var wo = document.getElementById('welcome-overlay');
-                    if (wo) wo.classList.add('splash-done');
                     setTimeout(function(){
                         if(sp.parentNode) sp.parentNode.removeChild(sp);
                         // Audio cleanup is NOT done here — the drone owns its
@@ -555,7 +551,7 @@
             <div class="control-item" style="margin-top:5px;">
                 <span style="font-size:0.65rem;opacity:0.7;" data-i18n="news_band">GLOBAL NEWS BAND</span>
                 <label class="toggle-switch">
-                    <input type="checkbox" id="toggle-ticker" checked>
+                    <input type="checkbox" id="toggle-ticker">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -836,106 +832,6 @@
          FIRST match, every legend write landed in this undocumented div while
          the documented one stayed empty. -->
 
-    <!-- WELCOME OVERLAY (First Visit) -->
-    <div id="welcome-overlay">
-        <!-- Ambient map scrim (the live map renders behind this overlay) -->
-        <div class="welcome-scrim"></div>
-
-        <div id="welcome-card">
-            <div class="welcome-glow"></div>
-            <button id="welcome-lang-toggle" class="welcome-lang-btn" onclick="var l=document.documentElement.lang==='de'?'en':'de'; if(window.setLanguage){setLanguage(l)}else{var ev=new CustomEvent('setLang',{detail:l});document.dispatchEvent(ev)}" title="Switch language">
-                <span class="welcome-lang-flag" id="welcome-lang-label">DE</span>
-            </button>
-            <!-- Wireframe globe (V2.7) — replaces the 🌍 emoji, which read as a
-                 children's app. Graticule + turning meridians + an orbiting
-                 satellite + live-event pings, in the map's own cyan/amber. -->
-            <div class="welcome-icon" aria-hidden="true">
-                <svg class="wg" viewBox="0 0 120 120" width="96" height="96" focusable="false">
-                    <defs>
-                        <radialGradient id="wg-sphere" cx="38%" cy="32%" r="75%">
-                            <stop offset="0" stop-color="#12364a"/>
-                            <stop offset=".55" stop-color="#061722"/>
-                            <stop offset="1" stop-color="#010408"/>
-                        </radialGradient>
-                        <radialGradient id="wg-halo" cx="50%" cy="50%" r="50%">
-                            <stop offset=".64" stop-color="#00d4ff" stop-opacity="0"/>
-                            <stop offset=".70" stop-color="#00d4ff" stop-opacity=".18"/>
-                            <stop offset="1" stop-color="#00d4ff" stop-opacity="0"/>
-                        </radialGradient>
-                        <clipPath id="wg-clip"><circle cx="60" cy="60" r="38"/></clipPath>
-                    </defs>
-                    <circle cx="60" cy="60" r="58" fill="url(#wg-halo)"/>
-                    <!-- orbit, back half: drawn under the sphere so the globe hides it -->
-                    <g transform="rotate(-20 60 60)">
-                        <ellipse cx="60" cy="60" rx="54" ry="15" fill="none" stroke="#ffb000" stroke-opacity=".3" stroke-width=".7" stroke-dasharray="2 3"/>
-                        <circle r="2" fill="#ffb000"><animateMotion dur="10s" repeatCount="indefinite" path="M114,60 A54,15 0 1,1 6,60 A54,15 0 1,1 114,60"/></circle>
-                    </g>
-                    <circle cx="60" cy="60" r="38" fill="url(#wg-sphere)"/>
-                    <g clip-path="url(#wg-clip)" fill="none" stroke-width=".7">
-                        <g stroke="#00d4ff" stroke-opacity=".26">
-                            <ellipse cx="60" cy="60" rx="38" ry="11"/>
-                            <ellipse cx="60" cy="42" rx="33" ry="9.5"/>
-                            <ellipse cx="60" cy="78" rx="33" ry="9.5"/>
-                            <ellipse cx="60" cy="27" rx="19" ry="5.5"/>
-                            <ellipse cx="60" cy="93" rx="19" ry="5.5"/>
-                        </g>
-                        <g stroke="#00d4ff" stroke-opacity=".5">
-                            <ellipse class="wg-mer" cx="60" cy="60" rx="38" ry="38" vector-effect="non-scaling-stroke"/>
-                            <ellipse class="wg-mer" cx="60" cy="60" rx="38" ry="38" vector-effect="non-scaling-stroke" style="animation-delay:-2s"/>
-                            <ellipse class="wg-mer" cx="60" cy="60" rx="38" ry="38" vector-effect="non-scaling-stroke" style="animation-delay:-4s"/>
-                        </g>
-                    </g>
-                    <circle cx="60" cy="60" r="38" fill="none" stroke="#00d4ff" stroke-opacity=".75" stroke-width="1"/>
-                    <g fill="#ffb000">
-                        <circle cx="51" cy="45" r="1.5"/><circle class="wg-ping" cx="51" cy="45" r="1.5"/>
-                        <circle cx="74" cy="57" r="1.5"/><circle class="wg-ping" cx="74" cy="57" r="1.5" style="animation-delay:-.9s"/>
-                        <circle cx="57" cy="75" r="1.5"/><circle class="wg-ping" cx="57" cy="75" r="1.5" style="animation-delay:-1.8s"/>
-                    </g>
-                    <!-- orbit, front half: drawn over the sphere; its satellite only shows on this half -->
-                    <g transform="rotate(-20 60 60)">
-                        <path d="M114,60 A54,15 0 0,1 6,60" fill="none" stroke="#ffb000" stroke-opacity=".55" stroke-width=".8" stroke-dasharray="2 3"/>
-                        <circle r="2.2" fill="#ffd27a">
-                            <animateMotion dur="10s" repeatCount="indefinite" path="M114,60 A54,15 0 1,1 6,60 A54,15 0 1,1 114,60"/>
-                            <animate attributeName="opacity" values="1;0" keyTimes="0;.5" calcMode="discrete" dur="10s" repeatCount="indefinite"/>
-                        </circle>
-                    </g>
-                </svg>
-            </div>
-            <script>
-                // CSS reduced-motion rules don't reach SMIL — stop the orbit explicitly.
-                try { if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelector('.wg').pauseAnimations(); } catch (e) {}
-            </script>
-            <h1 class="welcome-title">GEOPULSE</h1>
-            <p class="welcome-subtitle"><span data-i18n="ob_value">The interactive world atlas for school and university</span></p>
-
-            <!-- V3.1: education first — what a class gets, in three lines -->
-            <ul class="welcome-features welcome-edu">
-                <li class="welcome-feat"><i class="fa-solid fa-route" aria-hidden="true"></i> <span><span class="tours-count-num">41</span> <span data-i18n="ob_feat_tours">guided tours — from the Roman Empire to the climate crisis</span></span></li>
-                <li class="welcome-feat"><i class="fa-solid fa-book-open" aria-hidden="true"></i> <span data-i18n="ob_feat_subjects">For history, geography, politics, religion and science</span></li>
-                <li class="welcome-feat"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> <span data-i18n="ob_feat_sheets">Worksheet &amp; QR code for every tour — projector or tablet</span></li>
-            </ul>
-
-            <!-- Live intelligence ticker (real feeds; hidden on feed failure) -->
-            <div id="welcome-ticker" class="welcome-ticker" style="display:none;"></div>
-
-            <div class="welcome-actions">
-                <button id="welcome-library" class="welcome-btn welcome-btn-primary">
-                    <i class="fa-solid fa-route"></i> <span data-i18n="welcome_browse_tours">BROWSE THE TOURS</span>
-                </button>
-                <div class="welcome-actions-row">
-                    <button id="welcome-tour" class="welcome-btn welcome-btn-secondary" data-tour="welcome">
-                        <i class="fa-solid fa-play"></i> <span data-i18n="welcome_start_tour">DEMO TOUR</span>
-                    </button>
-                    <button id="welcome-explore" class="welcome-btn welcome-btn-secondary">
-                        <i class="fa-solid fa-compass"></i> <span data-i18n="welcome_explore">EXPLORE FREELY</span>
-                    </button>
-                </div>
-            </div>
-            <a class="welcome-teachers" href="/teachers/" data-href-en="/teachers/" data-href-de="/lehrkraefte/"><i class="fa-solid fa-chalkboard-user"></i> <span data-i18n="welcome_teachers">For teachers: worksheets, QR codes, lesson links →</span></a>
-            <div class="welcome-footer" data-i18n="welcome_footer">Free · No login · No ads · No cookies</div>
-        </div>
-    </div>
-
     <!-- TOUR BRIEFING OVERLAY -->
     <div id="tour-briefing" class="tour-briefing-panel hidden">
         <div class="tour-progress-bar"><div class="tour-progress-fill" id="tour-progress-fill" style="width:0%"></div></div>
@@ -1049,20 +945,20 @@
         <span id="live-clock" title="Local Time" style="display:flex;align-items:center;height:28px;padding:0 12px;"></span>
     </div>
 
-    <script defer src="./i18n.js?v=3.1.3"></script>
-    <script defer src="./quiz_bank.js?v=3.1.3"></script>
-    <script defer src="./quiz.js?v=3.1.3"></script>
-    <script defer src="./audio.js?v=3.1.3"></script>
-    <script defer src="./wind.js?v=3.1.3"></script>
-    <script defer src="./main.js?v=3.1.3"></script>
-    <script defer src="./search.js?v=3.1.3"></script>
-    <script defer src="./widgets.js?v=3.1.3"></script>
+    <script defer src="./i18n.js?v=3.2.0"></script>
+    <script defer src="./quiz_bank.js?v=3.2.0"></script>
+    <script defer src="./quiz.js?v=3.2.0"></script>
+    <script defer src="./audio.js?v=3.2.0"></script>
+    <script defer src="./wind.js?v=3.2.0"></script>
+    <script defer src="./main.js?v=3.2.0"></script>
+    <script defer src="./search.js?v=3.2.0"></script>
+    <script defer src="./widgets.js?v=3.2.0"></script>
     <!-- Tour prose (~450 KB) is fetched on idle by tours_loader.js, not on first paint -->
-    <script defer src="./tours_loader.js?v=3.1.3"></script>
-    <script defer src="./permalink.js?v=3.1.3"></script>
-    <script defer src="./today.js?v=3.1.3"></script>
-    <script defer src="./teacher.js?v=3.1.3"></script>
-    <script defer src="./tour_library.js?v=3.1.3"></script>
-    <script defer src="./timelapse.js?v=3.1.3"></script>
+    <script defer src="./tours_loader.js?v=3.2.0"></script>
+    <script defer src="./permalink.js?v=3.2.0"></script>
+    <script defer src="./today.js?v=3.2.0"></script>
+    <script defer src="./teacher.js?v=3.2.0"></script>
+    <script defer src="./tour_library.js?v=3.2.0"></script>
+    <script defer src="./timelapse.js?v=3.2.0"></script>
 </body>
 </html>
